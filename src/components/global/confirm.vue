@@ -1,11 +1,16 @@
 <template>
-    <Modal v-model="confirmModel" width="360" :mode="mode" :z-index="3000" class-name="ivu-confirm-modal">
+    <Modal v-model="confirmModel"
+           width="360"
+           :mode="mode"
+           :z-index="3000"
+           class-name="ivu-confirm-modal">
         <p slot="header" style="text-align:center;">
             <!-- <Icon type="information-circled"></Icon> -->
             <span>信息确认</span>
         </p>
         <div style="margin-top:-20px;margin-left:10px;">
-           <Icon class="icon-content" type="md-close-circle" /> <h3 style=" display: inline-block;color:#ED4014;font-size:14px;">{{content}}</h3>
+           <Icon class="icon-content" type="md-close-circle" />
+          <h3 style=" display: inline-block;color:#ED4014;font-size:14px;">{{content}}</h3>
            <p style="margin-left:42px;margin-top:-18px;color:#909399;font-size:12px;">【警告】该操作不可恢复，请谨慎操作！</p>
         </div>
         <div slot="footer" style="text-align:center">

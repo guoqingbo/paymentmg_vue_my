@@ -18,7 +18,15 @@
       </Col>
     </Row>
     <div class="grids">
-      <Table style="position:static;" stripe :columns="columns" :data="res2.rows" :url="url"  @on-selection-change="changeSelection2"></Table>
+      <Table
+        :highlight-row="highlightRow"
+        style="position:static;"
+        stripe
+        :columns="columns"
+        :data="res2.rows"
+        :url="url"
+        @on-current-change="changeSelection2"
+        @on-selection-change="changeSelection2"></Table>
       <Page :total="res2.total" class-name="pages" @on-change="changepage2"></Page>
     </div>
   </div>
@@ -30,7 +38,7 @@ export default {
       searchForm: {}
     };
   },
-  props: ["searchItems", "hannleItems", "columns", "url"],
+  props: ["searchItems", "hannleItems", "columns", "url","params","highlightRow"],
   mounted() {
     this.$store.state.list.url = this.url;
     this.$store.state.list.params = this.params;

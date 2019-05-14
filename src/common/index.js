@@ -19,8 +19,8 @@ const common = {
               obj.$refs.gridTable.loadpage()
               break;
               case 'page':
-              
-              break  
+
+              break
           }
         } else if (res.status === 200) {
             switch (options.mold) {
@@ -50,35 +50,23 @@ const common = {
   columnsHandle (h, actions) {
     let array = []
     actions.forEach(element => {
-        if(element.title=='删除'){
-            let obj = h('a', {
-                style: {
-                  marginRight: '10px',
-                  color:'#C9CCD3'
-                },
-                on: {
-                  click: () => {
-                    element.action()
-                  }
-                }
-              }, element.title)
-              array.push(obj)
-        }else{
-            let obj = h('a', {
-                style: {
-                  marginRight: '10px'
-                },
-                on: {
-                  click: () => {
-                    element.action()
-                  }
-                }
-              }, element.title)
-              array.push(obj)
+      let obj = h('Button', {
+        props: {
+          type: 'primary',
+          size: 'small'
+        },
+        style: {
+          margin: '5px',
+          marginLeft: 0
+        },
+        on: {
+          click: () => {
+            element.action()
+          }
         }
-     
-      
-    }) 
+      }, element.title)
+      array.push(obj)
+    })
     return array
   },
   validate: {
@@ -146,6 +134,10 @@ const common = {
       }
     },
     IdCodeValid: (rule, value, callback) => {
+      if(!rule.require && !value){
+        // 非必填时
+        return
+      }
       let city = {11: '北京', 12: '天津', 13: '河北', 14: '山西', 15: '内蒙古', 21: '辽宁', 22: '吉林', 23: '黑龙江', 31: '上海', 32: '江苏', 33: '浙江', 34: '安徽', 35: '福建', 36: '江西', 37: '山东', 41: '河南', 42: '湖北', 43: '湖南', 44: '广东', 45: '广西', 46: '海南', 50: '重庆', 51: '四川', 52: '贵州', 53: '云南', 54: '西藏', 61: '陕西', 62: '甘肃', 63: '青海', 64: '宁夏', 65: '新疆', 71: '台湾', 81: '香港', 82: '澳门', 91: '国外'}
       if (!value || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/.test(value)) {
         callback(new Error('身份证号格式错误!'))

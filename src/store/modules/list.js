@@ -1,5 +1,5 @@
 import {apiPost} from '../../fetch/api'
-
+import list from './list.json'
 const state = {
   url: '',
   params: '',
@@ -32,7 +32,9 @@ const actions = {
   // },
   async postApi (context) {
     // return apiPost(params.url, params.params)
-    context.state.res = await apiPost(context.state.url, context.state.params)
+    // let res = await apiPost(context.state.url, context.state.params)
+    let res = list
+    context.state.res = res
     return context.state.res
   }
 }

@@ -90,10 +90,10 @@
                     </Menu>
                 </Sider>
                 <Layout id="content">
-                    <!-- <Breadcrumb class="breadcrumb">
+                    <Breadcrumb class="breadcrumb">
                         <BreadcrumbItem>首页</BreadcrumbItem>
                         <BreadcrumbItem v-for="(item,index) in breadcrumbList" :key="index">{{item}}</BreadcrumbItem>
-                    </Breadcrumb> -->
+                    </Breadcrumb>
                     <Content class="content" :style="{'padding-bottom':padding}" :class="{delPad:$route.path==='/houseStatus'}">
                         <div v-if="$route.path==='/houseStatus'">
                             <router-view></router-view>
@@ -235,7 +235,7 @@ export default {
   },
   mounted() {
     this.loadpage();
-    this.bgheight = window.innerHeight - 80 + "px";
+    // this.bgheight = window.innerHeight + "px";
     this.getHotel()
   },
   methods: {
@@ -243,9 +243,9 @@ export default {
           let params={page: 1, limit: 10, sort: "createTime", order: "asc" }
           apiPost('/manage/hotel/webApi/hotelMerchant/grid',params).then(res=>{
               if(res.status==200){
-                  res.data.rows.forEach(ele=>{                                         
-                      localStorage.setItem('hotelMerchantId',res.data.rows[0].id)                        
-                  })                  
+                  res.data.rows.forEach(ele=>{
+                      localStorage.setItem('hotelMerchantId',res.data.rows[0].id)
+                  })
               }
           })
       },

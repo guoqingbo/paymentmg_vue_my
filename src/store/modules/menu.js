@@ -1,5 +1,5 @@
 import {apiGet} from '../../fetch/api'
-import json from './json.json'
+import menu from './menu.json'
 const state = {
   menuList: '',
   activeName: '',
@@ -22,6 +22,7 @@ const mutations = {
   formaterRouter (state) {// 根据权限生成路由
     let roleRouter = []
     // let length = state.menuList.data.length
+    console.log(state.menuList)
     if (!(state.menuList&&state.menuList.data&&state.menuList.data.length)) {
     //   window.location.href = ''
       return
@@ -48,16 +49,17 @@ const mutations = {
           })
       })
     })
+    console.log(roleRouter);
     state.asyncRouter = roleRouter
   }
 }
 const actions = {
   async getApi (context,userInfoId) {
     // let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
-    // context.state.activeName = menuList.data[0].funCode
+    let menuList = menu
+    context.state.activeName = menuList.data[0].funCode
     console.log(menuList)
-    // context.state.menuList = menuList
-    context.state.menuList = json
+    context.state.menuList = menuList
   },
   setActiveNameAction ({commit}, name) {
     commit('setActiveName', name)

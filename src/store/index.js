@@ -9,6 +9,9 @@ import indexdefined from './modules/indexdefined'
 //自定义页面
 import defined from './modules/userDefined'
 
+// 全局变量
+import global from './modules/global'
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -58,6 +61,7 @@ const store = new Vuex.Store({
     }
   },
   modules: {
+    global,
     user,
     list,
     menu,

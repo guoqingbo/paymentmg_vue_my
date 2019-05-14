@@ -2,7 +2,6 @@ const defined = {
   namespaced: true,
   state: {
     list: [],
-    index: null,
     userDefine: false,
     vuxDisabled: false,
     errorShow: false,

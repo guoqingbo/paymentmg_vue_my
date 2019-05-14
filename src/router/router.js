@@ -1,7 +1,7 @@
 // 不作为Main组件的子页面展示的页面单独写，如下
 import Main from '@/components/main'
 export const loginRouter = [
-    {
+  {
     path: '/',
     redirect: {
       name: 'login'
@@ -45,9 +45,9 @@ export const loginRouter = [
     name: ' Main',
     component: Main,
     children: [
-        {
+      {
         path: '/addMenu',
-        name: 'addmenu', 
+        name: 'addmenu',
         meta: {
           breadcrumbList: ['用户管理', '菜单管理'],
           belongTab: 'system',
@@ -59,7 +59,7 @@ export const loginRouter = [
       },
       {
         path: '/menu',
-        name: 'Menu', 
+        name: 'Menu',
         meta: {
           breadcrumbList: ['用户管理', '菜单管理'],
           belongTab: 'system',
@@ -69,13 +69,33 @@ export const loginRouter = [
           require(['@/components/system/account/menu'], resolve)
         }
       },
-   
-    
-    
-    
-       
+      {
+        path: '/merchantAdd',
+        name: 'merchantAdd',
+        meta: {
+          breadcrumbList: ['商户管理','商户管理','添加商户'],
+          belongTab: 'merchant',
+          openName: 'merchantAdd'
+        },
+        component: resolve => {
+          require(['@/components/merchant/merchant/merchantAdd'], resolve)
+        }
+      },
+      {
+        path: '/merchantChannelAdd',
+        name: 'merchantChannelAdd',
+        meta: {
+          breadcrumbList: ['商户管理','商户管理','添加渠道'],
+          belongTab: 'merchant',
+          openName: 'merchantChannelAdd'
+        },
+        component: resolve => {
+          require(['@/components/merchant/merchant/merchantChannelAdd'], resolve)
+        }
+      },
     ]
-  }
+  },
+
 ]
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [

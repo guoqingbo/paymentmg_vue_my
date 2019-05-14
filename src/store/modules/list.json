@@ -1,0 +1,53 @@
+{
+  "total": 4,
+  "rows": [
+    {
+      "id": 102,
+      "deleted": "F",
+      "modifyBy": "15010001000",
+      "modifyTime": "2019-02-11 08:47:55",
+      "roleName": "aaa",
+      "accType": "4",
+      "useFlag": "1",
+      "remark": "aaa啊啊啊",
+      "mainUserId": 1471
+    },
+    {
+      "id": 104,
+      "deleted": "F",
+      "modifyBy": "15010001000",
+      "modifyTime": "2019-02-11 08:48:03",
+      "roleName": "test",
+      "accType": "4",
+      "useFlag": "1",
+      "remark": "1231231",
+      "mainUserId": 1471
+    },
+    {
+      "id": 129,
+      "deleted": "F",
+      "modifyBy": "15010001000",
+      "modifyTime": "2019-02-11 08:48:16",
+      "roleName": "测试角色",
+      "accType": "4",
+      "useFlag": "0",
+      "remark": "测试一下是不是可以新增",
+      "mainUserId": 1471
+    },
+    {
+      "id": 134,
+      "deleted": "F",
+      "modifyBy": "15010001000",
+      "modifyTime": "2019-02-13 17:38:01",
+      "roleName": "再测试一个12",
+      "accType": "4",
+      "useFlag": "1",
+      "remark": "前端测试前端测试前端测试前端",
+      "mainUserId": 1471
+    }
+  ],
+  "pages": 1,
+  "recordsTotal": 4,
+  "recordsFiltered": 4,
+  "identified": "id"
+}

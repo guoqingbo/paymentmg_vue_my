@@ -23,7 +23,7 @@
         </span>
         <span class="demo-upload-list-del"
               style="vertical-align: middle; margin-left:10px; display:inline-block; cursor: pointer;">
-          <Icon type="trash-a"
+          <Icon type="md-trash"
                 size="20"
                 @click.native="handleRemove(index)"></Icon>
         </span>
