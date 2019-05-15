@@ -4,7 +4,7 @@
       <FormItem v-for="item in searchItems"  :key="item.label">
         <Input v-if="item.type=='input'" v-model="searchForm[item.name]" :placeholder="'请输入'+item.label"></Input>
         <DatePicker v-if="item.type=='date'" type="date" :placeholder="'请输入'+item.label" v-model="searchForm[item.name]"></DatePicker>
-        <Select v-if="item.type=='select'" v-model="searchForm[item.name]" style="width:180px">
+        <Select v-if="item.type=='select'" v-model="searchForm[item.name]" :placeholder="'请选择'+item.label">
             <Option v-for="sitem in item.data" :value="sitem.value" :key="sitem.value">{{ sitem.label }}</Option>
         </Select>
       </FormItem>

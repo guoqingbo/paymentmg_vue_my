@@ -10,28 +10,11 @@
              :content="content"
              :sucessMsg="sucessMsg"
              mode="mode"></confirm>
-    <modalForm v-model="modalForm"
-               :title="modalFormTitle"
-               :formRef="$refs.formItem"
-               :formAction="formAction"
-               :formParams="formParams">
-      <Form :model="formItem"
-            label-position="right"
-            :label-width="150"
-            ref="formItem"
-            :rules="ruleForm">
-        <FormItem label="角色名称："
-                  prop="roleName">
-          <Input v-model="formItem.roleName"
-                 placeholder="填写角色名称"></Input>
-        </FormItem>
-        <FormItem label="备注：">
-          <Input v-model="formItem.remark"
-                 type="textarea"
-                 :autosize="{minRows: 2,maxRows: 5}"></Input>
-        </FormItem>
-      </Form>
-    </modalForm>
+    <modalForm v-model="formShow"
+               :formItems="formItems"
+               :url="formUrl"
+               :title="formTitle"
+               json></modalForm>
   </div>
 </template>
 <script>
@@ -48,7 +31,7 @@
             type:'index'
           },
           {
-            title: '商户号',
+            title: '商户编号',
             key: 'accType',
             sortable: true,
           },
@@ -58,7 +41,17 @@
             sortable: true,
           },
           {
-            title: '客户类型',
+            title: '场景编号',
+            key: 'remark',
+            sortable: true,
+          },
+          {
+            title: '场景名称',
+            key: 'remark',
+            sortable: true,
+          },
+          {
+            title: '场景描述',
             key: 'remark',
             sortable: true,
           },
@@ -73,23 +66,6 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "详情",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchantAdd?lookId=" + params.row.id
-                    });
-                  }
-                },
-                {
-                  title: "编辑",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchantAdd",
-                      query: { editId: params.row.id }
-                    });
-                  }
-                },
-                {
                   title: "删除",
                   action: () => {
                     this.mode = "done";
@@ -101,7 +77,6 @@
                   }
                 }
               ];
-              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
@@ -125,7 +100,7 @@
             title: '添加商户场景',
             icon: 'md-add',
             callback: () => {
-              this.showModal('add')
+              this.formShow = true
             }
           }
         ],
@@ -133,20 +108,29 @@
         content: "",
         sucessMsg: "",
 
-        formItem: {
-          roleName: '',
-          switch: true,
-          remark: ''
-        },
-        ruleForm: {
-          roleName: [
-            { required: true, message: '请输入角色名称', trigger: 'blur' }
-          ]
-        },
-        modalForm: false,
-        modalFormTitle: '',
-        formParams: {},
-        formAction: ''
+        formTitle:"添加场景",
+        formShow: false,
+        formItems: [
+          {
+            title: '商户号',
+            name: 'merchantNo',
+            type: 'input',
+            rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
+          },
+          {
+            title: '场景名称',
+            name: 'sceneName',
+            type: 'input',
+            rules: [{ required: true, message: '请输入场景名称', trigger: 'blur' }]
+          },
+          {
+            title: '场景说明',
+            name: 'sceneRemark',
+            type: 'textarea',
+            rules: [{ required: true, message: '请输入场景说明', trigger: 'blur' }]
+          },
+        ],
+        formUrl: '/manage/admin/webApi/channelNotifyConfig/saveConfig'
       }
     },
     mounted () {
@@ -154,17 +138,6 @@
     },
     components: {list,confirm,modalForm},
     methods: {
-      showModal (type, row) {
-        // this.modal = true
-        this.modalForm = true
-        if (type === 'add') {
-          this.formItem.roleName = ''
-          this.formItem.switch = true
-          this.formItem.remark = ''
-          this.modalFormTitle = '新增角色'
-          this.formAction = '/admin/sysRole/saveRole'
-        }
-      },
     }
   }
 </script>

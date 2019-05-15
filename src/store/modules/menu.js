@@ -1,5 +1,5 @@
 import {apiGet} from '../../fetch/api'
-import menu from './menu.json'
+import menu from '../../data/menu.json'
 const state = {
   menuList: '',
   activeName: '',

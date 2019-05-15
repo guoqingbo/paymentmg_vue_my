@@ -10,7 +10,7 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"
+             :mode="mode"
              @sucessDone="sucessDone"></confirm>
   </div>
 </template>
@@ -24,13 +24,12 @@
         columns: [
           {
             title: '序号',
-            type:'index'
+            type:'index',
           },
           {
             title: '商户编号',
             key: 'accType',
             sortable: true,
-
           },
           {
             title: '商户名称',
@@ -146,7 +145,6 @@
             }
           }
         ],
-        selection: '',
         mode: "",
         content: "",
         sucessMsg: "",
@@ -185,7 +183,7 @@
   .merchant-channel{
     .btn-groups {
       .ivu-col{
-        width: 12%;
+        width: 150px;
       }
     }
   }

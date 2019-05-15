@@ -1,5 +1,5 @@
 import {apiPost} from '../../fetch/api'
-import list from './list.json'
+import list from '../../data/list.json'
 const state = {
   url: '',
   params: '',

@@ -104,7 +104,7 @@
             {
               "id": 211,
               "funName": "渠道管理",
-              "funCode": "index",
+              "funCode": "channelManage",
               "funType": "custom",
               "optType": "",
               "parentId": 210,
@@ -116,7 +116,7 @@
             {
               "id": 212,
               "funName": "渠道产品管理",
-              "funCode": "channelProduct",
+              "funCode": "channelProductManage",
               "funType": "custom",
               "optType": "",
               "parentId": 210,
@@ -142,7 +142,7 @@
             {
               "id": 221,
               "funName": "支付产品管理",
-              "funCode": "index",
+              "funCode": "payProductManage",
               "funType": "custom",
               "optType": "",
               "parentId": 220,
@@ -154,7 +154,7 @@
             {
               "id": 222,
               "funName": "渠道产品管理",
-              "funCode": "payChannel",
+              "funCode": "payChannelManage",
               "funType": "custom",
               "optType": "",
               "parentId": 220,

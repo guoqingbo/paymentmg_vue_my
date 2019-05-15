@@ -9,19 +9,13 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             :mode="mode"></confirm>
-    <modalForm v-model="formShow"
-               :formItems="formItems"
-               :url="formUrl"
-               :title="formTitle"
-               json></modalForm>
+             mode="mode"></confirm>
   </div>
 </template>
 <script>
   import { apiGet, apiPost } from '@/fetch/api'
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
-  import modalForm from '@/components/global/modalForm'
   export default {
     data () {
       return {
@@ -31,7 +25,7 @@
             type:'index'
           },
           {
-            title: '商户编号',
+            title: '商户号',
             key: 'accType',
             sortable: true,
           },
@@ -41,13 +35,8 @@
             sortable: true,
           },
           {
-            title: '商户来源',
+            title: '客户类型',
             key: 'remark',
-            sortable: true,
-          },
-          {
-            title: '来源商户号',
-            key: 'action',
             sortable: true,
           },
           {
@@ -61,6 +50,23 @@
             render: (h, params) => {
               const actions = [
                 {
+                  title: "详情",
+                  action: () => {
+                    this.$router.push({
+                      path: "/merchantAdd?lookId=" + params.row.id
+                    });
+                  }
+                },
+                {
+                  title: "编辑",
+                  action: () => {
+                    this.$router.push({
+                      path: "/merchantAdd",
+                      query: { editId: params.row.id }
+                    });
+                  }
+                },
+                {
                   title: "删除",
                   action: () => {
                     this.mode = "done";
@@ -72,6 +78,7 @@
                   }
                 }
               ];
+              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
@@ -85,61 +92,41 @@
             name: 'roleName'
           },
           {
-            label: '商户编号',
+            label: '商户号',
             type: 'input',
             name: 'roleName'
           },
           {
-            label: '商户来源',
-            type: 'select',
-            name: 'useFlag',
-            data: this.$store.state.global.payProduct
+            label: '开始日期',
+            type: 'date',
+            name: 'orderStartTime',
+            value: ''
+          },
+          {
+            label: '结束日期',
+            type: 'date',
+            name: 'orderEndTime',
+            value: ''
           },
         ],
         hannleItems: [
           {
-            title: '添加关联商户',
+            title: '添加商户',
             icon: 'md-add',
             callback: () => {
-              this.formShow = true
+              this.$router.push("/merchantAdd");
             }
           }
         ],
-
         mode: "",
         content: "",
         sucessMsg: "",
-
-        formTitle:"添加关联商户",
-        formShow: false,
-        formItems: [
-          {
-            title: '商户来源',
-            name: 'merchantOrigin',
-            type: 'select',
-            data: this.$store.state.global.payProduct,
-            rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
-          },
-          {
-            title: '来源商户号',
-            name: 'merchantOriginNo',
-            type: 'input',
-            // rules: [{ required: true, message: '请输入来源商户号', trigger: 'blur' }]
-          },
-          {
-            title: '支付中心商户号',
-            name: 'payMerchantNo',
-            type: 'input',
-            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' }]
-          }
-        ],
-        formUrl: '/manage/admin/webApi/channelNotifyConfig/saveConfig'
       }
     },
     mounted () {
 
     },
-    components: {list,confirm,modalForm},
+    components: {list,confirm},
     methods: {
 
     }
