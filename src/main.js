@@ -4,7 +4,6 @@ import './validate'
 import router from './router'
 import store from './store'
 import iView from 'iview'
-import $ from 'jquery'
 
 // import axios from 'axios'
 import VueCookies from 'vue-cookies'
@@ -13,28 +12,13 @@ import * as filter from './filters'
 import common from './common'
 import Main from './components/main'
 import VueClipboard from 'vue-clipboard2'
+import {
+  apiGet,
+  apiPost,
+  apiPut,
+  apiPostJson
+} from '@/fetch/api'
 
-
-// if (window.location.href.split('#/')[1] = 'login') {
-//   main()
-//   window.location.href = window.location.href
-
-// }
-// async function main() {
-//   let userId = VueCookies.get('userId')
-//   store.dispatch('setUserIdAction', userId)
-//   await store.dispatch('getApi') // 获取权限
-
-//   store.dispatch('formaterRouterHandle') // 根据权限获取路由
-//   router.addRoutes([{
-//     path: '/main',
-//     name: 'main',
-//     component: Main,
-//     children: [...store.state.menu.asyncRouter]
-//   }])
-// }
-
-// 自定义拖拽组件
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
@@ -89,34 +73,21 @@ router.beforeEach(async (to, from, next) => {
     // next()
   }
   }
-
 })
 
-
-window.$ = $
 Vue.use(iView)
 Vue.use(VueCookies)
 Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
-// Vue.prototype.$http = axios
 Vue.prototype.filter = filter
 Vue.prototype.common = common
+Vue.prototype.apiGet = apiGet
+Vue.prototype.apiPost = apiPost
+Vue.prototype.apiPut = apiPut
 
 Object.keys(filter).forEach(key => {
   Vue.filter(key, filter[key])
-})
-
-
-//混合，全局使用api
-Vue.mixin({
-  data() {
-    return {
-      upUrl:'/manage/admin/admin/ui/upload'
-    }
-  },
-  methods: {
-  }
 })
 
 

@@ -3,13 +3,13 @@
     <list ref="gridTable"
           :columns="columns"
           :url="url"
-          :params="params"
           :searchItems="searchItems"
+          :params="params"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"></confirm>
+             :mode="mode"></confirm>
   </div>
 </template>
 <script>
@@ -22,20 +22,26 @@
         columns: [
           {
             title: '序号',
-            type:'index'
+            type:'index',
+            sortable: true,
           },
           {
-            title: '商户号',
+            title: '渠道编码',
             key: 'accType',
             sortable: true,
           },
           {
-            title: '商户名称',
+            title: '渠道名称',
             key: 'useFlag',
             sortable: true,
           },
           {
-            title: '客户类型',
+            title: '渠道性质',
+            key: 'remark',
+            sortable: true,
+          },
+          {
+            title: '签约状态',
             key: 'remark',
             sortable: true,
           },
@@ -67,54 +73,28 @@
                   }
                 },
                 {
-                  title: "删除",
+                  title: "添加渠道产品",
                   action: () => {
-                    this.mode = "done";
-                    this.sucessMsg = "删除成功！";
-                    this.content = "确定删除？";
-                    this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
-                    );
+                    this.$router.push({
+                      path: "/channelProductAdd",
+                      query: { id: params.row.id }
+                    });
                   }
                 }
               ];
-              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
         ],
         params: {},
         url: 'admin/sysRole/grid',
-        searchItems: [
-          {
-            label: '商户名称',
-            type: 'input',
-            name: 'roleName'
-          },
-          {
-            label: '商户号',
-            type: 'input',
-            name: 'roleName'
-          },
-          {
-            label: '开始日期',
-            type: 'date',
-            name: 'orderStartTime',
-            value: ''
-          },
-          {
-            label: '结束日期',
-            type: 'date',
-            name: 'orderEndTime',
-            value: ''
-          },
-        ],
+        searchItems:[],
         hannleItems: [
           {
-            title: '添加商户',
+            title: '新增渠道',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchantAdd");
+              this.$router.push("/channelAdd");
             }
           }
         ],

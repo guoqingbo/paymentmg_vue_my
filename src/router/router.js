@@ -69,6 +69,7 @@ export const loginRouter = [
           require(['@/components/system/account/menu'], resolve)
         }
       },
+
       {
         path: '/merchantAdd',
         name: 'merchantAdd',
@@ -91,6 +92,31 @@ export const loginRouter = [
         },
         component: resolve => {
           require(['@/components/merchant/merchant/merchantChannelAdd'], resolve)
+        }
+      },
+
+      {
+        path: '/channelAdd',
+        name: 'channelAdd',
+        meta: {
+          breadcrumbList: ['产品渠道管理','渠道管理','添加渠道'],
+          belongTab: 'productChannel',
+          openName: 'channelAdd'
+        },
+        component: resolve => {
+          require(['@/components/productChannel/channel/channelAdd'], resolve)
+        }
+      },
+      {
+        path: '/channelProductAdd',
+        name: 'channelProductAdd',
+        meta: {
+          breadcrumbList: ['产品渠道管理','渠道管理','添加渠道产品'],
+          belongTab: 'productChannel',
+          openName: 'channelProductAdd'
+        },
+        component: resolve => {
+          require(['@/components/productChannel/channel/channelProductAdd'], resolve)
         }
       },
     ]

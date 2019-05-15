@@ -129,7 +129,7 @@
           ],
           shortName: [
             { required: true, message: '请输入商户简称', trigger: 'blur' },
-            { max: 50, message: "商户简称不超过50字符" }
+            { max: 50, message: "商户简称不超过50字符" ,trigger: 'blur'}
           ],
           enterpriseName: [
             { required: true, message: '请输入企业简称', trigger: 'blur' },

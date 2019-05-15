@@ -38,6 +38,11 @@
                  type="textarea"
                  :placeholder="'请输入'+item.title"
                  :autosize="{minRows: 2,maxRows: 5}"></Input>
+          <RadioGroup v-if="item.type=='radio'"
+                      v-model="formItem[item.name]">
+            <Radio v-for="sitem in item.data"
+                   :label="sitem.value">{{ sitem.label }}</Radio>
+          </RadioGroup>
         </FormItem>
       </Form>
     </Modal>

@@ -25,18 +25,23 @@
             type:'index'
           },
           {
-            title: '商户号',
-            key: 'accType',
+            title: '渠道编码',
+            key: 'chanelNo',
             sortable: true,
           },
           {
-            title: '商户名称',
-            key: 'useFlag',
+            title: '渠道产品编码吗',
+            key: 'chanelProductNo',
             sortable: true,
           },
           {
-            title: '客户类型',
-            key: 'remark',
+            title: '渠道产品名称',
+            key: 'chanelProductName',
+            sortable: true,
+          },
+          {
+            title: '渠道产品状态',
+            key: 'chanelProductStatus',
             sortable: true,
           },
           {
@@ -78,7 +83,6 @@
                   }
                 }
               ];
-              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
@@ -87,37 +91,26 @@
         url: 'admin/sysRole/grid',
         searchItems: [
           {
-            label: '商户名称',
+            label: '渠道编码',
             type: 'input',
-            name: 'roleName'
+            name: 'chanelNo'
           },
           {
-            label: '商户号',
+            label: '渠道产品编码',
             type: 'input',
-            name: 'roleName'
+            name: 'chanelProductNo'
           },
           {
-            label: '开始日期',
-            type: 'date',
-            name: 'orderStartTime',
-            value: ''
-          },
-          {
-            label: '结束日期',
-            type: 'date',
-            name: 'orderEndTime',
-            value: ''
+            label: '渠道产品状态',
+            type: 'select',
+            name: 'chanelProductStatus',
+            data:[{label:'可用',value:1},{label:'不可用',value:0}]
           },
         ],
         hannleItems: [
-          {
-            title: '添加商户',
-            icon: 'md-add',
-            callback: () => {
-              this.$router.push("/merchantAdd");
-            }
-          }
+
         ],
+
         mode: "",
         content: "",
         sucessMsg: "",
