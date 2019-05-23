@@ -1,7 +1,9 @@
 <template>
-  <div class="merchantAdd">
+  <div>
     <formList :formItems="formList"
-              :url="formListUrl"></formList>
+              :url="formListUrl"
+              :routeType="routeType"
+              @beforeSave="beforeSave"></formList>
   </div>
 </template>
 
@@ -13,20 +15,21 @@
     },
     data () {
       return {
-        formListUrl:"admin/sysRole/grid",
+        formListUrl:"/channel/saveOrUpdate",
         formList: [
           {
             title: '渠道编码',
-            name: 'chanelNo',
+            name: 'channelCode',
             type: 'input',
             rules: [
               { required: true, message: '请输入渠道编码', trigger: 'blur' },
               { max: 20, message: "渠道编码不超过20字符" ,trigger: 'blur'}
-            ]
+            ],
+            value:""
           },
           {
             title: '渠道名称',
-            name: 'chanelName',
+            name: 'channelName',
             type: 'input',
             rules: [
               { required: true, message: '请输入场景名称', trigger: 'blur' },
@@ -35,24 +38,17 @@
           },
           {
             title: '渠道性质',
-            name: 'chanelNature',
+            name: 'channelType',
             type: 'select',
-            data: [
-              {label:"银行",value:"0"},
-              {label:"支付公司",value:"1"},
-              {label:"其它",value:"2"}
-            ],
-            rules: [{ required: true, message: '请选择渠道性质', trigger: 'change' }]
+            data: this.$store.state.global.channelType,
+            rules: [{ required: true,type:"number", message: '请选择渠道性质', trigger: 'change' }]
           },
           {
             title: '签约状态',
-            name: 'signStatus',
+            name: 'status',
             type: 'select',
-            data: [
-              {label:"已签约",value:"0"},
-              {label:"已解约",value:"1"},
-            ],
-            rules: [{ required: true, message: '请选择签约状态', trigger: 'change' }]
+            data: this.common.dic.signStatus,
+            rules: [{ required: true, type:"number",message: '请选择签约状态', trigger: 'change' }]
           },
           {
             title: '业务联系人',
@@ -62,7 +58,7 @@
           },
           {
             title: '业务联系人手机号',
-            name: 'contactTel',
+            name: 'contactPhone',
             type: 'input',
             rules: [{
               validator: this.common.validate.phone,
@@ -81,28 +77,58 @@
           },
           {
             title: '备注',
-            name: 'sceneRemark',
+            name: 'remark',
             type: 'textarea',
             rules: [{ max: 100, message: "备注不超过100字符" ,trigger: 'blur'}]
           },
         ],
+        routeType:"",
       }
     },
     watch: {
 
     },
     created () {
-
+      // 如果是编辑，详情
+      this.getDetail()
+      //获取渠道类型
+      this.getChannelType()
     },
     methods: {
-
+      beforeSave(formItem){
+        // 确认保存之前
+        if (this.$route.query.id){
+          formItem.id = this.$route.query.id
+        }
+      },
+      getDetail(){
+        if (this.$route.query.id) {
+          let id = this.$route.query.id
+          this.apiGet("/channel/"+id).then(res => {
+            this.routeType = this.$route.query.routeType
+            if (res.status == 200 && res.data) {
+              this.formList.forEach((ele)=>{
+                ele.value = res.data[ele.name]
+                if(this.routeType == 'detail'){
+                  // 如果是详情页
+                  ele.type += "Text"
+                }
+              })
+            }
+          });
+        }
+      },
+      getChannelType(){
+        if(!this.$store.state.global.channelType){
+          this.$store.dispatch("getChannelType").then(res=>{
+            this.formList[2].data = this.$store.state.global.channelType
+          })
+        }
+      }
     }
   }
 </script>
 
 <style lang="scss">
-  .merchantAdd {
-    width: 70%;
-    margin: 0 auto;
-  }
+
 </style>

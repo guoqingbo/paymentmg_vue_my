@@ -9,11 +9,10 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"></confirm>
+             :mode="mode"></confirm>
   </div>
 </template>
 <script>
-  import { apiGet, apiPost } from '@/fetch/api'
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
   export default {
@@ -25,18 +24,18 @@
             type:'index'
           },
           {
-            title: '商户号',
-            key: 'accType',
+            title: '支付产品名称',
+            key: 'payProductName',
             sortable: true,
           },
           {
-            title: '商户名称',
-            key: 'useFlag',
+            title: '支付产品代码',
+            key: 'payProductCode',
             sortable: true,
           },
           {
-            title: '客户类型',
-            key: 'remark',
+            title: '产品说明',
+            key: 'productRemark',
             sortable: true,
           },
           {
@@ -53,7 +52,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd?lookId=" + params.row.id
+                      path: "/payProductAdd?lookId=" + params.row.id
                     });
                   }
                 },
@@ -61,7 +60,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd",
+                      path: "/payProductAdd",
                       query: { editId: params.row.id }
                     });
                   }
@@ -69,16 +68,24 @@
                 {
                   title: "删除",
                   action: () => {
-                    this.mode = "done";
+                    this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
                       "/product/parkInfo/del?id=" + params.row.id
                     );
                   }
+                },
+                {
+                  title: "添加渠道产品",
+                  action: () => {
+                    this.$router.push({
+                      path: "/payProductChannelAdd",
+                      query: { editId: params.row.id }
+                    });
+                  }
                 }
               ];
-              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
@@ -86,35 +93,13 @@
         params: {},
         url: 'admin/sysRole/grid',
         searchItems: [
-          {
-            label: '商户名称',
-            type: 'input',
-            name: 'roleName'
-          },
-          {
-            label: '商户号',
-            type: 'input',
-            name: 'roleName'
-          },
-          {
-            label: '开始日期',
-            type: 'date',
-            name: 'orderStartTime',
-            value: ''
-          },
-          {
-            label: '结束日期',
-            type: 'date',
-            name: 'orderEndTime',
-            value: ''
-          },
         ],
         hannleItems: [
           {
-            title: '添加商户',
+            title: '新增支付产品',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchantAdd");
+              this.$router.push("/payProductAdd");
             }
           }
         ],

@@ -10,7 +10,8 @@ import {
 Vue.use(Router)
 
 const router = new Router({
-    mode: 'history',
+  // mode: 'history',
+  mode: 'hash',
   routes: routers
 })
 
@@ -22,6 +23,7 @@ router.beforeEach((to, from, next) => {
   store.dispatch('setOpenNameAction', to.meta.openName)
   // store.dispatch("updateSubMenuListAction",to.meta.belongTab)
   // Util.title(to.meta.title);
+
   next()
 })
 

@@ -13,7 +13,6 @@
   </div>
 </template>
 <script>
-  import { apiGet, apiPost } from '@/fetch/api'
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
   export default {
@@ -25,18 +24,18 @@
             type:'index'
           },
           {
-            title: '商户号',
-            key: 'accType',
+            title: '支付产品代码',
+            key: 'payProductCode',
             sortable: true,
           },
           {
-            title: '商户名称',
-            key: 'useFlag',
+            title: '支付产品名称',
+            key: 'payProductName',
             sortable: true,
           },
           {
-            title: '客户类型',
-            key: 'remark',
+            title: '支付产品编号',
+            key: 'payProductNo',
             sortable: true,
           },
           {
@@ -58,27 +57,17 @@
                   }
                 },
                 {
-                  title: "编辑",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchantAdd",
-                      query: { editId: params.row.id }
-                    });
-                  }
-                },
-                {
                   title: "删除",
                   action: () => {
-                    this.mode = "done";
+                    this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
                       "/product/parkInfo/del?id=" + params.row.id
                     );
                   }
-                }
+                },
               ];
-              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
@@ -87,36 +76,18 @@
         url: 'admin/sysRole/grid',
         searchItems: [
           {
-            label: '商户名称',
+            label: '产品代码',
             type: 'input',
-            name: 'roleName'
+            name: 'payProductCode'
           },
           {
-            label: '商户号',
+            label: '渠道产品代码',
             type: 'input',
-            name: 'roleName'
-          },
-          {
-            label: '开始日期',
-            type: 'date',
-            name: 'orderStartTime',
-            value: ''
-          },
-          {
-            label: '结束日期',
-            type: 'date',
-            name: 'orderEndTime',
-            value: ''
+            name: 'channelProductNo'
           },
         ],
         hannleItems: [
-          {
-            title: '添加商户',
-            icon: 'md-add',
-            callback: () => {
-              this.$router.push("/merchantAdd");
-            }
-          }
+
         ],
         mode: "",
         content: "",

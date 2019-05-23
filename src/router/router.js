@@ -1,5 +1,7 @@
 // 不作为Main组件的子页面展示的页面单独写，如下
 import Main from '@/components/main'
+import channelProduct from "./channelProduct"
+import merchant from "./merchant"
 export const loginRouter = [
   {
     path: '/',
@@ -69,56 +71,8 @@ export const loginRouter = [
           require(['@/components/system/account/menu'], resolve)
         }
       },
-
-      {
-        path: '/merchantAdd',
-        name: 'merchantAdd',
-        meta: {
-          breadcrumbList: ['商户管理','商户管理','添加商户'],
-          belongTab: 'merchant',
-          openName: 'merchantAdd'
-        },
-        component: resolve => {
-          require(['@/components/merchant/merchant/merchantAdd'], resolve)
-        }
-      },
-      {
-        path: '/merchantChannelAdd',
-        name: 'merchantChannelAdd',
-        meta: {
-          breadcrumbList: ['商户管理','商户管理','添加渠道'],
-          belongTab: 'merchant',
-          openName: 'merchantChannelAdd'
-        },
-        component: resolve => {
-          require(['@/components/merchant/merchant/merchantChannelAdd'], resolve)
-        }
-      },
-
-      {
-        path: '/channelAdd',
-        name: 'channelAdd',
-        meta: {
-          breadcrumbList: ['产品渠道管理','渠道管理','添加渠道'],
-          belongTab: 'productChannel',
-          openName: 'channelAdd'
-        },
-        component: resolve => {
-          require(['@/components/productChannel/channel/channelAdd'], resolve)
-        }
-      },
-      {
-        path: '/channelProductAdd',
-        name: 'channelProductAdd',
-        meta: {
-          breadcrumbList: ['产品渠道管理','渠道管理','添加渠道产品'],
-          belongTab: 'productChannel',
-          openName: 'channelProductAdd'
-        },
-        component: resolve => {
-          require(['@/components/productChannel/channel/channelProductAdd'], resolve)
-        }
-      },
+      ...channelProduct,
+      ...merchant,
     ]
   },
 

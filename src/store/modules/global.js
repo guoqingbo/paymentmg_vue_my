@@ -1,4 +1,4 @@
-// import {apiGet,apiPost} from '../../fetch/api'
+import {apiGet,apiPost} from '../../fetch/api'
 
 const globalConfig = {
   state: {
@@ -21,13 +21,20 @@ const globalConfig = {
     }
   },
   actions: {
-    getPayProduct (context, params) {
-
-      // return apiGet(params.url, params.params).then((res)=>{
-      //   if(res.status==200){
-      //     context.commit('setPayProduct',res.data)
-      //   }
-      // })
+    async getChannelType(context){
+      let channelType = []
+      let res = await apiGet("/channel/type/list")
+      if(res.status == 200){
+        res.data.forEach((ele)=>{
+          let channelTypeItem = {
+            value:ele.channelType,
+            label:ele.channelTypeName
+          }
+          channelType.push(channelTypeItem)
+        })
+      }
+      context.state.channelType = channelType
+      return context.state.channelType
     }
   }
 }

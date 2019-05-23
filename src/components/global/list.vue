@@ -46,7 +46,12 @@ export default {
   },
   computed: {
     res2() {
-      return this.$store.state.list.res;
+      let res = this.$store.state.list.res
+      if(res && res.data){
+        return res.data;
+      }else{
+        return {};
+      }
     }
   },
   methods: {
@@ -62,10 +67,10 @@ export default {
         this.$store.state.list.params,
         this.searchForm
       );
-      await this.$store.dispatch("postApi");
+      await this.$store.dispatch("getApi");
     },
      async loadpage () {
-      await this.$store.dispatch('postApi')
+      await this.$store.dispatch('getApi')
     }
   }
 };

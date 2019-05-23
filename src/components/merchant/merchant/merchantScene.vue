@@ -9,7 +9,7 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"></confirm>
+             :mode="mode"></confirm>
     <modalForm v-model="formShow"
                :formItems="formItems"
                :url="formUrl"
@@ -32,32 +32,32 @@
           },
           {
             title: '商户编号',
-            key: 'accType',
+            key: 'merchantNo',
             sortable: true,
           },
           {
             title: '商户名称',
-            key: 'useFlag',
+            key: 'merchantName',
             sortable: true,
           },
           {
             title: '场景编号',
-            key: 'remark',
+            key: 'no',
             sortable: true,
           },
           {
             title: '场景名称',
-            key: 'remark',
+            key: 'name',
             sortable: true,
           },
           {
             title: '场景描述',
-            key: 'remark',
+            key: 'description',
             sortable: true,
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -68,11 +68,11 @@
                 {
                   title: "删除",
                   action: () => {
-                    this.mode = "done";
+                    this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/merchant/scenario/delete/125"
                     );
                   }
                 }
@@ -82,16 +82,16 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/merchant/scenario/grid',
         searchItems: [
           {
             label: '商户名称',
             type: 'input',
-            name: 'roleName'
+            name: 'merchantName'
           },
           {
             label: '商户编号',
-            type: 'input',
+            type: 'merchantNo',
             name: 'roleName'
           }
         ],
@@ -104,6 +104,7 @@
             }
           }
         ],
+
         mode: "",
         content: "",
         sucessMsg: "",
@@ -130,7 +131,7 @@
             rules: [{ required: true, message: '请输入场景说明', trigger: 'blur' }]
           },
         ],
-        formUrl: '/manage/admin/webApi/channelNotifyConfig/saveConfig'
+        formUrl: '/merchant/scenario/save'
       }
     },
     mounted () {

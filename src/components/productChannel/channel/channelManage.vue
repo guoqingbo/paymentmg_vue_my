@@ -27,27 +27,33 @@
           },
           {
             title: '渠道编码',
-            key: 'accType',
+            key: 'channelCode',
             sortable: true,
           },
           {
             title: '渠道名称',
-            key: 'useFlag',
+            key: 'channelName',
             sortable: true,
           },
           {
             title: '渠道性质',
-            key: 'remark',
+            key: 'channelType',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.filter.turn("channelType",params.row.channelType))
+            }
           },
           {
             title: '签约状态',
-            key: 'remark',
+            key: 'status',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.filter.turn("signStatus",params.row.status))
+            }
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -59,7 +65,8 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd?lookId=" + params.row.id
+                      path: "/channelAddEditDetail",
+                      query: { id: params.row.id,routeType:"detail"},
                     });
                   }
                 },
@@ -67,8 +74,8 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd",
-                      query: { editId: params.row.id }
+                      path: "/channelAddEditDetail",
+                      query: { id: params.row.id },
                     });
                   }
                 },
@@ -76,8 +83,8 @@
                   title: "添加渠道产品",
                   action: () => {
                     this.$router.push({
-                      path: "/channelProductAdd",
-                      query: { id: params.row.id }
+                      path: "/channelProductAddEditDetail",
+                      query: { channelId: params.row.id,channelName:params.row.channelName }
                     });
                   }
                 }
@@ -87,14 +94,14 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/channel/grid',
         searchItems:[],
         hannleItems: [
           {
             title: '新增渠道',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/channelAdd");
+              this.$router.push("/channelAddEditDetail");
             }
           }
         ],
@@ -102,6 +109,9 @@
         content: "",
         sucessMsg: "",
       }
+    },
+    created(){
+      console.log($route.name)
     },
     mounted () {
 

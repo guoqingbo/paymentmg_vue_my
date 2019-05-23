@@ -50,7 +50,7 @@ export default {
             params: _this.param,
             callback: res => {
               if (res.success) {
-                // this.$store.dispatch("postApi");
+                this.$store.dispatch("getApi");
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {
@@ -66,7 +66,7 @@ export default {
             params: _this.param,
             callback: res => {
               if (res.success || res.status == 200) {
-                // this.$store.dispatch("postApi");
+                this.$store.dispatch("getApi");
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {
@@ -81,7 +81,7 @@ export default {
             params: _this.param,
             callback: res => {
               if (res.success) {
-                // this.$store.dispatch("postApi");
+                this.$store.dispatch("getApi");
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {

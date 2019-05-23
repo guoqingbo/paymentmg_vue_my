@@ -6,7 +6,7 @@
                 <Icon type="ios-trash-outline" @click.native="handleRemove(index)"></Icon>
             </div>
     </div>
-      <Upload 
+    <Upload
           ref="upload"
           :show-upload-list="false"
           :on-success="handleSuccess"
@@ -21,7 +21,7 @@
           <div style="width: 58px;height:58px;line-height: 58px;">
               <Icon type="ios-camera" size="20"></Icon>
           </div>
-      </Upload> 
+      </Upload>
 </div>
 
 </template>

@@ -1,10 +1,9 @@
 <template>
   <div class="city-select">
     <Row>
-     
         <Col class="city-list-item" span="8">
          <FormItem>
-          <Select v-model="sheng" @on-change="choseProvince" placeholder="省级地区">
+          <Select v-model="sheng" :disabled="disabled" @on-change="choseProvince" placeholder="省级地区">
             <Option
               v-for="item in province"
               :key="item.areaCode"
@@ -14,11 +13,11 @@
           </Select>
           </FormItem>
         </Col>
-      
-     
+
+
         <Col class="city-list-item" span="8">
          <FormItem>
-          <Select v-model="shi" @on-change="choseCity" placeholder="市级地区">
+          <Select v-model="shi" :disabled="disabled" @on-change="choseCity" placeholder="市级地区">
             <Option
               v-for="item in shi1"
               :key="item.areaCode"
@@ -28,11 +27,11 @@
           </Select>
            </FormItem>
         </Col>
-     
-      
+
+
         <Col class="city-list-item" span="8">
         <FormItem>
-          <Select v-model="qu" @on-change="choseBlock" placeholder="区级地区">
+          <Select v-model="qu" :disabled="disabled" @on-change="choseBlock" placeholder="区级地区">
             <Option
               v-for="item in qu1"
               :key="item.areaCode"
@@ -42,12 +41,11 @@
           </Select>
            </FormItem>
         </Col>
-     
+
     </Row>
   </div>
 </template>
 <script>
-import { apiPost, apiGet } from "@/fetch/api";
 export default {
   props: ["addrCode"], // 1211-111-22
   data() {
@@ -63,6 +61,16 @@ export default {
       code: ""
     };
   },
+  props: {
+    formItems: {
+      type: Array
+    },
+    disabled:{
+      // 区分是详情，新增，编辑
+      type:Boolean ,
+      default: false
+    },
+  },
   watch: {
     async addrCode(val, oldVal) {
       if (val) {
@@ -70,13 +78,13 @@ export default {
         this.shi = val.split("-")[1];
         this.qu = val.split("-")[2];
         if (this.sheng) {
-          let shires = await apiGet(
+          let shires = await this.apiGet(
             "/manage/admin/admin/area/selectByPcode?parentCode=" + this.sheng
           );
           this.shi1 = shires.data;
         }
         if (this.shi) {
-          let qures = await apiGet(
+          let qures = await this.apiGet(
             "/manage/admin/admin/area/selectByPcode?parentCode=" + this.shi
           );
           this.qu1 = qures.data;
@@ -100,13 +108,13 @@ export default {
         this.qu = this.addrCode.split("-")[2];
 
         if (this.sheng) {
-          let shires = await apiGet(
+          let shires = await this.apiGet(
             "/manage/admin/admin/area/selectByPcode?parentCode=" + this.sheng
           );
           this.shi1 = shires.data;
         }
         if (this.shi) {
-          let qures = await apiGet(
+          let qures = await this.apiGet(
             "/manage/admin/admin/area/selectByPcode?parentCode=" + this.shi
           );
           this.qu1 = qures.data;
@@ -119,14 +127,14 @@ export default {
   },
   methods: {
     getCityData() {
-      apiGet("/manage/admin/admin/area/selectByPcode").then(res => {
+      this.apiGet("/manage/admin/admin/area/selectByPcode").then(res => {
         this.province = res.data;
       });
     },
     // 选省
     choseProvince(e) {
       console.log("22")
-      apiGet("/manage/admin/admin/area/selectByPcode?parentCode=" + e).then(
+      this.apiGet("/manage/admin/admin/area/selectByPcode?parentCode=" + e).then(
         res => {
           this.shi1 = res.data;
           this.shi = "";
@@ -141,7 +149,7 @@ export default {
     },
     // 选市
     choseCity(e) {
-      apiGet("/manage/admin/admin/area/selectByPcode?parentCode=" + e).then(
+      this.apiGet("/manage/admin/admin/area/selectByPcode?parentCode=" + e).then(
         res => {
           this.qu1 = res.data;
           this.qu = "";
@@ -160,6 +168,11 @@ export default {
           this.$emit("getQu", this.qu1[index4].areaName, e);
         }
       }
+    },
+    // 获取选择后的省市区编码
+    getArea(){
+      let areaCode =  this.sheng+"-"+this.shi+"-"+ this.qu;
+      return areaCode
     }
   }
 };

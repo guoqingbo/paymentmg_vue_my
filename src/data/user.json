@@ -1,0 +1,436 @@
+{
+  "success": true,
+  "user": {
+    "sessionId": "095204975cb1f2b0a-ed92-4373-afc6-da1d7c8e23a4",
+    "id": 2,
+    "name": "15010001000",
+    "realName": "15010001000",
+    "time": 0,
+    "accType": "custom",
+    "admin": false
+  }
+}
+{
+  "status": "200",
+  "success": true,
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "superadmin",
+      "realName": "测试用户",
+      "time": 0,
+      "accType": "0",
+      "top": [
+        {
+          "id": 1,
+          "name": "商户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerManage1",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 2,
+          "name": "订单查询",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "orderCenter",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 3,
+          "name": "统计报表",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "statistics",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 4,
+          "name": "对账查询",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "checkBill",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 5,
+          "name": "产品渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "channelManageLevel1",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 6,
+          "name": "用户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "userManage",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        }
+      ],
+      "left": [
+        {
+          "id": 7,
+          "name": "商户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerManageLevel2",
+          "parentId": 1,
+          "index": 0,
+          "menus": [
+            {
+              "id": 8,
+              "name": "商户管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "customerManageLevel3",
+              "parentId": 7,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            },
+            {
+              "id": 9,
+              "name": "商户渠道管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "customerChannelManage",
+              "parentId": 7,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            },
+            {
+              "id": 10,
+              "name": "商户场景管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "customerSceneManage",
+              "parentId": 7,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            },
+            {
+              "id": 11,
+              "name": "关联商户管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "customerRelationManage",
+              "parentId": 7,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            }
+          ],
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 12,
+          "name": "渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "channelManageLevel2",
+          "parentId": 5,
+          "index": 0,
+          "menus": [
+            {
+              "id": 13,
+              "name": "渠道管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "channelManageLevel3",
+              "parentId": 12,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            },
+            {
+              "id": 14,
+              "name": "渠道产品管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "channelProductManage",
+              "parentId": 12,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            }
+          ],
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 15,
+          "name": "支付产品管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "payProductManage",
+          "parentId": 5,
+          "index": 0,
+          "menus": [
+            {
+              "id": 16,
+              "name": "支付产品管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "payProductManage1",
+              "parentId": 15,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            },
+            {
+              "id": 17,
+              "name": "支付产品渠道管理",
+              "href": "",
+              "type": "_self",
+              "icon": "",
+              "code": "payProductChannelManage",
+              "parentId": 15,
+              "index": 0,
+              "optType": "",
+              "functionType": "menu"
+            }
+          ],
+          "optType": "",
+          "functionType": "menu"
+        }
+      ],
+      "auth": [
+        {
+          "id": 1,
+          "name": "商户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerManage1",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 7,
+          "name": "商户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerManageLevel2",
+          "parentId": 1,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 8,
+          "name": "商户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerManageLevel3",
+          "parentId": 7,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 12,
+          "name": "渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "channelManageLevel2",
+          "parentId": 5,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 13,
+          "name": "渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "channelManageLevel3",
+          "parentId": 12,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 16,
+          "name": "支付产品管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "payProductManage1",
+          "parentId": 15,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 2,
+          "name": "订单查询",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "orderCenter",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 9,
+          "name": "商户渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerChannelManage",
+          "parentId": 7,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 14,
+          "name": "渠道产品管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "channelProductManage",
+          "parentId": 12,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 15,
+          "name": "支付产品管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "payProductManage",
+          "parentId": 5,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 17,
+          "name": "支付产品渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "payProductChannelManage",
+          "parentId": 15,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 3,
+          "name": "统计报表",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "statistics",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 10,
+          "name": "商户场景管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerSceneManage",
+          "parentId": 7,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 4,
+          "name": "对账查询",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "checkBill",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 11,
+          "name": "关联商户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "customerRelationManage",
+          "parentId": 7,
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 5,
+          "name": "产品渠道管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "channelManageLevel1",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        },
+        {
+          "id": 6,
+          "name": "用户管理",
+          "href": "",
+          "type": "_self",
+          "icon": "",
+          "code": "userManage",
+          "index": 0,
+          "optType": "",
+          "functionType": "menu"
+        }
+      ],
+      "authOper": {},
+      "admin": false
+    },
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiY3JlYXRlZCI6MTU1ODQxOTk0NzQxMiwiZXhwIjoxNTU4NDI3MTQ3fQ.CtZF94iI0ZuFCn2ki_OGbkjIYhBilcn_E676x27hbRBGTnywmiEQOKs_cOAky9frtLnPsV0GRpD7S4iByBqREg"
+  }
+}

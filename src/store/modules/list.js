@@ -1,5 +1,4 @@
-import {apiPost} from '../../fetch/api'
-import list from '../../data/list.json'
+import {apiPost,apiGet} from '../../fetch/api'
 const state = {
   url: '',
   params: '',
@@ -27,13 +26,15 @@ const mutations = {
 }
 
 const actions = {
-  // getApi (context, params) {
-  //   return apiGet(params.url, params.params)
-  // },
+  async getApi (context) {
+    let res = await apiGet(context.state.url, context.state.params)
+    // let res = require('../../data/list.json')
+    context.state.res = res
+    return context.state.res
+  },
   async postApi (context) {
-    // return apiPost(params.url, params.params)
-    // let res = await apiPost(context.state.url, context.state.params)
-    let res = list
+    let res = await apiPost(context.state.url, context.state.params)
+    // let res = require('../../data/list.json')
     context.state.res = res
     return context.state.res
   }

@@ -11,8 +11,9 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/manage':{
-            target:'http://pms.sendinfo.com.cn/',
+        '/':{
+            // target:'http://pms.sendinfo.com.cn/',
+            target:'http://192.168.200.88:6071/',
             // target:'http://192.168.66.246:6071/',
             // target:'http://192.168.200.55:6071/',
             changeOrigin:true,
@@ -30,7 +31,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */

@@ -1,5 +1,5 @@
 import * as api from '@/fetch/api'
-
+import dic from '@/common/dic'
 const common = {
   changeLoading (obj) {
     obj.loading = false
@@ -40,7 +40,7 @@ const common = {
     })
   },
   async listDelete (obj, options) {
-    let res = await api.apiDelete(options.url, options.params || {})
+    let res = await api.apiPost(options.url, options.params || {})
     options.callback(res)
   },
   async listDone (obj, options) {
@@ -177,7 +177,8 @@ const common = {
         }
       }
     }
-  }
+  },
+  dic,
 }
 
 export default common

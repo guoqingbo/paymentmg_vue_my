@@ -9,7 +9,7 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"></confirm>
+             :mode="mode"></confirm>
   </div>
 </template>
 <script>
@@ -26,22 +26,25 @@
           },
           {
             title: '商户号',
-            key: 'accType',
+            key: 'no',
             sortable: true,
           },
           {
             title: '商户名称',
-            key: 'useFlag',
+            key: 'name',
             sortable: true,
           },
           {
             title: '客户类型',
-            key: 'remark',
+            key: 'type',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.filter.turn("merchantType",params.row.type))
+            }
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -53,7 +56,8 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd?lookId=" + params.row.id
+                      path: "/merchantAdd",
+                      query: { id: params.row.id,routeType:"detail"}
                     });
                   }
                 },
@@ -62,50 +66,49 @@
                   action: () => {
                     this.$router.push({
                       path: "/merchantAdd",
-                      query: { editId: params.row.id }
+                      query: { id: params.row.id,routeType:"edit" }
                     });
                   }
                 },
                 {
                   title: "删除",
                   action: () => {
-                    this.mode = "done";
+                    this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/merchant/merchant/delete/" + params.row.id
                     );
                   }
                 }
               ];
-              console.log(this.common)
               return this.common.columnsHandle(h, actions);
             }
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/merchant/merchant/grid',
         searchItems: [
           {
             label: '商户名称',
             type: 'input',
-            name: 'roleName'
+            name: 'name'
           },
           {
             label: '商户号',
             type: 'input',
-            name: 'roleName'
+            name: 'no'
           },
           {
             label: '开始日期',
             type: 'date',
-            name: 'orderStartTime',
+            name: 'startTime',
             value: ''
           },
           {
             label: '结束日期',
             type: 'date',
-            name: 'orderEndTime',
+            name: 'endTime',
             value: ''
           },
         ],

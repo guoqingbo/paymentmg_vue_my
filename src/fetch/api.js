@@ -21,8 +21,9 @@ axios.interceptors.response.use(
   error => {
     if(error.response.data.status==401){
       setCookies('userId','',-1)
-      setCookies('pmsToken','',-1)
-      return  window.location.href='http://pms.sendinfo.com.cn/login'
+      setCookies('token','',-1)
+      console.log(error.response.data)
+      // return  window.location.href='http://pms.sendinfo.com.cn/login'
     }
     return Promise.reject(error)
   }
@@ -42,7 +43,7 @@ function setCookies(cname, cvalue, exdays) {
  * @param data
  * @returns {Promise}
  */
- 
+
 export function apiGet (url, params = {}) {
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {

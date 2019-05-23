@@ -28,35 +28,49 @@
           },
           {
             title: '商户编号',
-            key: 'accType',
+            key: 'merchantNo',
             sortable: true,
           },
           {
             title: '商户名称',
-            key: 'useFlag',
+            key: 'merchantName',
             sortable: true,
           },
           {
             title: '支付产品名称',
-            key: 'remark',
+            key: 'payProductName',
             sortable: true,
           },
           {
             title: '渠道产品名称',
-            key: 'remark',
+            key: 'channelName',
             sortable: true,
+            className:'channel-name',
+            render: (h, params) => {
+              let array = [
+                h('span', params.row.channelName),
+              ]
+              if(params.row.preferred == 1){
+                array.push(h('span', {
+                    'class': 'preferred'
+                  }, [h('Icon',{props:{type:"md-arrow-dropleft"}}),'优先'])
+                )
+              }
+              return array
+            }
+
           },
           {
             title: '支付产品代码',
-            key: 'remark',
-            sortable: true,
+            key: 'payProductNo',
+              ktable: true,
           },
           {
             title: '渠道产品状态',
-            key: 'remark',
+            key: 'status',
             sortable: true,
             render: (h, params) => {
-              return h('span', this.filter.status(params.row.useFlag))
+              return h('span', this.filter.turn('status',params.row.status))
             }
           },
           {
@@ -103,7 +117,7 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/merchant/channel/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -184,6 +198,29 @@
     .btn-groups {
       .ivu-col{
         width: 150px;
+      }
+    }
+    .channel-name{
+      .ivu-table-cell{
+        overflow:visible;
+        position: relative;
+        .preferred{
+          position: absolute;
+          right: 0;
+          background-color: #f00;
+          width: 34px;
+          height: 20px;
+          line-height: 20px;
+          text-align: center;
+          color: #fff;
+        }
+        .ivu-icon{
+          position: absolute;
+          font-size: 41px;
+          left: -25px;
+          top: -10px;
+          color: #f00;
+        }
       }
     }
   }

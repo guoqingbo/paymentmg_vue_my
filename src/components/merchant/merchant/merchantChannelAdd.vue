@@ -1,5 +1,5 @@
 <template>
-  <div class="merchantAdd">
+  <div>
     <Form :model="formItem"
           label-position="right"
           :label-width="120"
@@ -280,8 +280,5 @@
 </script>
 
 <style lang="scss">
-  .merchantAdd {
-    width: 70%;
-    margin: 0 auto;
-  }
+
 </style>

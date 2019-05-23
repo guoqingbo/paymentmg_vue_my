@@ -22,7 +22,6 @@ const mutations = {
   formaterRouter (state) {// 根据权限生成路由
     let roleRouter = []
     // let length = state.menuList.data.length
-    console.log(state.menuList)
     if (!(state.menuList&&state.menuList.data&&state.menuList.data.length)) {
     //   window.location.href = ''
       return
@@ -49,7 +48,6 @@ const mutations = {
           })
       })
     })
-    console.log(roleRouter);
     state.asyncRouter = roleRouter
   }
 }
@@ -58,7 +56,6 @@ const actions = {
     // let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
     let menuList = menu
     context.state.activeName = menuList.data[0].funCode
-    console.log(menuList)
     context.state.menuList = menuList
   },
   setActiveNameAction ({commit}, name) {

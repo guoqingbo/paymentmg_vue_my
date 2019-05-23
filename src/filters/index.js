@@ -1,48 +1,21 @@
-let dateServer = (value) => {
-  return value.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')
-}
-let noFristArr = (arr) => {
-  arr.splice(0, 1)
-  return arr
-}
+import dic from '@/common/dic'
 
-let adType = (value) => {
+console.log(dic)
+
+let turn = (type,value) => {
   let text = ''
-  switch (value) {
-    case 'main_page_top':
-      text = '首页顶部轮播'
-      break
-    case 'person_center_bg':
-      text = '个人中心背景'
-      break
-    case 'pay_page_ad':
-      text = '支付成功页广告'
-      break
-    case 'main_page_fix':
-      text = '首页顶部横条'
-      break
-  }
-  return text
-}
-let status = (value) => {
-  let text = ''
-  switch (value) {
-    case 'main_page_top':
-      text = '首页顶部轮播'
-      break
-    case 'person_center_bg':
-      text = '个人中心背景'
-      break
-    case 'pay_page_ad':
-      text = '支付成功页广告'
-      break
-    case 'main_page_fix':
-      text = '首页顶部横条'
-      break
+  // 如果数据字典存在该类型的数据
+  if(type && dic[type]){
+    dic[type].forEach(item=>{
+      if(item.value == value){
+        text = item.label
+      }
+    })
+  }else {
+    text = '数据字典('+type+')不存在'
   }
   return text
 }
 export {
-  adType,
-  status
+  turn
 }

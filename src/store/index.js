@@ -48,9 +48,7 @@ const store = new Vuex.Store({
         context.commit ('reduce')
       }, 3000)
     },
-    reduceAction ({
-      commit
-    }) {
+    reduceAction ({commit}) {
       commit('reduce')
     },
     getGrid (context) {

@@ -1,258 +1,128 @@
 <template>
-  <div class="merchantAdd">
-    <Form :model="formItem"
-          label-position="right"
-          :label-width="120"
-          ref="formItem"
-          :rules="ruleComplteForm">
-      <FormItem label="商户类型："
-                  prop="merchantType">
-          <Select v-model="formItem.merchantType"
-                  style="width:100%"
-                  placeholder="请选择商户类型">
-            <Option value="T">个人商户</Option>
-            <Option value="F">企业商户</Option>
-          </Select>
-        </FormItem>
-      <FormItem label="商户简称："
-                prop="shortName">
-        <Input v-model="formItem.shortName"
-               style="width:100%"
-               placeholder="请输入商户简称"></Input>
-      </FormItem>
-      <FormItem label="企业名称："
-                prop="enterpriseName">
-        <Input v-model="formItem.enterpriseName"
-               style="width:100%"
-               placeholder="请输入企业名称"></Input>
-      </FormItem>
-      <FormItem label="上级商户号："
-                prop="merchantNum">
-        <Input v-model="formItem.merchantNum"
-               style="width:100%"
-               placeholder="请输入上级商户号"></Input>
-      </FormItem>
-      <FormItem label="法定代表人姓名："
-                prop="legalName">
-        <Input v-model="formItem.legalName"
-               style="width:100%"
-               placeholder="请输入法人姓名"></Input>
-      </FormItem>
-      <FormItem label="身份证号码："
-                prop="idcard">
-        <Input v-model="formItem.idcard"
-               style="width:100%"
-               placeholder="请输入身份证号码"></Input>
-      </FormItem>
-      <FormItem label="社会统一信用代码："
-                prop="creditCode">
-        <Input v-model="formItem.creditCode"
-               style="width:100%"
-               placeholder="请输入社会统一信用代码"></Input>
-      </FormItem>
-      <FormItem label="开户行名称："
-                prop="bankName">
-        <Input v-model="formItem.bankName"
-               style="width:100%"
-               placeholder="请输入开户行名称"></Input>
-      </FormItem>
-      <FormItem label="银行账号："
-                prop="bankAccount">
-        <Input v-model="formItem.bankAccount"
-               style="width:100%"
-               placeholder="请输入银行账号"></Input>
-      </FormItem>
-      <FormItem label="所在地区：" prop="locationCode">
-        <select-item
-          ref="select"
-          style="width:100%;"
-          :addrCode="formItem.locationCode"
-          :span='8'
-          @getProvince="getProvince"
-          @getCity="getCity"
-          @getQu="getQu"></select-item>
-      </FormItem>
-      <FormItem label="详细地址：" prop="address">
-        <Input style="width:100%;"
-               v-model="formItem.address"
-               placeholder="请输入详细地址"></Input>
-      </FormItem>
-      <FormItem label="上传营业执照：" prop="licenseImg">
-        <Input v-model="formItem.licenseImg" style="display:none"></Input>
-        <my-img :limitNum="1" :uploadList="singleImgList" @getImgUrl="setlicenseImg"></my-img>
-        <p>建议上传小于10M的png、jpg、jpeg格式的图片</p>
-      </FormItem>
-      <FormItem>
-        <Button type="primary"
-                @click="submit"
-                :loading="btnLoading">确认</Button>
-        <Button @click='back'>取消</Button>
-      </FormItem>
-    </Form>
+  <div>
+    <formList :formItems="formList"
+              :routeType="routeType"
+              :url="formListUrl"></formList>
   </div>
 </template>
 
 <script>
-  import { apiGet, apiPost } from '@/fetch/api'
-  import selectItem from "@/components/global/selectList";
-  import myImg from "@/components/global/singleImg";
+  import formList from "@/components/global/formList";
   export default {
-    components: {
-      selectItem,
-      myImg,
-    },
+    components: {formList},
     data () {
       return {
-        singleImgList: [],
-        chooseModal: false,
-        flag: false,
-        entryMode: 'add',// 编辑、查看、新增 共用一个页面
-        btnLoading: false,
-        tableLoading: false,
-        formItem: {
-          merchantType: '',
-          shortName: '',
-          enterpriseName: '',
-          merchantNum: '',
-          legalName: '',
-          idcard: '',
-          creditCode: '',
-          bankName: '',
-          bankAccount: '',
-          locationCode: '',
-          address: '',
-          licenseImg: '',
-        },
-        ruleComplteForm: {
-          merchantType: [
-            { required: true, message: '请选择商户类型', trigger: 'change' }
-          ],
-          shortName: [
-            { required: true, message: '请输入商户简称', trigger: 'blur' },
-            { max: 50, message: "商户简称不超过50字符" ,trigger: 'blur'}
-          ],
-          enterpriseName: [
-            { required: true, message: '请输入企业简称', trigger: 'blur' },
-            { max: 60, message: "企业名称不超过50字符",trigger: 'blur'  }
-          ],
-          legalName: [
-            { max: 60, message: "企业名称不超过50字符",trigger: 'blur'  }
-          ],
-          idcard: [
-            {
-              required: false, validator: this.common.validate.IdCodeValid, trigger: 'blur' }
-          ],
-          creditCode: [
-            { max: 60, message: "信用代码不超过50字符",trigger: 'blur'  }
-          ],
-          bankName: [
-            { max: 60, message: "银行名称不得超过50字符",trigger: 'blur'  }
-          ],
-          bankAccount: [
-            { max: 60, message: "银行名称不得超过50字符",trigger: 'blur'  }
-          ],
-        },
+        formListUrl:"/merchant/merchant/save",
+        formList: [
+          {
+            title: '商户类型',
+            name: 'type',
+            type: 'select',
+            data:this.common.dic.merchantType,
+            rules: [
+              { required: true, message: '请选择商户类型', trigger: 'change' }
+            ]
+          },
+          {
+            title: '商户简称',
+            name: 'name',
+            type: 'input',
+            rules: [
+              { required: true, message: '请输入商户简称', trigger: 'blur' },
+              { max: 50, message: "商户简称不超过50字符" ,trigger: 'blur'}
+            ]
+          },
+          {
+            title: '企业名称',
+            name: 'corpName',
+            type: 'input',
+            rules: [{ required: true, message: '请输入企业名称', trigger: 'blur' },
+              { max: 60, message: "企业名称不超过50字符",trigger: 'blur'  }]
+          },
+          {
+            title: '上级商户号',
+            name: 'parentMerchantId',
+            type: 'input',
+            rules: [{ required: true, message: '请输入上级商户号', trigger: 'blur' },
+              { max: 60, message: "上级商户号不超过50字符",trigger: 'blur'  }]
+          },
+          {
+            title: '法定代表人姓名',
+            name: 'legalPersonName',
+            type: 'input',
+            rules: [{ max: 60, message: "法定代表人姓名不超过50字符",trigger: 'blur'  }]
+          },
+          {
+            title: '身份证号码',
+            name: 'legalPersonIdNo',
+            type: 'input',
+            rules: [{
+              required: false, validator: this.common.validate.IdCodeValid, trigger: 'blur' }]
+          },
+          {
+            title: '社会统一信用代码',
+            name: 'unifiedSocialCreditCode',
+            type: 'input',
+            rules: [{ max: 60, message: "信用代码不超过50字符",trigger: 'blur'  }]
+          },
+          {
+            title: '开户行名称',
+            name: 'bankName',
+            type: 'input',
+            rules: [{ max: 60, message: "开户行名称不得超过50字符",trigger: 'blur'  }]
+          },
+          {
+            title: '银行账号',
+            name: 'bankAccount',
+            type: 'input',
+            rules: [{ max: 60, message: "银行账号不得超过50字符",trigger: 'blur'  }]
+          },
+          {
+            title: '所在地区',
+            name: 'areaCode',
+            type: 'area',
+          },
+          {
+            title: '详细地址',
+            name: 'detailedAddress',
+            type: 'input',
+            rules: [{ max: 100, message: "详细地址不得超过100字符",trigger: 'blur'  }]
+          },
+          {
+            title: '上传营业执照',
+            name: 'businessLicensePic',
+            type: 'uploadFile',
+            tip:'建议上传小于10M的png、jpg、jpeg格式的图片'
+          },
+        ],
+        routeType:"add",// 判断是新增，详情，编辑
       }
     },
     watch: {
-      social: function (val) {
-        if (val.length != 10) {
-          // 没有全选
-          this.active = false
-        } else {
-          this.active = true
-        }
-      }
+
     },
     created () {
-      if (this.$route.query.editId) {
-        this.entryMode = 'edit'
-        apiPost('/admin/webapi/userNotice/getById', {
-          merchantId: this.$route.query.editId
+      let routeType = this.$route.query.routeType
+      console.log(routeType)
+      if (routeType == 'detail' || routeType == 'edit') {
+        this.routeType = routeType
+        this.apiPost("/admin/webapi/guide/getById", {
+          id: this.$route.query.id
         }).then(res => {
           if (res.status == 200) {
-            this.flag = true
-            this.formItem = {
-                merchantType: res.data.merchantType,
-                shortName: '',
-                enterpriseName: '',
-                merchantNum: '',
-                legalName: '',
-                idcard: '',
-                creditCode: '',
-                bankName: '',
-                bankAccount: '',
-                locationCode: '',
-                address: '',
-                licenseImg: '',
-            };
+
           }
-        })
+        });
       } else {
-        this.entryMode = 'add'
-        this.flag = true
+        this.routeType = 'add'
       }
+      console.log(this.routeType)
     },
     methods: {
-      getProvince(sheng){
-        this.sheng=sheng
-        console.log(sheng)
-      },
-      getCity(city){
-        this.city=city
-        console.log(city)
-      },
-      getQu(qu){
-        this.qu=qu
-        console.log(qu)
-      },
-      setlicenseImg(imgArr) {
-        this.formItem.licenseImg = imgArr.join(",");
-      },
-      back () {
-        this.$router.back()
-      },
-      submit () {
-        let _this = this
-        this.btnLoading = true
-
-        this.$refs.formItem.validate(async valid => {
-          if (valid) {
-            let url = '/admin/webapi/userNotice/save'
-
-            if (this.entryMode == 'edit') {
-              url = '/admin/webapi/userNotice/edit'
-              this.formItem.id = this.$route.query.editId
-            }
-
-            let res = await apiPost(url, this.formItem)
-            if (res.status == 200) {
-              _this.$Message.success('保存成功!')
-              _this.$router.push('/merchantManage')
-            } else {
-              this.btnLoading = false
-              _this.$Message.warning(res.message)
-            }
-          } else {
-            this.btnLoading = false
-            // 滚动到错误地方
-            setTimeout(function () {
-              $('#content').scrollTop(
-                $('.ivu-form-item-error').offset().top -
-                90 +
-                $('#content').scrollTop()
-              )
-            }, 500)
-          }
-        })
-      }
     }
   }
 </script>
 
 <style lang="scss">
-  .merchantAdd {
-    width: 70%;
-    margin: 0 auto;
-  }
+
 </style>

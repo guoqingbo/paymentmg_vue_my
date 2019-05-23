@@ -9,7 +9,7 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"></confirm>
+             :mode="mode"></confirm>
   </div>
 </template>
 <script>
@@ -26,27 +26,30 @@
           },
           {
             title: '渠道编码',
-            key: 'chanelNo',
+            key: 'channelCode',
             sortable: true,
           },
           {
             title: '渠道产品编码吗',
-            key: 'chanelProductNo',
+            key: 'channelProductCode',
             sortable: true,
           },
           {
             title: '渠道产品名称',
-            key: 'chanelProductName',
+            key: 'channelProductName',
             sortable: true,
           },
           {
             title: '渠道产品状态',
-            key: 'chanelProductStatus',
+            key: 'status',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.filter.turn("status",params.row.status))
+            }
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -58,7 +61,8 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd?lookId=" + params.row.id
+                      path: "/channelProductAddEditDetail",
+                      query: { id: params.row.id,routeType:"detail"}
                     });
                   }
                 },
@@ -66,19 +70,19 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd",
-                      query: { editId: params.row.id }
+                      path: "/channelProductAddEditDetail",
+                      query: { id: params.row.id,channelId: params.row.channelId}
                     });
                   }
                 },
                 {
                   title: "删除",
                   action: () => {
-                    this.mode = "done";
+                    this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/channelProduct/delete/" + params.row.id
                     );
                   }
                 }
@@ -88,29 +92,28 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/channelProduct/grid',
         searchItems: [
           {
             label: '渠道编码',
             type: 'input',
-            name: 'chanelNo'
+            name: 'channelCode'
           },
           {
             label: '渠道产品编码',
             type: 'input',
-            name: 'chanelProductNo'
+            name: 'channelProductCode'
           },
           {
             label: '渠道产品状态',
             type: 'select',
-            name: 'chanelProductStatus',
-            data:[{label:'可用',value:1},{label:'不可用',value:0}]
+            name: 'status',
+            data:this.common.dic.status
           },
         ],
         hannleItems: [
 
         ],
-
         mode: "",
         content: "",
         sucessMsg: "",
@@ -121,7 +124,6 @@
     },
     components: {list,confirm},
     methods: {
-
     }
   }
 </script>
