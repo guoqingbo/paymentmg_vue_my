@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
     if (token) { // 本地获取了token说明用户登录过了
       if (!store.state.userId) { // vuex中没有获取userId,说明是刷新,就需要去动态加载路由
         store.dispatch('setUserIdAction', userId)
-        await store.dispatch('getApi') // 获取权限
+        await store.dispatch('getMenu') // 获取权限
         store.dispatch('formaterRouterHandle') // 根据权限获取路由
         router.addRoutes([{
           path: '/main',

@@ -18,12 +18,11 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   // sessionStorage.setItem('activeName', to.meta.belongTab)
-  VueCookies.set('activeName', to.meta.belongTab)
+  // VueCookies.set('activeName', to.meta.belongTab)
   store.dispatch('setActiveNameAction', to.meta.belongTab)
   store.dispatch('setOpenNameAction', to.meta.openName)
   // store.dispatch("updateSubMenuListAction",to.meta.belongTab)
   // Util.title(to.meta.title);
-
   next()
 })
 

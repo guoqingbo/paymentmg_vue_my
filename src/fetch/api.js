@@ -1,6 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
+import common from '@/common/index'
 axios.defaults.timeout = 5000
+axios.defaults.baseURL = common.apiPrefix;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 // request 拦截器
@@ -45,6 +47,10 @@ function setCookies(cname, cvalue, exdays) {
  */
 
 export function apiGet (url, params = {}) {
+  console.log(url)
+  if(!url){
+   return
+  }
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {
     axios.get(url, {params:{...params}})

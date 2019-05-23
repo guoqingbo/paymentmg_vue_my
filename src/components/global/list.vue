@@ -67,10 +67,10 @@ export default {
         this.$store.state.list.params,
         this.searchForm
       );
-      await this.$store.dispatch("getApi");
+      await this.$store.dispatch("getList");
     },
      async loadpage () {
-      await this.$store.dispatch('getApi')
+      await this.$store.dispatch('getList')
     }
   }
 };

@@ -30,13 +30,18 @@
             sortable: true,
           },
           {
-            title: '渠道产品编码吗',
+            title: '渠道产品编码',
             key: 'channelProductCode',
             sortable: true,
           },
           {
             title: '渠道产品名称',
             key: 'channelProductName',
+            sortable: true,
+          },
+          {
+            title: '渠道费率',
+            key: 'feeRate',
             sortable: true,
           },
           {

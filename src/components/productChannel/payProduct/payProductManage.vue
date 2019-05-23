@@ -35,12 +35,12 @@
           },
           {
             title: '产品说明',
-            key: 'productRemark',
+            key: 'remark',
             sortable: true,
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -52,7 +52,8 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/payProductAdd?lookId=" + params.row.id
+                      path: "/payProductAddEditDetail",
+                      query: { id: params.row.id,routeType:"detail"}
                     });
                   }
                 },
@@ -60,8 +61,8 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/payProductAdd",
-                      query: { editId: params.row.id }
+                      path: "/payProductAddEditDetail",
+                      query: { id: params.row.id }
                     });
                   }
                 },
@@ -72,7 +73,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/payProduct/delete/"+ params.row.id
                     );
                   }
                 },
@@ -80,8 +81,8 @@
                   title: "添加渠道产品",
                   action: () => {
                     this.$router.push({
-                      path: "/payProductChannelAdd",
-                      query: { editId: params.row.id }
+                      path: "/payProductChannelAddDetail",
+                      query: { payProductId: params.row.id,payProductName:params.row.payProductName }
                     });
                   }
                 }
@@ -91,7 +92,7 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/payProduct/grid',
         searchItems: [
         ],
         hannleItems: [
@@ -99,7 +100,7 @@
             title: '新增支付产品',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/payProductAdd");
+              this.$router.push("/payProductAddEditDetail");
             }
           }
         ],

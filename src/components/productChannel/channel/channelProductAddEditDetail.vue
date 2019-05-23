@@ -55,8 +55,8 @@
             name: 'feeRate',
             type: 'input',
             rules: [
-              {required: true,type:'number',message: '请输入渠道费率',trigger: 'blur'},
-              {validator: this.validateChannelRate, trigger: "blur"}
+              // {required: true,message: '请输入渠道费率',trigger: 'blur'},
+              {required: true,validator: this.validateChannelRate, trigger: "blur"}
             ]
           },
           {
@@ -83,7 +83,7 @@
             rules: [{ max: 100, message: "备注不超过100字符" ,trigger: 'blur'}]
           },
         ],
-        routeType:""
+        routeType:"",
       }
     },
     watch: {
@@ -94,6 +94,12 @@
     },
     methods: {
       validateChannelRate(rule, value, callback){
+        console.log(value)
+        console.log(rule)
+        if(rule.required && !value){
+          callback(new Error('请输入渠道费率'))
+          return
+        }
         if(value<=0 || value>=100){
           callback(new Error('请输入大于0小于100的数'))
           return
@@ -134,6 +140,9 @@
               },
             ]
             this.formList.push(...moreFormList)
+          }else{
+            // 如果是编辑
+            this.formList[1].disabled = true
           }
           this.apiGet("/channelProduct/"+id).then(res => {
             if (res.status == 200 && res.data) {

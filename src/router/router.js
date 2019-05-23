@@ -1,7 +1,7 @@
 // 不作为Main组件的子页面展示的页面单独写，如下
 import Main from '@/components/main'
-import channelProduct from "./channelProduct"
-import merchant from "./merchant"
+// import channelProduct from "./channelProduct"
+// import merchant from "./merchant"
 export const loginRouter = [
   {
     path: '/',
@@ -71,8 +71,8 @@ export const loginRouter = [
           require(['@/components/system/account/menu'], resolve)
         }
       },
-      ...channelProduct,
-      ...merchant,
+      // ...channelProduct,
+      // ...merchant,
     ]
   },
 

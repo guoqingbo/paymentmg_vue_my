@@ -179,6 +179,7 @@ const common = {
     }
   },
   dic,
+  apiPrefix:'/api'
 }
 
 export default common

@@ -28,9 +28,10 @@ const store = new Vuex.Store({
     reduce (state) {
       state.count--
     },
-    setActiveName (state, name) {
-      state.activeName = name
-    },
+    // setActiveName (state, name) {
+    //   console.log(name)
+    //   state.activeName = name
+    // },
     setUserId (state, id) {
       state.userId = id
     }

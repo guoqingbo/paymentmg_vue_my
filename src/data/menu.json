@@ -1,172 +1,114 @@
 {
   "data": [
     {
-      "id": 100,
       "funName": "商户管理",
       "funCode": "merchant",
-      "funUrl": "merchant",
-      "funType": "custom",
-      "optType": "",
-      "sortNo": 1,
-      "hierarchy": 0,
-      "openType": "_self",
       "functionType": "menu",
       "list": [
         {
-          "id": 110,
           "funName": "商户管理",
-          "funCode": "merchant",
-          "funType": "custom",
-          "optType": "",
-          "parentId": 100,
-          "sortNo": 1,
-          "hierarchy": 1,
-          "openType": "_self",
-          "functionType": "menu",
+          "funCode": "merchant2",
+          "functionType": "column",
           "list": [
             {
-              "id": 111,
               "funName": "商户管理",
               "funCode": "merchantManage",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 110,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
               "functionType": "column"
             },
             {
-              "id": 112,
               "funName": "商户渠道管理",
               "funCode": "merchantChannel",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 110,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
               "functionType": "column"
             },
             {
-              "id": 113,
               "funName": "商户场景管理",
               "funCode": "merchantScene",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 110,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
-              "functionType": "menu",
-              "list": []
+              "functionType": "column"
             },
             {
-              "id": 114,
               "funName": "关联商户管理",
               "funCode": "merchantAssociate",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 110,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
-              "functionType": "menu",
-              "list": []
+              "functionType": "column"
+            },
+            {
+              "funName": "添加商户",
+              "funCode": "merchantAdd",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加渠道",
+              "funCode": "merchantChannelAdd",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加渠道",
+              "funCode": "merchantChannelAdd",
+              "functionType": "button"
             }
           ]
         }
       ]
     },
     {
-      "id": 200,
       "funName": "产品渠道管理",
       "funCode": "productChannel",
-      "funType": "custom",
-      "optType": "",
-      "sortNo": 2,
-      "hierarchy": 0,
-      "openType": "_self",
       "functionType": "menu",
       "list": [
         {
-          "id": 210,
           "funName": "渠道管理",
           "funCode": "channel",
-          "funType": "custom",
-          "optType": "",
-          "parentId": 200,
-          "sortNo": 1,
-          "hierarchy": 1,
-          "openType": "_self",
-          "functionType": "menu",
+          "functionType": "column",
           "list": [
             {
-              "id": 211,
               "funName": "渠道管理",
               "funCode": "channelManage",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 210,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
               "functionType": "column"
             },
             {
-              "id": 212,
               "funName": "渠道产品管理",
               "funCode": "channelProductManage",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 210,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
               "functionType": "column"
+            },
+            {
+              "funName": "添加渠道",
+              "funCode": "channelAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加渠道产品",
+              "funCode": "channelProductAddEditDetail",
+              "functionType": "button"
             }
           ]
         },
         {
-          "id": 220,
           "funName": "支付产品管理",
           "funCode": "payProduct",
-          "funType": "custom",
-          "optType": "",
-          "parentId": 200,
-          "sortNo": 1,
-          "hierarchy": 1,
-          "openType": "_self",
           "functionType": "menu",
           "list": [
             {
-              "id": 221,
               "funName": "支付产品管理",
               "funCode": "payProductManage",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 220,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
               "functionType": "column"
             },
             {
-              "id": 222,
               "funName": "渠道产品管理",
               "funCode": "payChannelManage",
-              "funType": "custom",
-              "optType": "",
-              "parentId": 220,
-              "sortNo": 1,
-              "hierarchy": 2,
-              "openType": "_self",
               "functionType": "column"
+            },
+            {
+              "funName": "添加支付产品",
+              "funCode": "payProductAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加支付产品渠道",
+              "funCode": "payProductChannelAddDetail",
+              "functionType": "button"
             }
           ]
         }
       ]
     }
-  ],
-  "status": 200
+  ]
 }

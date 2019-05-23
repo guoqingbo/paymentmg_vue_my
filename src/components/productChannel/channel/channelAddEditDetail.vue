@@ -104,12 +104,31 @@
       getDetail(){
         if (this.$route.query.id) {
           let id = this.$route.query.id
+          this.routeType = this.$route.query.routeType
+          if(this.routeType == 'detail'){
+            // 如果是详情页
+            let moreFormList = [
+              {
+                title: '创建日期',
+                name: 'createTime',
+                type: 'text',
+              },
+              {
+                title: '最近更新时间',
+                name: 'modifyTime',
+                type: 'text',
+              },
+            ]
+            this.formList.push(...moreFormList)
+          }else{
+            // 如果是编辑
+            this.formList[0].disabled = true
+          }
           this.apiGet("/channel/"+id).then(res => {
-            this.routeType = this.$route.query.routeType
             if (res.status == 200 && res.data) {
               this.formList.forEach((ele)=>{
                 ele.value = res.data[ele.name]
-                if(this.routeType == 'detail'){
+                if(this.routeType == 'detail' && ele.type!='text'){
                   // 如果是详情页
                   ele.type += "Text"
                 }

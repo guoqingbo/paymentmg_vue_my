@@ -101,7 +101,7 @@
       // ]),
       getCode() {
         this.formInline.key = new Date().getTime()
-        this.codeImg = "/api/checkCode?key=" + this.formInline.key;
+        this.codeImg = this.common.apiPrefix+"/api/checkCode?key=" + this.formInline.key;
         //   this.codeImg = "/checkCode";
       },
       handleSubmit() {
@@ -123,7 +123,7 @@
               this.$cookies.set("userId", res.data.user.id);
               // this.$cookies.set("sessionId", res.user.sessionId);
               this.$store.dispatch("setUserIdAction", res.data.user.id);
-              await this.$store.dispatch("getApi"); //获取权限
+              await this.$store.dispatch("getMenu"); //获取权限
               this.$store.dispatch("formaterRouterHandle"); // 根据权限获取路由
               this.$router.addRoutes([
                 {

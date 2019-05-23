@@ -1,5 +1,4 @@
 import {apiGet} from '../../fetch/api'
-import menu from '../../data/menu.json'
 const state = {
   menuList: '',
   activeName: '',
@@ -14,6 +13,7 @@ const mutations = {
   updateMenulist (state) {
   },
   setActiveName (state, name) {
+    console.log(name)
     state.activeName = name
   },
   setOpenName (state, name) {
@@ -52,10 +52,9 @@ const mutations = {
   }
 }
 const actions = {
-  async getApi (context,userInfoId) {
+  async getMenu (context,userInfoId) {
     // let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
-    let menuList = menu
-    context.state.activeName = menuList.data[0].funCode
+    let menuList = require('../../data/menu.json')
     context.state.menuList = menuList
   },
   setActiveNameAction ({commit}, name) {

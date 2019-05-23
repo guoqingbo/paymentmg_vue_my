@@ -89,7 +89,7 @@
                 <!-- <Icon type="ios-navigate"></Icon> -->
                 {{item.funName}}
               </template>
-              <MenuItem v-for="sitem in item.list" :name="sitem.funCode" :key="sitem.id">
+              <MenuItem v-for="sitem in item.list" :name="sitem.funCode" :key="sitem.id" v-if="sitem.functionType=='column'">
                 <span>{{sitem.funName}}</span>
               </MenuItem>
             </Submenu>
@@ -160,7 +160,8 @@
         openNames: "",
         activeName: "",
         padding: "",
-        bgheight: ""
+        bgheight: "",
+        // testName:this.$store.state.menu.activeName
       };
     },
     // beforeRouteUpdate (to, from, next) {
@@ -220,11 +221,11 @@
     },
     watch: {
       testName(newValue, oldValue) {
-        this.$store.state.menu.menuList.data.forEach(element => {
-          if (element.funCode === newValue) {
-            this.subMenuList = element;
-          }
-        });
+        // this.$store.state.menu.menuList.data.forEach(element => {
+        //   if (element.funCode === newValue) {
+        //     this.subMenuList = element;
+        //   }
+        // });
       },
       vexOpenNames(newValue) {
         // this.openName = [newValue]
@@ -233,8 +234,6 @@
           this.$refs.contactMenu.updateActiveName();
         });
       },
-      $route(v) {
-      }
     },
     mounted() {
       this.loadpage();
@@ -317,6 +316,7 @@
           this.$refs.contactMenu.updateOpened();
           this.$refs.contactMenu.updateActiveName();
         });
+        console.log(this.$store.state.menu.activeName)
       },
       async loadpage() {
         this.openNames = [this.$route.meta.openName];

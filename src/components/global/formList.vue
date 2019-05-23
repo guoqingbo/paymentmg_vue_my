@@ -41,6 +41,10 @@
         type: String,
         default: 'add'
       },
+      method: {
+        type: String,
+        default: 'post'
+      },
     },
     watch: {
       // formItems: {

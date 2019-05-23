@@ -34,13 +34,13 @@
             sortable: true,
           },
           {
-            title: '支付产品编号',
-            key: 'payProductNo',
+            title: '渠道产品编号',
+            key: 'channelProductCode',
             sortable: true,
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -52,7 +52,8 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd?lookId=" + params.row.id
+                      path: "/payProductChannelAddDetail",
+                      query: { id: params.row.id,routeType:"detail"}
                     });
                   }
                 },
@@ -73,7 +74,7 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/payProductChannel/grid',
         searchItems: [
           {
             label: '产品代码',
@@ -83,7 +84,7 @@
           {
             label: '渠道产品代码',
             type: 'input',
-            name: 'channelProductNo'
+            name: 'channelProductCode'
           },
         ],
         hannleItems: [

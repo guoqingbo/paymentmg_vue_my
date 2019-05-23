@@ -40,7 +40,7 @@
             key: 'channelType',
             sortable: true,
             render: (h, params) => {
-              return h('span', this.filter.turn("channelType",params.row.channelType))
+              // return h('span', this.turnChannelType(params.row.channelType))
             }
           },
           {
@@ -110,15 +110,41 @@
         sucessMsg: "",
       }
     },
+    beforeCreate(){
+      //获取渠道类型
+      if(!this.$store.state.global.channelType){
+        this.$store.dispatch("getChannelType")
+      }
+    },
     created(){
-      console.log($route.name)
+      // 设置渠道性质转化
+      this.renderChannelType()
     },
     mounted () {
 
     },
     components: {list,confirm},
     methods: {
-
+      renderChannelType(){
+        //获取渠道类型
+        if(!this.$store.state.global.channelType){
+          // 如果还没有渠道性质，则获取渠道性质
+          this.$store.dispatch("getChannelType").then(res=>{
+            this.setChannelType()
+          })
+        }else{
+          this.setChannelType()
+        }
+      },
+      setChannelType(){
+        let channelType={}
+        this.$store.state.global.channelType.forEach(ele=>{
+          channelType[ele.value] = ele.label
+        })
+        this.columns[3].render = (h, params) => {
+          return h('span', channelType[params.row.status])
+        }
+      }
     }
   }
 </script>
