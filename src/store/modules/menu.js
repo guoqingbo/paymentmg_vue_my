@@ -3,7 +3,8 @@ const state = {
   menuList: '',
   activeName: '',
   openName: '',
-  asyncRouter: ''
+  asyncRouter: '',
+  breadcrumbList:[]
 }
 const getters = {
 
@@ -18,6 +19,10 @@ const mutations = {
   },
   setOpenName (state, name) {
     state.openName = name
+  },
+  setBreadcrumbList(state, name) {
+    console.log(name)
+    state.breadcrumbList = name
   },
   formaterRouter (state) {// 根据权限生成路由
     let roleRouter = []
@@ -62,6 +67,9 @@ const actions = {
   },
   setOpenNameAction ({commit}, name) {
     commit('setOpenName', name)
+  },
+  setBreadcrumbListAction ({commit},name) {
+    commit('setBreadcrumbList',name)
   },
   formaterRouterHandle ({commit}) {
     commit('formaterRouter')

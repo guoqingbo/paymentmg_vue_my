@@ -140,9 +140,13 @@
               },
             ]
             this.formList.push(...moreFormList)
+            // 更新位置占位符
+            this.$store.dispatch('setBreadcrumbListAction', ['渠道管理','渠道产品管理','渠道产品详情'])
           }else{
             // 如果是编辑
             this.formList[1].disabled = true
+            // 更新位置占位符
+            this.$store.dispatch('setBreadcrumbListAction', ['渠道管理','渠道产品管理','编辑渠道产品'])
           }
           this.apiGet("/channelProduct/"+id).then(res => {
             if (res.status == 200 && res.data) {

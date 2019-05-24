@@ -216,23 +216,32 @@
         return this.$store.state.menu.menuList;
       },
       breadcrumbList() {
-        return this.$route.meta.breadcrumbList;
+        return this.$store.state.menu.breadcrumbList;
+        // return this.$route.meta.breadcrumbList;
       }
     },
     watch: {
-      testName(newValue, oldValue) {
-        // this.$store.state.menu.menuList.data.forEach(element => {
-        //   if (element.funCode === newValue) {
-        //     this.subMenuList = element;
-        //   }
-        // });
-      },
+      // breadcrumbList: {
+      //   handler(newValue, oldValue) {
+      //     console.log(newValue)
+      //     this.breadcrumbList = [...this.$store.state.menu.breadcrumbList];
+      //   },
+      //   deep: true,
+      //   immediate: true
+      // },
       vexOpenNames(newValue) {
         // this.openName = [newValue]
         this.$nextTick(() => {
           this.$refs.contactMenu.updateOpened();
           this.$refs.contactMenu.updateActiveName();
         });
+      },
+      testName(newValue, oldValue) {
+        // this.$store.state.menu.menuList.data.forEach(element => {
+        //   if (element.funCode === newValue) {
+        //     this.subMenuList = element;
+        //   }
+        // });
       },
     },
     mounted() {
@@ -316,7 +325,7 @@
           this.$refs.contactMenu.updateOpened();
           this.$refs.contactMenu.updateActiveName();
         });
-        console.log(this.$store.state.menu.activeName)
+        // console.log(this.$store.state.menu.breadcrumbList)
       },
       async loadpage() {
         this.openNames = [this.$route.meta.openName];

@@ -2,6 +2,7 @@
   <div>
     <formList :formItems="formList"
               :url="formListUrl"
+              :routeType="routeType"
               @beforeSave="beforeSave"
               @afterSave="afterSave"></formList>
   </div>
@@ -81,6 +82,8 @@
               },
             ]
             this.formList.push(...moreFormList)
+            // 更新位置占位符
+            this.$store.dispatch('setBreadcrumbListAction', ['支付产品管理','支付产品渠道详情'])
           }else{
             // 如果是编辑的时候
 

@@ -21,6 +21,7 @@ router.beforeEach((to, from, next) => {
   // VueCookies.set('activeName', to.meta.belongTab)
   store.dispatch('setActiveNameAction', to.meta.belongTab)
   store.dispatch('setOpenNameAction', to.meta.openName)
+  store.dispatch('setBreadcrumbListAction', to.meta.breadcrumbList)
   // store.dispatch("updateSubMenuListAction",to.meta.belongTab)
   // Util.title(to.meta.title);
   next()

@@ -9,7 +9,7 @@
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
-             mode="mode"></confirm>
+             :mode="mode"></confirm>
   </div>
 </template>
 <script>
@@ -64,7 +64,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/payProductChannel/delete/" + params.row.id
                     );
                   }
                 },

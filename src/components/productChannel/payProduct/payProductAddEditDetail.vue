@@ -79,9 +79,13 @@
               },
             ]
             this.formList.push(...moreFormList)
+            // 更新位置占位符
+            this.$store.dispatch('setBreadcrumbListAction', ['支付产品管理','支付产品详情'])
           }else{
             // 如果是编辑的时候
             this.formList[0].disabled = true
+            // 更新位置占位符
+            this.$store.dispatch('setBreadcrumbListAction', ['支付产品管理','编辑支付产品'])
           }
           this.apiGet("/payProduct/"+id).then(res => {
             if (res.status == 200 && res.data) {
