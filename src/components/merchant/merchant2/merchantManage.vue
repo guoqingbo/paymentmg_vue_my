@@ -26,20 +26,20 @@
           },
           {
             title: '商户号',
-            key: 'no',
+            key: 'merchantCode',
             sortable: true,
           },
           {
             title: '商户名称',
-            key: 'name',
+            key: 'merchantName',
             sortable: true,
           },
           {
-            title: '客户类型',
-            key: 'type',
+            title: '商户类型',
+            key: 'merchantType',
             sortable: true,
             render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.type))
+              return h('span', this.filter.turn("merchantType",params.row.merchantType))
             }
           },
           {
@@ -56,7 +56,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd",
+                      path: "/merchantAddEditDetail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
                   }
@@ -65,7 +65,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantAdd",
+                      path: "/merchantAddEditDetail",
                       query: { id: params.row.id,routeType:"edit" }
                     });
                   }
@@ -87,17 +87,17 @@
           }
         ],
         params: {},
-        url: '/merchant/merchant/grid',
+        url: '/merchant/grid',
         searchItems: [
           {
             label: '商户名称',
             type: 'input',
-            name: 'name'
+            name: 'merchantName'
           },
           {
             label: '商户号',
             type: 'input',
-            name: 'no'
+            name: 'merchantCode'
           },
           {
             label: '开始日期',
@@ -117,7 +117,7 @@
             title: '添加商户',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchantAdd");
+              this.$router.push("/merchantAddEditDetail");
             }
           }
         ],

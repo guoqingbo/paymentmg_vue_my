@@ -2,8 +2,8 @@
 let dic = {
   //商户类型
   merchantType: [
-    {label: '个人商户', value: 1},
-    {label: '企业商户', value: 2}
+    {label: '个人商户', value: 100},
+    {label: '企业商户', value: 200}
   ],
   status: [
     {label:"不可用",value:0},

@@ -58,7 +58,8 @@ export default {
       qu1: [],
       city: "",
       block: "",
-      code: ""
+      code: "",
+      url:"/area/list"
     };
   },
   props: {
@@ -72,54 +73,21 @@ export default {
     },
   },
   watch: {
-    async addrCode(val, oldVal) {
-      if (val) {
-        this.sheng = val.split("-")[0];
-        this.shi = val.split("-")[1];
-        this.qu = val.split("-")[2];
-        if (this.sheng) {
-          let shires = await this.apiGet(
-            "/manage/admin/admin/area/selectByPcode?parentCode=" + this.sheng
-          );
-          this.shi1 = shires.data;
-        }
-        if (this.shi) {
-          let qures = await this.apiGet(
-            "/manage/admin/admin/area/selectByPcode?parentCode=" + this.shi
-          );
-          this.qu1 = qures.data;
-        }
-      } else {
-        this.sheng = "";
-        this.shi = "";
-        this.qu = "";
-        this.shi1 = [];
-        this.qu1 = [];
-      }
-    }
+    // async addrCode(val, oldVal) {
+    //   if (val){
+    //     this.updateArea()
+    //   } else {
+    //     this.sheng = "";
+    //     this.shi = "";
+    //     this.qu = "";
+    //     this.shi1 = [];
+    //     this.qu1 = [];
+    //   }
+    // }
   },
   mounted() {
-    // this.getCityData()
-    // console.log(this.addrCode)
     this.$nextTick(async () => {
-      if (this.addrCode) {
-        this.sheng = this.addrCode.split("-")[0];
-        this.shi = this.addrCode.split("-")[1];
-        this.qu = this.addrCode.split("-")[2];
-
-        if (this.sheng) {
-          let shires = await this.apiGet(
-            "/manage/admin/admin/area/selectByPcode?parentCode=" + this.sheng
-          );
-          this.shi1 = shires.data;
-        }
-        if (this.shi) {
-          let qures = await this.apiGet(
-            "/manage/admin/admin/area/selectByPcode?parentCode=" + this.shi
-          );
-          this.qu1 = qures.data;
-        }
-      }
+      this.updateArea()
     }, 200);
   },
   created() {
@@ -127,14 +95,16 @@ export default {
   },
   methods: {
     getCityData() {
-      this.apiGet("/manage/admin/admin/area/selectByPcode").then(res => {
+      this.apiGet(this.url).then(res => {
         this.province = res.data;
       });
     },
     // 选省
     choseProvince(e) {
-      console.log("22")
-      this.apiGet("/manage/admin/admin/area/selectByPcode?parentCode=" + e).then(
+      let params = {
+        parentCode:e
+      }
+      this.apiGet(this.url,params).then(
         res => {
           this.shi1 = res.data;
           this.shi = "";
@@ -149,7 +119,10 @@ export default {
     },
     // 选市
     choseCity(e) {
-      this.apiGet("/manage/admin/admin/area/selectByPcode?parentCode=" + e).then(
+      let params = {
+        parentCode:e
+      }
+      this.apiGet(this.url,params).then(
         res => {
           this.qu1 = res.data;
           this.qu = "";
@@ -173,6 +146,25 @@ export default {
     getArea(){
       let areaCode =  this.sheng+"-"+this.shi+"-"+ this.qu;
       return areaCode
+    },
+    // 更新市或区
+    async updateArea(){
+      if (this.addrCode){
+        this.sheng = this.addrCode.split("-")[0];
+        this.shi = this.addrCode.split("-")[1];
+        this.qu = this.addrCode.split("-")[2];
+        let params = {}
+        if (this.sheng) {
+          params.parentCode = this.sheng
+          let shires = await this.apiGet(this.url,params);
+          this.shi1 = shires.data;
+        }
+        if (this.shi) {
+          params.parentCode = this.shi
+          let qures = await this.apiGet(this.url,params);
+          this.qu1 = qures.data;
+        }
+      }
     }
   }
 };

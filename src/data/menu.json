@@ -32,7 +32,7 @@
             },
             {
               "funName": "添加商户",
-              "funCode": "merchantAdd",
+              "funCode": "merchantAddEditDetail",
               "functionType": "button"
             },
             {
