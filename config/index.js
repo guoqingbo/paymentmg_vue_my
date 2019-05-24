@@ -11,14 +11,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/api':{
+        '/api/admin':{
             // target:'http://pms.sendinfo.com.cn/',
             target:'http://192.168.200.88:6071/',
             // target:'http://192.168.66.246:6071/',
             // target:'http://192.168.200.55:6071/',
             changeOrigin:true,
             pathRewrite: {
-              '^/api': '/'
+              '^/api/admin': '/api/admin'
             }
           },
     },
