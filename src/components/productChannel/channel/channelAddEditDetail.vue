@@ -142,11 +142,14 @@
         }
       },
       getChannelType(){
-        if(!this.$store.state.global.channelType){
-          this.$store.dispatch("getChannelType").then(res=>{
-            this.formList[2].data = this.$store.state.global.channelType
-          })
-        }
+        // if(!this.$store.state.global.channelType){
+        //   this.$store.dispatch("getChannelType").then(res=>{
+        //     this.formList[2].data = this.$store.state.global.channelType
+        //   })
+        // }
+        this.$store.dispatch("getChannelType").then(res=>{
+          this.formList[2].data = this.$store.state.global.channelType
+        })
       }
     }
   }

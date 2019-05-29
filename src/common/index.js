@@ -1,7 +1,26 @@
 import * as api from '@/fetch/api'
 import dic from '@/common/dic'
 const common = {
-  changeLoading (obj) {
+  formatDate(date, fmt){
+    if (/(y+)/.test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+    }
+    let o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds()
+      };
+    for (let k in o) {
+      if (new RegExp(`(${k})`).test(fmt)) {
+        let str = o[k] + '';
+        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length));
+      }
+    }
+    return fmt;
+  },
+changeLoading (obj) {
     obj.loading = false
     obj.$nextTick(() => {
       obj.loading = true
@@ -44,7 +63,7 @@ const common = {
     options.callback(res)
   },
   async listDone (obj, options) {
-    let res = await api.apiGet(options.url, options.params || {})
+    let res = await api.apiPost(options.url, options.params || {})
     options.callback(res)
   },
   columnsHandle (h, actions) {

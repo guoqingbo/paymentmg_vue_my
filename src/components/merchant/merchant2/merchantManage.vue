@@ -66,7 +66,7 @@
                   action: () => {
                     this.$router.push({
                       path: "/merchantAddEditDetail",
-                      query: { id: params.row.id,routeType:"edit" }
+                      query: {id: params.row.id}
                     });
                   }
                 },
@@ -77,7 +77,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchant/merchant/delete/" + params.row.id
+                      "/merchant/delete/" + params.row.id
                     );
                   }
                 }
@@ -102,13 +102,13 @@
           {
             label: '开始日期',
             type: 'date',
-            name: 'startTime',
+            name: 'startDate',
             value: ''
           },
           {
             label: '结束日期',
             type: 'date',
-            name: 'endTime',
+            name: 'endDate',
             value: ''
           },
         ],

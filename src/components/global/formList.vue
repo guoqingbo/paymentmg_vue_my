@@ -90,7 +90,7 @@
               this.$emit("beforeSave", this.$refs.myForm.formItem)
             }
             let res = await this[saveMethod](this.url, this.$refs.myForm.formItem)
-            if (res.status == 200) {
+            if (res.status == 200 && res.success) {
               this.$Message.success('保存成功!')
               if (this._events.afterSave) {
                 this.$emit("afterSave")

@@ -13,8 +13,7 @@
     <modalForm v-model="formShow"
                :formItems="formItems"
                :url="formUrl"
-               :title="formTitle"
-               json></modalForm>
+               :title="formTitle"></modalForm>
   </div>
 </template>
 <script>
@@ -32,7 +31,7 @@
           },
           {
             title: '商户编号',
-            key: 'merchantNo',
+            key: 'merchantCode',
             sortable: true,
           },
           {
@@ -42,12 +41,12 @@
           },
           {
             title: '场景编号',
-            key: 'no',
+            key: 'sceneNo',
             sortable: true,
           },
           {
             title: '场景名称',
-            key: 'name',
+            key: 'sceneName',
             sortable: true,
           },
           {
@@ -72,7 +71,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchant/scenario/delete/125"
+                      "/merchantScene/delete/"+params.row.id
                     );
                   }
                 }
@@ -82,7 +81,7 @@
           }
         ],
         params: {},
-        url: '/merchant/scenario/grid',
+        url: '/merchantScene/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -91,7 +90,7 @@
           },
           {
             label: '商户编号',
-            type: 'merchantNo',
+            type: 'merchantCode',
             name: 'roleName'
           }
         ],
@@ -114,7 +113,7 @@
         formItems: [
           {
             title: '商户号',
-            name: 'merchantNo',
+            name: 'merchantCode',
             type: 'input',
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
           },
@@ -126,12 +125,12 @@
           },
           {
             title: '场景说明',
-            name: 'sceneRemark',
+            name: 'description',
             type: 'textarea',
             rules: [{ required: true, message: '请输入场景说明', trigger: 'blur' }]
           },
         ],
-        formUrl: '/merchant/scenario/save'
+        formUrl: '/merchantScene/save'
       }
     },
     mounted () {

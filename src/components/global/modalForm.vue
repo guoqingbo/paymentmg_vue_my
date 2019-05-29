@@ -60,7 +60,7 @@
     },
     methods: {
       ok() {
-        this.$refs.myForm.validate(async (valid) => {
+        this.$refs.myForm.validate(async valid => {
           if (valid) {
             let saveMethod = 'apiPost'
             switch (this.method) {

@@ -37,12 +37,7 @@
             },
             {
               "funName": "添加渠道",
-              "funCode": "merchantChannelAdd",
-              "functionType": "button"
-            },
-            {
-              "funName": "添加渠道",
-              "funCode": "merchantChannelAdd",
+              "funCode": "merchantChannelAddEditDetail",
               "functionType": "button"
             }
           ]

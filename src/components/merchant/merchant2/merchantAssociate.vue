@@ -13,8 +13,7 @@
     <modalForm v-model="formShow"
                :formItems="formItems"
                :url="formUrl"
-               :title="formTitle"
-               json></modalForm>
+               :title="formTitle"></modalForm>
   </div>
 </template>
 <script>
@@ -32,27 +31,28 @@
           },
           {
             title: '商户编号',
-            key: 'accType',
+            key: 'merchantCode',
             sortable: true,
           },
           {
             title: '商户名称',
-            key: 'useFlag',
+            key: 'merchantName',
             sortable: true,
           },
           {
             title: '商户来源',
-            key: 'remark',
+            key: 'source',
             sortable: true,
+            render:''
           },
           {
             title: '来源商户号',
-            key: 'action',
+            key: 'sourceMerchantCode',
             sortable: true,
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -63,11 +63,11 @@
                 {
                   title: "删除",
                   action: () => {
-                    this.mode = "done";
+                    this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/merchantRelation/delete/" + params.row.id
                     );
                   }
                 }
@@ -77,23 +77,23 @@
           }
         ],
         params: {},
-        url: 'admin/sysRole/grid',
+        url: '/merchantRelation/grid',
         searchItems: [
           {
             label: '商户名称',
             type: 'input',
-            name: 'roleName'
+            name: 'merchantName'
           },
           {
             label: '商户编号',
             type: 'input',
-            name: 'roleName'
+            name: 'merchantCode'
           },
           {
             label: '商户来源',
             type: 'select',
-            name: 'useFlag',
-            data: this.$store.state.global.payProduct
+            name: 'source',
+            data: ''
           },
         ],
         hannleItems: [
@@ -115,33 +115,57 @@
         formItems: [
           {
             title: '商户来源',
-            name: 'merchantOrigin',
+            name: 'source',
             type: 'select',
-            data: this.$store.state.global.payProduct,
+            data: '',
             rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
           },
           {
             title: '来源商户号',
-            name: 'merchantOriginNo',
+            name: 'sourceMerchantCode',
             type: 'input',
-            // rules: [{ required: true, message: '请输入来源商户号', trigger: 'blur' }]
+            rules: [{ required: true, message: '请输入来源商户号', trigger: 'blur' },
+              {max: 20, message: "来源商户号不超过20字符", trigger: 'blur'}]
           },
           {
             title: '支付中心商户号',
-            name: 'payMerchantNo',
+            name: 'merchantCode',
             type: 'input',
-            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' }]
+            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
+              {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
           }
         ],
-        formUrl: '/manage/admin/webApi/channelNotifyConfig/saveConfig'
+        formUrl: '/merchantRelation/save'
       }
+    },
+    computed:{
+
+    },
+    created(){
+      this.getMerchantSource()
     },
     mounted () {
 
     },
     components: {list,confirm,modalForm},
     methods: {
+      getMerchantSource(){
+        // 获取商户来源
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          let merchantSource = this.$store.state.global.merchantSource
+          this.formItems[0].data = this.searchItems[2].data = merchantSource
 
+          // 表格商户来源转换
+          let source={}
+          merchantSource.forEach(ele=>{
+            source[ele.value] = ele.label
+          })
+          console.log(source)
+          this.columns[3].render = (h, params) => {
+            return h('span', source[params.row.source])
+          }
+        })
+      }
     }
   }
 </script>

@@ -162,6 +162,7 @@
         padding: "",
         bgheight: "",
         // testName:this.$store.state.menu.activeName
+        // breadcrumbList:this.$store.state.menu.breadcrumbList
       };
     },
     // beforeRouteUpdate (to, from, next) {

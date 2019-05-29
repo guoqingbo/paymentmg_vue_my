@@ -43,7 +43,6 @@ export default {
       // console.log(this.url)
       let _this = this;
       switch (this.mode) {
-        //delete请求
         case "delete":
           _this.common.listDelete(_this, {
             url: _this.url,
@@ -59,7 +58,6 @@ export default {
             }
           });
           break;
-        //get请求
         case "done":
           _this.common.listDone(_this, {
             url: _this.url,

@@ -38,7 +38,7 @@
             :format="defaultFormat"
             :max-size="2048"
             type="drag"
-            action="/manage/admin/admin/ui/upload"
+            :action="url"
             style="display: inline-block;width:58px;"
             v-if="uploadList.length !== limitNum">
       <div style="width: 58px;height:58px;line-height: 58px;">
@@ -57,6 +57,7 @@
 export default {
   data () {
     return {
+      url:this.common.apiPrefix+"/file/upload",
       uploadList: [],
       defaultFormat: ['jpg', 'jpeg', 'png'],
       isImg: true
@@ -72,6 +73,10 @@ export default {
     },
     format: {
       type: Array
+    },
+    fieldName:{
+      type: String,
+      default: "fileUrl"
     }
   },
   watch: {
@@ -95,14 +100,14 @@ export default {
   methods: {
     handleRemove (index) {
       this.uploadList.splice(index, 1)
-      this.$emit('input', this.uploadList.join(','))
+      // this.$emit('input', this.uploadList.join(','))
       this.$emit('on-remove')
     },
     handleSuccess (res, file) {
-      if (res.status === 200) {
-        this.uploadList.push(res.message)
-        this.$emit('input', this.uploadList.join(','))
-        this.$emit('on-success')
+      if (res.status == 200) {
+        this.uploadList.push(res.data)
+        // this.$emit('input', this.uploadList.join(','))
+        this.$emit('on-success',this.uploadList.join(','),this.fieldName)
       } else {
         this.$Message.error('上传失败，请重新上传')
       }

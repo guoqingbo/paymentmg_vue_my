@@ -112,9 +112,9 @@
     },
     beforeCreate(){
       //获取渠道类型
-      if(!this.$store.state.global.channelType){
-        this.$store.dispatch("getChannelType")
-      }
+      // if(!this.$store.state.global.channelType){
+      //   this.$store.dispatch("getChannelType")
+      // }
     },
     created(){
       // 设置渠道性质转化
@@ -127,14 +127,17 @@
     methods: {
       renderChannelType(){
         //获取渠道类型
-        if(!this.$store.state.global.channelType){
-          // 如果还没有渠道性质，则获取渠道性质
-          this.$store.dispatch("getChannelType").then(res=>{
-            this.setChannelType()
-          })
-        }else{
+        // if(!this.$store.state.global.channelType){
+        //   // 如果还没有渠道性质，则获取渠道性质
+        //   this.$store.dispatch("getChannelType").then(res=>{
+        //     this.setChannelType()
+        //   })
+        // }else{
+        //   this.setChannelType()
+        // }
+        this.$store.dispatch("getChannelType").then(res=>{
           this.setChannelType()
-        }
+        })
       },
       setChannelType(){
         let channelType={}

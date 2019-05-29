@@ -28,7 +28,7 @@
           },
           {
             title: '商户编号',
-            key: 'merchantNo',
+            key: 'merchantCode',
             sortable: true,
           },
           {
@@ -43,14 +43,14 @@
           },
           {
             title: '渠道产品名称',
-            key: 'channelName',
+            key: 'channelProductName',
             sortable: true,
             className:'channel-name',
             render: (h, params) => {
               let array = [
-                h('span', params.row.channelName),
+                h('span', params.row.channelProductName),
               ]
-              if(params.row.preferred == 1){
+              if(params.row.priority > 0){
                 array.push(h('span', {
                     'class': 'preferred'
                   }, [h('Icon',{props:{type:"md-arrow-dropleft"}}),'优先'])
@@ -62,7 +62,7 @@
           },
           {
             title: '支付产品代码',
-            key: 'payProductNo',
+            key: 'payProductCode',
               ktable: true,
           },
           {
@@ -75,7 +75,7 @@
           },
           {
             title: '创建时间',
-            key: 'action',
+            key: 'createTime',
             sortable: true,
           },
           {
@@ -87,7 +87,8 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantChannelAdd?lookId=" + params.row.id
+                      path: "/merchantChannelAddEditDetail",
+                      query: { id: params.row.id,routeType:'detail'}
                     });
                   }
                 },
@@ -95,8 +96,8 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchantChannelAdd",
-                      query: { editId: params.row.id }
+                      path: "/merchantChannelAddEditDetail",
+                      query: { id: params.row.id }
                     });
                   }
                 },
@@ -107,7 +108,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/product/parkInfo/del?id=" + params.row.id
+                      "/merchantChannel/delete/" + params.row.id
                     );
                   }
                 }
@@ -117,29 +118,29 @@
           }
         ],
         params: {},
-        url: '/merchant/channel/grid',
+        url: '/merchantChannel/grid',
         searchItems: [
           {
             label: '商户名称',
             type: 'input',
-            name: 'roleName'
+            name: 'merchantName'
           },
           {
             label: '支付产品名称',
             type: 'select',
-            name: 'useFlag',
-            data: this.$store.state.global.payProduct
+            name: 'payProductId',
+            data: ''
           },
           {
             label: '开始日期',
             type: 'date',
-            name: 'orderStartTime',
+            name: 'startDate',
             value: ''
           },
           {
             label: '结束日期',
             type: 'date',
-            name: 'orderEndTime',
+            name: 'endDate',
             value: ''
           },
         ],
@@ -148,7 +149,7 @@
             title: '添加渠道信息',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchantChannelAdd");
+              this.$router.push("/merchantChannelAddEditDetail");
             }
           },
           {
@@ -164,32 +165,42 @@
         sucessMsg: "",
       }
     },
+    created(){
+      // 获取支付产品
+      this.getPayProduct()
+    },
     mounted () {
 
     },
     components: {list,confirm},
     methods: {
+      // 设置优先路由
       setFirstRoute () {
         let selection = this.$refs.gridTable.selection
-        console.log(selection)
         if (selection && selection.id) {
-          let id = selection.id
           this.mode = "done";
           this.sucessMsg = "设置优先路由成功！";
           this.content = "确定设置优先路？";
           this.$refs.confirmModel.confirm(
-            "/product/parkInfo/del?id=" + id
+            "/merchantChannel/priority/high/" +  selection.id
           );
         } else {
           this.$Message.warning('请选择一条数据！')
         }
         // this.$refs.gridTable.clearCurrentRow();
       },
+      // 弹框成功回掉
       sucessDone () {
         if(this.sucessMsg == "设置优先路由成功！"){
           this.$refs.gridTable.selection = ''
         }
       },
+      // 获取支付产品
+      getPayProduct(){
+        this.$store.dispatch("getPayProduct").then(res=>{
+          this.searchItems[1].data = this.$store.state.global.payProduct
+        })
+      }
     }
   }
 </script>
