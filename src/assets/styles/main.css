@@ -16,11 +16,6 @@ html {
   height: 100%;
 }
 
-/* .ivu-layout-sider-children {
-  border-right: 2px solid #f5f7f9;
-  background: rgba(238, 238, 238, 0.98);
-} */
-
 .ivu-menu-light.ivu-menu-vertical .ivu-menu-item {
   border: none;
 }
@@ -31,8 +26,8 @@ html {
   padding: 0 24px;
   height: 42px;
   line-height: 42px;
-  /* border-bottom: 1px solid #e5e5e5; */
-  color:#999CA1 !important;
+   border-bottom: 1px solid #e5e5e5;
+  /*color:#999CA1 !important;*/
 }
 .ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item:hover{
 color:#65ADFF !important;
@@ -62,15 +57,11 @@ background-color: transparent !important;
   margin-bottom: 20px;
 }
 
-/* .ivu-menu-light.ivu-menu-vertical {
-  background-color: rgba(238, 238, 238, 0.98);
-} */
 
 .ivu-menu-vertical .ivu-menu-submenu .ivu-menu-submenu-title-icon {
-  top: 16px;
+  /*top: 16px;*/
 }
 
-/* .ivu-modal-body{ max-height: 550px; overflow: auto;} */
 .ivu-icon:before,
 .ivu-icon:after {
   font-family: Ionicons !important;
@@ -90,41 +81,6 @@ background-color: transparent !important;
   padding: 30px 0;
 }
 
-.newtable .table{
-    width:100%;
-    border-collapse: collapse;
-    border-spacing: 0 20px;
-    border: 1px solid #e9eaec;
-  }
-  .newtable .table td.table-label::before{
-    content: '*';
-    display: inline-block;
-    margin-right: 4px;
-    line-height: 1;
-    font-family: SimSun;
-    font-size: 12px;
-    color: #ed4014;
-  }
-  .newtable .table td {
-    height: 40px;
-    box-sizing: border-box;
-    padding: 10px 10px 25px 10px;
-    width: 60%;
-    text-align: center;
-    /* border: 1px solid #e9eaec; */
-  }
-  
-  .newtable .table th {
-    height: 30px;
-    background-color: #EBEEF9;
-  }
-  
-  .newtable .table td.title {
-    /* color:#000;
-      font-size:13px; */
-    background-color: #f8f8f9;
-    width: 11%;
-  }
   .ivu-menu-vertical.ivu-menu-light:after{
       background-color:transparent!important;
   }

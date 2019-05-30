@@ -29,6 +29,7 @@
             title: '渠道产品编码',
             name: 'channelProductCode',
             type: 'input',
+            value:'',
             rules: [
               { required: true, message: '请输入渠道产品编码', trigger: 'blur' },
               { max: 20, message: "支付产品名称不超过20字符" ,trigger: 'blur'}
@@ -38,6 +39,7 @@
             title: '说明',
             name: 'productRemark',
             type: 'textarea',
+            value:'',
             rules: [{ max: 100, message: "产品说明不超过100字符" ,trigger: 'blur'}]
           },
         ],
@@ -60,7 +62,7 @@
       },
       afterSave(){
         this.$router.push({
-          path: "/payChannelManage",
+          path: "/productChannel/payProduct/payChannelManage",
         });
       },
       getDetail(){

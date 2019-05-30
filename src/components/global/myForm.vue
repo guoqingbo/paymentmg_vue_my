@@ -10,14 +10,14 @@
                 :prop="item.name"
                 :rules="item.rules||{}"
                 v-if="item.type">
-        <span v-if="item.type=='text'||
+        <span class="detail-text" v-if="item.type=='text'||
         item.type=='inputText'||
         item.type=='textareaText'">
           {{item.value}}
         </span>
         <Divider v-if="item.type=='divider'"> {{item.title}}</Divider>
 
-        <span v-if="item.type=='selectText' ||item.type=='radioText'">
+        <span class="detail-text" v-if="item.type=='selectText' ||item.type=='radioText'">
           {{item.value|selectFilter(item.data)}}
         </span>
         <Input v-if="item.type=='input'"
@@ -59,7 +59,7 @@
                      @getQu="getQu"
                     :addrCode="item.addrCode"
                     :span='8'></select-item>
-        <span v-if="item.type=='areaText'">
+        <span class="detail-text" v-if="item.type=='areaText'">
           {{item.areaText}}
         </span>
         <div v-if="item.type=='uploadFile'">
@@ -140,7 +140,6 @@ export default {
       deep: true,
       immediate: true　
     }
-
   },
   methods: {
     validate(cb){
@@ -175,3 +174,15 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .detail-text{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    background-color: #cccccc14;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 0 10px;
+    height: 33px;
+  }
+</style>

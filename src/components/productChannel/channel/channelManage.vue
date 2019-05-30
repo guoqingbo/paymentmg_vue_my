@@ -65,7 +65,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/channelAddEditDetail",
+                      path: "/productChannel/channel/channelAddEditDetail",
                       query: { id: params.row.id,routeType:"detail"},
                     });
                   }
@@ -74,7 +74,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/channelAddEditDetail",
+                      path: "/productChannel/channel/channelAddEditDetail",
                       query: { id: params.row.id },
                     });
                   }
@@ -83,7 +83,7 @@
                   title: "添加渠道产品",
                   action: () => {
                     this.$router.push({
-                      path: "/channelProductAddEditDetail",
+                      path: "/productChannel/channel/channelProductAddEditDetail",
                       query: { channelId: params.row.id,channelName:params.row.channelName }
                     });
                   }
@@ -101,7 +101,7 @@
             title: '新增渠道',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/channelAddEditDetail");
+              this.$router.push("/productChannel/channel/channelAddEditDetail");
             }
           }
         ],

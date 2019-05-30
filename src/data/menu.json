@@ -104,6 +104,40 @@
           ]
         }
       ]
+    },
+    {
+      "funName": "订单查询",
+      "funCode": "order",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "订单查询",
+          "funCode": "orderQuery",
+          "functionType": "column",
+          "list": [
+            {
+              "funName": "交易订单查询",
+              "funCode": "tradeOrderQuery",
+              "functionType": "column"
+            },
+            {
+              "funName": "退款订单查询",
+              "funCode": "refundOrderQuery",
+              "functionType": "column"
+            },
+            {
+              "funName": "交易订单明细",
+              "funCode": "tradeOrderDetail",
+              "functionType": "button"
+            },
+            {
+              "funName": "退款订单明细",
+              "funCode": "refundOrderDetail",
+              "functionType": "button"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -16,10 +16,14 @@
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSubmit2()">搜索</Button>
       </FormItem>
+
     </Form>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
       <Col span="2" v-for="item in hannleItems" :key="item.title">
-        <Button type="primary" :icon="item.icon" @click="item.callback">{{ item.title }}</Button>
+        <Button type="primary"
+                :icon="item.icon"
+                @click="item.callback"
+                :loading="item.loading">{{ item.title }}</Button>
       </Col>
     </Row>
     <div class="grids">
@@ -55,6 +59,9 @@
     },
     props: ["searchItems", "hannleItems", "columns", "url", "params", "highlightRow"],
     mounted() {
+
+    },
+    created(){
       this.$store.state.list.url = this.url;
       this.$store.state.list.params = this.params
       this.$store.state.list.params.limit = this.limit

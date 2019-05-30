@@ -33,6 +33,7 @@
             type: 'select',
             data:'',
             onChange:this.getChannelProduct,
+            value:'',
             rules: [
               { required: true, type:'number',message: '请选择支付产品', trigger: 'change' }
             ]
@@ -43,6 +44,7 @@
             type: 'select',
             data:'',
             onChange:this.getPayConfig,
+            value:'',
             rules: [
               { required: true, type:'number',message: '请选择渠道产品', trigger: 'change' }
             ]
@@ -60,6 +62,7 @@
             title: '商户费率',
             name: 'merchantFeeRate',
             type: 'input',
+            value:'',
             rules: [
               { required: true, validator:this.validateMerchantFeeRate, trigger: 'blur' }
               ]
@@ -77,8 +80,6 @@
     },
     created () {
       this.getDetail()
-      // 获取支付产品
-      this.getPayProduct()
     },
     methods: {
       validateMerchantFeeRate(rule, value, callback){
@@ -97,27 +98,18 @@
         if(this.$route.query.id){
           formItem.id = this.$route.query.id
         }
-        console.log(formItem)
       },
       getDetail(){
+        this.routeType = this.$route.query.routeType
+        if(this.routeType!=='detail'){
+          // 获取支付产品
+          this.getPayProduct()
+        }
         if (this.$route.query.id) {
           let id = this.$route.query.id
-          this.routeType = this.$route.query.routeType
           if(this.routeType == 'detail'){
             // 如果是详情页
-            let moreFormList = [
-              {
-                title: '创建日期',
-                name: 'createTime',
-                type: 'text',
-              },
-              {
-                title: '最近更新时间',
-                name: 'modifyTime',
-                type: 'text',
-              },
-            ]
-            this.formList.push(...moreFormList)
+
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理','商户渠道详情'])
           }else{
@@ -130,11 +122,26 @@
           }
           this.apiGet("/merchantChannel/"+id).then(res => {
             if (res.status == 200 && res.data) {
-              this.formList.forEach((ele)=>{
-                ele.value = res.data[ele.name]
-                if(this.routeType == 'detail'&&ele.type!='text'){
+
+              // 转换支付配置
+              this.turnPayConfig(res.data.configInfos)
+
+              this.formList.forEach((ele,index)=>{
+                if(index <=5){
+                  // 支付配置之前的选型需要赋值
+                  ele.value = res.data[ele.name]
+                }
+                if(this.routeType == 'detail'&&ele.type!='text'&&ele.type!='divider'){
                   // 如果是详情页
                   ele.type += "Text"
+                  // 转换数据
+                  if(ele.name == 'channelProductId'){
+                    ele.type = 'text'
+                    ele.value = res.data.channelProductName
+                  }else if(ele.name == 'payProductId'){
+                    ele.type = 'text'
+                    ele.value = res.data.payProductName
+                  }
                 }else{
                   if(ele.name == 'payProductId'){
                     // 获取渠道产品
@@ -177,19 +184,25 @@
               // 保留公共选项
               // this.formList.length = 6
               this.formList = this.formList.slice(0,6)
-              res.data.forEach((ele)=>{
-                let formListItem = {
-                  title: ele.configName,
-                  name: ele.configKey,
-                  type: ele.ifFile == 'F'?'input':'uploadFile',
-                  rules: [
-                    { required: ele.required=='T'?true:false, message: '请输入'+ele.configName, trigger: 'blur' }
-                  ]
-                }
-                this.formList.push(formListItem)
-              })
+              // 转换支付配置
+              this.turnPayConfig(res.data)
             }
           })
+      },
+      // 转换支付配置
+      turnPayConfig(configInfos){
+        configInfos.forEach((ele)=>{
+          let formListItem = {
+            title: ele.configName,
+            name: ele.configKey,
+            type: ele.ifFile == 'F'?'input':'uploadFile',
+            rules: [
+              { required: ele.required=='T'?true:false, message: '请输入'+ele.configName, trigger: 'blur' }
+            ],
+            value:ele.configValue?ele.configValue:''
+          }
+          this.formList.push(formListItem)
+        })
       }
     }
   }

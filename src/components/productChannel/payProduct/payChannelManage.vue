@@ -52,7 +52,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/payProductChannelAddDetail",
+                      path: "/productChannel/payProduct/payProductChannelAddDetail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
                   }

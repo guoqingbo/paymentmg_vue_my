@@ -1,9 +1,9 @@
 <template>
   <div class="layout">
-    <!-- {{testName}} -->
+    <!-- {{firstRouter}} -->
     <Layout>
       <Header>
-        <Menu mode="horizontal" :active-name="testName" @on-select="changeTab">
+        <Menu mode="horizontal" theme="dark" :active-name="firstRouter" @on-select="changeTab">
           <div @click="goHome" class="layout-logo">
             <!-- <img v-if='imgUrl' :src="imgUrl" alt> -->
             <!-- <img src="./../assets/images/index-logo.png" alt> -->
@@ -17,14 +17,14 @@
               <!-- <Icon type="arrow-down-b"></Icon> -->
               <Icon type="md-arrow-dropdown"/>
               <DropdownMenu slot="list">
-                <!-- <DropdownItem><span @click="info">个人信息</span></DropdownItem>
-<DropdownItem>修改密码</DropdownItem>-->
-                <DropdownItem>
-                  <div class="down-item-handle" @click="lookingKey">查看密钥</div>
-                </DropdownItem>
-                <DropdownItem class="down-item">
-                  <div class="down-item-handle" @click="updateCorp">企业信息</div>
-                </DropdownItem>
+                <!--<DropdownItem><span @click="info">个人信息</span></DropdownItem>-->
+                <!--<DropdownItem>修改密码</DropdownItem>-->
+                <!--<DropdownItem>-->
+                  <!--<div class="down-item-handle" @click="lookingKey">查看密钥</div>-->
+                <!--</DropdownItem>-->
+                <!--<DropdownItem class="down-item">-->
+                  <!--<div class="down-item-handle" @click="updateCorp">企业信息</div>-->
+                <!--</DropdownItem>-->
                 <DropdownItem class="down-item">
                   <div class="down-item-handle" @click="logout">退出</div>
                 </DropdownItem>
@@ -76,20 +76,25 @@
         <div slot="footer"></div>
       </Modal>
       <Layout>
-        <Sider hide-trigger class="page-left" :class="{houseShow:$route.path==='/houseStatus'}">
+        <Sider hide-trigger class="page-left">
           <Menu ref="contactMenu"
-                :active-name="$route.name"
+                :active-name="$route.path"
                 theme="light"
                 width="auto"
                 :accordion="true"
                 :open-names="vexOpenNames?[vexOpenNames]:openNames"
                 @on-select="changeMenu">
-            <Submenu v-for="item in subMenuList.list" :name="item.funCode" :key="item.id">
+            <Submenu v-for="item in subMenuList.list"
+                     :name="item.funCode"
+                     :key="item.id">
               <template slot="title">
                 <!-- <Icon type="ios-navigate"></Icon> -->
                 {{item.funName}}
               </template>
-              <MenuItem v-for="sitem in item.list" :name="sitem.funCode" :key="sitem.id" v-if="sitem.functionType=='column'">
+              <MenuItem v-for="sitem in item.list"
+                        :name="'/'+firstRouter+'/'+item.funCode+'/'+sitem.funCode"
+                        :key="sitem.id"
+                        v-if="sitem.functionType=='column'">
                 <span>{{sitem.funName}}</span>
               </MenuItem>
             </Submenu>
@@ -100,7 +105,7 @@
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem v-for="(item,index) in breadcrumbList" :key="index">{{item}}</BreadcrumbItem>
           </Breadcrumb>
-          <Content class="content" :style="{'padding-bottom':padding}" :class="{delPad:$route.path==='/houseStatus'}">
+          <Content class="content" :style="{'padding-bottom':padding}">
             <div class="content-bg" :style="{'height':bgheight}">
               <router-view></router-view>
             </div>
@@ -161,7 +166,7 @@
         activeName: "",
         padding: "",
         bgheight: "",
-        // testName:this.$store.state.menu.activeName
+        // firstRouter:this.$store.state.menu.activeName
         // breadcrumbList:this.$store.state.menu.breadcrumbList
       };
     },
@@ -210,7 +215,7 @@
       vexOpenNames() {
         return this.$store.state.menu.openName;
       },
-      testName() {
+      firstRouter() {
         return this.$store.state.menu.activeName;
       },
       menuList() {
@@ -237,7 +242,7 @@
           this.$refs.contactMenu.updateActiveName();
         });
       },
-      testName(newValue, oldValue) {
+      firstRouter(newValue, oldValue) {
         // this.$store.state.menu.menuList.data.forEach(element => {
         //   if (element.funCode === newValue) {
         //     this.subMenuList = element;
@@ -303,12 +308,8 @@
         this.$refs.formItem.resetFields();
       },
       changeMenu(active) {
-        if (active === "aa890897878") {
-          // 如果点击店铺设置 - 全员营销 跳转 全员营销 全员配置
-          active = "peizhi";
-        }
         // this.$emit("on-change", active);
-        this.$router.push("/" + active);
+        this.$router.push(active);
         this.subMenuList.list.forEach(element => {
           element.list.forEach(item => {
             if (item.funCode === active) {
@@ -321,7 +322,7 @@
         this.menuPosite(active);
         this.$cookies.set("activeName", active);
         this.openNames = [this.subMenuList.list[0].funCode];
-        this.$router.push("/" + this.subMenuList.list[0].list[0].funCode);
+        this.$router.push("/" +active+'/'+this.subMenuList.list[0].funCode+'/'+this.subMenuList.list[0].list[0].funCode);
         this.$nextTick(() => {
           this.$refs.contactMenu.updateOpened();
           this.$refs.contactMenu.updateActiveName();
@@ -382,18 +383,7 @@
   .layout-logo {
     width: 199px;
     height: 60px;
-    background-color: #e5eaee;
-    /* height: 30px; */
-    /* background: #5b6270; */
-    /* border-radius: 3px; */
     float: left;
-    /* position: relative;
-    top: 15px;
-    left: 20px; */
-  }
-
-  .page-left {
-    background-color: #fff;
   }
 
   .layout-logo img {
@@ -402,35 +392,18 @@
     float: left;
   }
 
-  .layout-nav {
-    margin: 0 auto;
-    margin-right: 50px;
-    float: right;
-  }
-
-  .layout-nav .ivu-menu-item {
-    color: #fff;
-  }
-
-  .ivu-menu {
-    color: #999ca1 !important;
-  }
-
-  .ivu-menu-item-selected {
-    background-color: #398ee5;
-    /* background-color: #D9ECFF; */
-  }
-
   .breadcrumb {
     padding: 12px;
     text-align: left;
   }
 
   .page-left {
-    background-color: #fff;
+    background-color: #ededed;
     height: 100%;
   }
-
+  .ivu-menu-light{
+    background-color: #ededed;
+  }
   .layout-userinfo {
     float: right;
     color: #ffffff;
@@ -445,41 +418,6 @@
     vertical-align: middle;
   }
 
-  .ivu-icon-chevron-down {
-    color: #ffffff;
-    padding: 14px;
-    padding: 23px 14px;
-  }
-
-  .ivu-icon-chevron-down:hover {
-    background: rgba(250, 250, 250, 0.2);
-  }
-
-  .ivu-layout-header {
-    height: 60px !important;
-    line-height: 60px !important;
-    background-color: #409eff !important;
-  }
-
-  .ivu-menu-horizontal {
-    height: 0;
-    line-height: 60px !important;
-    background-color: #409eff !important;
-    color: #fff !important;
-  }
-
-  .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active,
-  .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover,
-  .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active,
-  .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
-    color: #fff !important;
-    border-bottom: 0 !important;
-  }
-
-  .ivu-layout-header {
-    padding-left: 0px;
-  }
-
   .wordBreak {
     word-break: break-all;
   }
@@ -491,29 +429,5 @@
   .content .content-bg {
     padding: 20px;
     background-color: #fff !important;
-  }
-
-  .page-left > .ivu-layout-sider-children {
-    background-color: #fff !important;
-    border: 0 !important;
-  }
-
-  .ivu-page-item-jump-next,
-  .ivu-page-item-jump-prev,
-  .ivu-page-next,
-  .ivu-page-prev {
-    border-radius: 0 !important;
-  }
-
-  .ivu-table-wrapper {
-    border: none !important;
-  }
-
-  .houseShow {
-    display: none;
-  }
-
-  .delPad {
-    padding: 0;
   }
 </style>

@@ -46,7 +46,7 @@ const mutations = {
             openName: secondRouter
           }
           roleRouter.push({
-            path: '/' + thirdRouter,
+            path: '/' + firstRouter+'/' + secondRouter+'/' + thirdRouter,
             name: thirdRouter,
             component: resolve => { require([`@/components/${firstRouter}/${secondRouter}/${thirdRouter}`], resolve) },
             meta: meta})
