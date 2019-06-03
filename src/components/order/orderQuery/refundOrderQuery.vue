@@ -13,9 +13,9 @@
   </div>
 </template>
 <script>
-  import { apiGet, apiPost } from '@/fetch/api'
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
+  import qs from 'qs'
   export default {
     data () {
       return {
@@ -164,10 +164,17 @@
             loading: false,
             callback: () => {
               this.hannleItems[0].loading = true
-              let url = ''
-              this.common.exportData('交易订单', url, () => {
-                this.hannleItems[0].loading = false
-              }, this)
+              let url = '/refundorder/export';
+              let params = this.$store.state.list.params
+
+              this.common.exportData({
+                url,
+                params,
+                text:'退款订单',
+                callback:()=>{
+                  this.hannleItems[0].loading = false
+                }
+              })
             }
           }
         ],

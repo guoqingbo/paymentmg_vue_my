@@ -8,9 +8,9 @@ const defined = {
     index:0,
   },
   getters: {
-    editComData:state=>{
-      return state.list[state.index].data
-    }
+    // editComData:state=>{
+    //   return state.list[state.index].data
+    // }
   },
   mutations: {
     setErrorShow(state, flag) {

@@ -139,3 +139,24 @@ export function apiPut (url, params = {}) {
       })
   })
 }
+
+/**
+ * 封装get blob方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function apiGetBlob (url, params = {}) {
+  return new Promise((resolve, reject) => {
+    axios({
+      method:'get',
+      url:url,
+      params,
+      responseType:'blob'
+    }) .then(response => {
+      resolve(response.data)
+    }).catch(err => {
+        reject(err)
+      })
+  })
+}

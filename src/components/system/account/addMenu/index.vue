@@ -44,13 +44,13 @@
                 <Button type="primary" @click="submit">提交</Button>
                 <Button @click="back">取消</Button>
             </FormItem>
-            
+
         </Form>
     </div>
 </template>
 
 <script>
-import {apiGet} from '@/fetch/api'
+
 export default {
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
         openType: "",
         functionType: "",
         hierarchy: null,
-       
+
         funType:""
       },
        funTypes: [],
@@ -142,7 +142,7 @@ export default {
   created(){
       if(this.$route.query.id||this.$route.query.id==0){
           this.type='edit'
-          apiGet('/manage/admin/admin/menu/getMenuById?id='+this.$route.query.id).then(res=>{
+          this.apiGet('/manage/admin/admin/menu/getMenuById?id='+this.$route.query.id).then(res=>{
               if(res.status==200){
                 //   this.formItem=res.data
                   this.formItem.id=res.data.id
@@ -161,7 +161,7 @@ export default {
           this.formItem.hierarchy=this.$route.query.parentHierarchy
           this.formItem.parentId=this.$route.query.parentId
       }
-      
+
   },
   methods:{
       back(){
@@ -170,7 +170,7 @@ export default {
       submit(){
           let _this = this
           this.formItem.funType=this.funTypes.join(',')
-      let url = _this.type === 'edit' ?'/manage/admin/admin/menu/udpateMenu':'/manage/admin/admin/menu/saveMenu' 
+      let url = _this.type === 'edit' ?'/manage/admin/admin/menu/udpateMenu':'/manage/admin/admin/menu/saveMenu'
       this.common.formPost(this, {
         url,
         params: this.formItem,

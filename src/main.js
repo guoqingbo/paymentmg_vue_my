@@ -6,6 +6,7 @@ import store from './store'
 import iView from 'iview'
 
 // import axios from 'axios'
+import $ from 'jquery'
 import VueCookies from 'vue-cookies'
 import 'iview/dist/styles/iview.css'
 import * as filter from './filters'
@@ -56,7 +57,7 @@ router.beforeEach(async (to, from, next) => {
       // next()
     }
 })
-
+window.$ = $
 Vue.use(iView)
 Vue.use(VueCookies)
 Vue.use(VueClipboard)

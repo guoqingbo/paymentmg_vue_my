@@ -1,35 +1,23 @@
 import * as api from '@/fetch/api'
 import dic from '@/common/dic'
-
+import {Message} from 'iview'
 const common = {
   // 导出excel表格方法
-  exportData(text, url, callback, that) {
-    var xhr = new XMLHttpRequest()
-    xhr.open('POST', url, true) // 也可以使用POST方式，根据接口
-    xhr.responseType = 'blob' // 返回类型blob
-    // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
-    xhr.onload = function () {
-      // 请求完成
-      var blob = this.response
-      var reader = new FileReader()
-      reader.readAsDataURL(blob) // 转换为base64，可以直接放入a表情href
-      reader.onload = function (e) {
-        // 转换完成，创建一个a标签用于下载
+  exportData({url,params, callback,text}) {
+    api.apiGetBlob(url,params).then(res=>{
+      if(res){
+        let url = window.URL.createObjectURL(res)
+        let a = document.createElement('a')
+        a.href = url
+        a.download = text?text + '.xlsx':'下载.xlsx'
+        $('body').append(a) // 修复firefox中无法触发click
+        a.click()
+        $(a).remove()
         callback()
-        var a = document.createElement('a')
-        a.download = text + '.xlsx'
-        if (e.target.result.length > 5) {
-          a.href = e.target.result
-          $('body').append(a) // 修复firefox中无法触发click
-          a.click()
-          $(a).remove()
-        } else {
-          that.$Message.error('报表没有记录')
-        }
+      }else {
+        Message.error('报表没有记录')
       }
-    }
-    // 发送ajax请求
-    xhr.send()
+    })
   },
   arrayTurnObj(arr){
     let obj = {}

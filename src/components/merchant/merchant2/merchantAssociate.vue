@@ -17,7 +17,6 @@
   </div>
 </template>
 <script>
-  import { apiGet, apiPost } from '@/fetch/api'
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
   import modalForm from '@/components/global/modalForm'
