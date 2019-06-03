@@ -160,7 +160,6 @@
           merchantSource.forEach(ele=>{
             source[ele.value] = ele.label
           })
-          console.log(source)
           this.columns[3].render = (h, params) => {
             return h('span', source[params.row.source])
           }

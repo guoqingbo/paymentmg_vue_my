@@ -31,7 +31,6 @@
             title: '支付产品名称',
             name: 'payProductName',
             type: 'input',
-            value:'',
             rules: [
               { required: true, message: '请输入支付产品名称', trigger: 'blur' },
               { max: 20, message: "支付产品名称不超过20字符" ,trigger: 'blur'}
@@ -41,7 +40,6 @@
             title: '产品说明',
             name: 'remark',
             type: 'textarea',
-            value:'',
             rules: [{ max: 100, message: "产品说明不超过100字符" ,trigger: 'blur'}]
           },
         ],
@@ -99,7 +97,6 @@
                 }
               })
             }
-            console.log(this.formList)
           });
         }
       },

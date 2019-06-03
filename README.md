@@ -9,6 +9,9 @@
       * jekins地址 http://192.168.200.24:9002 guoqingbo/Gqb123456
       
   ## 测试环境
+  
+      * swagger  http://192.168.200.88:6071/swagger-ui.html
+      * 后台接口 http://192.168.200.88:6071/
       * 测试域名 paycenter.zhiyoubao.com
       * 普通账号 15010001000/123456
       * 超级账号 superadmin/123456

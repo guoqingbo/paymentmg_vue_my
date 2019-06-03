@@ -33,7 +33,6 @@
             type: 'select',
             data:'',
             onChange:this.getChannelProduct,
-            value:'',
             rules: [
               { required: true, type:'number',message: '请选择支付产品', trigger: 'change' }
             ]
@@ -44,7 +43,6 @@
             type: 'select',
             data:'',
             onChange:this.getPayConfig,
-            value:'',
             rules: [
               { required: true, type:'number',message: '请选择渠道产品', trigger: 'change' }
             ]
@@ -62,7 +60,6 @@
             title: '商户费率',
             name: 'merchantFeeRate',
             type: 'input',
-            value:'',
             rules: [
               { required: true, validator:this.validateMerchantFeeRate, trigger: 'blur' }
               ]

@@ -81,7 +81,7 @@ export default {
         id: 17,
         defColor: "#00428E"
       }).then(res => {
-        console.log(res);
+
       });
     }
   }

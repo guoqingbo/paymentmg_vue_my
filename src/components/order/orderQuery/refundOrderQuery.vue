@@ -26,64 +26,61 @@
           },
           {
             title: '退款申请时间',
-            key: 'merchantCode',
+            key: 'orderTime',
             sortable: true,
           },
           {
             title: '原订单号',
-            key: 'merchantName',
+            key: 'orderNo',
             sortable: true,
           },
           {
             title: '退款订单号',
-            key: 'merchantName',
+            key: 'refundOrderNo',
             sortable: true,
           },
           {
             title: '支付流水号',
-            key: 'merchantType',
+            key: 'payNo',
             sortable: true,
           },
           {
             title: '订单实付金额',
-            key: 'createTime',
+            key: 'payAmount',
             sortable: true,
           },
           {
             title: '退款金额',
-            key: 'createTime',
+            key: 'refundAmount',
             sortable: true,
           },
           {
             title: '退款状态',
-            key: 'createTime',
+            key: 'payStatus',
             sortable: true,
-            render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            }
+            render: ''
           },
           {
             title: '商户名称',
-            key: 'createTime',
+            key: 'merchantName',
             sortable: true,
           },
           {
             title: '商户号',
-            key: 'createTime',
+            key: 'merchantNo',
             sortable: true,
           },
           {
             title: '订单来源',
-            key: 'createTime',
+            key: 'orderSource',
             sortable: true,
-            render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            }
+            render: ''
           },
           {
             title: '支付渠道',
-            key: 'createTime',
+            key: 'channelCode',
             sortable: true,
+            render: ''
           },
           {
             title: '操作',
@@ -105,56 +102,58 @@
           }
         ],
         params: {},
-        url: '/merchant/grid',
+        url: '/refundorder/grid',
         searchItems: [
           {
             label: '退款单号',
             type: 'input',
-            name: 'merchantName'
+            name: 'refundOrderNo'
           },
           {
             label: '原订单号',
             type: 'input',
-            name: 'merchantName'
+            name: 'orderNo'
           },
           {
             label: '支付流水号',
             type: 'input',
-            name: 'merchantCode'
+            name: 'payNo'
           },
           {
             label: '起始日期',
             type: 'date',
-            name: 'startDate',
-            value: ''
+            name: 'orderTimeStart',
+            format:'yyyy-MM-dd 00:00:00',
+            value: new Date(new Date().setMonth(new Date().getMonth()-1))
           },
           {
             label: '结束日期',
             type: 'date',
-            name: 'endDate',
-            value: ''
+            name: 'orderTimeEnd',
+            format:'yyyy-MM-dd 23:59:59',
+            value: new Date()
           },
           {
             label: '来源',
             type: 'select',
-            name: 'source',
+            name: 'orderSource',
             data: ''
           },
           {
             label: '支付渠道',
             type: 'select',
-            name: 'source',
+            name: 'channelCode',
             data: ''
           },
           {
             label: '商户号',
             type: 'input',
-            name: 'merchantCode'
+            name: 'merchantNo'
           },
           {
             label: '退款状态',
             type: 'select',
-            name: 'source',
+            name: 'payStatus',
             data: ''
           },
         ],
@@ -180,9 +179,43 @@
     mounted () {
 
     },
+    created(){
+      // 获取退款状态
+      this.getRefundStatus()
+      // 获取订单来源
+      this.getMerchantSource()
+      // 获取支付渠道
+      this.getChannel()
+    },
     components: {list,confirm},
     methods: {
-
+      // 获取退款状态
+      getRefundStatus(){
+        this.$store.dispatch("getRefundStatus").then(res=>{
+          this.columns[7].render =  (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.row.payStatus])
+          }
+          this.searchItems[8].data = res
+        })
+      },
+      // 获取订单来源
+      getMerchantSource(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          this.columns[10].render =  (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.row.orderSource])
+          }
+          this.searchItems[5].data = res
+        })
+      },
+      // 获取支付渠道
+      getChannel(){
+        this.$store.dispatch("getChannel").then(res=>{
+          this.columns[11].render =  (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.row.channelCode])
+          }
+          this.searchItems[6].data = res
+        })
+      }
     }
   }
 </script>

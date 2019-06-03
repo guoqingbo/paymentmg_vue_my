@@ -31,7 +31,19 @@ const common = {
     // 发送ajax请求
     xhr.send()
   },
+  arrayTurnObj(arr){
+    let obj = {}
+    if(arr instanceof Array){
+      arr.forEach(ele=>{
+        obj[ele.value] = ele.label
+      })
+    }
+    return obj
+  },
   formatDate(date, fmt) {
+    if(typeof date == 'string' || typeof date == 'number'){
+      date = new Date(date)
+    }
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
     }

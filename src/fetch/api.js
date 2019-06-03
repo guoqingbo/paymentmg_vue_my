@@ -24,7 +24,6 @@ axios.interceptors.response.use(
     if(error.response.data.status==401){
       setCookies('userId','',-1)
       setCookies('token','',-1)
-      console.log(error.response.data)
       // return  window.location.href='http://pms.sendinfo.com.cn/login'
     }
     return Promise.reject(error)
@@ -47,7 +46,6 @@ function setCookies(cname, cvalue, exdays) {
  */
 
 export function apiGet (url, params = {}) {
-  console.log(url)
   if(!url){
    return
   }
@@ -113,6 +111,26 @@ export function apiDelete (url, params = {}) {
   axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
   return new Promise((resolve, reject) => {
     axios.delete(url, params)
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+/**
+ * 封装UPDATE方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function apiPut (url, params = {}) {
+  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+  return new Promise((resolve, reject) => {
+    axios.put(url, params)
       .then(response => {
         resolve(response.data)
       })

@@ -30,7 +30,6 @@
             title: '商户简称',
             name: 'merchantName',
             type: 'input',
-            value:'',
             rules: [
               {required: true, message: '请输入商户简称', trigger: 'blur'},
               {max: 50, message: "商户简称不超过50字符", trigger: 'blur'}
@@ -40,7 +39,7 @@
             title: '企业名称',
             name: 'corpName',
             type: 'input',
-            value:'',
+
             rules: [{required: true, message: '请输入企业名称', trigger: 'blur'},
               {max: 60, message: "企业名称不超过50字符", trigger: 'blur'}]
           },
@@ -48,21 +47,18 @@
             title: '上级商户号',
             name: 'parentMerchantCode',
             type: 'input',
-            value:'',
             rules: [{max: 60, message: "上级商户号不超过50字符", trigger: 'blur'}]
           },
           {
             title: '法定代表人姓名',
             name: 'legalPersonName',
             type: 'input',
-            value:'',
             rules: [{max: 60, message: "法定代表人姓名不超过50字符", trigger: 'blur'}]
           },
           {
             title: '身份证号码',
             name: 'legalPersonIdNo',
             type: 'input',
-            value:'',
             rules: [{
               required: false, validator: this.common.validate.IdCodeValid, trigger: 'blur'
             }]
@@ -71,21 +67,18 @@
             title: '社会统一信用代码',
             name: 'unifiedSocialCreditCode',
             type: 'input',
-            value:'',
             rules: [{max: 60, message: "信用代码不超过50字符", trigger: 'blur'}]
           },
           {
             title: '开户行名称',
             name: 'bankName',
             type: 'input',
-            value:'',
             rules: [{max: 60, message: "开户行名称不得超过50字符", trigger: 'blur'}]
           },
           {
             title: '银行账号',
             name: 'accountNo',
             type: 'input',
-            value:'',
             rules: [{max: 60, message: "银行账号不得超过50字符", trigger: 'blur'}]
           },
           {
@@ -100,7 +93,6 @@
             title: '详细地址',
             name: 'detailedAddress',
             type: 'input',
-            value:'',
             rules: [{max: 100, message: "详细地址不得超过100字符", trigger: 'blur'}]
           },
           {
@@ -124,7 +116,6 @@
         if (formItem.area) {
           // 转换省市区
           let area = formItem.area
-          console.log(area)
           formItem.provinceCode = area[0].value;
           formItem.province = area[0].label;
           formItem.cityCode = area[1].value;

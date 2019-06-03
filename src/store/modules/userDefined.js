@@ -26,7 +26,7 @@ const defined = {
     },
     upData(state, item, index) {
       //更新
-      console.log(item, index)
+
     },
     reset(state, arr) {
       //重置

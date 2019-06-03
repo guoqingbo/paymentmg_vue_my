@@ -103,12 +103,14 @@
             label: '开始日期',
             type: 'date',
             name: 'startDate',
+            format:'yyyy-MM-dd 00:00:00',
             value: ''
           },
           {
             label: '结束日期',
             type: 'date',
             name: 'endDate',
+            format:'yyyy-MM-dd 23:59:59',
             value: ''
           },
         ],

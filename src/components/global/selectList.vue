@@ -177,7 +177,6 @@ export default {
       if (this.addrCode){
         let [sheng,shi,qu] = this.addrCode.split("-")
         if(sheng && shi && qu){
-          console.log(sheng)
           this.sheng = sheng;
           this.shi = shi;
           this.qu = qu;

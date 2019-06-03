@@ -1,13 +1,16 @@
 <template>
   <div style="width: 80%;margin: 0 auto">
     <h4 class="table-title">订单信息</h4>
-    <myTable :tableRows="tableRows"></myTable>
+    <myTable :tableRows="tableRows"
+             :url="tableUrl"
+             :params="tableParams"
+              @onGetAfter="onGetAfter"></myTable>
 
     <h4 class="table-title ptop">退款信息</h4>
     <Table border
            size="small"
            :columns="columns"
-           :data="orderDetail"></Table>
+           :data="refundOrderDetail"></Table>
     <div class="bottom-btn-box">
       <Button @click='$router.back()' type="primary">返回</Button>
     </div>
@@ -24,185 +27,230 @@
             cols:[
               {
               title:'订单编号',
-              name:'orderNo1'
+              name:'orderNo'
             },{
               title:'下单时间',
-              name:'orderNo2'
+              name:'orderTime'
             },{
               title:'支付流水号',
-              name:'orderNo3'
+              name:'payNo'
             }],
           },
           {
             cols:[
               {
                 title:'支付时间',
-                name:'orderNo1'
+                name:'payTime'
               },{
                 title:'订单状态',
-                name:'orderNo2',
-                render: (h, params) => {
-                  const actions = [
-                    {
-                      title: params.name,
-                      type:'text',
-                    },
-                    {
-                      title: "状态同步",
-                      type:'Button',
-                      action: () => {
-                        this.$router.push({
-                          path: "/merchant/merchant2/merchantAddEditDetail",
-                          query: { id: params.row.id,routeType:"detail"}
-                        });
-                      }
-                    },
-                  ];
-                  return this.common.columnsItemRender(h, actions);
-                }
+                name:'payStatus',
+                render: ''
               },{
                 title:'订单金额（元）',
-                name:'orderNo3'
+                name:'orderAmount'
               }],
           },
           {
             cols:[
               {
                 title:'订单实付金额（元）',
-                name:'orderNo1'
+                name:'payAmount'
               },{
                 title:'支付产品',
-                name:'orderNo2'
+                name:'payProductName'
               },{
                 title:'支付渠道',
-                name:'orderNo3'
+                name:'channelName'
               }],
           },
           {
             cols:[
               {
                 title:'商品编码',
-                name:'orderNo1'
+                name:'productCode'
               },{
                 title:'商品名称',
-                name:'orderNo2'
+                name:'productName'
               },{
                 title:'商品数量',
-                name:'orderNo3'
+                name:'productTotalNum'
               }],
           },
           {
             cols:[
               {
                 title:'商户名称',
-                name:'orderNo1'
+                name:'merchantName'
               },{
                 title:'商户号',
-                name:'orderNo2'
+                name:'merchantNo'
               },{
                 title:'订单来源',
-                name:'orderNo3'
+                name:'orderSource',
+                render: '',
               }],
           },
           {
             cols:[
               {
                 title:'来源商户号',
-                name:'orderNo1'
+                name:'merchantSourceNo'
               },{
                 title:'来源用户标识',
-                name:'orderNo2'
+                name:'userSourceNo'
               },{
                 title:'支付场景',
-                name:'orderNo3'
+                name:'payScene'
               }],
           },
           {
             cols:[
               {
                 title:'清算类型',
-                name:'orderNo1'
+                name:'auditType',
+                render: '',
               },{
                 title:'第三方支付流水',
-                name:'orderNo2'
+                name:'thirdPartyNo'
               },{
                 title:'第三方支付时间',
-                name:'orderNo3'
+                name:'thirdPartyPayTime'
               }],
           },
           {
             cols:[
               {
                 title:'手续费',
-                name:'orderNo1'
+                name:'thirdPartyFee'
               },{
                 title:'备注',
-                name:'orderNo2',
+                name:'extra',
                 colspan:"3"
               }],
           }],
-        orderDetail: [],
+        tableUrl:'/payorder/detail/'+this.$route.query.id,
+        tableParams:{},
+
+        refundOrderDetail: [],
         columns: [
           {
             title: '退款申请时间',
             align: 'center',
-            key: 'linkMan'
+            key: 'orderTime'
           },
           {
             title: '退款单号',
             align: 'center',
-            key: 'idcardNo'
+            key: 'refundOrderNo',
+            render: (h, params) => {
+              const actions = [
+                {
+                  title: params.row.refundOrderNo,
+                  type:'router',
+                  to:{
+                    path:'/order/orderQuery/refundOrderDetail',
+                    query:{
+                      orderNo:params.row.orderNo,
+                      orderSource:params.row.orderSource
+                    }
+                  },
+                },
+              ];
+              return this.common.columnsItemRender(h, actions);
+            }
           },
           {
             title: '退款金额',
             align: 'center',
-            key: 'checked',
-            render: (h, params) => {
-              let text = '未消费'
-              if (params.row.checked === 'T') {
-                text = '已消费'
-              }
-              if (params.row.refunded === 'T') {
-                text = '已退票'
-              }
-              return h('span', text)
-            }
+            key: 'refundAmount',
           },
           {
             title: '支付流水号',
             align: 'center',
-            key: 'checked',
-            render: (h, params) => {
-              let text = '未消费'
-              if (params.row.checked === 'T') {
-                text = '已消费'
-              }
-              if (params.row.refunded === 'T') {
-                text = '已退票'
-              }
-              return h('span', text)
-            }
+            key: 'payNo',
           },
           {
             title: '支付时间',
             align: 'center',
-            key: 'checked',
-            render: (h, params) => {
-              let text = '未消费'
-              if (params.row.checked === 'T') {
-                text = '已消费'
-              }
-              if (params.row.refunded === 'T') {
-                text = '已退票'
-              }
-              return h('span', text)
-            }
+            key: 'payTime',
           }
         ]
       }
     },
-    props: ['result', 'searchType'],
     watch: {
+    },
+    created(){
+      // 获取清算类型
+      this.getAuditType()
+      // 根据订单号和订单来源查询支付订单详情
+      this.getOrderByOrderNo()
+      // 获取支付状态
+      this.getPayStatus()
+      // 获取订单来源
+      this.getMerchantSource()
+    },
+    methods:{
+      // 获取订单明细后
+      onGetAfter(orderInfo){
+        this.refundOrderDetail = orderInfo.refundOrders
+      },
+      // 状态同步
+      orderSync(){
+        let url = '/payorder/synch'
+        let params = {
+          id:this.$route.query.id,
+        }
+        this.apiPut(url,params).then(res=>{
+          if(res.status == 200){
+            this.$Message.info(res.message || '同步成功！')
+          }
+        })
+      },
+      // 获取清算类型
+      getAuditType(){
+        this.$store.dispatch("getAuditType").then(res=>{
+          this.tableRows[6].cols[0].render = (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.auditType])
+          }
+        })
+      },
+      // 根据订单号和订单来源查询支付订单详情
+      getOrderByOrderNo(){
+        let {orderNo,orderSource}= this.$route.query
+        if(orderNo && orderSource){
+            this.tableUrl = '/payorder/detail'
+            this.tableParams = {orderNo,orderSource}
+        }
+      },
+      // 获取支付状态
+      getPayStatus(){
+        this.$store.dispatch("getPayStatus").then(res=>{
+          this.tableRows[1].cols[1].render = (h, params) => {
+            const actions = [
+              {
+                title: this.common.arrayTurnObj(res)[params.payStatus],
+                type:'text',
+              },
+              {
+                title: "状态同步",
+                type:'Button',
+                action: () => {
+                  this.orderSync()
+                }
+              },
+            ];
+            return this.common.columnsItemRender(h, actions);
+          }
+        })
+      },
+      // 获取订单来源
+      getMerchantSource(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          this.tableRows[4].cols[2].render =  (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.orderSource])
+          }
+        })
+      },
     }
   }
 </script>

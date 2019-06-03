@@ -42,7 +42,6 @@
             name: 'channelType',
             type: 'select',
             data: this.$store.state.global.channelType,
-            value:'',
             rules: [{ required: true,type:"number", message: '请选择渠道性质', trigger: 'change' }]
           },
           {
@@ -50,21 +49,18 @@
             name: 'status',
             type: 'select',
             data: this.common.dic.signStatus,
-            value:'',
             rules: [{ required: true, type:"number",message: '请选择签约状态', trigger: 'change' }]
           },
           {
             title: '业务联系人',
             name: 'contactName',
             type: 'input',
-            value:'',
             rules: [{ max: 20, message: "业务联系人不超过20字符" ,trigger: 'blur'}]
           },
           {
             title: '业务联系人手机号',
             name: 'contactPhone',
             type: 'input',
-            value:'',
             rules: [{
               validator: this.common.validate.phone,
               required: false,
@@ -75,7 +71,6 @@
             title: '业务联系人邮箱',
             name: 'contactEmail',
             type: 'input',
-            value:'',
             rules: [
               // {required: false, type:'email',trigger: "blur"},
               {validator: this.common.validate.email, required: false, trigger: "blur"}
@@ -85,7 +80,6 @@
             title: '备注',
             name: 'remark',
             type: 'textarea',
-            value:'',
             rules: [{ max: 100, message: "备注不超过100字符" ,trigger: 'blur'}]
           },
         ],

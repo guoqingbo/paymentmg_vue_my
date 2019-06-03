@@ -5,8 +5,8 @@
       <Header>
         <Menu mode="horizontal" theme="dark" :active-name="firstRouter" @on-select="changeTab">
           <div @click="goHome" class="layout-logo">
-            <!-- <img v-if='imgUrl' :src="imgUrl" alt> -->
-            <!-- <img src="./../assets/images/index-logo.png" alt> -->
+             <!--<img class="logo-img" src="./../assets/images/index-logo.png" alt>-->
+             <span class="logo-img">支付中心</span>
           </div>
 
           <div class="layout-userinfo">
@@ -381,15 +381,18 @@
   }
 
   .layout-logo {
-    width: 199px;
-    height: 60px;
+    width: 150px;
+    /*height: 60px;*/
     float: left;
   }
 
-  .layout-logo img {
+  .layout-logo .logo-img {
     width: 130px;
     height: 28px;
-    float: left;
+    vertical-align: middle;
+    color: #fff;
+    font-size: 21px;
+    /*float: left;*/
   }
 
   .breadcrumb {

@@ -1,7 +1,5 @@
 import dic from '@/common/dic'
 
-console.log(dic)
-
 let turn = (type,value) => {
   let text = ''
   // 如果数据字典存在该类型的数据

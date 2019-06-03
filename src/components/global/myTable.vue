@@ -8,7 +8,7 @@
           <td class="title">{{sitem.title}}</td>
           <td  :colspan="sitem.colspan"
                :rowspan="sitem.rowspan">
-            <render  v-if="sitem.render" :params="sitem" :render="sitem.render"></render>
+            <render  v-if="sitem.render" :params="detailData" :render="sitem.render"></render>
             <template  v-else>
               {{sitem.value}}
             </template>
@@ -27,7 +27,7 @@
     components: {render},
     data () {
       return {
-
+        detailData:{}
       }
     },
     props: {
@@ -42,14 +42,35 @@
         type: String,
         default: ''
       },
-      parems:{
+      params:{
         type: Object,
-        default: ''
       }
     },
-    watch: {
-
-    },
+    // watch: {
+    //   tableRows: {
+    //     handler(newValue, oldValue) {
+    //       newValue.forEach((element,index) => {
+    //         // 如果是详情
+    //         // if(this.routeType=='detail'){
+    //         //   element.disabled = true
+    //         //   element.type = 'text'
+    //         // }
+    //         // this.formItem[element.name] = element.value
+    //
+    //         if(typeof element.value == 'undefined'){
+    //           // 作用是监听输入框value的变化，使表单验证起作用
+    //           this.$set(element, 'value','')
+    //         }
+    //         if(element.name){
+    //           // this.formItem[element.name] = element.value
+    //           this.$set(this.formItem, element.name, element.value)
+    //         }
+    //       })
+    //     },
+    //     deep: true,
+    //     immediate: true
+    //   }
+    // },
     created(){
       this.getDetail()
     },
@@ -57,11 +78,16 @@
       // 获取表格中的数据
       getDetail(){
         if(this.url){
-          this.apiGet(this.url,this.parems).then(res=>{
+          this.apiGet(this.url,this.params).then(res=>{
             if(res.status == 200){
+              this.detailData = res.data
+              this.$emit('onGetAfter',res.data)
               this.tableRows.forEach(item=>{
                 item.cols.forEach(sitem=>{
-                  sitem.value = res.data[sitem.name]
+                  this.$set(sitem,'value',res.data[sitem.name])
+                  // console.log(res.data)
+                  // console.log(sitem.name)
+                  // sitem.value = res.data[sitem.name]
                 })
               })
             }

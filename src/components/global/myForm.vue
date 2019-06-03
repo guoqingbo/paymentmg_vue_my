@@ -125,14 +125,20 @@ export default {
     // },
     formItems: {　　　
       handler(newValue, oldValue) {
-        this.formItems.forEach((element,index) => {
+        newValue.forEach((element,index) => {
           // 如果是详情
           // if(this.routeType=='detail'){
           //   element.disabled = true
           //   element.type = 'text'
           // }
           // this.formItem[element.name] = element.value
+
+          if(typeof element.value == 'undefined'){
+            // 作用是监听输入框value的变化，使表单验证起作用
+            this.$set(element, 'value','')
+          }
           if(element.name){
+            // this.formItem[element.name] = element.value
             this.$set(this.formItem, element.name, element.value)
           }
         })

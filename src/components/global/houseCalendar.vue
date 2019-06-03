@@ -65,7 +65,6 @@ export default {
 
   methods: {
     prev(e) {
-        console.log(this.monthIndex)
         e && e.stopPropagation();
          if (this.monthIndex === 1) {
             this.oversliding = false;
@@ -90,7 +89,6 @@ export default {
         this.init(this.year,this.month)
     },
     next(e) {
-        console.log(this.monthIndex)
          e && e.stopPropagation();
           if (this.monthIndex === 12) {
             this.oversliding = false;
@@ -222,7 +220,6 @@ export default {
         daysArr.push(arr);
       }
       this.daysArr = daysArr;
-      console.log(this.daysArr);
     },
     show() {
       this.isShow = true;

@@ -2,15 +2,20 @@
   <div>
     <Form ref="formInline" :model="searchForm" inline v-show="searchItems.length">
       <FormItem v-for="item in searchItems" :key="item.label">
-        <Input v-if="item.type=='input'" v-model="searchForm[item.name]" :placeholder="'请输入'+item.label"></Input>
+        <Input v-if="item.type=='input'"
+               v-model="item.value"
+               :placeholder="'请输入'+item.label"></Input>
         <DatePicker v-if="item.type=='date'"
                     type="date"
                     :placeholder="'请输入'+item.label"
-                    v-model="searchForm[item.name]"
-                    format="yyyy-MM-dd"
-                    @on-change="searchForm[item.name] = $event"></DatePicker>
-        <Select v-if="item.type=='select'" v-model="searchForm[item.name]" :placeholder="'请选择'+item.label">
-          <Option v-for="sitem in item.data" :value="sitem.value" :key="sitem.value">{{ sitem.label }}</Option>
+                    v-model="item.value"
+                    :format="item.format||'yyyy-MM-dd'"></DatePicker>
+        <Select v-if="item.type=='select'"
+                v-model="item.value"
+                :placeholder="'请选择'+item.label">
+          <Option v-for="sitem in item.data"
+                  :value="sitem.value"
+                  :key="sitem.value">{{ sitem.label }}</Option>
         </Select>
       </FormItem>
       <FormItem>
@@ -30,6 +35,7 @@
       <Table
         :highlight-row="highlightRow"
         style="position:static;"
+        border
         stripe
         :columns="columns"
         :data="res2.rows"
@@ -53,18 +59,37 @@
   export default {
     data() {
       return {
-        searchForm: {},
+        searchForm: {
+
+        },
         limit:10,
       };
     },
     props: ["searchItems", "hannleItems", "columns", "url", "params", "highlightRow"],
+    watch: {
+      searchItems: {
+        handler(newValue, oldValue) {
+          newValue.forEach((element,index) => {
+            if(typeof element.value == 'undefined'){
+              // 作用是监听输入框value的变化，使表单验证起作用
+              this.$set(element, 'value','')
+            }
+            if(element.name){
+              // this.formItem[element.name] = element.value
+              this.$set(this.searchForm, element.name, element.value)
+            }
+          })
+        },
+        deep: true,
+        immediate: true
+      }
+    },
     mounted() {
 
     },
     created(){
       this.$store.state.list.url = this.url;
       this.$store.state.list.params = this.params
-      this.$store.state.list.params.limit = this.limit
       this.loadpage();
     },
     computed: {
@@ -80,7 +105,6 @@
     methods: {
       pageSizeShange(limit){
         this.limit = limit
-        this.$store.state.list.params.limit = limit
         this.loadpage()
       },
       changepage2(num) {
@@ -90,25 +114,26 @@
       changeSelection2(selection) {
         this.selection = selection
       },
-      async handleSubmit2() {
+      handleSubmit2() {
+        this.loadpage();
+      },
+      loadpage() {
         this.formateDate()
         this.$store.state.list.params = Object.assign(
           this.$store.state.list.params,
           this.searchForm
         );
-        await this.$store.dispatch("getList");
-      },
-      async loadpage() {
-        await this.$store.dispatch('getList')
+        this.$store.state.list.params.limit = this.limit
+        this.$store.dispatch('getList')
       },
       formateDate(){
-        this.searchForm.startDate += ' 00:00:00'
-        this.searchForm.endDate += ' 23:59:59'
-        // Object.keys(this.searchForm).forEach(ele=>{
-        //   if(this.searchForm[ele] instanceof Date){
-        //     this.searchForm[ele] = this.common.formatDate(this.searchForm[ele], "yyyy-MM-dd hh:mm:ss")
-        //   }
-        // })
+        // this.searchForm.startDate += ' 00:00:00'
+        // this.searchForm.endDate += ' 23:59:59'
+        this.searchItems.forEach(ele=>{
+          if(this.searchForm[ele.name] instanceof Date){
+            this.searchForm[ele.name] = this.common.formatDate(this.searchForm[ele.name], ele.format||"yyyy-MM-dd")
+          }
+        })
       }
     }
   };

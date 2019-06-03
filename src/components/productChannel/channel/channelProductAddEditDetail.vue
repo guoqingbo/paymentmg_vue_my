@@ -29,7 +29,6 @@
             title: '渠道产品编码',
             name: 'channelProductCode',
             type: 'input',
-            value:'',
             rules: [
               { required: true, message: '请输入渠道产品编码', trigger: 'blur' },
               { max: 20, message: "渠道产品编码不超过20字符" ,trigger: 'blur'}
@@ -39,7 +38,6 @@
             title: '渠道产品名称',
             name: 'channelProductName',
             type: 'input',
-            value:'',
             rules: [
               { required: true, message: '请输入渠道产品名称', trigger: 'blur' },
               { max: 20, message: "渠道产品名称不超过20字符" ,trigger: 'blur'}
@@ -50,14 +48,12 @@
             name: 'feeType',
             type: 'select',
             data: this.common.dic.feeType,
-            value:'',
             rules: [{ required: true,type:'number',message: '请选择渠道计费方式', trigger: 'change' }]
           },
           {
             title: '渠道费率',
             name: 'feeRate',
             type: 'input',
-            value:'',
             rules: [
               // {required: true,message: '请输入渠道费率',trigger: 'blur'},
               {required: true,validator: this.validateChannelRate, trigger: "blur"}
@@ -71,7 +67,6 @@
               {label:"是",value:"T"},
               {label:"否",value:"F"},
             ],
-            value:'',
             rules: [{ required: true, message: '请选择是否退手续费', trigger: 'change' }]
           },
           {
@@ -79,14 +74,12 @@
             name: 'status',
             type: 'select',
             data: this.common.dic.status,
-            value:'',
             rules: [{ type: 'number'}]
           },
           {
             title: '备注',
             name: 'remark',
             type: 'textarea',
-            value:'',
             rules: [{ max: 100, message: "备注不超过100字符" ,trigger: 'blur'}]
           },
         ],
@@ -101,8 +94,6 @@
     },
     methods: {
       validateChannelRate(rule, value, callback){
-        console.log(value)
-        console.log(rule)
         if(rule.required && !value){
           callback(new Error('请输入渠道费率'))
           return
@@ -121,7 +112,6 @@
         if(this.$route.query.id){
           formItem.id = this.$route.query.id
         }
-        console.log(formItem)
       },
       afterSave(){
         this.$router.push({

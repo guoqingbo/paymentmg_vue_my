@@ -26,54 +26,50 @@
           },
           {
             title: '下单时间',
-            key: 'merchantCode',
+            key: 'orderTime',
             sortable: true,
           },
           {
             title: '订单编号',
-            key: 'merchantName',
+            key: 'orderNo',
             sortable: true,
           },
           {
             title: '支付流水号',
-            key: 'merchantType',
+            key: 'payNo',
             sortable: true,
           },
           {
             title: '订单金额',
-            key: 'createTime',
+            key: 'orderAmount',
             sortable: true,
           },
           {
             title: '订单实付金额',
-            key: 'createTime',
+            key: 'payAmount',
             sortable: true,
           },
           {
             title: '支付状态',
-            key: 'createTime',
+            key: 'payStatus',
             sortable: true,
-            render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            }
+            render:''
           },
           {
             title: '商户名称',
-            key: 'createTime',
+            key: 'channelName',
             sortable: true,
           },
           {
             title: '订单来源',
-            key: 'createTime',
+            key: 'orderSource',
             sortable: true,
+            render:"",
           },
           {
             title: '支付渠道',
-            key: 'createTime',
+            key: 'channelName',
             sortable: true,
-            render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            }
           },
           {
             title: '操作',
@@ -94,52 +90,55 @@
             }
           }
         ],
-        params: {},
-        url: '/merchant/grid',
+        params: {
+        },
+        url: '/payorder/grid',
         searchItems: [
           {
             label: '订单号',
             type: 'input',
-            name: 'merchantName'
+            name: 'orderNo'
           },
           {
             label: '支付流水号',
             type: 'input',
-            name: 'merchantCode'
+            name: 'payNo'
           },
           {
             label: '起始日期',
             type: 'date',
-            name: 'startDate',
-            value: ''
+            name: 'orderTimeStart',
+            format:'yyyy-MM-dd 00:00:00',
+            value: new Date(new Date().setMonth(new Date().getMonth()-1))
           },
           {
             label: '结束日期',
             type: 'date',
-            name: 'endDate',
-            value: ''
+            name: 'orderTimeEnd',
+            format:'yyyy-MM-dd 23:59:59',
+            value: new Date()
           },
           {
             label: '商户号',
             type: 'input',
-            name: 'merchantCode'
+            name: 'merchantNo'
           },
           {
             label: '支付状态',
             type: 'select',
-            name: 'source',
+            name: 'payStatus',
             data: ''
           },
           {
             label: '订单来源',
             type: 'select',
-            name: 'source',
+            name: 'orderSource',
             data: ''
           },
           {
             label: '支付渠道',
             type: 'select',
-            name: 'source',
+            name: 'channelCode',
             data: ''
           },
         ],
@@ -166,8 +165,39 @@
 
     },
     components: {list,confirm},
+    created(){
+      // 获取支付状态
+      this.getPayStatus()
+      // 获取订单来源
+      this.getMerchantSource()
+      // 获取支付渠道
+      this.getChannel()
+    },
     methods: {
-
+      // 获取支付状态
+      getPayStatus(){
+        this.$store.dispatch("getPayStatus").then(res=>{
+          this.columns[6].render =  (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.row.payStatus])
+          }
+          this.searchItems[5].data = res
+        })
+      },
+      // 获取订单来源
+      getMerchantSource(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          this.columns[8].render =  (h, params) => {
+            return h('span', this.common.arrayTurnObj(res)[params.row.orderSource])
+          }
+          this.searchItems[6].data = res
+        })
+      },
+      // 获取支付渠道
+      getChannel(){
+        this.$store.dispatch("getChannel").then(res=>{
+          this.searchItems[7].data = res
+        })
+      }
     }
   }
 </script>

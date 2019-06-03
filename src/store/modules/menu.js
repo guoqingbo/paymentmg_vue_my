@@ -1,34 +1,31 @@
 import {apiGet} from '../../fetch/api'
+
 const state = {
   menuList: '',
   activeName: '',
   openName: '',
   asyncRouter: '',
-  breadcrumbList:[]
+  breadcrumbList: []
 }
-const getters = {
-
-}
+const getters = {}
 
 const mutations = {
-  updateMenulist (state) {
+  updateMenulist(state) {
   },
-  setActiveName (state, name) {
-    console.log(name)
+  setActiveName(state, name) {
     state.activeName = name
   },
-  setOpenName (state, name) {
+  setOpenName(state, name) {
     state.openName = name
   },
   setBreadcrumbList(state, name) {
-    console.log(name)
     state.breadcrumbList = name
   },
-  formaterRouter (state) {// 根据权限生成路由
+  formaterRouter(state) {// 根据权限生成路由
     let roleRouter = []
     // let length = state.menuList.data.length
-    if (!(state.menuList&&state.menuList.data&&state.menuList.data.length)) {
-    //   window.location.href = ''
+    if (!(state.menuList && state.menuList.data && state.menuList.data.length)) {
+      //   window.location.href = ''
       return
     }
     state.menuList.data.forEach(item => {
@@ -46,32 +43,35 @@ const mutations = {
             openName: secondRouter
           }
           roleRouter.push({
-            path: '/' + firstRouter+'/' + secondRouter+'/' + thirdRouter,
+            path: '/' + firstRouter + '/' + secondRouter + '/' + thirdRouter,
             name: thirdRouter,
-            component: resolve => { require([`@/components/${firstRouter}/${secondRouter}/${thirdRouter}`], resolve) },
-            meta: meta})
+            component: resolve => {
+              require([`@/components/${firstRouter}/${secondRouter}/${thirdRouter}`], resolve)
+            },
+            meta
           })
+        })
       })
     })
     state.asyncRouter = roleRouter
   }
 }
 const actions = {
-  async getMenu (context,userInfoId) {
+  async getMenu(context, userInfoId) {
     // let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
     let menuList = require('../../data/menu.json')
     context.state.menuList = menuList
   },
-  setActiveNameAction ({commit}, name) {
+  setActiveNameAction({commit}, name) {
     commit('setActiveName', name)
   },
-  setOpenNameAction ({commit}, name) {
+  setOpenNameAction({commit}, name) {
     commit('setOpenName', name)
   },
-  setBreadcrumbListAction ({commit},name) {
-    commit('setBreadcrumbList',name)
+  setBreadcrumbListAction({commit}, name) {
+    commit('setBreadcrumbList', name)
   },
-  formaterRouterHandle ({commit}) {
+  formaterRouterHandle({commit}) {
     commit('formaterRouter')
   }
 }

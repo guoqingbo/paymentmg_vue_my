@@ -2,10 +2,15 @@ import {apiGet,apiPost} from '../../fetch/api'
 
 const globalConfig = {
   state: {
-    channelType: '',
-    cityData:'',
-    PayProduct:'',
-    merchantSource:''
+    channelType: '',//渠道类型
+    cityData:'', //省市区
+    payProduct:'',//支付产品
+    channel:'',// 渠道
+    merchantSource:'',//商户来源
+    payStatus:'',//支付状态
+    refundStatus:'',// 退款状态
+    auditType:'',// 清算类型
+
   },
   getters: {
     // getPayProduct: (state) => (username) => {
@@ -64,7 +69,9 @@ const globalConfig = {
     async getMerchantSource(context){
       if(!context.state.merchantSource){
         let merchantSource = []
-        let res = await apiGet("/merchantRelation/source/list")
+        // let res = await apiGet("/merchantRelation/source/list")
+        let res = await apiGet("/constant/ordersource")
+
         if(res.status == 200){
           Object.keys(res.data).forEach((ele)=>{
             merchantSource.push({
@@ -76,7 +83,75 @@ const globalConfig = {
         context.state.merchantSource = merchantSource
       }
       return context.state.merchantSource
-    }
+    },
+    // 获取支付状态
+    async getPayStatus(context){
+      if(!context.state.payStatus){
+        let payStatus = []
+        let res = await apiGet("/constant/paystatus")
+        if(res.status == 200){
+          Object.keys(res.data).forEach((ele)=>{
+            payStatus.push({
+              value:ele,
+              label:res.data[ele]
+            })
+          })
+        }
+        context.state.payStatus = payStatus
+      }
+      return context.state.payStatus
+    },
+    // 获取支付状态
+    async getChannel(context){
+      if(!context.state.channel){
+        let channel = []
+        let res = await apiGet("/channel/list")
+        if(res.status == 200){
+          res.data.rows.forEach((ele)=>{
+            channel.push({
+              value:ele.channelCode,
+              label:ele.channelName
+            })
+          })
+        }
+        context.state.channel = channel
+      }
+      return context.state.channel
+    },
+    // 获取退款状态
+    async getRefundStatus(context){
+      if(!context.state.refundStatus){
+        let refundStatus = []
+        let res = await apiGet("/constant/refundstatus")
+        if(res.status == 200){
+          Object.keys(res.data).forEach((ele)=>{
+            refundStatus.push({
+              value:ele,
+              label:res.data[ele]
+            })
+          })
+        }
+        context.state.refundStatus = refundStatus
+      }
+      return context.state.refundStatus
+    },
+    // 获取清算类型
+    async getAuditType(context){
+      if(!context.state.auditType){
+        let auditType = []
+        let res = await apiGet("/constant/audittype")
+        if(res.status == 200){
+          Object.keys(res.data).forEach((ele)=>{
+            auditType.push({
+              value:ele,
+              label:res.data[ele]
+            })
+          })
+        }
+        context.state.auditType = auditType
+      }
+      return context.state.auditType
+    },
   }
 }
 

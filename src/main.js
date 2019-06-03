@@ -13,6 +13,7 @@ import common from './common'
 import Main from './components/main'
 import VueClipboard from 'vue-clipboard2'
 import {
+  apiPut,
   apiGet,
   apiPost,
   apiPostJson
@@ -63,8 +64,10 @@ Vue.use(VueClipboard)
 Vue.config.productionTip = false
 Vue.prototype.filter = filter
 Vue.prototype.common = common
+
 Vue.prototype.apiGet = apiGet
 Vue.prototype.apiPost = apiPost
+Vue.prototype.apiPut = apiPut
 
 // Object.keys(filter).forEach(key => {
 //   Vue.filter(key, filter[key])
