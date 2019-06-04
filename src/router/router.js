@@ -47,7 +47,7 @@ export const loginRouter = [
     name: 'choosePayWay',
     meta: {
       title: '收银台支付方式',
-
+      isLogin:false,
     },
     component: resolve => {
       require(['@/components/cashier/cashierManage/choosePayWay.vue'], resolve)

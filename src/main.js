@@ -22,6 +22,10 @@ import {
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
+  if(!to.meta.isLogin){
+    next()
+    return
+  }
     // if(!to.meta.beforeEach){
     //   // 是否添加路由拦截
     //   next()
