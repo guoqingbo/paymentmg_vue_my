@@ -28,6 +28,7 @@
                  class="pay-way-item"
                  :disabled="item.disabled"
                  :label="item.label"
+                 :on-change="index==0?onChange(item,payProductCode):''"
                  :class="{active:item.label==payProductCode}">
             <div class="pay-way-info">
               <span class="last-pay-way">{{item.firstText}}</span>
@@ -39,12 +40,25 @@
       </Col>
     </Row>
     <div class="bottom-btn">
-      <Button type="primary">提交付款</Button>
+      <Button type="primary" @click="submit">提交付款</Button>
     </div>
+    <!--二维码-->
+    <Modal v-model="modal"
+           title="二维码"
+              width="400">
+      <div class="qrcode-box">
+        <qrcode :value="qrcodeUrl" :options="{ size: 170}"></qrcode>
+      </div>
+      <div slot="footer">
+        <Button type="success" @click="">确认</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
+  import qrcode from "@xkeshi/vue-qrcode";
   export default {
+    components: {qrcode},
     data () {
       return {
         payWays:[
@@ -82,27 +96,21 @@
         initCrashier:{
           payOrder:{}
         },
+        qrcodeUrl:'123',
+        modal:false,
       }
     },
     mounted () {
 
     },
-    components: {},
     created(){
       // 获取初始化收银台信息
       this.getCashierIniInfo()
-      // 获取订单信息
-      // this.getOrderInfo()
     },
     methods: {
       // 获取支付渠道
       getCashierIniInfo(){
         let url = '/initcrashier'
-        // let params = {
-        //   merchantSourceNo,
-        //   orderNo,
-        //   orderSource
-        // }
         let params  = this.$route.query
         let apiPrefix = this.common.apiPayPrefix
         this.apiGet(url,params,apiPrefix).then(res=>{
@@ -132,12 +140,14 @@
       latestPayInfo(){
         let latestPayInfo = this.initCrashier.latestPayInfo
         if(latestPayInfo){
+          let label = latestPayInfo.payProductCode+","+latestPayInfo.channelProductCode
           this.payWays.unshift({
             firstText:'上次支付方式',
             icon:this.getPayIcon(latestPayInfo.payProductCode),
             text:latestPayInfo.yeeBankName + ' | 尾号 ' +latestPayInfo.yeeBankCardTail,
-            label:latestPayInfo.payProductCode+","+latestPayInfo.channelProductCode,
+            label,
           })
+          this.payProductCode = label
         }
       },
       availablePayProducts(){
@@ -153,6 +163,15 @@
             }
           })
         }
+      },
+      onChange(item,value){
+        console.log(item)
+        console.log(value)
+      },
+      // 提交表单
+      submit(){
+        this.modal = true;
+        this.qrcodeUrl = 1444;
       }
     }
   }
@@ -232,5 +251,8 @@
   .bottom-btn{
     padding: 20px;
     text-align: left;
+  }
+  .qrcode-box{
+    text-align: center;
   }
 </style>

@@ -26,13 +26,10 @@
 </template>
 
 <script>
-import QRcode from "@xkeshi/vue-qrcode";
-import { apiGet } from "@/fetch/api";
+  import qrcode from "@xkeshi/vue-qrcode";
 export default {
   props: ["codeTxt"],
-  components: {
-    qrcode: QRcode
-  },
+  components: {qrcode},
   data() {
     return {
       preLookModal: false,
@@ -45,7 +42,7 @@ export default {
   methods: {
     async open(url, param) {
       let _this = this;
-      await apiGet(url, param).then(res => {
+      await this.apiGet(url, param).then(res => {
         if (res.success || res.status == 200) {
           this.preLookModal = true;
           this.qrcodeUrl = res.data.qrCodeLongUrl;
