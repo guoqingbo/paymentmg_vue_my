@@ -13,7 +13,7 @@
     mounted () {
 
     },
-    components: {list,confirm},
+    components: {},
     created(){
       // 获取初始化收银台信息
       this.getCashierIniInfo()

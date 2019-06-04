@@ -46,7 +46,8 @@ export const loginRouter = [
     path: '/cashier/cashierManage/choosePayWay',
     name: 'choosePayWay',
     meta: {
-      title: '收银台支付方式'
+      title: '收银台支付方式',
+
     },
     component: resolve => {
       require(['@/components/cashier/cashierManage/choosePayWay.vue'], resolve)

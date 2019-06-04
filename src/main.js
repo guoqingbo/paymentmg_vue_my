@@ -22,6 +22,11 @@ import {
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
+    // if(!to.meta.beforeEach){
+    //   // 是否添加路由拦截
+    //   next()
+    //   return
+    // }
     let token = VueCookies.get('token')
     let userId = VueCookies.get('userId')
     if (token) { // 本地获取了token说明用户登录过了
