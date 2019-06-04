@@ -101,7 +101,7 @@
       // ]),
       getCode() {
         this.formInline.key = new Date().getTime()
-        this.codeImg = this.common.apiPrefix+"/checkCode?key=" + this.formInline.key;
+        this.codeImg = this.common.apiAdminPrefix+"/checkCode?key=" + this.formInline.key;
         //   this.codeImg = "/checkCode";
       },
       handleSubmit() {

@@ -307,7 +307,8 @@ const common = {
     }
   },
   dic,
-  apiPrefix: '/api/admin'
+  apiAdminPrefix: '/api/admin',// 默认的前缀
+  apiPayPrefix: '/api/pay' // 收银台的前缀
 }
 
 export default common

@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import common from '@/common/index'
 axios.defaults.timeout = 5000
-axios.defaults.baseURL = common.apiPrefix;
+axios.defaults.baseURL = common.apiAdminPrefix;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 // request 拦截器
@@ -45,9 +45,13 @@ function setCookies(cname, cvalue, exdays) {
  * @returns {Promise}
  */
 
-export function apiGet (url, params = {}) {
+export function apiGet (url, params = {},apiPrefix) {
   if(!url){
    return
+  }
+  if(apiPrefix){
+    // 如果设置了前缀
+    axios.defaults.baseURL = apiPrefix
   }
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {
@@ -67,7 +71,11 @@ export function apiGet (url, params = {}) {
  * @param data
  * @returns {Promise}
  */
-export function apiPost (url, params = {}) {
+export function apiPost (url, params = {},apiPrefix) {
+  if(apiPrefix){
+    // 如果设置了前缀
+    axios.defaults.baseURL = apiPrefix
+  }
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {
     params = qs.stringify(params)

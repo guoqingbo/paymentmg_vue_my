@@ -57,7 +57,7 @@
 export default {
   data () {
     return {
-      url:this.common.apiPrefix+"/file/upload",
+      url:this.common.apiAdminPrefix+"/file/upload",
       uploadList: [],
       defaultFormat: ['jpg', 'jpeg', 'png'],
       isImg: true
