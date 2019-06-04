@@ -3,7 +3,7 @@
     <h3 class="cashier-title">账号充值</h3>
     <Row class="account-info">
       <Col span="16" class="account-info-left">
-        <p>收款商户：{{initCrashier.payOrder.merchantNo}}</p>
+        <p>收款商户：{{initCrashier.payOrder.merchantName}}</p>
         <p>商户编号：{{initCrashier.payOrder.merchantNo}}</p>
         <p>订单编号：{{initCrashier.payOrder.orderNo}}</p>
       </Col>
@@ -23,12 +23,12 @@
         <h4 class="pay-way-text">请选择支付方式</h4>
         <RadioGroup vertical
                     class="pay-way-list"
-                    v-model="payWay">
+                    v-model="payProductCode">
           <Radio v-for="(item,index) in payWays" :key="index"
                  class="pay-way-item"
                  :disabled="item.disabled"
                  :label="item.label"
-                 :class="{active:item.label==payWay}">
+                 :class="{active:item.label==payProductCode}">
             <div class="pay-way-info">
               <span class="last-pay-way">{{item.firstText}}</span>
               <img :src=item.icon alt>
@@ -49,40 +49,36 @@
       return {
         payWays:[
           {
-            firstText:'上次支付方式',
-            icon:require('../../../assets/images/choosePayWay/pay-icon5.png'),
-            text:'工商银行 | 尾号0798',
-            label:'pay6',
-            disabled:false,
-          },
-          {
             icon:require('../../../assets/images/choosePayWay/pay-icon1.png'),
             text:'微信支付',
-            label:'pay1',
+            label:2002,
             disabled:true,
           },
           {
             icon:require('../../../assets/images/choosePayWay/pay-icon2.png'),
             text:'支付宝',
-            label:'pay2'
+            label:2001,
+            disabled:true,
           },
           {
             icon:require('../../../assets/images/choosePayWay/pay-icon3.png'),
             text:'个人网银',
-            label:'pay3'
+            label:2005,
+            disabled:true,
           },
           {
             icon:require('../../../assets/images/choosePayWay/pay-icon4.png'),
             text:'企业网银',
-            label:'pay4'
+            label:2006,
+            disabled:true,
           },
           {
             icon:require('../../../assets/images/choosePayWay/pay-icon5.png'),
             // text:'快捷支付',
-            label:'pay5'
-          }
-          ],
-        payWay:'pay4',
+            label:2007,
+            disabled:true,
+          }],
+        payProductCode:'',
         initCrashier:{
           payOrder:{}
         },
@@ -101,7 +97,6 @@
     methods: {
       // 获取支付渠道
       getCashierIniInfo(){
-        console.log(this.$route.query)
         let url = '/initcrashier'
         // let params = {
         //   merchantSourceNo,
@@ -111,8 +106,12 @@
         let params  = this.$route.query
         let apiPrefix = this.common.apiPayPrefix
         this.apiGet(url,params,apiPrefix).then(res=>{
-          if(res.data.status == 200){
-            this.initCrashier = this.data
+          if(res.status == 200){
+            this.initCrashier = res.data
+            // 是否有上次支付方式
+            this.latestPayInfo()
+            // 可使用的支付产品
+            this.availablePayProducts()
           }
         })
       },
@@ -120,6 +119,41 @@
       // getOrderInfo(){
       //
       // }
+      // 获取支付图标
+      getPayIcon(code){
+        let icon = ''
+       this.payWays.forEach(ele=>{
+         if(ele.label == code){
+           icon = ele.icon
+         }
+       })
+        return icon
+      },
+      latestPayInfo(){
+        let latestPayInfo = this.initCrashier.latestPayInfo
+        if(latestPayInfo){
+          this.payWays.unshift({
+            firstText:'上次支付方式',
+            icon:this.getPayIcon(latestPayInfo.payProductCode),
+            text:latestPayInfo.yeeBankName + ' | 尾号 ' +latestPayInfo.yeeBankCardTail,
+            label:latestPayInfo.payProductCode+","+latestPayInfo.channelProductCode,
+          })
+        }
+      },
+      availablePayProducts(){
+        let availablePayProducts = this.initCrashier.availablePayProducts
+        if(availablePayProducts.length){
+          let available = {}
+          availablePayProducts.forEach(ele=>{
+            available[ele.payProductCode] = ele.payProductName
+          })
+          this.payWays.forEach(ele=>{
+            if(available[ele.label]){
+              ele.disabled = false
+            }
+          })
+        }
+      }
     }
   }
 </script>
