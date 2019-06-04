@@ -200,7 +200,7 @@
   .pay-way-list{
     width: 100%;
   }
-  .pay-way-item{
+  .pay-way-list .pay-way-item{
     padding: 0 20px;
     height: 50px;
     line-height: 50px;
