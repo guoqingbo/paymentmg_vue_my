@@ -151,7 +151,6 @@
       },
       latestPayInfo(){
         let latestPayInfo = this.initCrashier.latestPayInfo
-        let yeeBankCardTail = latestPayInfo.yeeBankCardTail
         if(latestPayInfo){
           let label = latestPayInfo.payProductCode+","+latestPayInfo.channelProductCode
           let text = latestPayInfo.yeeBankName
