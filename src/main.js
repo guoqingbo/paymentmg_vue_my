@@ -22,7 +22,7 @@ import {
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
-  if(!to.meta.isLogin){
+  if(to.meta.isLogin === false){
     next()
     return
   }

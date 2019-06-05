@@ -23,12 +23,12 @@
         <h4 class="pay-way-text">请选择支付方式</h4>
         <RadioGroup vertical
                     class="pay-way-list"
-                    v-model="payProductCode">
+                    v-model="payProductCode"
+                    @on-change="onChange(payProductCode)">
           <Radio v-for="(item,index) in payWays" :key="index"
                  class="pay-way-item"
                  :disabled="item.disabled"
                  :label="item.label"
-                 :on-change="index==0?onChange(item,payProductCode):''"
                  :class="{active:item.label==payProductCode}">
             <div class="pay-way-info">
               <span class="last-pay-way">{{item.firstText}}</span>
@@ -40,7 +40,7 @@
       </Col>
     </Row>
     <div class="bottom-btn">
-      <Button type="primary" @click="submit">提交付款</Button>
+      <Button type="primary" :loading='loading'@click="submit">提交付款</Button>
     </div>
     <!--二维码-->
     <Modal v-model="modal"
@@ -50,7 +50,7 @@
         <qrcode :value="qrcodeUrl" :options="{ size: 170}"></qrcode>
       </div>
       <div slot="footer">
-        <Button type="success" @click="">确认</Button>
+        <Button type="success" @click="modal=false">确认</Button>
       </div>
     </Modal>
   </div>
@@ -96,8 +96,14 @@
         initCrashier:{
           payOrder:{}
         },
+
         qrcodeUrl:'123',
         modal:false,
+
+        params:{
+
+        },
+        loading:false
       }
     },
     mounted () {
@@ -113,15 +119,19 @@
         let url = '/initcrashier'
         let params  = this.$route.query
         let apiPrefix = this.common.apiPayPrefix
-        this.apiGet(url,params,apiPrefix).then(res=>{
-          if(res.status == 200){
-            this.initCrashier = res.data
-            // 是否有上次支付方式
-            this.latestPayInfo()
-            // 可使用的支付产品
-            this.availablePayProducts()
-          }
-        })
+        if(params.merchantSourceNo && params.orderNo && params.orderSource){
+          this.apiGet(url,params,apiPrefix).then(res=>{
+            if(res.status == 200){
+              this.initCrashier = res.data
+              // 是否有上次支付方式
+              this.latestPayInfo()
+              // 可使用的支付产品
+              this.availablePayProducts()
+              // 初始化表单参数
+              this.setParams()
+            }
+          })
+        }
       },
       // 获取订单信息
       // getOrderInfo(){
@@ -164,14 +174,62 @@
           })
         }
       },
-      onChange(item,value){
-        console.log(item)
-        console.log(value)
+      // 选择支付产品
+      onChange(value){
+        this.params.pay_product_code = ''
+        this.params.channel_product_code = ''
+
+        let code = value.toString().split(",")
+        if(code.length>1){
+          // 上次支付方式
+          //支付产品代码 及 渠道产品代码
+          this.params.pay_product_code = code[0]
+          this.params.channel_product_code = code[1]
+        }else{
+          //支付产品代码
+          this.params.pay_product_code = code[0]
+        }
+        console.log(this.params)
+      },
+      // 初始化表单参数
+      setParams(){
+        let payOrder = this.initCrashier.payOrder
+        let latestPayInfo = this.initCrashier.latestPayInfo
+        this.params = {
+          out_trade_no:payOrder.orderNo,//订单号
+          // order_time:payOrder.orderTime,//下单时间
+          // pay_amount:payOrder.payAmount,//实际付款金额
+          // order_amount:payOrder.orderAmount,//订单金额
+          pay_product_code:latestPayInfo.payProductCode,//支付产品代码
+          channel_product_code:latestPayInfo.channelProductCode,//渠道产品代码
+          // sign:'',//签名
+          // product_name:payOrder.productName,//商品名称
+          // product_code:payOrder.productCode,//商品编码
+          // product_num:'',//商品数量
+          order_source:payOrder.orderSource,//订单来源
+          merchant_source_no:payOrder.merchantSourceNo,//来源商户标识
+          // user_source_no:payOrder.userSourceNo,//来源用户标识
+          // pay_scene_no:payOrder.payScene,//支付场景编号
+          // time_expire:'',//交易过期时间
+          // audit_type:'',//清算类型 1：T+1清算 2：担保交易
+          submit_source:1,//1 收银台 2其他
+          // auth_code:'',//支付授权码
+          // buyer_id:''//微信用户标识、支付宝用户标识
+        }
       },
       // 提交表单
       submit(){
-        this.modal = true;
-        this.qrcodeUrl = 1444;
+        this.loading = true
+        let url = '/initcrashier'
+        let params  = this.params
+        let apiPrefix = this.common.apiPayPrefix
+        this.apiGet(url,params,apiPrefix).then(res=>{
+          this.loading = false
+          if(res.status == 200){
+            this.modal = true;
+            this.qrcodeUrl = res.data.code_url;
+          }
+        })
       }
     }
   }

@@ -56,7 +56,7 @@
           },
           {
             title: '商户名称',
-            key: 'channelName',
+            key: 'merchantName',
             sortable: true,
           },
           {
