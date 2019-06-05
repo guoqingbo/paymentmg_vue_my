@@ -23,8 +23,8 @@ module.exports = {
           },
         // 收银台
         '/api/pay':{
-          // target:'http://192.168.200.88:6073/',
-          target:'http://192.168.66.83:6073/',
+          target:'http://192.168.200.88:6073/',
+          // target:'http://192.168.66.83:6073/',
           changeOrigin:true,
           pathRewrite: {
             '^/api/pay': '/api/pay'

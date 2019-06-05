@@ -151,14 +151,20 @@
       },
       latestPayInfo(){
         let latestPayInfo = this.initCrashier.latestPayInfo
+        let yeeBankCardTail = latestPayInfo.yeeBankCardTail
         if(latestPayInfo){
           let label = latestPayInfo.payProductCode+","+latestPayInfo.channelProductCode
+          let text = latestPayInfo.yeeBankName
+          if(latestPayInfo.yeeBankCardTail){
+            text += ' | 尾号 ' +latestPayInfo.yeeBankCardTail
+          }
           this.payWays.unshift({
             firstText:'上次支付方式',
             icon:this.getPayIcon(latestPayInfo.payProductCode),
-            text:latestPayInfo.yeeBankName + ' | 尾号 ' +latestPayInfo.yeeBankCardTail,
+            text,
             label,
           })
+
           this.payProductCode = label
         }
       },
