@@ -57,6 +57,8 @@
 </template>
 <script>
   import qrcode from "@xkeshi/vue-qrcode";
+  // import json2xml from 'json2xml';
+  import convert from 'xml-js';
   export default {
     components: {qrcode},
     data () {
@@ -193,8 +195,8 @@
       },
       // 初始化表单参数
       setParams(){
-        let payOrder = this.initCrashier.payOrder
-        let latestPayInfo = this.initCrashier.latestPayInfo
+        let payOrder = this.initCrashier.payOrder || {}
+        let latestPayInfo = this.initCrashier.latestPayInfo || {}
         this.params = {
           out_trade_no:payOrder.orderNo,//订单号
           // order_time:payOrder.orderTime,//下单时间
@@ -220,16 +222,33 @@
       // 提交表单
       submit(){
         this.loading = true
-        let url = '/initcrashier'
-        let params  = this.params
+        let url = '/unifiedorder'
+        let params  = {requestXml:this.json2xml({xml:this.params})}
+        console.log(params)
         let apiPrefix = this.common.apiPayPrefix
-        this.apiGet(url,params,apiPrefix).then(res=>{
+        this.apiPost(url,params,apiPrefix).then(res=>{
+          res = this.xml2json(res)
+          console.log(res)
           this.loading = false
-          if(res.status == 200){
+          if(res.xml.result_code && res.xml.result_code._text == 'SUCCESS'){
             this.modal = true;
-            this.qrcodeUrl = res.data.code_url;
+            this.qrcodeUrl = res.xml.code_url._text;
+          }else{
+            this.$Message.error(res.xml.return_msg._text);
           }
         })
+      },
+      // json 转xml
+      json2xml(json){
+        // let convert = require('xml-js');
+        return convert.js2xml(json,{compact: true})
+
+        // let json2xml = require('json2xml');
+        // return json2xml(json,{ header: true })
+      },
+      xml2json(xml){
+        // let convert = require('xml-js');
+        return convert.xml2js(xml,{compact:true})
       }
     }
   }

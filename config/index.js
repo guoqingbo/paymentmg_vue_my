@@ -23,10 +23,8 @@ module.exports = {
           },
         // 收银台
         '/api/pay':{
-          // target:'http://pms.sendinfo.com.cn/',
-          target:'http://192.168.200.88:6073/',
-          // target:'http://192.168.66.246:6071/',
-          // target:'http://192.168.200.55:6071/',
+          // target:'http://192.168.200.88:6073/',
+          target:'http://192.168.66.83:6073/',
           changeOrigin:true,
           pathRewrite: {
             '^/api/pay': '/api/pay'
