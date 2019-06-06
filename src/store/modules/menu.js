@@ -34,25 +34,41 @@ const mutations = {
       item.list.forEach(it => {
         let secontName = it.funName
         let secondRouter = it.funCode
-        it.list.forEach(el => {
-          let thirdName = el.funName
-          let thirdRouter = el.funCode
+        if(!it.list || !it.list.length){
+          // 如果是二级菜单
           let meta = {
-            breadcrumbList: [secontName, thirdName],
+            breadcrumbList: [secontName],
             belongTab: firstRouter,
             openName: secondRouter
           }
+          let path = `/${firstRouter}/${secondRouter}`
+          let name = secondRouter
           roleRouter.push({
-            path: '/' + firstRouter + '/' + secondRouter + '/' + thirdRouter,
-            name: thirdRouter,
-            component: resolve => {
-              require([`@/components/${firstRouter}/${secondRouter}/${thirdRouter}`], resolve)
-            },
-            meta
+            path, name, meta,
+            component: resolve => {require([`@/components${path}`], resolve)},
           })
-        })
+
+        }else if(it.list && it.list.length){
+          // 如果三级菜单存在
+          it.list.forEach(el => {
+            let thirdName = el.funName
+            let thirdRouter = el.funCode
+            let meta = {
+              breadcrumbList: [secontName, thirdName],
+              belongTab: firstRouter,
+              openName: secondRouter
+            }
+            let path = `/${firstRouter}/${secondRouter}/${thirdRouter}`
+            let name = thirdRouter
+            roleRouter.push({
+              path, name, meta,
+              component: resolve => {require([`@/components${path}`], resolve)},
+            })
+          })
+        }
       })
     })
+    console.log(roleRouter)
     state.asyncRouter = roleRouter
   }
 }

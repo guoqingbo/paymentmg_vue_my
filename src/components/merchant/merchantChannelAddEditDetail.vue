@@ -3,7 +3,9 @@
     <formList :formItems="formList"
               :routeType="routeType"
               :url="formListUrl"
-              @beforeSave="beforeSave"></formList>
+              @beforeSave="beforeSave">
+      <div v-if="formList.length==6" class="select-channel-product" slot="bottom">请选择渠道产品</div>
+    </formList>
   </div>
 </template>
 <script>
@@ -42,7 +44,7 @@
             name: 'channelProductId',
             type: 'select',
             data:'',
-            onChange:this.getPayConfig,
+            onChange:this.payConfigOnChange,
             rules: [
               { required: true, type:'number',message: '请选择渠道产品', trigger: 'change' }
             ]
@@ -70,6 +72,7 @@
           }
         ],
         routeType: "",// 判断是新增，详情，编辑
+        detail:'',//获取的详情
       }
     },
     watch: {
@@ -119,7 +122,7 @@
           }
           this.apiGet("/merchantChannel/"+id).then(res => {
             if (res.status == 200 && res.data) {
-
+              this.detail = res.data
               // 转换支付配置
               this.turnPayConfig(res.data.configInfos)
 
@@ -174,20 +177,44 @@
           this.formList[2].data = channelProduct
         })
       },
-      // 获取渠道产品支付配置
+      // 渠道产品更改时
+      payConfigOnChange(e){
+          if(this.$route.query.id ){
+            // 如果是编辑页面，并且产品支付配置存在，则弹出提示
+            this.$Modal.confirm({
+              content:'更换渠道产品将清空支付配置信息',
+              onCancel:()=>{
+                // 恢复原选项
+                this.formList[2].value=this.detail.channelProductId
+                // 转换支付配置
+                this.turnPayConfig(this.detail.configInfos)
+              },
+              onOk:()=>{
+                this.getPayConfig(e)
+              }
+            })
+          }else{
+            // 新增的时候
+            this.getPayConfig(e)
+          }
+
+      },
+      //获取渠道产品支付配置
       getPayConfig(e){
-          this.apiGet('/merchantChannel/payConfig/channelProduct/'+e).then(res=>{
-            if(res.status == 200){
-              // 保留公共选项
-              // this.formList.length = 6
-              this.formList = this.formList.slice(0,6)
-              // 转换支付配置
-              this.turnPayConfig(res.data)
-            }
-          })
+        this.apiGet('/merchantChannel/payConfig/channelProduct/'+e).then(res=>{
+          if(res.status == 200){
+            // 保留公共选项
+            // this.formList.length = 6
+            this.formList = this.formList.slice(0,6)
+            // 转换支付配置
+            this.turnPayConfig(res.data)
+          }
+        })
       },
       // 转换支付配置
       turnPayConfig(configInfos){
+        // 清空配置
+        this.formList = this.formList.slice(0,6)
         configInfos.forEach((ele)=>{
           let formListItem = {
             title: ele.configName,
@@ -205,6 +232,13 @@
   }
 </script>
 
-<style lang="scss">
-
+<style scoped>
+  .select-channel-product{
+      text-align: center;
+      font-size: 30px;
+      color: #999;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e5e5e5;
+      margin-bottom: 20px;
+    }
 </style>

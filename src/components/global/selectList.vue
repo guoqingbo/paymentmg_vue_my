@@ -1,7 +1,7 @@
 <template>
   <div class="city-select">
     <Row>
-        <Col class="city-list-item" span="8">
+        <Col class="city-list-item" span="7">
           <Select v-model="sheng" :disabled="disabled" @on-change="choseProvince" placeholder="省级地区">
             <Option
               v-for="item in province"
@@ -12,9 +12,7 @@
             ></Option>
           </Select>
         </Col>
-
-
-        <Col class="city-list-item" span="8">
+        <Col class="city-list-item" span="7" offset="1">
           <Select v-model="shi" :disabled="disabled" @on-change="choseCity" placeholder="市级地区">
             <Option
               v-for="item in shi1"
@@ -27,7 +25,7 @@
         </Col>
 
 
-        <Col class="city-list-item" span="8">
+        <Col class="city-list-item" span="7" offset="1">
           <Select v-model="qu" :disabled="disabled" @on-change="choseBlock" placeholder="区级地区">
             <Option
               v-for="item in qu1"

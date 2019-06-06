@@ -39,18 +39,14 @@
             sortable: true,
           },
           {
-            title: '场景编号',
-            key: 'sceneNo',
+            title: '商户来源',
+            key: 'source',
             sortable: true,
+            render:''
           },
           {
-            title: '场景名称',
-            key: 'sceneName',
-            sortable: true,
-          },
-          {
-            title: '场景描述',
-            key: 'description',
+            title: '来源商户号',
+            key: 'sourceMerchantCode',
             sortable: true,
           },
           {
@@ -70,7 +66,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchantScene/delete/"+params.row.id
+                      "/merchantRelation/delete/" + params.row.id
                     );
                   }
                 }
@@ -79,8 +75,11 @@
             }
           }
         ],
-        params: {},
-        url: '/merchantScene/grid',
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
+        url: '/merchantRelation/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -89,13 +88,19 @@
           },
           {
             label: '商户编号',
-            type: 'merchantCode',
-            name: 'roleName'
-          }
+            type: 'input',
+            name: 'merchantCode'
+          },
+          {
+            label: '商户来源',
+            type: 'select',
+            name: 'source',
+            data: ''
+          },
         ],
         hannleItems: [
           {
-            title: '添加商户场景',
+            title: '添加关联商户',
             icon: 'md-add',
             callback: () => {
               this.formShow = true
@@ -107,36 +112,61 @@
         content: "",
         sucessMsg: "",
 
-        formTitle:"添加场景",
+        formTitle:"添加关联商户",
         formShow: false,
         formItems: [
           {
-            title: '商户号',
+            title: '商户来源',
+            name: 'source',
+            type: 'select',
+            data: '',
+            rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+          },
+          {
+            title: '来源商户号',
+            name: 'sourceMerchantCode',
+            type: 'input',
+            rules: [{ required: true, message: '请输入来源商户号', trigger: 'blur' },
+              {max: 20, message: "来源商户号不超过20字符", trigger: 'blur'}]
+          },
+          {
+            title: '支付中心商户号',
             name: 'merchantCode',
             type: 'input',
-            rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
-          },
-          {
-            title: '场景名称',
-            name: 'sceneName',
-            type: 'input',
-            rules: [{ required: true, message: '请输入场景名称', trigger: 'blur' }]
-          },
-          {
-            title: '场景说明',
-            name: 'description',
-            type: 'textarea',
-            rules: [{ required: true, message: '请输入场景说明', trigger: 'blur' }]
-          },
+            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
+              {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
+          }
         ],
-        formUrl: '/merchantScene/save'
+        formUrl: '/merchantRelation/save'
       }
+    },
+    computed:{
+
+    },
+    created(){
+      this.getMerchantSource()
     },
     mounted () {
 
     },
     components: {list,confirm,modalForm},
     methods: {
+      getMerchantSource(){
+        // 获取商户来源
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          let merchantSource = this.$store.state.global.merchantSource
+          this.formItems[0].data = this.searchItems[2].data = merchantSource
+
+          // 表格商户来源转换
+          let source={}
+          merchantSource.forEach(ele=>{
+            source[ele.value] = ele.label
+          })
+          this.columns[3].render = (h, params) => {
+            return h('span', source[params.row.source])
+          }
+        })
+      }
     }
   }
 </script>

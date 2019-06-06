@@ -6,7 +6,7 @@
              :params="tableParams"
               @onGetAfter="onGetAfter"></myTable>
 
-    <h4 class="table-title ptop">退款信息</h4>
+    <h4 class="table-title table-title-refund">退款信息</h4>
     <Table border
            size="small"
            :columns="columns"
@@ -53,7 +53,7 @@
           {
             cols:[
               {
-                title:'订单实付金额（元）',
+                title:'实付金额（元）',
                 name:'payAmount'
               },{
                 title:'支付产品',
@@ -146,14 +146,17 @@
               const actions = [
                 {
                   title: params.row.refundOrderNo,
-                  type:'router',
-                  to:{
-                    path:'/order/orderQuery/refundOrderDetail',
-                    query:{
-                      orderNo:params.row.orderNo,
-                      orderSource:params.row.orderSource
-                    }
-                  },
+                  type:'a',
+                  action:()=>{
+                    let href = this.$router.resolve({
+                      path:'/order/orderQuery/refundOrderDetail',
+                      query:{
+                        orderNo:params.row.orderNo,
+                        orderSource:params.row.orderSource
+                      }
+                    }).href;
+                    window.open(href, '_blank');
+                  }
                 },
               ];
               return this.common.columnsItemRender(h, actions);
@@ -262,5 +265,8 @@
   .bottom-btn-box {
     margin-top: 20px;
     text-align: center;
+  }
+  .table-title-refund{
+    padding: 25px 0 10px;
   }
 </style>

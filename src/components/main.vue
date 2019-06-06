@@ -84,20 +84,27 @@
                 :accordion="true"
                 :open-names="vexOpenNames?[vexOpenNames]:openNames"
                 @on-select="changeMenu">
-            <Submenu v-for="item in subMenuList.list"
-                     :name="item.funCode"
-                     :key="item.id">
-              <template slot="title">
-                <!-- <Icon type="ios-navigate"></Icon> -->
-                {{item.funName}}
-              </template>
-              <MenuItem v-for="sitem in item.list"
-                        :name="'/'+firstRouter+'/'+item.funCode+'/'+sitem.funCode"
-                        :key="sitem.id"
-                        v-if="sitem.functionType=='column'">
-                <span>{{sitem.funName}}</span>
+            <template v-for="item in subMenuList.list">
+              <!--如果存在3级菜单-->
+              <Submenu :name="item.funCode"
+                       v-if="item.list && item.list.length">
+                <template slot="title">
+                  <!-- <Icon type="ios-navigate"></Icon> -->
+                  {{item.funName}}
+                </template>
+                <MenuItem v-for="sitem in item.list"
+                          :name="'/'+firstRouter+'/'+item.funCode+'/'+sitem.funCode"
+                          :key="sitem.id"
+                          v-if="sitem.functionType=='column'">
+                  <span>{{sitem.funName}}</span>
+                </MenuItem>
+              </Submenu>
+              <!--如果存在2级菜单-->
+              <MenuItem :name="'/'+firstRouter+'/'+item.funCode"
+                        v-if="(!item.list || item.list.length== 0) && item.functionType == 'column'">
+                <span>{{item.funName}}</span>
               </MenuItem>
-            </Submenu>
+            </template>
           </Menu>
         </Sider>
         <Layout id="content">
@@ -117,7 +124,6 @@
 </template>
 <script>
   import store from "@/store";
-  import {apiGet, apiPost} from "@/fetch/api";
   import myImg from "@/components/global/uploadFile";
 
   export default {
@@ -256,7 +262,7 @@
     },
     methods: {
       lookingKey() {
-        apiGet("/manage/admin/getUserByUserId").then(res => {
+        this.apiGet("/manage/admin/getUserByUserId").then(res => {
           this.showKey = true;
           if (res.status == 200) {
             this.user = res.user;
@@ -277,7 +283,7 @@
       },
       updateCorp() {
         this.showCorp = true;
-        apiGet("/manage/admin/getCurrentCorp").then(res => {
+        this.apiGet("/manage/admin/getCurrentCorp").then(res => {
           if (res.status == 200) {
             this.formItem = res.data;
             (this.formItem.corpName = res.data.corpName),
@@ -292,7 +298,7 @@
         let _this = this;
         this.$refs.formItem.validate(vaild => {
           if (vaild) {
-            apiPost("/manage/admin/updateCorp", this.formItem).then(res => {
+            this.apiPost("/manage/admin/updateCorp", this.formItem).then(res => {
               if (res.status == 200) {
                 _this.$Message.success("修改成功！");
                 _this.showCorp = false;
@@ -310,19 +316,35 @@
       changeMenu(active) {
         // this.$emit("on-change", active);
         this.$router.push(active);
-        this.subMenuList.list.forEach(element => {
-          element.list.forEach(item => {
-            if (item.funCode === active) {
-              this.$cookies.set("openName", element.funCode);
-            }
-          });
-        });
+          // this.subMenuList.list.forEach(element => {
+          //   // 如果存在3级菜单
+          //   if(element.list){
+          //     element.list.forEach(item => {
+          //       if (item.funCode === active) {
+          //         this.$cookies.set("openName", element.funCode);
+          //       }
+          //     });
+          //   }else{
+          //     // 如果存在2级菜单
+          //     if(element.funCode == active){
+          //       this.$cookies.set("openName", element.funCode);
+          //     }
+          //   }
+          // });
       },
       changeTab(active) {
         this.menuPosite(active);
-        this.$cookies.set("activeName", active);
-        this.openNames = [this.subMenuList.list[0].funCode];
-        this.$router.push("/" +active+'/'+this.subMenuList.list[0].funCode+'/'+this.subMenuList.list[0].list[0].funCode);
+        // this.$cookies.set("activeName", active);
+
+        if(this.subMenuList.list[0].list){
+          // 如果存在3级菜单
+          this.openNames = [this.subMenuList.list[0].funCode];
+          this.$router.push("/" +active+'/'+this.subMenuList.list[0].funCode+'/'+this.subMenuList.list[0].list[0].funCode);
+        }else{
+          // 如果存在2级菜单
+          this.openNames = [this.subMenuList.list[0].funCode];
+          this.$router.push("/" +active+'/'+this.subMenuList.list[0].funCode);
+        }
         this.$nextTick(() => {
           this.$refs.contactMenu.updateOpened();
           this.$refs.contactMenu.updateActiveName();
@@ -426,7 +448,7 @@
   }
 
   .content {
-    background-color: #eff3f9;
+    background-color: #fff;
   }
 
   .content .content-bg {

@@ -5,7 +5,8 @@
           :url="url"
           :params="params"
           :searchItems="searchItems"
-          :hannleItems="hannleItems"></list>
+          :hannleItems="hannleItems"
+          :exportItem="exportItem"></list>
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
@@ -44,7 +45,7 @@
             sortable: true,
           },
           {
-            title: '订单实付金额',
+            title: '实付金额',
             key: 'payAmount',
             sortable: true,
           },
@@ -90,6 +91,8 @@
           }
         ],
         params: {
+          sort:'modifyTime',
+          order:'desc'
         },
         url: '/payorder/grid',
         searchItems: [
@@ -141,27 +144,25 @@
             data: ''
           },
         ],
-        hannleItems: [
-          {
+        hannleItems:[],
+        exportItem: {
             title: '导出',
             type: 'success',
             loading: false,
             callback: () => {
-              this.hannleItems[0].loading = true
+              this.exportItem.loading = true
               let url = '/payorder/export';
               let params = this.$store.state.list.params
-              console.log(params)
               this.common.exportData({
                 url,
                 params,
                 text:'交易订单',
                 callback:()=>{
-                  this.hannleItems[0].loading = false
+                  this.exportItem.loading = false
                 }
               })
             }
-          }
-        ],
+        },
         mode: "",
         content: "",
         sucessMsg: "",

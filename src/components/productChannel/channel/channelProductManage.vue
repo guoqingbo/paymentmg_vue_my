@@ -95,7 +95,10 @@
             }
           }
         ],
-        params: {},
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
         url: '/channelProduct/grid',
         searchItems: [
           {

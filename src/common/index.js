@@ -1,6 +1,7 @@
 import * as api from '@/fetch/api'
 import dic from '@/common/dic'
 import {Message} from 'iview'
+import Router from 'vue-router'
 const common = {
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
@@ -99,11 +100,11 @@ const common = {
   columnsHandle(h, actions) {
     let array = []
     actions.forEach(element => {
-      let obj = h('Button', {
-        props: {
-          type: 'primary',
-          size: 'small'
-        },
+      let obj = h('a', {
+        // props: {
+        //   type: 'primary',
+        //   size: 'small'
+        // },
         style: {
           margin: '5px',
           marginLeft: 0
@@ -155,6 +156,18 @@ const common = {
             margin: '5px',
             marginLeft: 0
           },
+        },element.title)
+      }else if(element.type =='a'){
+        obj = h('a', {
+          style: {
+            margin: '5px',
+            marginLeft: 0
+          },
+          on: {
+            click: () => {
+              element.action()
+            }
+          }
         },element.title)
       }
       array.push(obj)

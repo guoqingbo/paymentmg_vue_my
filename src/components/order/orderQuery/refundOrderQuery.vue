@@ -5,7 +5,7 @@
           :url="url"
           :params="params"
           :searchItems="searchItems"
-          :hannleItems="hannleItems"></list>
+          :exportItem="exportItem"></list>
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
@@ -45,7 +45,7 @@
             sortable: true,
           },
           {
-            title: '订单实付金额',
+            title: '实付金额',
             key: 'payAmount',
             sortable: true,
           },
@@ -101,7 +101,10 @@
             }
           }
         ],
-        params: {},
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
         url: '/refundorder/grid',
         searchItems: [
           {
@@ -157,13 +160,12 @@
             data: ''
           },
         ],
-        hannleItems: [
-          {
+        exportItem: {
             title: '导出',
             type: 'success',
             loading: false,
             callback: () => {
-              this.hannleItems[0].loading = true
+              this.exportItem.loading = true
               let url = '/refundorder/export';
               let params = this.$store.state.list.params
 
@@ -172,12 +174,11 @@
                 params,
                 text:'退款订单',
                 callback:()=>{
-                  this.hannleItems[0].loading = false
+                  this.exportItem.loading = false
                 }
               })
             }
-          }
-        ],
+        },
         mode: "",
         content: "",
         sucessMsg: "",

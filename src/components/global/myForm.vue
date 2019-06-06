@@ -10,14 +10,16 @@
                 :prop="item.name"
                 :rules="item.rules||{}"
                 v-if="item.type">
-        <span class="detail-text" v-if="item.type=='text'||
-        item.type=='inputText'||
-        item.type=='textareaText'">
+        <span class="detail-text"
+              v-if="item.type=='text'||
+              item.type=='inputText'||
+              item.type=='textareaText'">
           {{item.value}}
         </span>
         <Divider v-if="item.type=='divider'"> {{item.title}}</Divider>
-
-        <span class="detail-text" v-if="item.type=='selectText' ||item.type=='radioText'">
+        <span class="detail-text"
+              v-if="item.type=='selectText' ||
+              item.type=='radioText'">
           {{item.value|selectFilter(item.data)}}
         </span>
         <Input v-if="item.type=='input'"
@@ -33,6 +35,7 @@
                 :disabled="item.disabled"
                 v-model="item.value"
                 :placeholder="'请选择'+item.title"
+                @on-open-change="item.onOpenChange?item.onOpenChange($event):''"
                 @on-change="item.onChange?item.onChange($event):''"
                 style="width:220px">
           <Option v-for="sitem in item.data"
@@ -70,6 +73,10 @@
                       :fieldName="item.name"
                       @on-success="uploadSuccess"></uploadFile>
           <p>{{item.tip}}</p>
+        </div>
+        <div class="upload-img-box" v-if="item.type=='uploadFileText'">
+          <img v-if="item.value"  :src="item.value">
+          <span v-else class="no-img">未上传</span>
         </div>
       </FormItem>
     </Form>
@@ -110,28 +117,13 @@ export default {
     }
   },
   watch: {
-    // value: {
-    //   handler (value) {
-    //     this.formItems.forEach(element => {
-    //       // 如果是详情
-    //       // if(this.routeType=='detail'){
-    //       //   element.disabled = true
-    //       //   element.type = 'text'
-    //       // }
-    //       this.$set(this.formItem, element.name, element.value)
-    //     })
-    //   },
-    //   immediate: true
-    // },
     formItems: {　　　
       handler(newValue, oldValue) {
         newValue.forEach((element,index) => {
           // 如果是详情
-          // if(this.routeType=='detail'){
-          //   element.disabled = true
-          //   element.type = 'text'
-          // }
-          // this.formItem[element.name] = element.value
+          if(this.routeType=='detail'){
+            element.rules = ''
+          }
 
           if(typeof element.value == 'undefined'){
             // 作用是监听输入框value的变化，使表单验证起作用
@@ -190,5 +182,18 @@ export default {
     border-radius: 5px;
     padding: 0 10px;
     height: 33px;
+  }
+  .upload-img-box img{
+    width: 70px;
+    height: 70px;
+  }
+  .no-img{
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border: 1px dashed #e5e5e5;
+    text-align: center;
+    line-height: 70px;
+    color: #999;
   }
 </style>

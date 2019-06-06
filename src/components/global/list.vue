@@ -21,7 +21,12 @@
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSubmit2()">搜索</Button>
       </FormItem>
-
+      <FormItem v-if="exportItem">
+        <Button type="primary"
+                :icon="exportItem.icon"
+                @click="exportItem.callback"
+                :loading="exportItem.loading">{{ exportItem.title }}</Button>
+      </FormItem>
     </Form>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
       <Col span="2" v-for="item in hannleItems" :key="item.title">
@@ -65,7 +70,29 @@
         limit:10,
       };
     },
-    props: ["searchItems", "hannleItems", "columns", "url", "params", "highlightRow"],
+    props: {
+      columns:{
+        type: Array
+      },
+      searchItems: {
+        type: Array
+      },
+      hannleItems:{
+        type: Array,
+      },
+      url:{
+        type: String,
+      },
+      params:{
+        type: Object,
+      },
+      highlightRow:{
+        type: Boolean ,
+      },
+      exportItem:{
+        type:Object
+      }
+    },
     watch: {
       searchItems: {
         handler(newValue, oldValue) {

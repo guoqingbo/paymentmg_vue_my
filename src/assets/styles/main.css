@@ -18,6 +18,7 @@ html {
 
 .ivu-menu-light.ivu-menu-vertical .ivu-menu-item {
   border: none;
+  text-align: left;
 }
 
 .ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item,

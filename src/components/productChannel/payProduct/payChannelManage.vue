@@ -73,7 +73,10 @@
             }
           }
         ],
-        params: {},
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
         url: '/payProductChannel/grid',
         searchItems: [
           {

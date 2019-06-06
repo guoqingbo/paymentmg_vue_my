@@ -56,21 +56,24 @@
                   const actions = [
                     {
                       title: params.orderNo,
-                      type:'router',
-                      to:{
-                        path:'/order/orderQuery/tradeOrderDetail',
-                        query:{
-                          orderNo:params.orderNo,
-                          orderSource:params.orderSource
-                        }
-                      },
+                      type:'a',
+                      action:()=>{
+                        let href = this.$router.resolve({
+                          path:'/order/orderQuery/tradeOrderDetail',
+                          query:{
+                            orderNo:params.orderNo,
+                            orderSource:params.orderSource
+                          }
+                        }).href;
+                        window.open(href, '_blank');
+                      }
                     },
                   ];
                   return this.common.columnsItemRender(h, actions);
                 }
               },
               {
-                title:'订单实付金额（元）',
+                title:'实付金额（元）',
                 name:'payAmount'
               },
               {

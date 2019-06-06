@@ -4,6 +4,7 @@
             :formItems='formItems'
             :routeType="routeType"
     ></myForm>
+    <slot name="bottom"></slot>
     <div class="bottom-btn-box">
       <Button v-if="routeType!=='detail'"
               type="primary"

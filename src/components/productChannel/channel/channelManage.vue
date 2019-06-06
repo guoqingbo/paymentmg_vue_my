@@ -92,7 +92,10 @@
             }
           }
         ],
-        params: {},
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
         url: '/channel/grid',
         searchItems:[],
         hannleItems: [

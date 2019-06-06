@@ -10,11 +10,16 @@
              :content="content"
              :sucessMsg="sucessMsg"
              :mode="mode"></confirm>
+    <modalForm v-model="formShow"
+               :formItems="formItems"
+               :url="formUrl"
+               :title="formTitle"></modalForm>
   </div>
 </template>
 <script>
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
+  import modalForm from '@/components/global/modalForm'
   export default {
     data () {
       return {
@@ -24,7 +29,7 @@
             type:'index'
           },
           {
-            title: '商户号',
+            title: '商户编号',
             key: 'merchantCode',
             sortable: true,
           },
@@ -34,12 +39,19 @@
             sortable: true,
           },
           {
-            title: '商户类型',
-            key: 'merchantType',
+            title: '场景编号',
+            key: 'sceneNo',
             sortable: true,
-            render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            }
+          },
+          {
+            title: '场景名称',
+            key: 'sceneName',
+            sortable: true,
+          },
+          {
+            title: '场景描述',
+            key: 'description',
+            sortable: true,
           },
           {
             title: '创建时间',
@@ -52,31 +64,13 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "详情",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchant/merchant2/merchantAddEditDetail",
-                      query: { id: params.row.id,routeType:"detail"}
-                    });
-                  }
-                },
-                {
-                  title: "编辑",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchant/merchant2/merchantAddEditDetail",
-                      query: {id: params.row.id}
-                    });
-                  }
-                },
-                {
                   title: "删除",
                   action: () => {
                     this.mode = "delete";
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchant/delete/" + params.row.id
+                      "/merchantScene/delete/"+params.row.id
                     );
                   }
                 }
@@ -85,8 +79,11 @@
             }
           }
         ],
-        params: {},
-        url: '/merchant/grid',
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
+        url: '/merchantScene/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -94,45 +91,55 @@
             name: 'merchantName'
           },
           {
-            label: '商户号',
-            type: 'input',
-            name: 'merchantCode'
-          },
-          {
-            label: '开始日期',
-            type: 'date',
-            name: 'startDate',
-            format:'yyyy-MM-dd 00:00:00',
-            value: ''
-          },
-          {
-            label: '结束日期',
-            type: 'date',
-            name: 'endDate',
-            format:'yyyy-MM-dd 23:59:59',
-            value: ''
-          },
+            label: '商户编号',
+            type: 'merchantCode',
+            name: 'roleName'
+          }
         ],
         hannleItems: [
           {
-            title: '添加商户',
+            title: '添加商户场景',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchant2/merchantAddEditDetail");
+              this.formShow = true
             }
           }
         ],
+
         mode: "",
         content: "",
         sucessMsg: "",
+
+        formTitle:"添加场景",
+        formShow: false,
+        formItems: [
+          {
+            title: '商户号',
+            name: 'merchantCode',
+            type: 'input',
+            rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
+          },
+          {
+            title: '场景名称',
+            name: 'sceneName',
+            type: 'input',
+            rules: [{ required: true, message: '请输入场景名称', trigger: 'blur' }]
+          },
+          {
+            title: '场景说明',
+            name: 'description',
+            type: 'textarea',
+            rules: [{ required: true, message: '请输入场景说明', trigger: 'blur' }]
+          },
+        ],
+        formUrl: '/merchantScene/save'
       }
     },
     mounted () {
 
     },
-    components: {list,confirm},
+    components: {list,confirm,modalForm},
     methods: {
-
     }
   }
 </script>

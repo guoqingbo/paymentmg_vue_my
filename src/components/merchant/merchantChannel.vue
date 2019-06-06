@@ -50,9 +50,7 @@
                 h('span', params.row.channelProductName),
               ]
               if(params.row.priority > 0){
-                array.push(h('span', {
-                    'class': 'preferred'
-                  }, [h('Icon',{props:{type:"md-arrow-dropleft"}}),'优先'])
+                array.push(h('span', {class: 'preferred'},'优先')
                 )
               }
               return array
@@ -86,7 +84,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchant2/merchantChannelAddEditDetail",
+                      path: "/merchant/merchantChannelAddEditDetail",
                       query: { id: params.row.id,routeType:'detail'}
                     });
                   }
@@ -95,7 +93,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchant2/merchantChannelAddEditDetail",
+                      path: "/merchant/merchantChannelAddEditDetail",
                       query: { id: params.row.id }
                     });
                   }
@@ -116,7 +114,10 @@
             }
           }
         ],
-        params: {},
+        params: {
+          sort:'modifyTime',
+          order:'desc'
+        },
         url: '/merchantChannel/grid',
         searchItems: [
           {
@@ -150,7 +151,7 @@
             title: '添加渠道信息',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchant2/merchantChannelAddEditDetail");
+              this.$router.push("/merchant/merchantChannelAddEditDetail");
             }
           },
           {
@@ -219,19 +220,17 @@
         .preferred{
           position: absolute;
           right: 0;
-          background-color: #f00;
-          width: 34px;
-          height: 20px;
-          line-height: 20px;
-          text-align: center;
+          top: 50%;
+          transform: translateY(-50%);
+          /*background-color: #f00;*/
+          background: url("../../assets/images/merchant/preferred.png") no-repeat;
+          background-size: 100% 100%;
+          width: 50px;
+          /*height: 20px;*/
+          /*line-height: 20px;*/
+          padding: 10px;
+          text-align: right;
           color: #fff;
-        }
-        .ivu-icon{
-          position: absolute;
-          font-size: 41px;
-          left: -25px;
-          top: -10px;
-          color: #f00;
         }
       }
     }

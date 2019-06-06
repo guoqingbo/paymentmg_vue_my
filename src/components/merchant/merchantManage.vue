@@ -24,19 +24,22 @@
             type:'index'
           },
           {
-            title: '支付产品名称',
-            key: 'payProductName',
+            title: '商户号',
+            key: 'merchantCode',
             sortable: true,
           },
           {
-            title: '支付产品代码',
-            key: 'payProductCode',
+            title: '商户名称',
+            key: 'merchantName',
             sortable: true,
           },
           {
-            title: '产品说明',
-            key: 'remark',
+            title: '商户类型',
+            key: 'merchantType',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.filter.turn("merchantType",params.row.merchantType))
+            }
           },
           {
             title: '创建时间',
@@ -52,7 +55,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/payProduct/payProductAddEditDetail",
+                      path: "/merchant/merchantAddEditDetail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
                   }
@@ -61,8 +64,8 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/payProduct/payProductAddEditDetail",
-                      query: { id: params.row.id }
+                      path: "/merchant/merchantAddEditDetail",
+                      query: {id: params.row.id}
                     });
                   }
                 },
@@ -73,17 +76,8 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/payProduct/delete/"+ params.row.id
+                      "/merchant/delete/" + params.row.id
                     );
-                  }
-                },
-                {
-                  title: "添加渠道产品",
-                  action: () => {
-                    this.$router.push({
-                      path: "/productChannel/payProduct/payProductChannelAddDetail",
-                      query: { payProductId: params.row.id,payProductName:params.row.payProductName }
-                    });
                   }
                 }
               ];
@@ -95,15 +89,39 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/payProduct/grid',
+        url: '/merchant/grid',
         searchItems: [
+          {
+            label: '商户名称',
+            type: 'input',
+            name: 'merchantName'
+          },
+          {
+            label: '商户号',
+            type: 'input',
+            name: 'merchantCode'
+          },
+          {
+            label: '开始日期',
+            type: 'date',
+            name: 'startDate',
+            format:'yyyy-MM-dd 00:00:00',
+            value: ''
+          },
+          {
+            label: '结束日期',
+            type: 'date',
+            name: 'endDate',
+            format:'yyyy-MM-dd 23:59:59',
+            value: ''
+          },
         ],
         hannleItems: [
           {
-            title: '新增支付产品',
+            title: '添加商户',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/productChannel/payProduct/payProductAddEditDetail");
+              this.$router.push("/merchant/merchantAddEditDetail");
             }
           }
         ],

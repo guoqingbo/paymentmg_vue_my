@@ -7,40 +7,33 @@
       "list": [
         {
           "funName": "商户管理",
-          "funCode": "merchant2",
-          "functionType": "column",
-          "list": [
-            {
-              "funName": "商户管理",
-              "funCode": "merchantManage",
-              "functionType": "column"
-            },
-            {
-              "funName": "商户渠道管理",
-              "funCode": "merchantChannel",
-              "functionType": "column"
-            },
-            {
-              "funName": "商户场景管理",
-              "funCode": "merchantScene",
-              "functionType": "column"
-            },
-            {
-              "funName": "关联商户管理",
-              "funCode": "merchantAssociate",
-              "functionType": "column"
-            },
-            {
-              "funName": "添加商户",
-              "funCode": "merchantAddEditDetail",
-              "functionType": "button"
-            },
-            {
-              "funName": "添加渠道",
-              "funCode": "merchantChannelAddEditDetail",
-              "functionType": "button"
-            }
-          ]
+          "funCode": "merchantManage",
+          "functionType": "column"
+        },
+        {
+          "funName": "商户渠道管理",
+          "funCode": "merchantChannel",
+          "functionType": "column"
+        },
+        {
+          "funName": "商户场景管理",
+          "funCode": "merchantScene",
+          "functionType": "column"
+        },
+        {
+          "funName": "关联商户管理",
+          "funCode": "merchantAssociate",
+          "functionType": "column"
+        },
+        {
+          "funName": "添加商户",
+          "funCode": "merchantAddEditDetail",
+          "functionType": "button"
+        },
+        {
+          "funName": "添加渠道",
+          "funCode": "merchantChannelAddEditDetail",
+          "functionType": "button"
         }
       ]
     },
