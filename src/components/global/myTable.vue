@@ -101,7 +101,7 @@
     width:100%;
     border-collapse: collapse;
     border-spacing: 0 20px;
-    border: 1px solid #e9eaec;
+    /*border: 1px solid #e9eaec;*/
   }
   .newtable .table td {
     height: 40px;
