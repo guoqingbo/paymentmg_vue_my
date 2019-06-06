@@ -1,7 +1,6 @@
 <template>
   <div class="newtable">
     <table class="table"
-           border
            width=100%>
       <tr v-for="(item,index) in tableRows" :key="index">
         <template v-for="(sitem,sindex) in item.cols" >
@@ -110,11 +109,13 @@
     box-sizing: border-box;
     padding: 5px;
     text-align: center;
+    border: 1px solid #e9eaec;
   }
 
   .newtable .table th {
     height: 40px;
     background-color: #EBEEF9;
+    border: 1px solid #e9eaec;
   }
 
   .newtable .table td.title {
