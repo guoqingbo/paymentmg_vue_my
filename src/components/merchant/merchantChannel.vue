@@ -50,7 +50,7 @@
                 h('span', params.row.channelProductName),
               ]
               if(params.row.priority > 0){
-                array.push(h('span', {class: 'preferred'},'优先')
+                array.push(h('span', {class: 'preferred'},'')
                 )
               }
               return array
@@ -223,9 +223,9 @@
           top: 50%;
           transform: translateY(-50%);
           /*background-color: #f00;*/
-          background: url("../../assets/images/merchant/preferred.png") no-repeat;
+          background: url("../../assets/images/merchant/preferred1.png") no-repeat;
           background-size: 100% 100%;
-          width: 50px;
+          width: 45px;
           /*height: 20px;*/
           /*line-height: 20px;*/
           padding: 10px;
