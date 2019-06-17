@@ -7,9 +7,11 @@
       </tr>
       <template v-for="item,index in tableData.list">
         <tr v-for="sitem,sindex in item.list">
-          <td :rolspan="sitem.list.length" v-if="index==0">
-            {{item.title}}
-          </td>
+          <template v-if="sindex==0">
+            <td :rowspan="item.list.length">
+              {{item.title}}
+            </td>
+          </template>
           <td  v-for="tdItem in sitem.list">{{tdItem}}</td>
         </tr>
       </template>
@@ -62,13 +64,21 @@
               list:[{
                 title:'易宝支付',
                 list:[{
-                  list:['支付宝扫码支付', '18000', '18000', '18000', '18000']
+                  list:['支付宝扫码支付1', '18000', '18000', '18000', '18000']
                 },{
-                  list:['支付宝扫码支付', '18000', '18000', '18000', '18000']
+                  list:['支付宝扫码支付2', '18000', '18000', '18000', '18000']
+                },{
+                  list:['合计', '18000', '18000', '18000', '18000']
                 }]
               },{
-                title:'易宝支付',
-                list:['支付宝扫码支付', '18000', '18000', '18000', '18000']
+                title:'易宝支付2',
+                list:[{
+                  list:['支付宝扫码支付2', '18000', '18000', '18000', '18000']
+                },{
+                  list:['支付宝扫码支付2', '18000', '18000', '18000', '18000']
+                },{
+                  list:['合计', '18000', '18000', '18000', '18000']
+                }]
               }],
             }
           }
@@ -91,5 +101,18 @@
   .chart-search{
     position: absolute;
     right: 20px;
+  }
+  .table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table td,
+  .table th{
+    height: 40px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+  }
+  .table th {
+    background-color: #EBEEF9;
   }
 </style>
