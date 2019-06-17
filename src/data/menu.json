@@ -131,6 +131,48 @@
           ]
         }
       ]
+    },
+    {
+      "funName": "数据中心",
+      "funCode": "dataCenter",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "平台交易统计图表",
+          "funCode": "platformTradeData",
+          "functionType": "column"
+        },
+        {
+          "funName": "商户交易统计图表",
+          "funCode": "merchantTradeData",
+          "functionType": "column"
+        },
+        {
+          "funName": "按支付渠道统计",
+          "funCode": "payChannelData",
+          "functionType": "column"
+        },
+        {
+          "funName": "按订单来源统计",
+          "funCode": "orderSourceData",
+          "functionType": "column"
+        },
+        {
+          "funName": "渠道佣金统计",
+          "funCode": "channelCommissionData",
+          "functionType": "column"
+        },
+        {
+          "funName": "按支付场景统计",
+          "funCode": "paySceneData",
+          "functionType": "column"
+        },
+        {
+          "funName": "担保交易图表",
+          "funCode": "warrantTradeData",
+          "functionType": "column"
+        }
+      ]
     }
   ]
 }

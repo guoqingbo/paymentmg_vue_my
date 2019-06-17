@@ -1,33 +1,6 @@
 <template>
   <div>
-    <Form ref="formInline" :model="searchForm" inline v-show="searchItems.length">
-      <FormItem v-for="item in searchItems" :key="item.label">
-        <Input v-if="item.type=='input'"
-               v-model="item.value"
-               :placeholder="'请输入'+item.label"></Input>
-        <DatePicker v-if="item.type=='date'"
-                    type="date"
-                    :placeholder="'请输入'+item.label"
-                    v-model="item.value"
-                    :format="item.format||'yyyy-MM-dd'"></DatePicker>
-        <Select v-if="item.type=='select'"
-                v-model="item.value"
-                :placeholder="'请选择'+item.label">
-          <Option v-for="sitem in item.data"
-                  :value="sitem.value"
-                  :key="sitem.value">{{ sitem.label }}</Option>
-        </Select>
-      </FormItem>
-      <FormItem>
-        <Button type="primary" icon="ios-search" @click="handleSubmit2()">搜索</Button>
-      </FormItem>
-      <FormItem v-if="exportItem">
-        <Button type="primary"
-                :icon="exportItem.icon"
-                @click="exportItem.callback"
-                :loading="exportItem.loading">{{ exportItem.title }}</Button>
-      </FormItem>
-    </Form>
+    <searchForm :searchItems="searchItems" :exportItem="exportItem" :url="url"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
       <Col span="2" v-for="item in hannleItems" :key="item.title">
         <Button type="primary"
@@ -61,7 +34,9 @@
   </div>
 </template>
 <script>
+  import searchForm from './searchForm'
   export default {
+    components:{searchForm},
     data() {
       return {
         searchForm: {
@@ -117,6 +92,7 @@
     created(){
       this.$store.state.list.url = this.url;
       this.$store.state.list.params = this.params
+      this.$store.state.list.params.limit = this.limit
       this.loadpage();
     },
     computed: {
@@ -131,7 +107,7 @@
     },
     methods: {
       pageSizeShange(limit){
-        this.limit = limit
+        this.$store.state.list.params.limit = this.limit = limit
         this.loadpage()
       },
       changepage2(num) {
@@ -150,7 +126,6 @@
           this.$store.state.list.params,
           this.searchForm
         );
-        this.$store.state.list.params.limit = this.limit
         this.$store.dispatch('getList')
       },
       formateDate(){

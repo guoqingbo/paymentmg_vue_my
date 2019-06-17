@@ -101,7 +101,6 @@
 
         qrcodeUrl:'123',
         modal:false,
-
         params:{
 
         },
@@ -236,6 +235,11 @@
           console.log(res)
           this.loading = false
           if(res.xml.result_code && res.xml.result_code._text == 'SUCCESS'){
+            if(res.xml.redirect){
+              window.location.href = res.xml.code_url
+              // window.open(res.xml.code_url, '_blank');
+              return
+            }
             this.modal = true;
             this.qrcodeUrl = res.xml.code_url._text;
           }else{

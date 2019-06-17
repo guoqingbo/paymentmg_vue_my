@@ -1,7 +1,8 @@
 import * as api from '@/fetch/api'
+// select下拉常量
 import dic from '@/common/dic'
 import {Message} from 'iview'
-import Router from 'vue-router'
+
 const common = {
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
@@ -20,6 +21,7 @@ const common = {
       }
     })
   },
+  // 数组变对象（select下拉的数组）
   arrayTurnObj(arr){
     let obj = {}
     if(arr instanceof Array){
@@ -29,6 +31,7 @@ const common = {
     }
     return obj
   },
+  // 日期格式化
   formatDate(date, fmt) {
     if(typeof date == 'string' || typeof date == 'number'){
       date = new Date(date)
@@ -51,6 +54,7 @@ const common = {
     }
     return fmt;
   },
+
   changeLoading(obj) {
     obj.loading = false
     obj.$nextTick(() => {
@@ -320,7 +324,7 @@ const common = {
     }
   },
   dic,
-  apiAdminPrefix: '/api/admin',// 默认的前缀
+  apiAdminPrefix: '/api/admin',// 后台的前缀（默认的前缀）
   apiPayPrefix: '/api/pay' // 收银台的前缀
 }
 
