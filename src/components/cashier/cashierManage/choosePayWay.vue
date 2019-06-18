@@ -237,15 +237,16 @@
           if(res.xml.result_code && res.xml.result_code._text == 'SUCCESS'){
             // 如果
             if(res.xml.redirect){
-              window.location.href = res.xml.code_url
-              // window.open(res.xml.code_url, '_blank');
+              console.log(res.xml.code_url._text)
+              window.location.href = res.xml.code_url._text
+              // window.open(res.xml.code_url._text);
               return
             }
             // 二维码弹框
             this.modal = true;
             this.qrcodeUrl = res.xml.code_url._text;
           }else{
-            this.$Message.error(res.xml.return_msg._text);
+            this.$Message.error(res.xml.return_msg?res.xml.return_msg._text:"支付失败");
           }
         })
       },
