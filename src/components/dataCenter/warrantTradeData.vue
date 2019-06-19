@@ -1,0 +1,96 @@
+<template>
+  <div>
+    <searchForm ref="searchForm" :searchItems = "searchItems"></searchForm>
+    <div class="chart-box">
+      <searchForm class="chart-search" :searchItems = "chartSearchItems"></searchForm>
+      <myChart :options="chartOption"></myChart>
+    </div>
+  </div>
+</template>
+
+<script>
+  import searchForm from "@/components/global/searchForm";
+  import myChart from "@/components/global/myChart";
+
+  export default {
+    components:{searchForm,myChart},
+    data(){
+      return {
+        searchItems: [
+          {
+            label: '商户号',
+            type: 'input',
+            name: 'merchantNo',
+            value: '',
+          }
+        ],
+        chartSearchItems: [
+          {
+            label: '开始日期',
+            type: 'date',
+            name: 'startDate',
+            format:'yyyy-MM-dd 00:00:00',
+            value: '',
+            style:'width:130px'
+          },
+          {
+            label: '结束日期',
+            type: 'date',
+            name: 'endDate',
+            format:'yyyy-MM-dd 23:59:59',
+            value: '',
+            style:'width:130px'
+          },
+        ],
+        chartOption: {
+          title: {
+            text: '平台交易统计图表',
+            subtext:'统计日期 2019-06-01至2019-06-06',
+            textAlign:'center',
+            left:"50%"
+          },
+          xAxis: {
+            name:'日期',
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          },
+          yAxis: {
+            name:'单位万元',
+            type: 'value',
+            // min:800,
+            // max:1400
+          },
+          series: [{
+            type: 'line',
+            smooth: true,
+            label: {
+              normal: {
+                show: true,
+                position: 'top'
+              }
+            },
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+          }]
+        },
+      }
+    },
+    created(){
+
+    }
+  }
+</script>
+
+<style scoped>
+  .chart-box {
+    position: relative;
+    padding: 20px 0;
+    width: 90%;
+    height: 500px;
+    /*margin: 20px auto;*/
+    border: 1px solid #ccc
+  }
+  .chart-search{
+    position: absolute;
+    right: 20px;
+  }
+</style>

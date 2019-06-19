@@ -9,9 +9,11 @@
              :placeholder="'请输入'+item.label"
              :style="item.style"></Input>
       <DatePicker v-if="item.type=='date'"
+                  @on-change="item.onChange1?item.onChange1($event):''"
                   type="date"
                   :placeholder="'请输入'+item.label"
                   v-model="item.value"
+                  :options="item.options"
                   :format="item.format||'yyyy-MM-dd'"
                   :style="item.style"></DatePicker>
       <Select v-if="item.type=='select'"
@@ -38,11 +40,92 @@
 export default {
   data () {
     return {
-      searchForm: {}
+      searchForm: {},
     }
   },
-  props: ['searchItems','exportItem','url'],
+  props: ['searchItems','exportItem','url','params'],
+  watch: {
+    searchItems: {
+      handler(newValue, oldValue) {
+        let startDateItem = ''
+        let endDateItem = ''
+        newValue.forEach((element,index) => {
+          if(typeof element.value == 'undefined'){
+            // 作用是监听输入框value的变化
+            this.$set(element, 'value','')
+          }
+          if(typeof element.options == 'undefined'){
+            // 作用是监听options的变化，使表单验证起作用
+            this.$set(element, 'options',{})
+          }
+          if(element.name){
+            // 格式化日期
+            if(element.value instanceof Date){
+              element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
+            }
+            if(element.name == 'startDate'){
+              startDateItem = element
+            }
+            if(element.name == 'endDate'){
+              endDateItem = element
+            }
+            this.$set(this.searchForm, element.name, element.value)
+          }
+        })
+        // 开始时间结束时间限制
+        if(startDateItem && endDateItem){
+
+          if(!startDateItem.onChange1){
+            startDateItem.options.disabledDate = startDateItem.disabledDate
+          }
+          if(!endDateItem.onChange1){
+            endDateItem.options.disabledDate = endDateItem.disabledDate
+          }
+
+          startDateItem.onChange1=(date1)=>{
+            // console.log(this.$refs.search.searchForm)
+            if(startDateItem.onChange){
+              startDateItem.onChange(date1)
+            }
+            endDateItem.options.disabledDate=date2=>{
+              let disabled = false
+              if(endDateItem.disabledDate){
+                disabled = endDateItem.disabledDate(date2)
+              }
+              if(date2.valueOf()<new Date(date1).valueOf()){
+                // 结束日期不得小于开始日期
+                disabled = true
+              }
+              return disabled
+            }
+          }
+          endDateItem.onChange1=(date1)=>{
+            // console.log(this.$refs.search.searchForm)
+            if(endDateItem.onChange){
+              endDateItem.onChange(date1)
+            }
+            startDateItem.options.disabledDate=date2=>{
+              let disabled = false
+              if(startDateItem.disabledDate){
+                disabled = startDateItem.disabledDate(date2)
+              }
+              if(date2.valueOf()>new Date(date1).valueOf()){
+                // 开始日期不得大于结束日期
+                disabled = true
+              }
+              return disabled
+            }
+          }
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   mounted () {
+
+  },
+  created(){
 
   },
   methods: {
@@ -50,12 +133,21 @@ export default {
       // 格式化日期
       this.formateDate()
       this.$store.state.list.url = this.url;
+      this.$store.state.list.params = this.params
       this.$store.state.list.params = Object.assign(
-        this.$store.state.list.params,
+        this.params,
         this.searchForm
       );
-       this.$store.state.list.params.limit = this.limit
-      this.$store.dispatch('getList')
+      // 是否自定义搜索
+      if (this._events.searchSubmit) {
+        this.$emit("searchSubmit",this.$store.state.list.params)
+        return
+      }
+     // 搜索前
+      this.$emit('beforeSubmit',this.$store.state.list.params)
+      this.$store.dispatch('getList').then(res=>{
+        this.$emit('afterSubmit',res)
+      })
     },
     formateDate(){
       // 格式化日期

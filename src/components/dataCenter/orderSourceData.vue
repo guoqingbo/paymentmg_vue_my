@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="order-source">
-      <Button v-for='item,index in orderSource'>{{item.label}}</Button>
+      <Button v-for='item,index in orderSource' :key="index">{{item.label}}</Button>
     </div>
     <Row>
       <Col span="16">

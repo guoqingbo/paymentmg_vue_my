@@ -1,6 +1,10 @@
 <template>
   <div>
-    <searchForm :searchItems="searchItems" :exportItem="exportItem" :url="url"></searchForm>
+    <searchForm ref='search'
+                :searchItems="searchItems"
+                :exportItem="exportItem"
+                :url="url"
+                :params="params"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
       <Col span="2" v-for="item in hannleItems" :key="item.title">
         <Button type="primary"
@@ -87,13 +91,13 @@
       }
     },
     mounted() {
-
+      this.$refs.search.searchSubmit()
     },
     created(){
-      this.$store.state.list.url = this.url;
-      this.$store.state.list.params = this.params
+      // this.$store.state.list.url = this.url;
+      // this.$store.state.list.params = this.params
       this.$store.state.list.params.limit = this.limit
-      this.loadpage();
+      // this.loadpage();
     },
     computed: {
       res2() {
@@ -108,35 +112,32 @@
     methods: {
       pageSizeShange(limit){
         this.$store.state.list.params.limit = this.limit = limit
-        this.loadpage()
+        this.$refs.search.searchSubmit()
       },
       changepage2(num) {
         this.$store.state.list.params.page = num
-        this.loadpage()
+        this.$refs.search.searchSubmit()
       },
       changeSelection2(selection) {
         this.selection = selection
       },
-      handleSubmit2() {
-        this.loadpage();
-      },
-      loadpage() {
-        this.formateDate()
-        this.$store.state.list.params = Object.assign(
-          this.$store.state.list.params,
-          this.searchForm
-        );
-        this.$store.dispatch('getList')
-      },
-      formateDate(){
-        // this.searchForm.startDate += ' 00:00:00'
-        // this.searchForm.endDate += ' 23:59:59'
-        this.searchItems.forEach(ele=>{
-          if(this.searchForm[ele.name] instanceof Date){
-            this.searchForm[ele.name] = this.common.formatDate(this.searchForm[ele.name], ele.format||"yyyy-MM-dd")
-          }
-        })
-      }
+      // loadpage() {
+      //   this.formateDate()
+      //   this.$store.state.list.params = Object.assign(
+      //     this.$store.state.list.params,
+      //     this.searchForm
+      //   );
+      //   this.$store.dispatch('getList')
+      // },
+      // formateDate(){
+      //   // this.searchForm.startDate += ' 00:00:00'
+      //   // this.searchForm.endDate += ' 23:59:59'
+      //   this.searchItems.forEach(ele=>{
+      //     if(this.searchForm[ele.name] instanceof Date){
+      //       this.searchForm[ele.name] = this.common.formatDate(this.searchForm[ele.name], ele.format||"yyyy-MM-dd")
+      //     }
+      //   })
+      // }
     }
   };
 </script>

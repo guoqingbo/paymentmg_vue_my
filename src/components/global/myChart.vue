@@ -19,6 +19,9 @@
     },
       props:["options"],
       mounted(){
+
+      },
+      created(){
         // 不使用$nextTick的话，刷新时，图表的宽度不对
         this.$nextTick(() => {
           this.draw()
@@ -26,6 +29,19 @@
         window.onresize = () => {
           //  根据窗口大小调整曲线大小
           this.chart && this.chart.resize()
+        }
+      },
+      watch: {
+        options: {
+          handler(newValue, oldValue) {
+            // 绘制条形图
+            if(this.chart){
+              this.chart.clear()
+              this.chart.setOption(this.options)
+            }
+          },
+          deep: true,
+          // immediate: true
         }
       },
       methods: {

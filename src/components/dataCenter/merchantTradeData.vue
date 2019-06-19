@@ -1,8 +1,17 @@
 <template>
   <div>
-    <searchForm :searchItems = "searchItems"></searchForm>
+    <searchForm ref="search"
+                :params="params"
+                :url="url"
+                :searchItems = "searchItems"
+                @searchSubmit="searchSubmit"></searchForm>
     <div class="chart-box">
-      <searchForm class="chart-search" :searchItems = "chartSearchItems"></searchForm>
+      <searchForm class="chart-search"
+                  ref="chartSearch"
+                  :params="params"
+                  :url="url"
+                  :searchItems = "chartSearchItems"
+                  @searchSubmit="searchSubmit"></searchForm>
       <myChart :options="chartOption"></myChart>
     </div>
   </div>
@@ -29,30 +38,59 @@
                 label: '开始日期',
                 type: 'date',
                 name: 'startDate',
-                format:'yyyy-MM-dd 00:00:00',
-                value: '',
-                style:'width:130px'
+                format:'yyyy-MM-dd',
+                value:  new Date(Date.now()-7*24*60*60*1000),
+                style:'width:130px',
+                disabledDate (date) {
+                  let disabled = false
+                  // 截至日期昨天为止
+                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                    disabled = true
+                  }
+                  return disabled
+                },
+                onChange(date){
+
+                }
               },
               {
                 label: '结束日期',
                 type: 'date',
                 name: 'endDate',
-                format:'yyyy-MM-dd 23:59:59',
-                value: '',
-                style:'width:130px'
+                format:'yyyy-MM-dd',
+                value: new Date(Date.now()-24*60*60*1000),
+                style:'width:130px',
+                disabledDate (date) {
+                  let disabled = false
+                  // 截至日期昨天为止
+                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                    disabled = true
+                  }
+                  return disabled
+                },
+                onChange(date){
+
+                }
               },
             ],
             chartOption: {
               title: {
                 text: '平台交易统计图表',
-                subtext:'统计日期 2019-06-01至2019-06-06',
+                subtext:'',
                 textAlign:'center',
                 left:"50%"
               },
               xAxis: {
                 name:'日期',
-                type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                // type: 'category',
+                // splitNumber:3,
+                axisTick:{
+                  alignWithLabel:true,
+                },
+                interval:7,
+                min:'',
+                max:'',
+                data: '',
               },
               yAxis: {
                 name:'单位万元',
@@ -69,13 +107,104 @@
                     position: 'top'
                   }
                 },
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                data: '',
               }]
-          },
+            },
+            params:{},
+            url:'/channel/grid'
           }
       },
       created(){
+        // 检查搜素条件
+        this.checkSearchDate()
+        //
 
+      },
+      mounted(){
+
+      },
+      methods: {
+        // 检查搜索条件
+        checkSearchDate(){
+          let startSearchItem=this.chartSearchItems[0]
+          let endSearchItem=this.chartSearchItems[1]
+
+          startSearchItem.onChange=(date1)=>{
+            endSearchItem.disabledDate=date2=>{
+              let disabled = false
+              if(date2 && date2.valueOf() > Date.now()-24*60*60*1000){
+                // 截至日期昨天为止
+                disabled = true
+              }else if(date2.valueOf()>new Date(date1).valueOf()+30*24*60*60*1000){
+                // 查询日期不得超过30天
+                disabled = true
+              }
+              return disabled
+            }
+          }
+          endSearchItem.onChange=(date1)=>{
+            startSearchItem.disabledDate=date2=>{
+              let disabled = false
+              if(date2 && date2.valueOf() > Date.now()-24*60*60*1000){
+                // 截至日期昨天为止
+                disabled = true
+              }else if(date2.valueOf()<new Date(date1).valueOf()-30*24*60*60*1000){
+                // 查询日期不得超过30天
+                disabled = true
+              }
+              return disabled
+            }
+          }
+        },
+        // 检查搜素条件
+        checkSearch(preventDefault){
+          let checkRes = true
+          if(!this.params.merchantNo){
+            this.$Message.info('请输入商户号')
+            checkRes=false
+          }
+          return checkRes
+        },
+        // 自定义搜索
+        searchSubmit(params){
+          // 合并搜索条件
+          this.params = Object.assign(this.$refs.search.searchForm,this.$refs.chartSearch.searchForm)
+          // 检查搜素条件
+          if(this.checkSearch()){
+            // 执行搜索初始化，获取数据
+            this.$store.dispatch('getList').then(res=>{
+              this.afterSubmit(res)
+            })
+          }
+        },
+        // 搜索之前
+        beforeSubmit(params){
+
+        },
+        // 搜索之后
+        afterSubmit(res){
+          this.chartOption.title.subtext = `黄山景区 （200893040444）`
+          // 格式话图标数据
+          this.formatRes(res)
+        },
+        // 格式化图标数据
+        formatRes(res){
+          let xAxisData = []
+          let seriesData = []
+          let row = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+          row.forEach((ele,index)=>{
+            let date = this.common.formatDate(Date.now()+24*60*60*1000*index,'yyyy-MM-dd')
+            xAxisData.push(date)
+            seriesData.push(ele)
+          })
+          // 设置x轴
+          this.chartOption.xAxis.data = xAxisData
+          this.min = xAxisData[0]
+          this.max = xAxisData[xAxisData.length-1]
+
+          // 设置数据
+          this.chartOption.series[0].data = seriesData
+        }
       }
     }
 </script>
@@ -92,5 +221,6 @@
   .chart-search{
     position: absolute;
     right: 20px;
+    z-index:10;
   }
 </style>
