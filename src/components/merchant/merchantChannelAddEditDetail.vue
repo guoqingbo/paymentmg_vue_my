@@ -159,7 +159,7 @@
           this.formList[1].data = this.$store.state.global.payProduct
         })
       },
-      // 获取渠道产品
+      // 根据支付产品获取渠道产品
       getChannelProduct(e){
         if(!e){
           return

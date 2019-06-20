@@ -186,7 +186,7 @@
         },
         {
           "funName": "拦截记录",
-          "funCode": "interceptRecord",
+          "funCode": "interceptionRecord",
           "functionType": "column"
         },
         {

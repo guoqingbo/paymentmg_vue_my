@@ -31,17 +31,27 @@
             sortable: true,
           },
           {
-            title: '加入时间',
+            title: '订单编号',
             key: 'sourceMerchantCode',
             sortable: true,
           },
           {
-            title: '操作员',
+            title: '拦截规则',
             key: 'createTime',
             sortable: true,
           },
            {
-            title: '解除拦截规则',
+            title: '支付渠道',
+            key: 'createTime',
+            sortable: true,
+          },
+           {
+            title: '渠道产品',
+            key: 'createTime',
+            sortable: true,
+          },
+           {
+            title: '拦截时间',
             key: 'createTime',
             sortable: true,
           },
@@ -51,7 +61,7 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "取消白名单",
+                  title: "加入白名单",
                   action: () => {
                     this.mode = "delete";
                     this.sucessMsg = "删除成功！";
@@ -76,6 +86,11 @@
             label: '用户标识',
             type: 'input',
             name: 'merchantName'
+          },
+          {
+            label: '订单编号',
+            type: 'input',
+            name: 'merchantCode'
           },
           {
             label: '支付渠道',

@@ -115,7 +115,7 @@
       this.getCashierIniInfo()
     },
     methods: {
-      // 获取支付渠道
+      // 获取收银台初始化信息
       getCashierIniInfo(){
         let url = '/initcrashier'
         let params  = this.$route.query
