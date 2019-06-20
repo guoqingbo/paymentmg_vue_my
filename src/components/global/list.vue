@@ -95,7 +95,7 @@
     },
     created(){
       // this.$store.state.list.url = this.url;
-      // this.$store.state.list.params = this.params
+      this.$store.state.list.params = this.params
       this.$store.state.list.params.limit = this.limit
       // this.loadpage();
     },
