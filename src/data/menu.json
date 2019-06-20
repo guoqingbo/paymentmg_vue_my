@@ -173,6 +173,28 @@
           "functionType": "column"
         }
       ]
+    },
+    {
+      "funName": "风控管理",
+      "funCode": "riskManage",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "支付限额管理",
+          "funCode": "paymentLimit",
+          "functionType": "column"
+        },
+        {
+          "funName": "拦截记录",
+          "funCode": "interceptRecord",
+          "functionType": "column"
+        },
+        {
+          "funName": "白名单",
+          "funCode": "whiteList",
+          "functionType": "column"
+        }
+      ]
     }
   ]
 }
