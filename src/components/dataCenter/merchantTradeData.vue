@@ -31,6 +31,7 @@
                 type: 'input',
                 name: 'merchantNo',
                 value: '',
+                // value: '2006151605062019',
               }
             ],
             chartSearchItems: [
@@ -39,7 +40,7 @@
                 type: 'date',
                 name: 'startDate',
                 format:'yyyy-MM-dd',
-                value:  new Date(Date.now()-7*24*60*60*1000),
+                value:  new Date(Date.now()-30*24*60*60*1000),
                 style:'width:130px',
                 disabledDate (date) {
                   let disabled = false
@@ -111,7 +112,7 @@
               }]
             },
             params:{},
-            url:'/channel/grid'
+            url:'/report/merchantSumReport'
           }
       },
       created(){
@@ -169,9 +170,11 @@
         searchSubmit(params){
           // 合并搜索条件
           this.params = Object.assign(this.$refs.search.searchForm,this.$refs.chartSearch.searchForm)
+        
           // 检查搜素条件
           if(this.checkSearch()){
             // 执行搜索初始化，获取数据
+            this.$store.state.list.params = this.params
             this.$store.dispatch('getList').then(res=>{
               this.afterSubmit(res)
             })
@@ -183,19 +186,22 @@
         },
         // 搜索之后
         afterSubmit(res){
-          this.chartOption.title.subtext = `黄山景区 （200893040444）`
-          // 格式话图标数据
-          this.formatRes(res)
+          if(res.status == 200){
+            // 格式话图标数据
+            this.formatRes(res)
+          }else{
+            this.$Message.error(res.message);
+            
+          }
         },
         // 格式化图标数据
         formatRes(res){
           let xAxisData = []
           let seriesData = []
-          let row = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-          row.forEach((ele,index)=>{
-            let date = this.common.formatDate(Date.now()+24*60*60*1000*index,'yyyy-MM-dd')
-            xAxisData.push(date)
-            seriesData.push(ele)
+          let list = res.data.mchTradeStatisticsList      
+          Object.keys(list).forEach((ele,index)=>{
+            xAxisData.push(ele)
+            seriesData.push(list[ele])
           })
           // 设置x轴
           this.chartOption.xAxis.data = xAxisData
@@ -204,6 +210,9 @@
 
           // 设置数据
           this.chartOption.series[0].data = seriesData
+
+          // 设置副标题
+           this.chartOption.title.subtext = `${res.data.merchantVo.merchantName} ${res.data.merchantVo.merchantCode}`
         }
       }
     }

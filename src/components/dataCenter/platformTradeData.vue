@@ -97,7 +97,7 @@
               }]
           },
             params:{},
-            url:'/channel/grid'
+            url:'/report/platformSumReport'
           }
       },
       created(){
@@ -157,19 +157,17 @@
         formatRes(res){
           let xAxisData = []
           let seriesData = []
-          let row = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-          row.forEach((ele,index)=>{
-             let date = this.common.formatDate(Date.now()+24*60*60*1000*index,'yyyy-MM-dd')
-             xAxisData.push(date)
-            seriesData.push(ele)
-           })
+          if(res.status == 200){
+            Object.keys(res.data).forEach((ele)=>{
+                        xAxisData.push(ele)
+                        seriesData.push(res.data[ele])
+            })
+          }
           // 设置x轴
           this.chartOption.xAxis.data = xAxisData
           this.min = xAxisData[0]
           this.max = xAxisData[xAxisData.length-1]
-
           // 设置数据
-          console.log(seriesData)
           this.chartOption.series[0].data = seriesData
         }
       }
