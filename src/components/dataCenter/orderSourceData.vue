@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="order-source">
-      <Button v-for='item,index in orderSource' :key="index">{{item.label}}</Button>
+      <Button  v-for='item,index in orderSource' 
+               :key="index" 
+               :type='orderIndex==index?"info":"default"' 
+               @click="changeOrderSource(index)">{{item.label}}</Button>
     </div>
     <Row>
       <Col span="16">
@@ -26,6 +29,7 @@
       data(){
           return {
             orderSource:[],
+            orderIndex:0,
             chartOption: {
               title: {
                 text: '最近6个月交易统计',
@@ -36,7 +40,7 @@
               xAxis: {
                 name:'日期',
                 type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                data: [],
               },
               yAxis: {
                 name:'单位万元',
@@ -53,13 +57,13 @@
                     position: 'top'
                   }
                 },
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                data: [],
               }]
           },
             tableColumns: [
               {
                 title: '月份',
-                key:'mouth',
+                key:'statisticMonth',
               },
               {
                 title: '交易金额（万元）',
@@ -67,32 +71,92 @@
               },
               {
                 title: '环比',
-                key: 'rate',
-                render: (h, params) => {
-                  return h('span', '12')
-                }
+                key: 'tradeMoneyQoq',
+                render: this.formateRate
               }
             ],
-            tableData:[{
-              mouth:'12',
-              tradeMoney:'888',
-              rate:'45'
-            }]
+            tableData:[]
           }
       },
       created(){
+          // 获取订单来源
           this.getMerchantSource()
+          
       },
       mounted(){
-
+         
       },
       methods: {
         // 获取订单来源
         getMerchantSource(){
           this.$store.dispatch("getMerchantSource").then(res=>{
             this.orderSource = res
+            // 按订单来源统计
+            this.orderSourceReport()
           })
-        }
+        },
+        // 切换订单来源
+        changeOrderSource(index){
+          this.orderIndex = index
+          // 按订单来源统计
+          this.orderSourceReport()
+        },
+        // 按订单来源统计
+        orderSourceReport(){
+          let url = '/report/orderSrcSumReport';
+          let params = {
+              startDate:this.common.formatDate(Date.now()-6*30*24*60*60*1000,"yyyy-MM"),
+              endDate:this.common.formatDate(Date.now()-30*24*60*60*1000,"yyyy-MM"),
+              src:this.orderSource[this.orderIndex].value
+          }
+    
+          this.apiGet(url,params).then(res=>{
+             if(res.status == 200){
+                // 格式话图标数据
+                this.formatRes(res)
+              }else{
+                this.$Message.error(res.message);
+              }
+          })
+        },
+         // 格式化图标数据
+        formatRes(res){
+          let xAxisData = []
+          let seriesData = []
+          if(res.status == 200){
+            res.data.forEach((ele)=>{
+              xAxisData.push(ele.statisticMonth)
+              seriesData.push(ele.tradeMoney)
+            })
+          }
+          // 设置x轴
+          this.chartOption.xAxis.data = xAxisData
+          this.min = xAxisData[0]
+          this.max = xAxisData[xAxisData.length-1]
+          // 设置数据
+          this.chartOption.series[0].data = seriesData
+
+          // 表格数据
+          this.tableData = res.data
+        },
+        //  格式化环比
+        formateRate (h, params){
+          let dom;
+          let value = params.row[params.column.key]
+          if(value){
+              dom =[
+                h('span', value*100+'%'),
+                h('Icon', {
+                    props:{
+                        type:value<0?'ios-arrow-round-down':'ios-arrow-round-up',
+                        color:value<0?'#0f0':'#f00',
+                        size:'20'
+                    }
+                  }
+                )]
+          }
+          return dom
+        }   
       }
     }
 </script>

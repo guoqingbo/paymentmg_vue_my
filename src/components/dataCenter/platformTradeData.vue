@@ -15,7 +15,6 @@
     import searchForm from "@/components/global/searchForm";
     import myChart from "@/components/global/myChart";
     export default {
-        name: "platformTradeData",
       components:{searchForm,myChart},
       data(){
           return {
@@ -73,7 +72,7 @@
                 axisTick:{
                   alignWithLabel:true,
                 },
-                interval:7,
+                // interval:7,
                 min:'',
                 max:'',
                 data: '',
@@ -146,8 +145,12 @@
         afterSubmit(res){
           let {startDate,endDate} = this.$refs.search.searchForm
           this.chartOption.title.subtext = `统计日期 ${startDate}至${endDate}`
-          // 格式话图标数据
-          this.formatRes(res)
+          if(res && res.status == 200){
+            // 格式话图标数据
+            this.formatRes(res)
+          }else{
+            this.$Message.error(res && res.message?res.message:'数据不存在');           
+          }
         },
         // 执行初始化搜搜
         getDetail(){

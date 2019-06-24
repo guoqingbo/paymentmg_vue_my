@@ -8,9 +8,9 @@
              v-model="item.value"
              :placeholder="'请输入'+item.label"
              :style="item.style"></Input>
-      <DatePicker v-if="item.type=='date'"
+      <DatePicker v-if="item.type=='date' || item.type=='month'"
                   @on-change="item.onChange1?item.onChange1($event):''"
-                  type="date"
+                  :type='item.type'
                   :placeholder="'请输入'+item.label"
                   v-model="item.value"
                   :options="item.options"
@@ -63,25 +63,26 @@ export default {
             if(element.value instanceof Date){
               element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
             }
-            if(element.name == 'startDate'){
+            if(element.name == 'startDate' || element.disabledDate){
               startDateItem = element
+              // 初始化时间限制
+               if(!element.onChange1){
+                  element.options.disabledDate = element.disabledDate
+                }
             }
             if(element.name == 'endDate'){
               endDateItem = element
+               // 初始化时间限制
+              if(!element.onChange1){
+                element.options.disabledDate = element.disabledDate
+              }
             }
             this.$set(this.searchForm, element.name, element.value)
           }
         })
+        
         // 开始时间结束时间限制
         if(startDateItem && endDateItem){
-
-          if(!startDateItem.onChange1){
-            startDateItem.options.disabledDate = startDateItem.disabledDate
-          }
-          if(!endDateItem.onChange1){
-            endDateItem.options.disabledDate = endDateItem.disabledDate
-          }
-
           startDateItem.onChange1=(date1)=>{
             // console.log(this.$refs.search.searchForm)
             if(startDateItem.onChange){

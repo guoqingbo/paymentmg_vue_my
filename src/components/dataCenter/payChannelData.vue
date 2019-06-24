@@ -1,6 +1,10 @@
 <template>
   <div>
-    <searchForm :searchItems = "searchItems" :exportItem="exportItem"></searchForm>
+     <searchForm ref="search"
+                :params="params"
+                :url="url"
+                :searchItems = "searchItems"
+                @afterSubmit="afterSubmit"></searchForm>
     <table class="table">
       <tr>
         <th v-for="thItem in tableData.th">{{thItem.title}}</th>
@@ -12,7 +16,12 @@
               {{item.title}}
             </td>
           </template>
-          <td  v-for="tdItem in sitem.list">{{tdItem}}</td>
+          <td  v-for="tdItem,tdIndex in sitem.data">
+            <render  v-if="tableData.th[tdIndex+1].render" :params="tdItem" :render="tableData.th[tdIndex+1].render"></render>
+            <template  v-else>
+              {{tdItem.title}}
+            </template>        
+          </td>
         </tr>
       </template>
     </table>
@@ -22,69 +31,147 @@
 <script>
     import searchForm from "@/components/global/searchForm";
     import myChart from "@/components/global/myChart";
-
+    import render from "@/components/global/render";
     export default {
-      components:{searchForm,myChart},
+      components:{searchForm,myChart,render},
       data(){
           return {
             searchItems: [
               {
-                label: '商户号',
-                type: 'input',
-                name: 'merchantNo',
-                value: '',
+                label: '月份',
+                type: 'month',
+                name: 'date',
+                format:'yyyy-MM',
+                value: new Date(Date.now()-30*24*60*60*1000),
+                disabledDate (date) {              
+                  let disabled = false
+                  // 截至日期上个月天为止
+                  if(date && date.valueOf() > Date.now()-30*24*60*60*1000){
+                    disabled = true
+                  }
+                  return disabled
+                },
               }
             ],
             exportItem: {
-              title: '导出',
-              type: 'success',
-              loading: false,
-              callback: () => {
-                this.exportItem.loading = true
-                let url = '/payorder/export';
-                let params = this.$store.state.list.params
-                this.common.exportData({
-                  url,
-                  params,
-                  text:'交易订单',
-                  callback:()=>{
-                    this.exportItem.loading = false
-                  }
-                })
-              }
+              // title: '导出',
+              // type: 'success',
+              // loading: false,
+              // callback: () => {
+              //   this.exportItem.loading = true
+              //   let url = '/payorder/export';
+              //   let params = this.$store.state.list.params
+              //   this.common.exportData({
+              //     url,
+              //     params,
+              //     text:'交易订单',
+              //     callback:()=>{
+              //       this.exportItem.loading = false
+              //     }
+              //   })
+              // }
+            },
+            url:'/report/channelSumReport',
+            params:{
             },
             tableData:{
-              th:[{title:'支付渠道'},
-                {title:'渠道支付产品'},
-                {title:'交易笔数'},
-                {title:'环比'},
-                {title:'交易金额'},
-                {title:'环比'},
+              th:[{title:'支付渠道',name:'payChannelName'},
+                {title:'渠道支付产品',name:'payProductName'},
+                {title:'交易笔数',name:'transactionNo'},
+                {title:'环比',name:'transactionNoRr',render:this.formateRate},
+                {title:'交易金额',name:'amount'},
+                {title:'环比',name:'amountRr',render:this.formateRate},
               ],
               list:[{
-                title:'易宝支付',
-                list:[{
-                  list:['支付宝扫码支付1', '18000', '18000', '18000', '18000']
-                },{
-                  list:['支付宝扫码支付2', '18000', '18000', '18000', '18000']
-                },{
-                  list:['合计', '18000', '18000', '18000', '18000']
-                }]
-              },{
-                title:'易宝支付2',
-                list:[{
-                  list:['支付宝扫码支付2', '18000', '18000', '18000', '18000']
-                },{
-                  list:['支付宝扫码支付2', '18000', '18000', '18000', '18000']
-                },{
-                  list:['合计', '18000', '18000', '18000', '18000']
-                }]
+                title:'',
+                list:[]
               }],
             }
           }
       },
       created(){
 
+      },
+      mounted(){
+        // 执行搜索初始化，获取数据
+        this.getDetail()
+      },
+      methods: {
+        // 搜索之后
+        afterSubmit(res){
+          if(res.status == 200){
+            // 格式话图标数据
+            this.formatRes(res)
+          }else{
+            this.$Message.error(res.message);           
+          }
+        },
+        // 执行初始化搜搜
+        getDetail(){
+          this.$refs.search.searchSubmit()
+        },
+        // 格式化图标数据
+        formatRes(res){
+        
+          let list = []
+          if(res.status == 200){
+            res.data.forEach((ele)=>{
+              let th = this.tableData.th.slice(1)
+              let voList = ele.payChannelProductStatisticsVoList
+              let sList = []
+              if(voList && voList.length){
+                voList.forEach(sEle=>{
+                  let data = []
+                  th.forEach(eleName=>{
+                    data.push({
+                      title:sEle[eleName.name],
+                    })
+                  })
+                  sList.push({data})                
+                })
+                // 合计
+                sList.push({
+                  data:[{
+                    title:'合计'
+                  },{
+                    title:ele.totalTransactionNum
+                  },{
+                    title:''
+                  },{
+                    title:ele.totalTransactionMoney
+                  },{
+                    title:''
+                  }]
+                })
+          
+              }
+              let item = {
+                title:ele.payChannelName,
+                list:sList
+              }
+              list.push(item)
+            })
+          }
+
+         this.tableData.list = list
+        },
+        //  格式化环比
+        formateRate (h, params){
+         let dom;
+          if(params.title){
+              dom =[
+                h('span', params.title*100+'%'),
+                h('Icon', {
+                    props:{
+                        type:params.title<0?'ios-arrow-round-down':'ios-arrow-round-up',
+                        color:params.title<0?'#0f0':'#f00',
+                        size:'20'
+                    }
+                  }
+                )]
+          }
+          return dom
+        }   
       }
     }
 </script>

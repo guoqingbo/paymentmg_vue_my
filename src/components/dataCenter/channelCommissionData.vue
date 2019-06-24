@@ -24,15 +24,15 @@
           return {
             chartOption: {
               title: {
-                text: '最近6个月交易统计',
+                text: '最近6个月的佣金统计报表',
                 subtext:'',
                 textAlign:'center',
                 left:"50%"
               },
               xAxis: {
-                name:'日期',
+                name:'月份',
                 type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                data: [],
               },
               yAxis: {
                 name:'单位万元',
@@ -49,13 +49,13 @@
                     position: 'top'
                   }
                 },
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                data: [],
               }]
           },
             tableColumns: [
               {
                 title: '月份',
-                key:'mouth',
+                key:'month',
               },
               {
                 title: '交易金额（万元）',
@@ -63,27 +63,76 @@
               },
               {
                 title: '环比',
-                key: 'rate',
-                render: (h, params) => {
-                  return h('span', '12')
-                }
+                key: 'tradeQoq',
+                render: this.formateRate
               }
             ],
-            tableData:[{
-              mouth:'12',
-              tradeMoney:'888',
-              rate:'45'
-            }]
+            tableData:[]
           }
       },
       created(){
-
+        // 获取图表数据
+        this.getDetail()
       },
       mounted(){
 
       },
       methods: {
+        // 获取图表数据
+        getDetail(){
+          let url = '/report/commissionSumReport';
+          let params = {
+              startDate:this.common.formatDate(Date.now()-6*30*24*60*60*1000,"yyyy-MM"),
+              endDate:this.common.formatDate(Date.now()-30*24*60*60*1000,"yyyy-MM"),
+          }
+    
+          this.apiGet(url,params).then(res=>{
+             if(res.status == 200){
+                // 格式话图标数据
+                this.formatRes(res)
+              }else{
+                this.$Message.error(res.message);
+              }
+          })
+        },
+         // 格式化图标数据
+        formatRes(res){
+          let xAxisData = []
+          let seriesData = []
+          if(res.status == 200){
+            res.data.forEach((ele)=>{
+              xAxisData.push(ele.month)
+              seriesData.push(ele.tradeMoney)
+            })
+          }
+          // 设置x轴
+          this.chartOption.xAxis.data = xAxisData
+          this.min = xAxisData[0]
+          this.max = xAxisData[xAxisData.length-1]
+          // 设置数据
+          this.chartOption.series[0].data = seriesData
 
+          // 表格数据
+          this.tableData = res.data
+        },
+        //  格式化环比
+        formateRate (h, params){
+          let dom;
+          let value = params.row[params.column.key]
+          if(value){
+              dom =[
+                h('span', value*100+'%'),
+                h('Icon', {
+                    props:{
+                        type:value<0?'ios-arrow-round-down':'ios-arrow-round-up',
+                        color:value<0?'#0f0':'#f00',
+                        size:'20'
+                    }
+                  }
+                )]
+          }
+          return dom
+        }   
       }
     }
 </script>

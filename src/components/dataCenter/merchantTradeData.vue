@@ -76,7 +76,7 @@
             ],
             chartOption: {
               title: {
-                text: '平台交易统计图表',
+                text: '商户交易统计图表',
                 subtext:'',
                 textAlign:'center',
                 left:"50%"
@@ -88,7 +88,7 @@
                 axisTick:{
                   alignWithLabel:true,
                 },
-                interval:7,
+                // interval:7,
                 min:'',
                 max:'',
                 data: '',
@@ -118,7 +118,6 @@
       created(){
         // 检查搜素条件
         this.checkSearchDate()
-        //
 
       },
       mounted(){
@@ -158,7 +157,7 @@
           }
         },
         // 检查搜素条件
-        checkSearch(preventDefault){
+        checkSearch(){
           let checkRes = true
           if(!this.params.merchantNo){
             this.$Message.info('请输入商户号')
