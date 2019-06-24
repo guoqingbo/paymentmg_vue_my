@@ -156,14 +156,21 @@
             }
           }
         },
-        // 检查搜素条件
+         // 检查搜素条件
         checkSearch(){
-          let checkRes = true
           if(!this.params.merchantNo){
             this.$Message.info('请输入商户号')
-            checkRes=false
+            return false
           }
-          return checkRes
+          if(!this.params.startDate){
+            this.$Message.info('请输入开始日期')
+            return false
+          }
+           if(!this.params.endDate){
+             this.$Message.info('请输入结束日期')
+             return false
+          }
+          return true
         },
         // 自定义搜索
         searchSubmit(params){

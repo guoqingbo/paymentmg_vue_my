@@ -17,4 +17,3 @@
       * 测试域名 paycenter.zhiyoubao.com
       * 普通账号 15010001000/123456
       * 超级账号 superadmin/123456
-     

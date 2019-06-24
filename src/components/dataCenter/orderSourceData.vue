@@ -111,11 +111,11 @@
           }
     
           this.apiGet(url,params).then(res=>{
-             if(res.status == 200){
+             if(res && res.status == 200){
                 // 格式话图标数据
                 this.formatRes(res)
               }else{
-                this.$Message.error(res.message);
+                this.$Message.error(res && res.message?res.message:'暂无数据');
               }
           })
         },

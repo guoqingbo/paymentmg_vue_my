@@ -63,7 +63,7 @@ export default {
             if(element.value instanceof Date){
               element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
             }
-            if(element.name == 'startDate' || element.disabledDate){
+            if(element.name == 'startDate' || element.name == 'date'){
               startDateItem = element
               // 初始化时间限制
                if(!element.onChange1){
