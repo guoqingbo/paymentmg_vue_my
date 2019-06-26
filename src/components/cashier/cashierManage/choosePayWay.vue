@@ -1,6 +1,6 @@
 <template>
   <div class="cashier-box">
-    <h3 class="cashier-title">账号充值</h3>
+    <h3 class="cashier-title">确认并支付</h3>
     <Row class="account-info">
       <Col span="16" class="account-info-left">
         <p>收款商户：{{initCrashier.payOrder.merchantName}}</p>
@@ -267,7 +267,7 @@
 </script>
 <style scoped>
   .cashier-box{
-    width: 80%;
+    width: 65%;
     margin: 0 auto;
     font-size: 14px;
   }
