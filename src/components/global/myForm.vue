@@ -25,16 +25,16 @@
         <Input v-if="item.type=='input'"
                :disabled="item.disabled"
                v-model="item.value"
-               :placeholder="'请输入'+item.title"></Input>
+               :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
         <DatePicker v-if="item.type=='date'"
                     type="date"
-                    :placeholder="'请选择'+item.title"
+                    :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"
                     v-model="item.value"
                     format="yyyy-MM-dd"></DatePicker>
         <Select v-if="item.type=='select'"
                 :disabled="item.disabled"
                 v-model="item.value"
-                :placeholder="'请选择'+item.title"
+                :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"
                 @on-open-change="item.onOpenChange?item.onOpenChange($event):''"
                 @on-change="item.onChange?item.onChange($event):''"
                 style="width:220px">
@@ -47,7 +47,7 @@
                :disabled="item.disabled"
                v-model="item.value"
                type="textarea"
-               :placeholder="'请输入'+item.title"
+               :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"
                :autosize="{minRows: 2,maxRows: 5}"></Input>
         <RadioGroup v-if="item.type=='radio'"
                     :disabled="item.disabled"

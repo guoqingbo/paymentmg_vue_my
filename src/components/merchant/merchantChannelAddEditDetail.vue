@@ -221,7 +221,7 @@
             name: ele.configKey,
             type: ele.ifFile == 'F'?'input':'uploadFile',
             rules: [
-              { required: ele.required=='T'?true:false, message: '请输入'+ele.configName, trigger: 'blur' }
+              { required: ele.required=='T'?true:false, message:'请输入'+ele.configName, trigger: 'blur',placeholder:ele.tips?ele.tips:'' }
             ],
             value:ele.configValue?ele.configValue:''
           }
