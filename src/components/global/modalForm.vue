@@ -81,8 +81,10 @@
             if (res.success || res.status === 200) {
               this.modal = false
               this.$Message.info(res.message || '操作成功！')
+              // 刷新列表
               if (this.$parent.$refs.gridTable) {
-                this.$parent.$refs.gridTable.loadpage()
+                this.$store.dispatch('getList')
+                // this.$parent.$refs.gridTable.loadpage()
               }
               this.$emit('on-success', res.data || res)
               this.$emit('input', this.modal)
