@@ -177,7 +177,9 @@
             align: 'center',
             key: 'payTime',
           }
-        ]
+        ],
+        orderInfo:{},
+        loading:false,
       }
     },
     watch: {
@@ -196,14 +198,17 @@
       // 获取订单明细后
       onGetAfter(orderInfo){
         this.refundOrderDetail = orderInfo.refundOrders
+        this.orderInfo = orderInfo
       },
       // 状态同步
       orderSync(){
+        this.loading = true
         let url = '/payorder/synch'
         let params = {
-          id:this.$route.query.id,
+          payNo:this.orderInfo.payNo,
         }
-        this.apiPut(url,params).then(res=>{
+        this.apiPost(url,params).then(res=>{
+          this.loading = false
           if(res.status == 200){
             this.$Message.info(res.message || '同步成功！')
           }
@@ -237,6 +242,7 @@
               {
                 title: "状态同步",
                 type:'Button',
+                loading:this.loading,
                 action: () => {
                   this.orderSync()
                 }

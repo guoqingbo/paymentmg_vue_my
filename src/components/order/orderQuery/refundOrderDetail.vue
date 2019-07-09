@@ -134,7 +134,9 @@
               }],
           }],
         tableUrl:"/refundorder/detail/"+this.$route.query.id,
-        tableParams:{}
+        tableParams:{},
+        orderInfo:{},
+        loading:false
       }
     },
     watch: {
@@ -151,7 +153,7 @@
     methods:{
       // 获取订单明细后
       onGetAfter(orderInfo){
-
+        this.orderInfo = orderInfo
       },
       // 根据订单号和订单来源查询支付订单详情
       getOrderByOrderNo(){
@@ -173,6 +175,7 @@
               {
                 title: "状态同步",
                 type:'Button',
+                loading:this.loading,
                 action: () => {
                   this.orderSync()
                 }
@@ -187,6 +190,20 @@
         this.$store.dispatch("getMerchantSource").then(res=>{
           this.tableRows[3].cols[0].render =  (h, params) => {
             return h('span', this.common.arrayTurnObj(res)[params.orderSource])
+          }
+        })
+      },
+      // 状态同步
+      orderSync(){
+        this.loading = true
+        let url = '/payorder/synch'
+        let params = {
+          payNo:this.orderInfo.payNo,
+        }
+        this.apiPost(url,params).then(res=>{
+          this.loading = false
+          if(res.status == 200){
+            this.$Message.info(res.message || '同步成功！')
           }
         })
       },

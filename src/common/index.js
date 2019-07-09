@@ -131,7 +131,8 @@ const common = {
         obj = h('Button', {
           props: {
             type: 'primary',
-            size: 'small'
+            size: 'small',
+            loading:element.loading
           },
           style: {
             margin: '5px',
