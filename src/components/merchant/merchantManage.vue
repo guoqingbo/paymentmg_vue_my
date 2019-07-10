@@ -44,7 +44,7 @@
           {
             title: '创建时间',
             key: 'createTime',
-            sortable: true,
+            sortable: 'custom',
           },
           {
             title: '操作',

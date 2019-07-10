@@ -22,6 +22,7 @@
         :columns="columns"
         :data="res2.rows"
         :url="url"
+        @on-sort-change = 'sortChange'
         @on-current-change="changeSelection2"
         @on-selection-change="changeSelection2"></Table>
       <Page :total="res2.total"
@@ -118,8 +119,23 @@
         this.$store.state.list.params.page = num
         this.$refs.search.searchSubmit()
       },
+      //在多选模式下有效，只要选中项发生变化时就会触发
       changeSelection2(selection) {
         this.selection = selection
+      },
+      // 排序
+      sortChange({column,key,order}){
+        console.log(column)
+        console.log(key)
+        console.log(order)
+        if(order === 'normal'){
+          delete this.$store.state.list.params.sort
+          delete this.$store.state.list.params.order
+        }else{
+          this.$store.state.list.params.sort = key
+          this.$store.state.list.params.order = order
+        }
+        this.$refs.search.searchSubmit()
       },
       // loadpage() {
       //   this.formateDate()
