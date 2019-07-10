@@ -50,7 +50,7 @@
           {
             cols:[
               {
-                title:'订单编号（元）',
+                title:'订单编号',
                 name:'orderNo',
                 render:(h, params) => {
                   const actions = [
