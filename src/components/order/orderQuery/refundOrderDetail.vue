@@ -1,7 +1,8 @@
 <template>
   <div style="width: 80%;margin: 0 auto">
     <h4 class="table-title">退款订单信息</h4>
-    <myTable :tableRows="tableRows"
+    <myTable ref="myTable"
+             :tableRows="tableRows"
              :btnShow="true"
              :url="tableUrl"
              :params="tableParams"
@@ -167,20 +168,23 @@
       getRefundStatus(){
         this.$store.dispatch("getRefundStatus").then(res=>{
           this.tableRows[1].cols[2].render = (h, params) => {
-            const actions = [
+            let actions = [
               {
                 title: this.common.arrayTurnObj(res)[params.payStatus],
                 type:'text',
               },
-              {
+            ];
+            if(params.payStatus == '21'){
+              // 退款中时
+              actions.push({
                 title: "状态同步",
                 type:'Button',
                 loading:this.loading,
                 action: () => {
                   this.orderSync()
                 }
-              },
-            ];
+              })
+            }
             return this.common.columnsItemRender(h, actions);
           }
         })
@@ -204,6 +208,8 @@
           this.loading = false
           if(res.status == 200){
             this.$Message.info(res.message || '同步成功！')
+            // 更新详情
+            this.$refs.myTable.getDetail()
           }
         })
       },

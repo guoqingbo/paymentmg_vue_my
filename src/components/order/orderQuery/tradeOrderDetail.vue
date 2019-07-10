@@ -1,7 +1,8 @@
 <template>
   <div style="width: 80%;margin: 0 auto">
     <h4 class="table-title">订单信息</h4>
-    <myTable :tableRows="tableRows"
+    <myTable ref="myTable"
+             :tableRows="tableRows"
              :url="tableUrl"
              :params="tableParams"
               @onGetAfter="onGetAfter"></myTable>
@@ -211,6 +212,8 @@
           this.loading = false
           if(res.status == 200){
             this.$Message.info(res.message || '同步成功！')
+            // 更新详情
+            this.$refs.myTable.getDetail()
           }
         })
       },
@@ -234,20 +237,23 @@
       getPayStatus(){
         this.$store.dispatch("getPayStatus").then(res=>{
           this.tableRows[1].cols[1].render = (h, params) => {
-            const actions = [
+            let actions = [
               {
                 title: this.common.arrayTurnObj(res)[params.payStatus],
                 type:'text',
               },
-              {
+            ];
+            if(params.payStatus ==11){
+              // 支付中时
+              actions.push({
                 title: "状态同步",
                 type:'Button',
                 loading:this.loading,
                 action: () => {
                   this.orderSync()
                 }
-              },
-            ];
+              })
+            }
             return this.common.columnsItemRender(h, actions);
           }
         })
