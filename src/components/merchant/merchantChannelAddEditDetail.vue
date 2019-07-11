@@ -201,7 +201,10 @@
       },
       //获取渠道产品支付配置
       getPayConfig(e){
-        this.apiGet('/merchantChannel/payConfig/channelProduct/'+e).then(res=>{
+        let params = {
+          merchantCode:this.formList[0].value
+        }
+        this.apiGet('/merchantChannel/payConfig/channelProduct/'+e,params).then(res=>{
           if(res.status == 200){
             // 保留公共选项
             // this.formList.length = 6
