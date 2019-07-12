@@ -158,10 +158,10 @@
       },
       // 根据订单号和订单来源查询支付订单详情
       getOrderByOrderNo(){
-        let {orderNo,orderSource}= this.$route.query
-        if(orderNo && orderSource){
+        let {refundOrderNo,orderSource}= this.$route.query
+        if(refundOrderNo && orderSource){
           this.tableUrl = '/refundorder/detail'
-          this.tableParams = {orderNo,orderSource}
+          this.tableParams = {refundOrderNo,orderSource}
         }
       },
       // 获取退款状态

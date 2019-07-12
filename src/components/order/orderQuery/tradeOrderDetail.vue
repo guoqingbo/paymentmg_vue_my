@@ -152,7 +152,7 @@
                     let href = this.$router.resolve({
                       path:'/order/orderQuery/refundOrderDetail',
                       query:{
-                        orderNo:params.row.orderNo,
+                        refundOrderNo:params.row.refundOrderNo,
                         orderSource:params.row.orderSource
                       }
                     }).href;
