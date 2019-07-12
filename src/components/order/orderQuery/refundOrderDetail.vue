@@ -221,8 +221,12 @@
         if (window.history.length>1) {
           this.$router.back()
         }else{
-          this.$router.push({
-            path: "/order/orderQuery/refundOrderQuery",
+          this.$router.replace({
+            path: "/order/orderQuery/tradeOrderDetail",
+            query:{
+              orderNo:this.orderInfo.orderNo,
+              orderSource:this.orderInfo.orderSource
+            }
           });
         }
       }
