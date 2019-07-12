@@ -13,7 +13,7 @@
            :columns="columns"
            :data="refundOrderDetail"></Table>
     <div class="bottom-btn-box">
-      <Button @click='$router.back()' type="primary">返回</Button>
+      <Button @click='back' type="primary">返回</Button>
     </div>
   </div>
 </template>
@@ -266,6 +266,16 @@
           }
         })
       },
+      // 返回
+      back(){
+        if (window.history.length>1) {
+          this.$router.back()
+        }else{
+          this.$router.push({
+            path: "/order/orderQuery/tradeOrderQuery",
+          });
+        }
+      }
     }
   }
 </script>

@@ -16,7 +16,7 @@
       </tr>
     </table>
     <div class="bottom-btn-box" v-if="btnShow">
-      <Button @click='$router.back()' type="primary">返回</Button>
+      <Button @click='back()' type="primary">返回</Button>
     </div>
   </div>
 </template>
@@ -74,6 +74,13 @@
       this.getDetail()
     },
     methods:{
+      back(){
+        if (this._events.back) {
+          this.$emit("back")
+        }else{
+          this.$router.back()
+        }
+      },
       // 获取表格中的数据
       getDetail(){
         if(this.url){

@@ -3,10 +3,12 @@
     <h4 class="table-title">退款订单信息</h4>
     <myTable ref="myTable"
              :tableRows="tableRows"
-             :btnShow="true"
              :url="tableUrl"
              :params="tableParams"
              @onGetAfter="onGetAfter"></myTable>
+    <div class="bottom-btn-box">
+      <Button @click='back' type="primary">返回</Button>
+    </div>
   </div>
 </template>
 <script>
@@ -213,6 +215,17 @@
           }
         })
       },
+      // 返回
+      back(){
+        console.log(window.history)
+        if (window.history.length>1) {
+          this.$router.back()
+        }else{
+          this.$router.push({
+            path: "/order/orderQuery/refundOrderQuery",
+          });
+        }
+      }
     }
   }
 </script>
@@ -220,5 +233,9 @@
   .table-title {
     padding: 5px 0;
     font-size: 14px;
+  }
+  .bottom-btn-box {
+    margin-top: 20px;
+    text-align: center;
   }
 </style>
