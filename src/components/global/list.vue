@@ -32,6 +32,7 @@
             show-total
             show-sizer
             show-elevator
+            :current="$store.state.list.params.page"
             :page-size="limit"></Page>
       <!--show-sizer-->
       <!--show-elevator-->
@@ -125,9 +126,7 @@
       },
       // 排序
       sortChange({column,key,order}){
-        console.log(column)
-        console.log(key)
-        console.log(order)
+        this.$store.state.list.params.page = 1
         if(order === 'normal'){
           delete this.$store.state.list.params.sort
           delete this.$store.state.list.params.order
