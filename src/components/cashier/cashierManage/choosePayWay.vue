@@ -99,7 +99,7 @@
           payOrder:{}
         },
 
-        qrcodeUrl:'123',
+        qrcodeUrl:'',
         modal:false,
         params:{
 
@@ -139,26 +139,31 @@
       //
       // }
       // 获取支付图标
-      getPayIcon(code){
+      getPayWay(code){
         let icon = ''
+        let text = ''
        this.payWays.forEach(ele=>{
          if(ele.label == code){
            icon = ele.icon
+           text = ele.text
          }
        })
-        return icon
+        return {icon,text}
       },
       latestPayInfo(){
         let latestPayInfo = this.initCrashier.latestPayInfo
         if(latestPayInfo){
           let label = latestPayInfo.payProductCode+","+latestPayInfo.channelProductCode
-          let text = latestPayInfo.yeeBankName
+          let {icon,text} = this.getPayWay(latestPayInfo.payProductCode)
+          if(latestPayInfo.yeeBankName){
+            text += " "+latestPayInfo.yeeBankName
+          }
           if(latestPayInfo.yeeBankCardTail){
             text += ' | 尾号 ' +latestPayInfo.yeeBankCardTail
           }
           this.payWays.unshift({
             firstText:'上次支付方式',
-            icon:this.getPayIcon(latestPayInfo.payProductCode),
+            icon,
             text,
             label,
           })

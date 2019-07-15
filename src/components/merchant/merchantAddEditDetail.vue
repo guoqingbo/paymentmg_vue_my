@@ -39,7 +39,6 @@
             title: '企业名称',
             name: 'corpName',
             type: 'input',
-
             rules: [{required: true, message: '请输入企业名称', trigger: 'blur'},
               {max: 50, message: "企业名称不超过50字符", trigger: 'blur'}]
           },
