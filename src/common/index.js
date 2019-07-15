@@ -317,7 +317,7 @@ const common = {
             wi = factor[i]
             sum += ai * wi
           }
-          if (parity[sum % 11] !== value[17].toUpperCase()) {
+          if (parity[sum % 11] != value[17].toUpperCase()) {
             callback(new Error('身份证号校验位错误!'))
           }
         }
