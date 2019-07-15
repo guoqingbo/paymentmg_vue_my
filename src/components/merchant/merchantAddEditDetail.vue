@@ -41,19 +41,19 @@
             type: 'input',
 
             rules: [{required: true, message: '请输入企业名称', trigger: 'blur'},
-              {max: 60, message: "企业名称不超过50字符", trigger: 'blur'}]
+              {max: 50, message: "企业名称不超过50字符", trigger: 'blur'}]
           },
           {
             title: '上级商户号',
             name: 'parentMerchantCode',
             type: 'input',
-            rules: [{max: 60, message: "上级商户号不超过50字符", trigger: 'blur'}]
+            rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
           },
           {
             title: '法定代表人姓名',
             name: 'legalPersonName',
             type: 'input',
-            rules: [{max: 60, message: "法定代表人姓名不超过50字符", trigger: 'blur'}]
+            rules: [{max: 50, message: "法定代表人姓名不超过50字符", trigger: 'blur'}]
           },
           {
             title: '身份证号码',
@@ -67,19 +67,19 @@
             title: '社会统一信用代码',
             name: 'unifiedSocialCreditCode',
             type: 'input',
-            rules: [{max: 60, message: "信用代码不超过50字符", trigger: 'blur'}]
+            rules: [{max: 50, message: "信用代码不超过50字符", trigger: 'blur'}]
           },
           {
             title: '开户行名称',
             name: 'bankName',
             type: 'input',
-            rules: [{max: 60, message: "开户行名称不得超过50字符", trigger: 'blur'}]
+            rules: [{max: 50, message: "开户行名称不得超过50字符", trigger: 'blur'}]
           },
           {
             title: '银行账号',
             name: 'accountNo',
             type: 'input',
-            rules: [{max: 60, message: "银行账号不得超过50字符", trigger: 'blur'}]
+            rules: [{max: 50, message: "银行账号不得超过50字符", trigger: 'blur'}]
           },
           {
             title: '所在地区',
