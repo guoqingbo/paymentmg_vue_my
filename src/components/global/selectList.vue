@@ -74,17 +74,6 @@ export default {
     addrCode(val, oldVal){
       this.updateArea()
     },
-    // async addrCode(val, oldVal) {
-    //   if (val){
-    //     this.updateArea()
-    //   } else {
-    //     this.sheng = "";
-    //     this.shi = "";
-    //     this.qu = "";
-    //     this.shi1 = [];
-    //     this.qu1 = [];
-    //   }
-    // }
   },
   mounted() {
     // this.$nextTick(async () => {
@@ -115,6 +104,7 @@ export default {
           break;
         }
       }
+      this.emitArea()
     },
     // 选市
     choseCity(e) {
@@ -126,6 +116,7 @@ export default {
           break;
         }
       }
+      this.emitArea()
       // let params = {
       //   parentCode:e
       // }
@@ -149,59 +140,60 @@ export default {
           break;
         }
       }
-      if(this.sheng && this.shi && this.qu){
-        let area = [{
-          value:this.sheng,
-          label:this.shengName
-        },{
-          value:this.shi,
-          label:this.shiName
-        },{
-          value:this.qu,
-          label:this.quName
-        }]
-        this.$emit("getQu", area,this.fieldName)
-      }
+      // if(this.sheng && this.shi && this.qu){
+      //   this.emitArea
+      // }
+      this.emitArea()
       // this.areaCode = this.sheng+"-"+this.shi+"-"+ this.qu;
 
     },
-    // 获取选择后的省市区编码
-    // getArea(){
-    //   let areaCode =  this.sheng+"-"+this.shi+"-"+ this.qu;
-    //   return areaCode
-    // },
+    // 暴露区域
+    emitArea(){
+      let area = [{
+        value:this.sheng,
+        label:this.shengName
+      },{
+        value:this.shi,
+        label:this.shiName
+      },{
+        value:this.qu,
+        label:this.quName
+      }]
+      this.$emit("getQu", area,this.fieldName)
+    },
     // 更新市或区
     updateArea(){
       if (this.addrCode){
         let [sheng,shi,qu] = this.addrCode.split("-")
-        if(sheng && shi && qu){
-          this.sheng = sheng;
-          this.shi = shi;
-          this.qu = qu;
-          this.$store.dispatch("getCityData").then(res => {
-            this.province = res.data;
-            for (let index2 in this.province) {
-              if (sheng === this.province[index2].areaCode) {
-                this.shi1 =  this.province[index2].subList
-                this.shengName = this.province[index2].areaName
-                break;
-              }
+        // if(sheng && shi && qu){
+        //
+        // }
+        this.sheng = sheng;
+        this.shi = shi;
+        this.qu = qu;
+        this.$store.dispatch("getCityData").then(res => {
+          this.province = res.data;
+          for (let index2 in this.province) {
+            if (sheng === this.province[index2].areaCode) {
+              this.shi1 =  this.province[index2].subList
+              this.shengName = this.province[index2].areaName
+              break;
             }
-            for (let index3 in this.shi1) {
-              if (shi === this.shi1[index3].areaCode) {
-                this.qu1 =  this.shi1[index3].subList
-                this.shiName =  this.shi1[index3].areaName
-                break;
-              }
+          }
+          for (let index3 in this.shi1) {
+            if (shi === this.shi1[index3].areaCode) {
+              this.qu1 =  this.shi1[index3].subList
+              this.shiName =  this.shi1[index3].areaName
+              break;
             }
-            for (let index4 in this.qu1) {
-              if (qu === this.qu1[index4].areaCode) {
-                this.quName = this.qu1[index4].areaName
-                break;
-              }
+          }
+          for (let index4 in this.qu1) {
+            if (qu === this.qu1[index4].areaCode) {
+              this.quName = this.qu1[index4].areaName
+              break;
             }
-          });
-        }
+          }
+        });
       }
     }
   }

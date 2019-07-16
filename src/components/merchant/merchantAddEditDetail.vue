@@ -152,7 +152,11 @@
                   ele.type += "Text"
                   if (ele.name == 'area') {
                     // 初始化区域
-                    let addrCodeName = [res.data.province, res.data.city, res.data.district]
+                    let addrCodeName = [res.data.province, res.data.city, res.data.district].filter(ele=>{
+                      if(ele){
+                        return true
+                      }
+                    })
                     ele.areaText = addrCodeName.join("-")
                   }
                 }
@@ -160,9 +164,10 @@
                   // 如果是编辑页
                   if (ele.name == 'area') {
                     let addrCode = [res.data.provinceCode, res.data.cityCode, res.data.districtCode]
-                    if (addrCode[0] && addrCode[1] && addrCode[2]) {
-                      ele.addrCode = addrCode.join("-")
-                    }
+                    ele.addrCode = addrCode.join("-")
+                    // if (addrCode[0] && addrCode[1] && addrCode[2]) {
+                    //   ele.addrCode = addrCode.join("-")
+                    // }
                   }
                 }
               })

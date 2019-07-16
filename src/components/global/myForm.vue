@@ -56,12 +56,12 @@
                  :label="sitem.value"
                  :key="sitem.value">{{ sitem.label }}</Radio>
         </RadioGroup>
-        <select-item v-if="item.type=='area'"
+        <selectList v-if="item.type=='area'"
                      :disabled="item.disabled"
                      :fieldName="item.name"
                      @getQu="getQu"
                     :addrCode="item.addrCode"
-                    :span='8'></select-item>
+                    :span='8'></selectList>
         <span class="detail-text" v-if="item.type=='areaText'">
           {{item.areaText}}
         </span>
@@ -83,10 +83,10 @@
   </div>
 </template>
 <script>
-  import selectItem from "@/components/global/selectList";
+  import selectList from "@/components/global/selectList";
   import uploadFile from "@/components/global/uploadFile";
 export default {
-  components:{selectItem,uploadFile},
+  components:{selectList,uploadFile},
   data () {
     return {
       formItem: {
