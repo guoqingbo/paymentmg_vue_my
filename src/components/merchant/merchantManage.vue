@@ -21,7 +21,8 @@
         columns: [
           {
             title: '序号',
-            type:'index'
+            type:'index',
+            width:60,
           },
           {
             title: '商户号',

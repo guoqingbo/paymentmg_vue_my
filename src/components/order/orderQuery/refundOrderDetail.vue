@@ -65,7 +65,8 @@
                           path:'/order/orderQuery/tradeOrderDetail',
                           query:{
                             orderNo:params.orderNo,
-                            orderSource:params.orderSource
+                            orderSource:params.orderSource,
+                            merchantSourceNo:params.merchantSourceNo
                           }
                         }).href;
                         window.open(href, '_blank');
@@ -160,10 +161,10 @@
       },
       // 根据订单号和订单来源查询支付订单详情
       getOrderByOrderNo(){
-        let {refundOrderNo,orderSource}= this.$route.query
-        if(refundOrderNo && orderSource){
+        let {refundOrderNo,orderSource,merchantSourceNo}= this.$route.query
+        if(refundOrderNo && orderSource && merchantSourceNo){
           this.tableUrl = '/refundorder/detail'
-          this.tableParams = {refundOrderNo,orderSource}
+          this.tableParams = {refundOrderNo,orderSource,merchantSourceNo}
         }
       },
       // 获取退款状态
@@ -221,12 +222,16 @@
         if (window.history.length>1) {
           this.$router.back()
         }else{
-          this.$router.replace({
-            path: "/order/orderQuery/tradeOrderDetail",
-            query:{
-              orderNo:this.orderInfo.orderNo,
-              orderSource:this.orderInfo.orderSource
-            }
+          // this.$router.replace({
+          //   path: "/order/orderQuery/tradeOrderDetail",
+          //   query:{
+          //     orderNo:this.orderInfo.orderNo,
+          //     orderSource:this.orderInfo.orderSource,
+          //     merchantSourceNo:this.orderInfo.merchantSourceNo
+          //   }
+          // });
+          this.$router.push({
+            path: "/order/orderQuery/refundOrderQuery",
           });
         }
       }
