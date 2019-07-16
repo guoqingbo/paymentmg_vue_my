@@ -22,7 +22,8 @@
           {
             title: '序号',
             type:'index',
-            sortable: true,
+            width:60,
+            align:'center'
           },
           {
             title: '渠道编码',

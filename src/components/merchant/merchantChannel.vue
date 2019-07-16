@@ -25,6 +25,7 @@
             title: '序号',
             type:'index',
             width:60,
+            align:'center'
           },
           {
             title: '商户编号',

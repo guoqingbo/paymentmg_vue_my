@@ -26,7 +26,9 @@
         columns: [
           {
             title: '序号',
-            type:'index'
+            type:'index',
+            width:60,
+            align:'center'
           },
           {
             title: '规则编号',
@@ -34,7 +36,7 @@
           },
           {
             title: '订单来源',
-            key: 'source',       
+            key: 'source',
             render:''
           },
           {
@@ -43,19 +45,19 @@
           },
           {
             title: '渠道产品',
-            key: 'createTime',            
+            key: 'createTime',
           },
           {
             title: '单笔交易限额',
-            key: 'createTime',            
+            key: 'createTime',
           },
           {
             title: '单日累计交易限额',
-            key: 'createTime',            
+            key: 'createTime',
           },
           {
             title: '状态',
-            key: 'createTime',            
+            key: 'createTime',
           },
           {
             title: '操作',
@@ -90,7 +92,7 @@
         },
         url: '/merchantRelation/grid',
         searchItems: [
-    
+
         ],
         hannleItems: [
           {
@@ -173,7 +175,7 @@
     methods: {
        // 获取订单来源
       getMerchantSource(){
-      
+
         this.$store.dispatch("getMerchantSource").then(res=>{
           this.formItems[0].data = res
           // 表格商户来源转换

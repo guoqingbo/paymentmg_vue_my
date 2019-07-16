@@ -22,7 +22,9 @@
         columns: [
           {
             title: '序号',
-            type:'index'
+            type:'index',
+            width:60,
+            align:'center'
           },
           {
             title: '下单时间',
