@@ -10,6 +10,7 @@ const globalConfig = {
     payStatus:'',//支付状态
     refundStatus:'',// 退款状态
     auditType:'',// 清算类型
+    payChannel:''// 支付渠道
 
   },
   getters: {
@@ -64,6 +65,23 @@ const globalConfig = {
         context.state.payProduct = payProduct
       }
       return context.state.payProduct
+    },
+    // 获取支付渠道
+    async getPayChannel(context){
+      if(!context.state.payChannel){
+        let payChannel = []
+        let res = await apiGet("/riskPayLimit/channel/list")
+        if(res.status == 200){
+          res.data.forEach((ele)=>{
+            payChannel.push({
+              value:ele.channelCode,
+              label:ele.channelName
+            })
+          })
+        }
+        context.state.payChannel = payChannel
+      }
+      return context.state.payChannel
     },
     // 获取商户来源
     async getMerchantSource(context){

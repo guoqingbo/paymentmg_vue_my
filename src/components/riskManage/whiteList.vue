@@ -6,11 +6,16 @@
           :params="params"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
+    <confirm ref="confirmModel"
+             :content="content"
+             :sucessMsg="sucessMsg"
+             :mode="mode"></confirm>
 
   </div>
 </template>
 <script>
   import list from '@/components/global/list'
+  import confirm from '@/components/global/confirm'
   export default {
     data () {
       return {
@@ -23,28 +28,28 @@
           },
            {
             title: '订单来源',
-            key: 'source',
+            key: 'orderSource',
             sortable: true,
             render:''
           },
           {
             title: '用户标识',
-            key: 'merchantName',
+            key: 'userSourceNo',
             sortable: true,
           },
           {
             title: '加入时间',
-            key: 'sourceMerchantCode',
+            key: 'createTime',
             sortable: true,
           },
           {
             title: '操作员',
-            key: 'createTime',
+            key: 'modifyBy',
             sortable: true,
           },
            {
             title: '解除拦截规则',
-            key: 'createTime',
+            key: 'ruleNo',
             sortable: true,
           },
           {
@@ -55,11 +60,15 @@
                 {
                   title: "取消白名单",
                   action: () => {
-                    this.mode = "delete";
-                    this.sucessMsg = "删除成功！";
-                    this.content = "确定删除？";
+                    this.mode = "done";
+                    this.sucessMsg = "取消白名单成功！";
+                    this.content = "确定取消白名单？";
+                    let param = {
+                      orderSource:params.row.orderSource,
+                      userSourceNo:params.row.userSourceNo,
+                    }
                     this.$refs.confirmModel.confirm(
-                      "/merchantRelation/delete/" + params.row.id
+                      "/riskWhiteList/removeWhiteList",param
                     );
                   }
                 }
@@ -72,7 +81,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchantRelation/grid',
+        url: '/riskWhiteList/grid',
         searchItems: [
           {
             label: '用户标识',
@@ -93,36 +102,48 @@
           },
         ],
         hannleItems: [
-        ]
+        ],
+        mode: "",
+        content: "",
+        sucessMsg: "",
       }
     },
     computed:{
 
     },
     created(){
+      // 获取订单来源
       this.getMerchantSource()
+      // 获取支付渠道
+      this.getPayChannel()
     },
     mounted () {
 
     },
-    components: {list},
+    components: {list,confirm},
     methods: {
+      // 获取订单来源
       getMerchantSource(){
-        // 获取商户来源
         this.$store.dispatch("getMerchantSource").then(res=>{
-          let merchantSource = this.$store.state.global.merchantSource
-          this.formItems[0].data = this.searchItems[2].data = merchantSource
+          let merchantSource = res
+          this.searchItems[2].data = merchantSource
 
           // 表格商户来源转换
           let source={}
           merchantSource.forEach(ele=>{
             source[ele.value] = ele.label
           })
-          this.columns[3].render = (h, params) => {
-            return h('span', source[params.row.source])
+          this.columns[1].render = (h, params) => {
+            return h('span', source[params.row.orderSource])
           }
         })
-      }
+      },
+      // 获取支付渠道
+      getPayChannel(){
+        this.$store.dispatch("getPayChannel").then(res=>{
+          this.searchItems[1].data = res
+        })
+      },
     }
   }
 </script>

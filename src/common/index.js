@@ -319,7 +319,11 @@ const common = {
           }
           if (parity[sum % 11] != value[17].toUpperCase()) {
             callback(new Error('身份证号校验位错误!'))
+          }else {
+            callback()
           }
+        }else{
+          callback()
         }
       }
     }

@@ -153,6 +153,7 @@
                       path:'/order/orderQuery/refundOrderDetail',
                       query:{
                         refundOrderNo:params.row.refundOrderNo,
+                        orderNo:params.row.orderNo,
                         orderSource:params.row.orderSource,
                         merchantSourceNo:this.orderInfo.merchantSourceNo
                       }

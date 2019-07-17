@@ -77,6 +77,9 @@
                 saveMethod = 'apiPut'
                 break
             }
+            if (this._events.beforeSave) {
+              this.$emit("beforeSave", this.$refs.myForm.formItem)
+            }
             let res = await this[saveMethod](this.url, this.$refs.myForm.formItem)
             if (res.success || res.status === 200) {
               this.modal = false

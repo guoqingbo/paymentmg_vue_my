@@ -13,6 +13,7 @@
     <modalForm v-model="formShow"
                :formItems="formItems"
                :url="formUrl"
+               @beforeSave="beforeSave"
                :title="formTitle"></modalForm>
   </div>
 </template>
@@ -32,32 +33,35 @@
           },
           {
             title: '规则编号',
-            key: 'merchantCode',
+            key: 'ruleNo',
           },
           {
             title: '订单来源',
-            key: 'source',
+            key: 'orderSource',
             render:''
           },
           {
             title: '支付渠道',
-            key: 'sourceMerchantCode',
+            key: 'channelName',
           },
           {
             title: '渠道产品',
-            key: 'createTime',
+            key: 'channelProductName',
           },
           {
             title: '单笔交易限额',
-            key: 'createTime',
+            key: 'singleLimit',
           },
           {
             title: '单日累计交易限额',
-            key: 'createTime',
+            key: 'dayLimit',
           },
           {
             title: '状态',
-            key: 'createTime',
+            key: 'status',
+            render: (h, params) => {
+              return h('span', this.filter.turn('payLimitStatus',params.row.status))
+            }
           },
           {
             title: '操作',
@@ -68,6 +72,8 @@
                   title: "修改",
                   action: () => {
                     this.formShow = true
+                    this.detail = params.row
+                    this.setDetail()
                   }
                 },
                 {
@@ -77,7 +83,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchantRelation/delete/" + params.row.id
+                      "/riskPayLimit/delete/" + params.row.id
                     );
                   }
                 }
@@ -90,7 +96,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchantRelation/grid',
+        url: '/riskPayLimit/grid',
         searchItems: [
 
         ],
@@ -100,6 +106,9 @@
             icon: 'md-add',
             callback: () => {
               this.formShow = true
+              // 清空详情
+              this.detail = ''
+              this.setDetail()
             }
           }
         ],
@@ -113,14 +122,14 @@
         formItems: [
           {
             title: '订单来源',
-            name: 'source',
+            name: 'orderSource',
             type: 'select',
             data: '',
-            rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            rules: [{ required: true, message: '请选择订单来源', trigger: 'change' }]
           },
            {
             title: '支付渠道',
-            name: 'payChannel',
+            name: 'channelCode',
             type: 'select',
             data: '',
             onChange:this.getChannelProduct,
@@ -128,34 +137,38 @@
           },
            {
             title: '渠道支付产品',
-            name: 'channelPayProduct',
+            name: 'channelProductCode',
             type: 'select',
             data: '',
-            rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            rules: [{ required: true,message: '请选择渠道支付产品', trigger: 'change' }]
           },
           {
             title: '单笔限额（元）',
-            name: 'sourceMerchantCode',
+            name: 'singleLimit',
             type: 'input',
-            rules: [{ required: true, message: '请输入来源商户号', trigger: 'blur' },
-              {max: 20, message: "来源商户号不超过20字符", trigger: 'blur'}]
+            rules: [{required: true,validator: this.validateLimit, trigger: "blur",message1: "请输入单笔限额"},
+              // {max: 20, message: "单笔限额不超过20字符", trigger: 'blur'}
+            ]
           },
           {
             title: '单日累计限额（元）',
-            name: 'merchantCode',
+            name: 'dayLimit',
             type: 'input',
-            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
-              {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
+            rules: [{required: true,validator: this.validateLimit, trigger: "blur",message1: "请输入单日累计限额"},
+              // {max: 20, message: "单日累计限额不超过20字符", trigger: 'blur'}
+            ]
           },
           {
             title: '是否启用',
-            name: 'isForbid',
+            name: 'status',
             type: 'radio',
-            data: [{label:'启用',value:'1'},{label:'禁用',value:'0'}],
-            rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            data: this.common.dic.payLimitStatus,
+            value:0,
+            rules: [{ required: false, type:'number'}]
           },
         ],
-        formUrl: '/merchantRelation/save'
+        formUrl: '/riskPayLimit/saveOrUpdate',
+        detail:'',
       }
     },
     computed:{
@@ -165,7 +178,7 @@
       // 获取订单来源
       this.getMerchantSource()
       // 获取支付渠道
-      this.getChannel()
+      this.getPayChannel()
 
     },
     mounted () {
@@ -184,27 +197,27 @@
             source[ele.value] = ele.label
           })
           this.columns[2].render = (h, params) => {
-            return h('span', source[params.row.source])
+            return h('span', source[params.row.orderSource])
           }
         })
       },
       // 获取支付渠道
-      getChannel(){
-        this.$store.dispatch("getChannel").then(res=>{
+      getPayChannel(){
+        this.$store.dispatch("getPayChannel").then(res=>{
           this.formItems[1].data = res
         })
       },
-      // 根据支付产品获取渠道产品
+      // 根据支付渠道获取渠道产品
       getChannelProduct(e){
         if(!e){
           return
         }
-        this.apiGet('/channelProduct/payProductId/'+e).then(res=>{
+        this.apiGet('/riskPayLimit/channelProduct/list',{channelCode:e}).then(res=>{
           let channelProduct = []
           if(res.status == 200){
             res.data.forEach((ele)=>{
               channelProduct.push({
-                value:ele.id,
+                value:ele.channelProductCode,
                 label:ele.channelProductName
               })
             })
@@ -212,6 +225,40 @@
           this.formItems[2].data = channelProduct
         })
       },
+      // 单笔交易限额、单日累计交易限额校验
+      validateLimit(rule, value, callback) {
+
+        let regexp = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
+        if (rule.required && !value) {
+          callback(new Error(rule.message1))
+        } else if (value <= 0 || value >= 100000000) {
+          callback(new Error('请输入大于0小于1亿的数'))
+        } else if (!(regexp.test(value))) {
+          callback(new Error('数据格式不正确！'))
+        } else {
+          callback()
+        }
+      },
+      // 设置详情页
+      setDetail(){
+        this.formItems.forEach((ele,index)=>{
+          ele.value = this.detail[ele.name]
+          // 新增时默认是否启用为停用
+          if(ele.name == 'status' && typeof this.detail[ele.name] == 'undefined'){
+            ele.value = 0
+          }
+        })
+        // 获取渠道支付产品
+        if(this.detail.channelCode){
+          this.getChannelProduct(this.detail.channelCode)
+        }
+      },
+      // 保存提交之前
+      beforeSave(params){
+        if(this.detail.id){
+          params.id = this.detail.id
+        }
+      }
     }
   }
 </script>

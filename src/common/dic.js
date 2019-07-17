@@ -10,6 +10,11 @@ let dic = {
     {label:"不可用",value:0},
     {label:"可用",value:1},
   ],
+  // 支付限额状态
+  payLimitStatus: [
+    {label:"启用",value:1},
+    {label:"停用",value:0},
+  ],
   // channelType: [
   //   {label:"银行",value:0},
   //   {label:"支付公司",value:1},

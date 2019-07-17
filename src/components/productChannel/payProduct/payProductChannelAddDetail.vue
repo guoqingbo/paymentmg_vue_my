@@ -36,7 +36,7 @@
           },
           {
             title: '说明',
-            name: 'productRemark',
+            name: 'remark',
             type: 'textarea',
             rules: [{ max: 100, message: "产品说明不超过100字符" ,trigger: 'blur'}]
           },

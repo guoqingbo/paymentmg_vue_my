@@ -6,11 +6,16 @@
           :params="params"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
+    <confirm ref="confirmModel"
+             :content="content"
+             :sucessMsg="sucessMsg"
+             :mode="mode"></confirm>
 
   </div>
 </template>
 <script>
   import list from '@/components/global/list'
+  import confirm from '@/components/global/confirm'
   export default {
     data () {
       return {
@@ -23,38 +28,41 @@
           },
            {
             title: '订单来源',
-            key: 'source',
+            key: 'orderSource',
             sortable: true,
             render:''
           },
           {
             title: '用户标识',
-            key: 'merchantName',
+            key: 'userSourceNo',
             sortable: true,
           },
           {
             title: '订单编号',
-            key: 'sourceMerchantCode',
+            key: 'orderNo',
             sortable: true,
           },
           {
             title: '拦截规则',
-            key: 'createTime',
+            key: 'ruleDesc',
             sortable: true,
           },
            {
             title: '支付渠道',
-            key: 'createTime',
+            key: 'channelCode',
             sortable: true,
           },
            {
             title: '渠道产品',
-            key: 'createTime',
+            key: 'channelProductCode',
             sortable: true,
+            render: (h, params) => {
+              this.getChannelProduct(params.row.channelCode)
+             }
           },
            {
             title: '拦截时间',
-            key: 'createTime',
+            key: 'interceptTime',
             sortable: true,
           },
           {
@@ -65,11 +73,14 @@
                 {
                   title: "加入白名单",
                   action: () => {
-                    this.mode = "delete";
-                    this.sucessMsg = "删除成功！";
-                    this.content = "确定删除？";
+                    this.mode = "done";
+                    this.sucessMsg = "加入白名单成功！";
+                    this.content = "确定加入白名单？";
+                    let param = {
+                      id:params.row.id
+                    }
                     this.$refs.confirmModel.confirm(
-                      "/merchantRelation/delete/" + params.row.id
+                      "/riskInterceptLog/saveWhiteList/",param
                     );
                   }
                 }
@@ -82,62 +93,99 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchantRelation/grid',
+        url: '/riskInterceptLog/grid',
         searchItems: [
           {
             label: '用户标识',
             type: 'input',
-            name: 'merchantName'
+            name: 'userSourceNo'
           },
           {
             label: '订单编号',
             type: 'input',
-            name: 'merchantCode'
+            name: 'orderNo'
           },
           {
             label: '支付渠道',
             type: 'select',
-            name: 'source',
+            name: 'channelCode',
             data: ''
           },
           {
             label: '订单来源',
             type: 'select',
-            name: 'source',
+            name: 'orderSource',
             data: ''
           },
         ],
         hannleItems: [
-        ]
+        ],
+        mode: "",
+        content: "",
+        sucessMsg: "",
       }
     },
     computed:{
 
     },
     created(){
+      // 获取订单来源
       this.getMerchantSource()
+      // 获取支付渠道
+      this.getPayChannel()
     },
     mounted () {
 
     },
-    components: {list},
+    components: {list,confirm},
     methods: {
+      // 获取订单来源
       getMerchantSource(){
-        // 获取商户来源
         this.$store.dispatch("getMerchantSource").then(res=>{
-          let merchantSource = this.$store.state.global.merchantSource
-          this.formItems[0].data = this.searchItems[2].data = merchantSource
+          let merchantSource = res
+          this.searchItems[3].data = res
 
-          // 表格商户来源转换
+          // 表格订单来源转换
           let source={}
           merchantSource.forEach(ele=>{
             source[ele.value] = ele.label
           })
-          this.columns[3].render = (h, params) => {
-            return h('span', source[params.row.source])
+          this.columns[1].render = (h, params) => {
+            return h('span', source[params.row.orderSource])
           }
         })
-      }
+      },
+      // 获取支付渠道
+      getPayChannel(){
+        this.$store.dispatch("getPayChannel").then(res=>{
+          this.searchItems[2].data = res
+          // 表格支付渠道转换
+          let source={}
+          res.forEach(ele=>{
+            source[ele.value] = ele.label
+          })
+          this.columns[5].render = (h, params) => {
+            return h('span', source[params.row.channelCode])
+          }
+        })
+      },
+      // 根据支付渠道获取渠道产品
+      getChannelProduct(e){
+        if(!e){
+          return
+        }
+        this.apiGet('/riskPayLimit/channelProduct/list',{channelCode:e}).then(res=>{
+          let source={}
+          if(res.status == 200){
+            res.data.forEach((ele)=>{
+              source[ele.channelProductCode] = ele.channelProductName
+            })
+          }
+          this.columns[6].render = (h, params) => {
+            return h('span', source[params.row.channelProductCode])
+          }
+        })
+      },
     }
   }
 </script>

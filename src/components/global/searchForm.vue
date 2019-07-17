@@ -63,14 +63,17 @@ export default {
             if(element.value instanceof Date){
               element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
             }
-            if(element.name == 'startDate' || element.name == 'date'){
+
+            if(element.name == 'startDate' ||
+              element.name == 'orderTimeStart' ||
+              element.name == 'date'){
               startDateItem = element
               // 初始化时间限制
                if(!element.onChange1){
                   element.options.disabledDate = element.disabledDate
                 }
             }
-            if(element.name == 'endDate'){
+            if(element.name == 'endDate' ||  element.name == 'orderTimeEnd'){
               endDateItem = element
                // 初始化时间限制
               if(!element.onChange1){
@@ -80,7 +83,7 @@ export default {
             this.$set(this.searchForm, element.name, element.value)
           }
         })
-        
+
         // 开始时间结束时间限制
         if(startDateItem && endDateItem){
           startDateItem.onChange1=(date1)=>{
