@@ -10,8 +10,8 @@ const globalConfig = {
     payStatus:'',//支付状态
     refundStatus:'',// 退款状态
     auditType:'',// 清算类型
-    payChannel:''// 支付渠道
-
+    payChannel:'',// 支付渠道
+    channelProduct:''// 渠道产品
   },
   getters: {
     // getPayProduct: (state) => (username) => {
@@ -83,7 +83,24 @@ const globalConfig = {
       }
       return context.state.payChannel
     },
-    // 获取商户来源
+    // 获取支付渠道
+    async getChannelProduct(context){
+      if(!context.state.channelProduct){
+        let channelProduct = []
+        let res = await apiGet("/riskPayLimit/channelProduct/all")
+        if(res.status == 200){
+          res.data.forEach((ele)=>{
+            channelProduct.push({
+              value:ele.channelProductCode,
+              label:ele.channelProductName
+            })
+          })
+        }
+        context.state.channelProduct = channelProduct
+      }
+      return context.state.channelProduct
+    },
+    // 获取商户来源或订单来源
     async getMerchantSource(context){
       if(!context.state.merchantSource){
         let merchantSource = []

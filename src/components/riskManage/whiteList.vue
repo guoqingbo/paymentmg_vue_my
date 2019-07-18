@@ -49,7 +49,7 @@
           },
            {
             title: '解除拦截规则',
-            key: 'ruleNo',
+            key: 'ruleList',
             sortable: true,
           },
           {

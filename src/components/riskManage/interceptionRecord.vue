@@ -56,9 +56,9 @@
             title: '渠道产品',
             key: 'channelProductCode',
             sortable: true,
-            render: (h, params) => {
-              this.getChannelProduct(params.row.channelCode)
-             }
+            // render: (h, params) => {
+            //   this.getChannelProduct(params.row.channelCode)
+            //  }
           },
            {
             title: '拦截时间',
@@ -133,6 +133,8 @@
       this.getMerchantSource()
       // 获取支付渠道
       this.getPayChannel()
+      // 获取渠道产品列表
+      this.getChannelProduct()
     },
     mounted () {
 
@@ -169,18 +171,13 @@
           }
         })
       },
-      // 根据支付渠道获取渠道产品
-      getChannelProduct(e){
-        if(!e){
-          return
-        }
-        this.apiGet('/riskPayLimit/channelProduct/list',{channelCode:e}).then(res=>{
+      // 获取渠道产品列表
+      getChannelProduct(){
+        this.$store.dispatch("getChannelProduct").then(res=>{
           let source={}
-          if(res.status == 200){
-            res.data.forEach((ele)=>{
-              source[ele.channelProductCode] = ele.channelProductName
-            })
-          }
+          res.forEach((ele)=>{
+            source[ele.value] = ele.label
+          })
           this.columns[6].render = (h, params) => {
             return h('span', source[params.row.channelProductCode])
           }
