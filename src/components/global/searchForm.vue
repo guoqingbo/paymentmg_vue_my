@@ -69,6 +69,7 @@ export default {
               element.name == 'date'){
               startDateItem = element
               // 初始化时间限制
+              // onChange1是添加的中间函数
                if(!element.onChange1){
                   element.options.disabledDate = element.disabledDate
                 }
@@ -96,7 +97,7 @@ export default {
               if(endDateItem.disabledDate){
                 disabled = endDateItem.disabledDate(date2)
               }
-              if(date2.valueOf()<new Date(date1).valueOf()){
+           if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
                 // 结束日期不得小于开始日期
                 disabled = true
               }
@@ -113,7 +114,7 @@ export default {
               if(startDateItem.disabledDate){
                 disabled = startDateItem.disabledDate(date2)
               }
-              if(date2.valueOf()>new Date(date1).valueOf()){
+              if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
                 // 开始日期不得大于结束日期
                 disabled = true
               }
@@ -162,6 +163,13 @@ export default {
           this.searchForm[ele.name] = this.common.formatDate(this.searchForm[ele.name], ele.format||"yyyy-MM-dd")
         }
       })
+    },
+    formateDateStr(str){
+      // 日期转为时间戳，如果不带时分秒，则存在时差
+      if(str.length <19){
+        str += ' 00:00:00'.substring(10-str.length)
+      }
+      return str
     }
   }
 }

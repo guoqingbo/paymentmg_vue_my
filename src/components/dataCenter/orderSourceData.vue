@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="order-source">
-      <Button  v-for='item,index in orderSource' 
-               :key="index" 
-               :type='orderIndex==index?"info":"default"' 
+      <Button  v-for='item,index in orderSource'
+               :key="index"
+               :type='orderIndex==index?"info":"default"'
                @click="changeOrderSource(index)">{{item.label}}</Button>
     </div>
     <Row>
@@ -81,10 +81,10 @@
       created(){
           // 获取订单来源
           this.getMerchantSource()
-          
+
       },
       mounted(){
-         
+
       },
       methods: {
         // 获取订单来源
@@ -109,12 +109,16 @@
               endDate:this.common.formatDate(Date.now()-30*24*60*60*1000,"yyyy-MM"),
               src:this.orderSource[this.orderIndex].value
           }
-    
+
           this.apiGet(url,params).then(res=>{
              if(res && res.status == 200){
                 // 格式话图标数据
                 this.formatRes(res)
               }else{
+               // 设置数据
+               this.chartOption.series[0].data = ''
+               // 表格数据
+               this.tableData = []
                 this.$Message.error(res && res.message?res.message:'暂无数据');
               }
           })
@@ -135,7 +139,6 @@
           this.max = xAxisData[xAxisData.length-1]
           // 设置数据
           this.chartOption.series[0].data = seriesData
-
           // 表格数据
           this.tableData = res.data
         },
@@ -145,7 +148,7 @@
           let value = params.row[params.column.key]
           if(value){
               dom =[
-                h('span', value*100+'%'),
+                h('span', value+'%'),
                 h('Icon', {
                     props:{
                         type:value<0?'ios-arrow-round-down':'ios-arrow-round-up',
@@ -156,7 +159,7 @@
                 )]
           }
           return dom
-        }   
+        }
       }
     }
 </script>

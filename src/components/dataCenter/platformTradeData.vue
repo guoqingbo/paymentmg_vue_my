@@ -4,6 +4,7 @@
                 :params="params"
                 :url="url"
                 :searchItems = "searchItems"
+                @searchSubmit="searchSubmit"
                 @afterSubmit="afterSubmit"></searchForm>
     <div class="chart-box">
       <myChart :options="chartOption"></myChart>
@@ -26,13 +27,17 @@
                 format:'yyyy-MM-dd',
                 value:  new Date(Date.now()-30*24*60*60*1000),
                 disabledDate (date) {
-                  let disabled = false
-                  // let endDate = this.$refs.searchForm.searchForm.endDate
-                  // 截至日期昨天为止
-                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                    disabled = true
-                  }
-                  return disabled
+                  // let disabled = false
+                  // // let endDate = this.$refs.searchForm.searchForm.endDate
+                  // // 截至日期昨天为止
+                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  //   disabled = true
+                  // }
+                  // else if(date.valueOf()<this.searchItems[1].value-30*24*60*60*1000){
+                  //   // 查询日期不得超过30天
+                  //   disabled = true
+                  // }
+                  // return disabled
                 },
                 onChange(date){
 
@@ -44,14 +49,28 @@
                 name: 'endDate',
                 format:'yyyy-MM-dd',
                 value: new Date(Date.now()-24*60*60*1000),
+                // options:{
+                //   disabledDate (date) {
+                //     let disabled = false
+                //     // let endDate = this.$refs.searchForm.searchForm.endDate
+                //     // 截至日期昨天为止
+                //     if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                //       disabled = true
+                //     }
+                //     return disabled
+                //   },
+                // },
                 disabledDate (date) {
-                  let disabled = false
-                  // let endDate = this.$refs.searchForm.searchForm.endDate
-                  // 截至日期昨天为止
-                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                    disabled = true
-                  }
-                  return disabled
+                  // let disabled = false
+                  // // let endDate = this.$refs.searchForm.searchForm.endDate
+                  // // 截至日期昨天为止
+                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  //   disabled = true
+                  // }else if(date.valueOf()<new Date(this.searchItems[0].value).valueOf()+30*24*60*60*1000){
+                  //   // 查询日期不得超过30天
+                  //   disabled = true
+                  // }
+                  // return disabled
                 },
                 onChange(date){
 
@@ -140,6 +159,31 @@
               return disabled
             }
           }
+          // 初始化时间限制
+          startSearchItem.onChange(this.common.formatDate(startSearchItem.value,"yyyy-MM-dd"))
+          endSearchItem.onChange(this.common.formatDate(endSearchItem.value,"yyyy-MM-dd"))
+        },
+        // 搜索
+        searchSubmit(params){
+          // 检查搜素条件
+          if(this.checkSearch()){
+            // 执行搜索初始化，获取数据
+            this.$store.dispatch('getList').then(res=>{
+              this.afterSubmit(res)
+            })
+          }
+        },
+        // 检查搜素条件
+        checkSearch(){
+          if(!this.params.startDate){
+            this.$Message.info('请输入开始日期')
+            return false
+          }
+          if(!this.params.endDate){
+            this.$Message.info('请输入结束日期')
+            return false
+          }
+          return true
         },
         // 搜索之后
         afterSubmit(res){
@@ -149,7 +193,8 @@
             // 格式话图标数据
             this.formatRes(res)
           }else{
-            this.$Message.error(res && res.message?res.message:'数据不存在');           
+            this.chartOption.series[0].data = ''
+            this.$Message.error(res && res.message?res.message:'数据不存在');
           }
         },
         // 执行初始化搜搜

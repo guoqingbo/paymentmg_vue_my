@@ -40,15 +40,15 @@
                 type: 'date',
                 name: 'startDate',
                 format:'yyyy-MM-dd',
-                value:  new Date(Date.now()-30*24*60*60*1000),
+                value:  new Date(Date.now()-7*24*60*60*1000),
                 style:'width:130px',
                 disabledDate (date) {
-                  let disabled = false
-                  // 截至日期昨天为止
-                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                    disabled = true
-                  }
-                  return disabled
+                  // let disabled = false
+                  // // 截至日期昨天为止
+                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  //   disabled = true
+                  // }
+                  // return disabled
                 },
                 onChange(date){
 
@@ -62,12 +62,12 @@
                 value: new Date(Date.now()-24*60*60*1000),
                 style:'width:130px',
                 disabledDate (date) {
-                  let disabled = false
-                  // 截至日期昨天为止
-                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                    disabled = true
-                  }
-                  return disabled
+                  // let disabled = false
+                  // // 截至日期昨天为止
+                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  //   disabled = true
+                  // }
+                  // return disabled
                 },
                 onChange(date){
 
@@ -155,6 +155,8 @@
               return disabled
             }
           }
+          startSearchItem.onChange(this.common.formatDate(startSearchItem.value,"yyyy-MM-dd"))
+          endSearchItem.onChange(this.common.formatDate(endSearchItem.value,"yyyy-MM-dd"))
         },
         // 检查搜素条件
         checkSearch(){
@@ -176,7 +178,7 @@
         searchSubmit(params){
           // 合并搜索条件
           this.params = Object.assign(this.$refs.search.searchForm,this.$refs.chartSearch.searchForm)
-        
+
           // 检查搜素条件
           if(this.checkSearch()){
             // 执行搜索初始化，获取数据
@@ -197,14 +199,14 @@
             this.formatRes(res)
           }else{
             this.$Message.error(res.message);
-            
+
           }
         },
         // 格式化图标数据
         formatRes(res){
           let xAxisData = []
           let seriesData = []
-          let list = res.data.mchTradeStatisticsList      
+          let list = res.data.mchTradeStatisticsList
           Object.keys(list).forEach((ele,index)=>{
             xAxisData.push(ele)
             seriesData.push(list[ele])

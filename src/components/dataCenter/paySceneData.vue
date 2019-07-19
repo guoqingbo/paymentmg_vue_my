@@ -47,7 +47,7 @@
             name: 'date',
             format:'yyyy-MM-dd',
             value: new Date(Date.now()-24*60*60*1000),
-            disabledDate (date) {              
+            disabledDate (date) {
               let disabled = false
               // 截至日期昨天为止
               if(date && date.valueOf() > Date.now()-24*60*60*1000){
@@ -107,7 +107,7 @@
     },
     computed: {},
     created() {
-      
+
     },
     methods: {
         // 检查搜素条件
@@ -127,7 +127,7 @@
         searchSubmit(params){
           // 搜索条件
           this.params = params
-        
+
           // 检查搜素条件
           if(this.checkSearch()){
             // 执行搜索初始化，获取数据
@@ -147,8 +147,8 @@
             // 格式话图标数据
             this.formatRes(res)
           }else{
+            this.tableData.list = []
             this.$Message.error(res.message);
-            
           }
         },
         // 格式化图标数据
@@ -162,7 +162,7 @@
           if(res.data && res.data.subChannelPayProductsVoList){
             rows = rows.concat(res.data.subChannelPayProductsVoList)
           }
-          rows.forEach(ele=>{          
+          rows.forEach(ele=>{
              // 商户名存在
             let ssItem = [ele.channelPayProductName,ele.tradeNum,ele.tradeMoneyAmount]
             if(tempList[ele.merchantName]){
@@ -170,9 +170,9 @@
               let merchantTmp = tempList[ele.merchantName]
               let sceneTmp = tempList[ele.merchantName].list[ele.sceneName]
 
-              let item = list[merchantTmp.index]             
-              item.rowspan++             
-              if(sceneTmp){              
+              let item = list[merchantTmp.index]
+              item.rowspan++
+              if(sceneTmp){
                 // 支付场景存在
                 item.list[sceneTmp.index].list.push({list:ssItem})
               }else{
@@ -202,7 +202,7 @@
               }
               list.push(item)
 
-              // 用于判断是否合并     
+              // 用于判断是否合并
               tempList[ele.merchantName] = {index:list.length-1,list:{}}
               tempList[ele.merchantName].list[ele.sceneName] = {index:item.list.length-1}
             }
@@ -216,7 +216,7 @@
             list.forEach(ele=>{
               let tradeNum = 0
               let tradeMoneyAmount = 0
-              ele.list.forEach(sele=>{            
+              ele.list.forEach(sele=>{
                 sele.list.forEach(ssele=>{
                   tradeNum+=Number(ssele.list[1])
                   tradeMoneyAmount+=Number(ssele.list[2])

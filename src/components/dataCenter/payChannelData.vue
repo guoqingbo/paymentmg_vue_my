@@ -4,6 +4,7 @@
                 :params="params"
                 :url="url"
                 :searchItems = "searchItems"
+                 @searchSubmit="searchSubmit"
                 @afterSubmit="afterSubmit"></searchForm>
     <table class="table">
       <tr>
@@ -20,7 +21,7 @@
             <render  v-if="tableData.th[tdIndex+1].render" :params="tdItem" :render="tableData.th[tdIndex+1].render"></render>
             <template  v-else>
               {{tdItem.title}}
-            </template>        
+            </template>
           </td>
         </tr>
       </template>
@@ -43,7 +44,7 @@
                 name: 'date',
                 format:'yyyy-MM',
                 value: new Date(Date.now()-30*24*60*60*1000),
-                disabledDate (date) {              
+                disabledDate (date) {
                   let disabled = false
                   // 截至日期上个月天为止
                   if(date && date.valueOf() > Date.now()-30*24*60*60*1000){
@@ -77,7 +78,7 @@
             tableData:{
               th:[{title:'支付渠道',name:'payChannelName'},
                 {title:'渠道支付产品',name:'payProductName'},
-                {title:'交易笔数',name:'transactionNo'},
+                {title:'交易笔数',name:'transactionNo',render:this.formateTransactionNo},
                 {title:'环比',name:'transactionNoRr',render:this.formateRate},
                 {title:'交易金额',name:'amount'},
                 {title:'环比',name:'amountRr',render:this.formateRate},
@@ -97,13 +98,33 @@
         this.getDetail()
       },
       methods: {
+        // 搜索
+        searchSubmit(params){
+          // 检查搜素条件
+          if(this.checkSearch()){
+            // 执行搜索初始化，获取数据
+            this.$store.dispatch('getList').then(res=>{
+              this.afterSubmit(res)
+            })
+          }
+        },
+        // 检查搜素条件
+        checkSearch(){
+          if(!this.params.date){
+            this.$Message.info('请输入月份')
+            return false
+          }
+          return true
+        },
         // 搜索之后
         afterSubmit(res){
           if(res.status == 200){
             // 格式话图标数据
             this.formatRes(res)
           }else{
-            this.$Message.error(res.message);           
+            // 清空列表数据
+            this.tableData.list=[]
+            this.$Message.error(res.message);
           }
         },
         // 执行初始化搜搜
@@ -112,7 +133,7 @@
         },
         // 格式化图标数据
         formatRes(res){
-        
+
           let list = []
           if(res.status == 200){
             res.data.forEach((ele)=>{
@@ -127,7 +148,7 @@
                       title:sEle[eleName.name],
                     })
                   })
-                  sList.push({data})                
+                  sList.push({data})
                 })
                 // 合计
                 sList.push({
@@ -143,7 +164,7 @@
                     title:''
                   }]
                 })
-          
+
               }
               let item = {
                 title:ele.payChannelName,
@@ -157,10 +178,10 @@
         },
         //  格式化环比
         formateRate (h, params){
-         let dom;
+          let dom;
           if(params.title){
               dom =[
-                h('span', params.title*100+'%'),
+                h('span', params.title+'%'),
                 h('Icon', {
                     props:{
                         type:params.title<0?'ios-arrow-round-down':'ios-arrow-round-up',
@@ -171,7 +192,12 @@
                 )]
           }
           return dom
-        }   
+        },
+        // 交易笔数格式化
+        formateTransactionNo(h, params){
+          let value =  params.title.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+          return h('span', value);
+        }
       }
     }
 </script>

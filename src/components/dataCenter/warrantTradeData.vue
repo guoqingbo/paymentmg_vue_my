@@ -43,12 +43,12 @@
                 value:  new Date(Date.now()-30*24*60*60*1000),
                 style:'width:130px',
                 disabledDate (date) {
-                  let disabled = false
-                  // 截至日期昨天为止
-                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                    disabled = true
-                  }
-                  return disabled
+                  // let disabled = false
+                  // // 截至日期昨天为止
+                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  //   disabled = true
+                  // }
+                  // return disabled
                 },
                 onChange(date){
 
@@ -62,12 +62,12 @@
                 value: new Date(Date.now()-24*60*60*1000),
                 style:'width:130px',
                 disabledDate (date) {
-                  let disabled = false
-                  // 截至日期昨天为止
-                  if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                    disabled = true
-                  }
-                  return disabled
+                  // let disabled = false
+                  // // 截至日期昨天为止
+                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  //   disabled = true
+                  // }
+                  // return disabled
                 },
                 onChange(date){
 
@@ -155,6 +155,9 @@
               return disabled
             }
           }
+          // 初始化时间限制
+          startSearchItem.onChange(this.common.formatDate(startSearchItem.value,"yyyy-MM-dd"))
+          endSearchItem.onChange(this.common.formatDate(endSearchItem.value,"yyyy-MM-dd"))
         },
          // 检查搜素条件
         checkSearch(){
@@ -176,7 +179,7 @@
         searchSubmit(params){
           // 合并搜索条件
           this.params = Object.assign(this.$refs.search.searchForm,this.$refs.chartSearch.searchForm)
-        
+
           // 检查搜素条件
           if(this.checkSearch()){
             // 执行搜索初始化，获取数据
@@ -196,15 +199,15 @@
             // 格式话图标数据
             this.formatRes(res)
           }else{
+            this.chartOption.series[0].data = ''
             this.$Message.error(res.message);
-            
           }
         },
         // 格式化图标数据
         formatRes(res){
           let xAxisData = []
           let seriesData = []
-          let list = res.data.data      
+          let list = res.data.data
           Object.keys(list).forEach((ele,index)=>{
             xAxisData.push(ele)
             seriesData.push(list[ele])
@@ -213,10 +216,8 @@
           this.chartOption.xAxis.data = xAxisData
           this.min = xAxisData[0]
           this.max = xAxisData[xAxisData.length-1]
-
           // 设置数据
           this.chartOption.series[0].data = seriesData
-
           // 设置副标题
            this.chartOption.title.subtext = `${res.data.merchantName} ${res.data.merchantNo}`
         }

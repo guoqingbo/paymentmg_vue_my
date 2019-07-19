@@ -85,7 +85,7 @@
               startDate:this.common.formatDate(Date.now()-6*30*24*60*60*1000,"yyyy-MM"),
               endDate:this.common.formatDate(Date.now()-30*24*60*60*1000,"yyyy-MM"),
           }
-    
+
           this.apiGet(url,params).then(res=>{
              if(res.status == 200){
                 // 格式话图标数据
@@ -121,7 +121,7 @@
           let value = params.row[params.column.key]
           if(value){
               dom =[
-                h('span', value*100+'%'),
+                h('span', value+'%'),
                 h('Icon', {
                     props:{
                         type:value<0?'ios-arrow-round-down':'ios-arrow-round-up',
@@ -132,7 +132,7 @@
                 )]
           }
           return dom
-        }   
+        }
       }
     }
 </script>
