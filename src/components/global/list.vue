@@ -77,16 +77,19 @@
     watch: {
       searchItems: {
         handler(newValue, oldValue) {
-          newValue.forEach((element,index) => {
-            if(typeof element.value == 'undefined'){
-              // 作用是监听输入框value的变化，使表单验证起作用
-              this.$set(element, 'value','')
-            }
-            if(element.name){
-              // this.formItem[element.name] = element.value
-              this.$set(this.searchForm, element.name, element.value)
-            }
-          })
+          console.log(newValue)
+          if(newValue instanceof Array){
+            newValue.forEach((element,index) => {
+              if(typeof element.value == 'undefined'){
+                // 作用是监听输入框value的变化，使表单验证起作用
+                this.$set(element, 'value','')
+              }
+              if(element.name){
+                // this.formItem[element.name] = element.value
+                this.$set(this.searchForm, element.name, element.value)
+              }
+            })
+          }
         },
         deep: true,
         immediate: true

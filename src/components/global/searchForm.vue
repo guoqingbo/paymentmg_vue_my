@@ -2,7 +2,7 @@
   <Form ref="formInline"
         :model="searchForm"
         inline
-        v-show="searchItems.length">
+        v-if="searchItems && searchItems.length">
     <FormItem v-for="item in searchItems" :key="item.label">
       <Input v-if="item.type=='input'"
              v-model="item.value"
@@ -47,78 +47,80 @@ export default {
   watch: {
     searchItems: {
       handler(newValue, oldValue) {
-        let startDateItem = ''
-        let endDateItem = ''
-        newValue.forEach((element,index) => {
-          if(typeof element.value == 'undefined'){
-            // 作用是监听输入框value的变化
-            this.$set(element, 'value','')
-          }
-          if(typeof element.options == 'undefined'){
-            // 作用是监听options的变化，使表单验证起作用
-            this.$set(element, 'options',{})
-          }
-          if(element.name){
-            // 格式化日期
-            if(element.value instanceof Date){
-              element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
+        if(newValue instanceof Array){
+          let startDateItem = ''
+          let endDateItem = ''
+          newValue.forEach((element,index) => {
+            if(typeof element.value == 'undefined'){
+              // 作用是监听输入框value的变化
+              this.$set(element, 'value','')
             }
+            if(typeof element.options == 'undefined'){
+              // 作用是监听options的变化，使表单验证起作用
+              this.$set(element, 'options',{})
+            }
+            if(element.name){
+              // 格式化日期
+              if(element.value instanceof Date){
+                element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
+              }
 
-            if(element.name == 'startDate' ||
-              element.name == 'orderTimeStart' ||
-              element.name == 'date'){
-              startDateItem = element
-              // 初始化时间限制
-              // onChange1是添加的中间函数
-               if(!element.onChange1){
+              if(element.name == 'startDate' ||
+                element.name == 'orderTimeStart' ||
+                element.name == 'date'){
+                startDateItem = element
+                // 初始化时间限制
+                // onChange1是添加的中间函数
+                if(!element.onChange1){
                   element.options.disabledDate = element.disabledDate
                 }
-            }
-            if(element.name == 'endDate' ||  element.name == 'orderTimeEnd'){
-              endDateItem = element
-               // 初始化时间限制
-              if(!element.onChange1){
-                element.options.disabledDate = element.disabledDate
               }
+              if(element.name == 'endDate' ||  element.name == 'orderTimeEnd'){
+                endDateItem = element
+                // 初始化时间限制
+                if(!element.onChange1){
+                  element.options.disabledDate = element.disabledDate
+                }
+              }
+              this.$set(this.searchForm, element.name, element.value)
             }
-            this.$set(this.searchForm, element.name, element.value)
-          }
-        })
+          })
 
-        // 开始时间结束时间限制
-        if(startDateItem && endDateItem){
-          startDateItem.onChange1=(date1)=>{
-            // console.log(this.$refs.search.searchForm)
-            if(startDateItem.onChange){
-              startDateItem.onChange(date1)
+          // 开始时间结束时间限制
+          if(startDateItem && endDateItem){
+            startDateItem.onChange1=(date1)=>{
+              // console.log(this.$refs.search.searchForm)
+              if(startDateItem.onChange){
+                startDateItem.onChange(date1)
+              }
+              endDateItem.options.disabledDate=date2=>{
+                let disabled = false
+                if(endDateItem.disabledDate){
+                  disabled = endDateItem.disabledDate(date2)
+                }
+                if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
+                  // 结束日期不得小于开始日期
+                  disabled = true
+                }
+                return disabled
+              }
             }
-            endDateItem.options.disabledDate=date2=>{
-              let disabled = false
-              if(endDateItem.disabledDate){
-                disabled = endDateItem.disabledDate(date2)
+            endDateItem.onChange1=(date1)=>{
+              // console.log(this.$refs.search.searchForm)
+              if(endDateItem.onChange){
+                endDateItem.onChange(date1)
               }
-           if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
-                // 结束日期不得小于开始日期
-                disabled = true
+              startDateItem.options.disabledDate=date2=>{
+                let disabled = false
+                if(startDateItem.disabledDate){
+                  disabled = startDateItem.disabledDate(date2)
+                }
+                if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
+                  // 开始日期不得大于结束日期
+                  disabled = true
+                }
+                return disabled
               }
-              return disabled
-            }
-          }
-          endDateItem.onChange1=(date1)=>{
-            // console.log(this.$refs.search.searchForm)
-            if(endDateItem.onChange){
-              endDateItem.onChange(date1)
-            }
-            startDateItem.options.disabledDate=date2=>{
-              let disabled = false
-              if(startDateItem.disabledDate){
-                disabled = startDateItem.disabledDate(date2)
-              }
-              if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
-                // 开始日期不得大于结束日期
-                disabled = true
-              }
-              return disabled
             }
           }
         }
@@ -158,11 +160,13 @@ export default {
       // 格式化日期
       // this.searchForm.startDate += ' 00:00:00'
       // this.searchForm.endDate += ' 23:59:59'
-      this.searchItems.forEach(ele=>{
-        if(this.searchForm[ele.name] instanceof Date){
-          this.searchForm[ele.name] = this.common.formatDate(this.searchForm[ele.name], ele.format||"yyyy-MM-dd")
-        }
-      })
+      if(this.searchItems instanceof Array){
+        this.searchItems.forEach(ele=>{
+          if(this.searchForm[ele.name] instanceof Date){
+            this.searchForm[ele.name] = this.common.formatDate(this.searchForm[ele.name], ele.format||"yyyy-MM-dd")
+          }
+        })
+      }
     },
     formateDateStr(str){
       // 日期转为时间戳，如果不带时分秒，则存在时差

@@ -13,7 +13,6 @@
 </template>
 <script>
   import myTable from "@/components/global/myTable";
-  import create from "../../../store/modules/create";
   export default {
     components: {myTable},
     data () {
