@@ -74,7 +74,8 @@
             name: 'status',
             type: 'select',
             data: this.common.dic.status,
-            rules: [{ type: 'number'}]
+            rules: [{ required:false,type: 'number'}],
+            value:1
           },
           {
             title: '备注',
