@@ -174,7 +174,6 @@
           if(res.data && res.data.subChannelPayProductsVoList){
             rows = rows.concat(res.data.subChannelPayProductsVoList)
           }
-          console.log(res)
           rows.forEach(ele=>{
              // 商户名存在
             let ssItem = [ele.channelPayProductName,ele.tradeNum,ele.tradeMoneyAmount]

@@ -217,7 +217,6 @@
       },
       // 返回
       back(){
-        console.log(window.history)
         if (window.history.length>1) {
           this.$router.back()
         }else{

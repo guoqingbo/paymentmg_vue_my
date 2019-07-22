@@ -278,7 +278,6 @@
       },
       // 更改商户类型
       merchantTypeChange(type){
-        console.log(type)
         // 100 个人商户 200企业商户
         if(type == 100){
           this.formList1[0].value = 100

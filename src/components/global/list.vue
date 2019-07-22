@@ -77,7 +77,6 @@
     watch: {
       searchItems: {
         handler(newValue, oldValue) {
-          console.log(newValue)
           if(newValue instanceof Array){
             newValue.forEach((element,index) => {
               if(typeof element.value == 'undefined'){

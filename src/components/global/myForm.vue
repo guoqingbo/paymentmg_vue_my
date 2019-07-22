@@ -126,7 +126,6 @@ export default {
           }
 
           if(typeof element.value == 'undefined'){
-            console.log(element)
             // 作用是监听输入框value的变化，使表单验证起作用
             this.$set(element, 'value','')
           }

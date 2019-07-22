@@ -200,7 +200,6 @@
           //支付产品代码
           this.params.pay_product_code = code[0]
         }
-        console.log(this.params)
       },
       // 初始化表单参数
       setParams(){
@@ -233,16 +232,13 @@
         this.loading = true
         let url = '/unifiedorder'
         let params  = {requestXml:this.json2xml({xml:this.params})}
-        console.log(params)
         let apiPrefix = this.common.apiPayPrefix
         this.apiPost(url,params,apiPrefix).then(res=>{
           res = this.xml2json(res)
-          console.log(res)
           this.loading = false
           if(res.xml.result_code && res.xml.result_code._text == 'SUCCESS'){
             // 如果
             if(res.xml.redirect){
-              console.log(res.xml.code_url._text)
               window.location.href = res.xml.code_url._text
               // window.open(res.xml.code_url._text);
               return
