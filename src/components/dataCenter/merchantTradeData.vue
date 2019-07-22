@@ -28,10 +28,12 @@
             searchItems: [
               {
                 label: '商户号',
-                type: 'input',
+                type: 'autoComplete',
                 name: 'merchantNo',
-                value: '',
-                // value: '2006151605062019',
+                data:[],
+                search: (value)=>{
+                  this.searchMerchantList(value,1)
+                }
               }
             ],
             chartSearchItems: [
@@ -42,14 +44,7 @@
                 format:'yyyy-MM-dd',
                 value:  new Date(Date.now()-7*24*60*60*1000),
                 style:'width:130px',
-                disabledDate (date) {
-                  // let disabled = false
-                  // // 截至日期昨天为止
-                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                  //   disabled = true
-                  // }
-                  // return disabled
-                },
+                options:{},
                 onChange(date){
 
                 }
@@ -61,14 +56,7 @@
                 format:'yyyy-MM-dd',
                 value: new Date(Date.now()-24*60*60*1000),
                 style:'width:130px',
-                disabledDate (date) {
-                  // let disabled = false
-                  // // 截至日期昨天为止
-                  // if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                  //   disabled = true
-                  // }
-                  // return disabled
-                },
+                options:{},
                 onChange(date){
 
                 }
@@ -130,7 +118,7 @@
           let endSearchItem=this.chartSearchItems[1]
 
           startSearchItem.onChange=(date1)=>{
-            endSearchItem.disabledDate=date2=>{
+            endSearchItem.options.disabledDate=date2=>{
               let disabled = false
               if(date2 && date2.valueOf() > Date.now()-24*60*60*1000){
                 // 截至日期昨天为止
@@ -138,12 +126,15 @@
               }else if(date2.valueOf()>new Date(date1).valueOf()+30*24*60*60*1000){
                 // 查询日期不得超过30天
                 disabled = true
+              }else  if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
+                // 结束日期不得小于开始日期
+                disabled = true
               }
               return disabled
             }
           }
           endSearchItem.onChange=(date1)=>{
-            startSearchItem.disabledDate=date2=>{
+            startSearchItem.options.disabledDate=date2=>{
               let disabled = false
               if(date2 && date2.valueOf() > Date.now()-24*60*60*1000){
                 // 截至日期昨天为止
@@ -151,12 +142,22 @@
               }else if(date2.valueOf()<new Date(date1).valueOf()-30*24*60*60*1000){
                 // 查询日期不得超过30天
                 disabled = true
+              }else if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
+                // 开始日期不得大于结束日期
+                disabled = true
               }
               return disabled
             }
           }
           startSearchItem.onChange(this.common.formatDate(startSearchItem.value,"yyyy-MM-dd"))
           endSearchItem.onChange(this.common.formatDate(endSearchItem.value,"yyyy-MM-dd"))
+        },
+        // 日期转为时间戳，如果不带时分秒，则存在时差
+        formateDateStr(str){
+          if(str.length <19){
+            str += ' 00:00:00'.substring(10-str.length)
+          }
+          return str
         },
         // 检查搜素条件
         checkSearch(){
@@ -221,7 +222,40 @@
 
           // 设置副标题
            this.chartOption.title.subtext = `${res.data.merchantVo.merchantName} ${res.data.merchantVo.merchantCode}`
-        }
+        },
+        // 商户信息模糊查询
+        searchMerchantList(keyword,columnType){
+          // columnType，1:code查询，2:name查询
+          if(keyword && columnType){
+            let params = {
+              vagueMerchantMark:keyword,
+              columnType,
+            }
+            let url = '/merchant/queryMerchantListByVagueMerchantMark'
+            this.apiGet(url,params).then(res=>{
+              if(res.status == 200){
+                let data = []
+                if(res.data.length){
+                  res.data.forEach(ele=>{
+                    if(columnType == 1){
+                      // 1:code查询
+                      data.push({label:ele.merchantCode,value:ele.merchantCode})
+                    }else{
+                      // 2:name查询
+                      data.push({label:ele.merchantName,value:ele.merchantName})
+                    }
+
+                  })
+                }else{
+                  data = [{label:'暂无数据',value:''}]
+                }
+                if(columnType == 1){
+                  this.searchItems[0].data = data
+                }
+              }
+            })
+          }
+        },
       }
     }
 </script>

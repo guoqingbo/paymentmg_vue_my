@@ -14,7 +14,8 @@
           <tr v-for="sitem1,sindex1 in sitem.list">
             <template v-if="sindex==0 && sindex1==0">
               <td :rowspan="item.rowspan">
-                {{item.title}}
+                <div>{{item.title}}</div>
+                <div>({{item.titleNo}})</div>
               </td>
             </template>
             <template v-if="sindex1==0">
@@ -47,20 +48,26 @@
             name: 'date',
             format:'yyyy-MM-dd',
             value: new Date(Date.now()-24*60*60*1000),
-            disabledDate (date) {
-              let disabled = false
-              // 截至日期昨天为止
-              if(date && date.valueOf() > Date.now()-24*60*60*1000){
-                disabled = true
+            options:{
+              disabledDate (date) {
+                let disabled = false
+                // 截至日期昨天为止
+                if(date && date.valueOf() > Date.now()-24*60*60*1000){
+                  disabled = true
+                }
+                return disabled
               }
-              return disabled
             },
           },
           {
             label: '商户号',
-            type: 'input',
             name: 'merchantNo',
             value: '',
+            type: 'autoComplete',
+            data:[],
+            search: (value)=>{
+              this.searchMerchantList(value,1)
+            }
           }
         ],
         exportItem: {
@@ -85,7 +92,7 @@
           th: [{title: '商户名称'},
             {title: '支付场景'},
             {title: '渠道支付产品'},
-            {title: '交易笔数'},
+            {title: '交易笔数',render:this.formateTransactionNo},
             {title: '交易金额'},
           ],
           list: [
@@ -177,17 +184,18 @@
                 item.list[sceneTmp.index].list.push({list:ssItem})
               }else{
                 tempList[ele.merchantName].list[ele.sceneName] = {index:item.list.length-1}
-                item.list =  {
+                item.list =  [{
                   title:ele.sceneName,
                   list:[
                     {list:ssItem}
                   ]
-                }
+                }]
               }
 
             }else{
               let item = {
                 title:ele.merchantName,
+                titleNo:ele.merchantCode,
                 rowspan:1,
                 list:[
                   {
@@ -228,8 +236,47 @@
                 list:[{list:["",tradeNum,tradeMoneyAmount]}]
               })
             })
-        }
+        },
+        // 商户信息模糊查询
+        searchMerchantList(keyword,columnType){
+          // columnType，1:code查询，2:name查询
+          if(keyword && columnType){
+            let params = {
+              vagueMerchantMark:keyword,
+              columnType,
+            }
+            let url = '/merchant/queryMerchantListByVagueMerchantMark'
+            this.apiGet(url,params).then(res=>{
+              if(res.status == 200){
+                let data = []
+                if(res.data.length){
+                  res.data.forEach(ele=>{
+                    if(columnType == 1){
+                      // 1:code查询
+                      data.push({label:ele.merchantCode,value:ele.merchantCode})
+                    }else{
+                      // 2:name查询
+                      data.push({label:ele.merchantName,value:ele.merchantName})
+                    }
 
+                  })
+                }else{
+                  data = [{label:'暂无数据',value:''}]
+                }
+                if(columnType == 1){
+                  this.searchItems[1].data = data
+                }else{
+                  this.searchItems[0].data = data
+                }
+              }
+            })
+          }
+        },
+        // 交易笔数格式化
+        formateTransactionNo(h, params){
+          let value =  params.title.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+          return h('span', value);
+        }
     }
   }
 </script>

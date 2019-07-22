@@ -30,5 +30,10 @@ let dic = {
     {label:"按交易笔数（元/笔）",value:0},
     {label:"按交易金额（%）",value:1},
   ],
+  idType:[
+    {label:"身份张",value:1},
+    {label:"护照",value:2},
+    {label:"港澳通行证",value:3},
+  ]
 }
 export default dic

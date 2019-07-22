@@ -225,18 +225,23 @@
         },
         {
           "funName": "个人结算管理",
-          "funCode": "personalSettleManage",
+          "funCode": "personSettleManage",
           "functionType": "column",
           "list": [
             {
-              "funName": "商户待结算查询",
-              "funCode": "personalWaitSettleQuery",
+              "funName": "个人待结算查询",
+              "funCode": "personWaitSettleQuery",
               "functionType": "column"
             },
             {
               "funName": "历史结算查询",
-              "funCode": "personalHistorySettleQuery",
+              "funCode": "personHistorySettleQuery",
               "functionType": "column"
+            },
+            {
+              "funName": "查询明细",
+              "funCode": "personHistorySettleDetail",
+              "functionType": "button"
             }
           ]
         }

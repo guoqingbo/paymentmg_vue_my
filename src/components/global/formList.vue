@@ -50,15 +50,12 @@
     watch: {
       // formItems: {
       //   handler(newValue, oldValue) {
-      //     console.log(newValue)
-      //     console.log(oldValue)
-      //     // this.formItems.forEach((element,index) => {
-      //     //   // 如果是详情
-      //     //   // if(this.routeType=='detail'){
-      //     //   //   element.disabled = true
-      //     //   //   element.type = 'text'
-      //     //   // }
-      //     // })
+      //     newValue.forEach((element,index) => {
+      //       if(typeof element.value == 'undefined'){
+      //         // 作用是监听输入框value的变化，使表单验证起作用
+      //         this.$set(element, 'value','')
+      //       }
+      //     })
       //   },
       //   deep: true,
       //   immediate: true

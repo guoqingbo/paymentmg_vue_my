@@ -89,8 +89,12 @@
         searchItems: [
           {
             label: '商户名称',
-            type: 'input',
-            name: 'merchantName'
+            name: 'merchantName',
+            type: 'autoComplete',
+            data:[],
+            search: (value)=>{
+              this.searchMerchantList(value,2)
+            }
           },
           {
             label: '商户编号',
@@ -142,6 +146,41 @@
     },
     components: {list,confirm,modalForm},
     methods: {
+      // 商户信息模糊查询
+      searchMerchantList(keyword,columnType){
+        // columnType，1:code查询，2:name查询
+        if(keyword && columnType){
+          let params = {
+            vagueMerchantMark:keyword,
+            columnType,
+          }
+          let url = '/merchant/queryMerchantListByVagueMerchantMark'
+          this.apiGet(url,params).then(res=>{
+            if(res.status == 200){
+              let data = []
+              if(res.data.length){
+                res.data.forEach(ele=>{
+                  if(columnType == 1){
+                    // 1:code查询
+                    data.push({label:ele.merchantCode,value:ele.merchantCode})
+                  }else{
+                    // 2:name查询
+                    data.push({label:ele.merchantName,value:ele.merchantName})
+                  }
+
+                })
+              }else{
+                data = [{label:'暂无数据',value:''}]
+              }
+              if(columnType == 1){
+                this.searchItems[1].data = data
+              }else{
+                this.searchItems[0].data = data
+              }
+            }
+          })
+        }
+      },
     }
   }
 </script>

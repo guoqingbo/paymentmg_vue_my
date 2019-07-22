@@ -44,13 +44,15 @@
                 name: 'date',
                 format:'yyyy-MM',
                 value: new Date(Date.now()-30*24*60*60*1000),
-                disabledDate (date) {
-                  let disabled = false
-                  // 截至日期上个月天为止
-                  if(date && date.valueOf() > Date.now()-30*24*60*60*1000){
-                    disabled = true
+                options:{
+                  disabledDate (date) {
+                    let disabled = false
+                    // 截至日期上个月天为止
+                    if(date && date.valueOf() > Date.now()-30*24*60*60*1000){
+                      disabled = true
+                    }
+                    return disabled
                   }
-                  return disabled
                 },
               }
             ],

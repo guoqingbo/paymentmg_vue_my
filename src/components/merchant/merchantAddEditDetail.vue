@@ -15,16 +15,18 @@
     data() {
       return {
         formListUrl: "/merchant/save",
-        formList: [
+        formList:[],
+        formList0: [
           {
             title: '商户类型',
             name: 'merchantType',
             type: 'select',
             data: this.common.dic.merchantType,
+            onChange:this.merchantTypeChange,
             rules: [
               {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
             ],
-            value: ""
+            value: 200,
           },
           {
             title: '商户简称',
@@ -100,12 +102,109 @@
             type: 'uploadFile',
             tip: '建议上传小于10M的png、jpg、jpeg格式的图片'
           },
-        ],
+        ],// 商户类型为企业时
+        formList1: [
+          {
+            title: '商户类型',
+            name: 'merchantType',
+            type: 'select',
+            data: this.common.dic.merchantType,
+            onChange:this.merchantTypeChange,
+            rules: [
+              {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
+            ],
+            value: 100
+          },
+          {
+            title: '姓名',
+            name: 'merchantName',
+            type: 'input',
+            rules: [
+              {required: true, message: '请输入姓名', trigger: 'blur'},
+              {max: 50, message: "姓名不超过50字符", trigger: 'blur'}
+            ],
+            value: ""
+          },
+          {
+            title: '证件类型',
+            name: 'idType',
+            type: 'select',
+            data: this.common.dic.idType,
+            rules: [
+              {required: false, type:'number',message: '请选择证件类型', trigger: 'change'}
+            ],
+            value: 1
+          },
+          {
+            title: '证件号码',
+            name: 'idCard',
+            type: 'input',
+            rules: [{required: false, message: "请输入证件号码",trigger: 'blur'}],
+            value: ""
+          },
+          {
+            title: '上级商户号',
+            name: 'parentMerchantCode',
+            type: 'input',
+            rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
+            value: ""
+          },
+          {
+            title: '手机号码',
+            name: 'phone',
+            type: 'input',
+            rules: [{
+              validator: this.common.validate.phone,
+              required: false,
+              trigger: "blur"
+            }],
+            value:'',
+          },
+          {
+            title: '开户行名称',
+            name: 'bankName',
+            type: 'input',
+            rules: [{max: 50, message: "开户行名称不得超过50字符", trigger: 'blur'}],
+            value: ""
+          },
+          {
+            title: '银行户名',
+            name: 'accountName',
+            type: 'input',
+            rules: [{max: 50, message: "银行户名不得超过50字符", trigger: 'blur'}],
+            value: ""
+          },
+          {
+            title: '银行账号',
+            name: 'accountNo',
+            type: 'input',
+            rules: [{max: 50, message: "银行账号不得超过50字符", trigger: 'blur'}],
+            value: ""
+          },
+          {
+            title: '所在地区',
+            name: 'area',
+            type: 'area',
+            addrCode: "",
+            areaText:"",
+            rules: [],
+            value: ""
+          },
+          {
+            title: '详细地址',
+            name: 'detailedAddress',
+            type: 'input',
+            rules: [{max: 100, message: "详细地址不得超过100字符", trigger: 'blur'}],
+            value: ""
+          },
+        ],// 商户类型为个人时
         routeType: "",// 判断是新增，详情，编辑
       }
     },
     watch: {},
     created() {
+      // 更改商户类型
+      this.merchantTypeChange(200)
       // 如果是编辑，详情
       this.getDetail()
     },
@@ -139,12 +238,14 @@
           } else {
             // 如果是编辑
             this.formListUrl = '/merchant/update'
-            this.formList[0].disabled = true
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
           this.apiGet("/merchant/" + id).then(res => {
             if (res.status == 200 && res.data) {
+              // 更改账户类型
+              this.merchantTypeChange(res.data.merchantType)
+              this.formList[0].disabled = true
               this.formList.forEach((ele) => {
                 ele.value = res.data[ele.name]
                 if (this.routeType == 'detail' && ele.type != 'text') {
@@ -175,6 +276,18 @@
           });
         }
       },
+      // 更改商户类型
+      merchantTypeChange(type){
+        console.log(type)
+        // 100 个人商户 200企业商户
+        if(type == 100){
+          this.formList1[0].value = 100
+          this.formList = this.formList1
+        }else{
+          this.formList0[0].value = 200
+          this.formList = this.formList0
+        }
+      }
     }
   }
 </script>

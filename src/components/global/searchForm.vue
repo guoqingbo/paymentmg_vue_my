@@ -8,8 +8,15 @@
              v-model="item.value"
              :placeholder="'请输入'+item.label"
              :style="item.style"></Input>
+      <AutoComplete v-if="item.type=='autoComplete'"
+                    v-model="item.value"
+                    @on-search="item.search?item.search($event):''"
+                    icon="ios-search"
+                    :placeholder="'请输入'+item.label">
+        <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sitem.value">{{ sitem.label }}</Option>
+      </AutoComplete>
       <DatePicker v-if="item.type=='date' || item.type=='month'"
-                  @on-change="item.onChange1?item.onChange1($event):''"
+                  @on-change="item.onChange?item.onChange($event):''"
                   :type='item.type'
                   :placeholder="'请输入'+item.label"
                   v-model="item.value"
@@ -65,64 +72,64 @@ export default {
                 element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
               }
 
-              if(element.name == 'startDate' ||
-                element.name == 'orderTimeStart' ||
-                element.name == 'date'){
-                startDateItem = element
-                // 初始化时间限制
-                // onChange1是添加的中间函数
-                if(!element.onChange1){
-                  element.options.disabledDate = element.disabledDate
-                }
-              }
-              if(element.name == 'endDate' ||  element.name == 'orderTimeEnd'){
-                endDateItem = element
-                // 初始化时间限制
-                if(!element.onChange1){
-                  element.options.disabledDate = element.disabledDate
-                }
-              }
+              // if(element.name == 'startDate' ||
+              //   element.name == 'orderTimeStart' ||
+              //   element.name == 'date'){
+              //   startDateItem = element
+              //   // 初始化时间限制
+              //   // onChange1是添加的中间函数
+              //   if(!element.onChange1){
+              //     element.options.disabledDate = element.disabledDate
+              //   }
+              // }
+              // if(element.name == 'endDate' ||  element.name == 'orderTimeEnd'){
+              //   endDateItem = element
+              //   // 初始化时间限制
+              //   if(!element.onChange1){
+              //     element.options.disabledDate = element.disabledDate
+              //   }
+              // }
               this.$set(this.searchForm, element.name, element.value)
             }
           })
 
-          // 开始时间结束时间限制
-          if(startDateItem && endDateItem){
-            startDateItem.onChange1=(date1)=>{
-              // console.log(this.$refs.search.searchForm)
-              if(startDateItem.onChange){
-                startDateItem.onChange(date1)
-              }
-              endDateItem.options.disabledDate=date2=>{
-                let disabled = false
-                if(endDateItem.disabledDate){
-                  disabled = endDateItem.disabledDate(date2)
-                }
-                if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
-                  // 结束日期不得小于开始日期
-                  disabled = true
-                }
-                return disabled
-              }
-            }
-            endDateItem.onChange1=(date1)=>{
-              // console.log(this.$refs.search.searchForm)
-              if(endDateItem.onChange){
-                endDateItem.onChange(date1)
-              }
-              startDateItem.options.disabledDate=date2=>{
-                let disabled = false
-                if(startDateItem.disabledDate){
-                  disabled = startDateItem.disabledDate(date2)
-                }
-                if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
-                  // 开始日期不得大于结束日期
-                  disabled = true
-                }
-                return disabled
-              }
-            }
-          }
+          // // 开始时间结束时间限制
+          // if(startDateItem && endDateItem){
+          //   startDateItem.onChange1=(date1)=>{
+          //     // console.log(this.$refs.search.searchForm)
+          //     if(startDateItem.onChange){
+          //       startDateItem.onChange(date1)
+          //     }
+          //     endDateItem.options.disabledDate=date2=>{
+          //       let disabled = false
+          //       if(endDateItem.disabledDate){
+          //         disabled = endDateItem.disabledDate(date2)
+          //       }
+          //       if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
+          //         // 结束日期不得小于开始日期
+          //         disabled = true
+          //       }
+          //       return disabled
+          //     }
+          //   }
+          //   endDateItem.onChange1=(date1)=>{
+          //     // console.log(this.$refs.search.searchForm)
+          //     if(endDateItem.onChange){
+          //       endDateItem.onChange(date1)
+          //     }
+          //     startDateItem.options.disabledDate=date2=>{
+          //       let disabled = false
+          //       if(startDateItem.disabledDate){
+          //         disabled = startDateItem.disabledDate(date2)
+          //       }
+          //       if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
+          //         // 开始日期不得大于结束日期
+          //         disabled = true
+          //       }
+          //       return disabled
+          //     }
+          //   }
+          // }
         }
       },
       deep: true,
@@ -167,13 +174,6 @@ export default {
           }
         })
       }
-    },
-    formateDateStr(str){
-      // 日期转为时间戳，如果不带时分秒，则存在时差
-      if(str.length <19){
-        str += ' 00:00:00'.substring(10-str.length)
-      }
-      return str
     }
   }
 }

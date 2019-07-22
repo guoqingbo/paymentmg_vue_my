@@ -26,27 +26,66 @@
             align:'center'
           },
           {
-            title: '商户号',
-            key: 'merchantCode',
+            title: '结算订单号',
+            key: 'orderTime',
+          },
+          {
+            title: '支付中心商户号',
+            key: 'orderNo',
+          },
+          {
+            title: '姓名',
+            key: 'payNo',
+          },
+          {
+            title: '证件号',
+            key: 'payNo',
+          },
+          {
+            title: '付款银行',
+            key: 'orderAmount',
+          },
+          {
+            title: '付款银行账号',
+            key: 'payAmount',
             sortable: true,
           },
           {
-            title: '商户名称',
+            title: '收款银行名称',
+            key: 'payStatus',
+            sortable: true,
+            render:''
+          },
+          {
+            title: '收款银行户名',
             key: 'merchantName',
             sortable: true,
           },
           {
-            title: '商户类型',
-            key: 'merchantType',
+            title: '收款银行账号',
+            key: 'orderSource',
             sortable: true,
-            render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            }
+            render:"",
           },
           {
-            title: '创建时间',
-            key: 'createTime',
-            sortable: 'custom',
+            title: '待结算金额',
+            key: 'channelName',
+            sortable: true,
+          },
+          {
+            title: '状态',
+            key: 'channelName',
+            sortable: true,
+          },
+          {
+            title: '结算日期',
+            key: 'channelName',
+            sortable: true,
+          },
+          {
+            title: '操作员',
+            key: 'channelName',
+            sortable: true,
           },
           {
             title: '操作',
@@ -54,32 +93,12 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "详情",
+                  title: "查看",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
+                      path: "/settleCenter/personSettleManage/personHistorySettleDetail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
-                  }
-                },
-                {
-                  title: "编辑",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
-                      query: {id: params.row.id}
-                    });
-                  }
-                },
-                {
-                  title: "删除",
-                  action: () => {
-                    this.mode = "delete";
-                    this.sucessMsg = "删除成功！";
-                    this.content = "确定删除？";
-                    this.$refs.confirmModel.confirm(
-                      "/merchant/delete/" + params.row.id
-                    );
                   }
                 }
               ];
@@ -91,7 +110,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchant/grid',
+        url: '/payorder/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -103,20 +122,10 @@
             }
           },
           {
-            label: '商户号',
-            type: 'autoComplete',
-            name: 'merchantCode',
-            data:[],
-            search: (value)=>{
-              this.searchMerchantList(value,1)
-            }
-          },
-          {
             label: '开始日期',
             type: 'date',
             name: 'startDate',
             format:'yyyy-MM-dd 00:00:00',
-            options:{},
             value: ''
           },
           {
@@ -124,19 +133,10 @@
             type: 'date',
             name: 'endDate',
             format:'yyyy-MM-dd 23:59:59',
-            options:{},
             value: ''
           },
         ],
-        hannleItems: [
-          {
-            title: '添加商户',
-            icon: 'md-add',
-            callback: () => {
-              this.$router.push("/merchant/merchantAddEditDetail");
-            }
-          }
-        ],
+        hannleItems:[],
         mode: "",
         content: "",
         sucessMsg: "",
@@ -145,11 +145,11 @@
     mounted () {
 
     },
+    components: {list,confirm},
     created(){
       // 日期限制
       this.checkDate()
     },
-    components: {list,confirm},
     methods: {
       // 商户信息模糊查询
       searchMerchantList(keyword,columnType){
@@ -189,8 +189,8 @@
       // 日期限制
       checkDate(){
         // 开始时间结束时间限制
-        let startDateItem = this.searchItems[2]
-        let endDateItem = this.searchItems[3]
+        let startDateItem = this.searchItems[1]
+        let endDateItem = this.searchItems[2]
         if(startDateItem && endDateItem){
           startDateItem.onChange=(date1)=>{
             endDateItem.options.disabledDate=date2=>{

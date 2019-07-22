@@ -113,19 +113,25 @@
             type: 'date',
             name: 'orderTimeStart',
             format:'yyyy-MM-dd 00:00:00',
-            value: new Date(new Date().setMonth(new Date().getMonth()-1))
+            value: new Date(new Date().setMonth(new Date().getMonth()-1)),
+            options:{}
           },
           {
             label: '结束日期',
             type: 'date',
             name: 'orderTimeEnd',
             format:'yyyy-MM-dd 23:59:59',
-            value: new Date()
+            value: new Date(),
+            options:{}
           },
           {
             label: '商户号',
-            type: 'input',
-            name: 'merchantNo'
+            name: 'merchantNo',
+            type: 'autoComplete',
+            data:[],
+            search: (value)=>{
+              this.searchMerchantList(value,1)
+            }
           },
           {
             label: '支付状态',
@@ -181,6 +187,8 @@
       this.getMerchantSource()
       // 获取支付渠道
       this.getChannel()
+      // 日期限制
+      this.checkDate()
     },
     methods: {
       // 获取支付状态
@@ -206,6 +214,74 @@
         this.$store.dispatch("getChannel").then(res=>{
           this.searchItems[7].data = res
         })
+      },
+      // 商户信息模糊查询
+      searchMerchantList(keyword,columnType){
+        // columnType，1:code查询，2:name查询
+        if(keyword && columnType){
+          let params = {
+            vagueMerchantMark:keyword,
+            columnType,
+          }
+          let url = '/merchant/queryMerchantListByVagueMerchantMark'
+          this.apiGet(url,params).then(res=>{
+            if(res.status == 200){
+              let data = []
+              if(res.data.length){
+                res.data.forEach(ele=>{
+                  if(columnType == 1){
+                    // 1:code查询
+                    data.push({label:ele.merchantCode,value:ele.merchantCode})
+                  }else{
+                    // 2:name查询
+                    data.push({label:ele.merchantName,value:ele.merchantName})
+                  }
+
+                })
+              }else{
+                data = [{label:'暂无数据',value:''}]
+              }
+              if(columnType == 1){
+                this.searchItems[4].data = data
+              }
+            }
+          })
+        }
+      },
+      // 日期限制
+      checkDate(){
+        // 开始时间结束时间限制
+        let startDateItem = this.searchItems[2]
+        let endDateItem = this.searchItems[3]
+        if(startDateItem && endDateItem){
+          startDateItem.onChange=(date1)=>{
+            endDateItem.options.disabledDate=date2=>{
+              let disabled = false
+              if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
+                // 结束日期不得小于开始日期
+                disabled = true
+              }
+              return disabled
+            }
+          }
+          endDateItem.onChange=(date1)=>{
+            startDateItem.options.disabledDate=date2=>{
+              let disabled = false
+              if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
+                // 开始日期不得大于结束日期
+                disabled = true
+              }
+              return disabled
+            }
+          }
+        }
+      },
+      // 日期转为时间戳，如果不带时分秒，则存在时差
+      formateDateStr(str){
+        if(str.length <19){
+          str += ' 00:00:00'.substring(10-str.length)
+        }
+        return str
       }
     }
   }

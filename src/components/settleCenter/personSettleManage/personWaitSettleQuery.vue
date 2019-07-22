@@ -35,7 +35,11 @@
         </div>
         <table class="account-info-table">
           <tr>
-            <td>收款商户名</td>
+            <td>收款人姓名</td>
+            <td>沙县一号店</td>
+          </tr>
+          <tr>
+            <td>证件号码</td>
             <td>沙县一号店</td>
           </tr>
           <tr>
@@ -84,7 +88,7 @@
           <p style="color: #999;">转账金额：19,000.00</p>
           <div style="color: #999;">
             <span>结算订单号：JSD99049050034 </span>
-            <router-link :to="{path:'/settleCenter/merchantSettleManage/merchantHistorySettleQuery',query: {}}">查看订单</router-link>
+            <router-link :to="{path:'/settleCenter/personSettleManage/personHistorySettleQuery',query: {}}">查看订单</router-link>
           </div>
         </div>
       </div>
@@ -114,35 +118,43 @@
             key: 'ruleNo',
           },
           {
-            title: '商户名称',
+            title: '姓名',
             key: 'orderSource',
             render:''
           },
           {
-            title: '待结算金额',
+            title: '证件号',
             key: 'channelName',
           },
           {
-            title: '付款银行',
+            title: '手机号码',
             key: 'channelProductName',
           },
           {
-            title: '付款银行户名',
+            title: '待结算金额',
             key: 'singleLimit',
           },
           {
-            title: '付款银行账号',
+            title: '付款银行',
             key: 'dayLimit',
           },
           {
-            title: '收款银行名称',
+            title: '付款银行户名',
             key: 'status',
             render: (h, params) => {
               return h('span', this.filter.turn('payLimitStatus',params.row.status))
             }
           },
           {
-            title: '付款银行户名',
+            title: '付款银行账号',
+            key: 'singleLimit',
+          },
+          {
+            title: '收款银行名称',
+            key: 'singleLimit',
+          },
+          {
+            title: '收款银行户名',
             key: 'singleLimit',
           },
           {
@@ -225,6 +237,10 @@
           {
             title: '订单实付金额',
             key: 'channelName',
+          },
+          {
+            title: '交易类型',
+            key: 'channelProductName',
           },
           {
             title: '待结算金额',
@@ -324,6 +340,7 @@
       this.getPayChannel()
       // 日期限制
       this.checkDate()
+
     },
     mounted () {
 
@@ -418,7 +435,6 @@
       onGetAfter(orderInfo){
         // this.orderInfo = orderInfo
       },
-
       // 商户信息模糊查询
       searchMerchantList(keyword,columnType){
         // columnType，1:code查询，2:name查询

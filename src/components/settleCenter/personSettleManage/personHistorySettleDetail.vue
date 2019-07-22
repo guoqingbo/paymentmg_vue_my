@@ -40,10 +40,20 @@
           {
             cols:[
               {
+                title:'证件号',
+                name:'orderNo'
+              },{
+                title:'付款银行户名',
+                name:'orderTime'
+              }],
+          },
+          {
+            cols:[
+              {
                 title:'收款银行',
                 name:'payTime'
               },{
-                title:'付款银行户名',
+                title:'付款银行账号',
                 name:'payStatus',
                 render: ''
               }],
@@ -54,7 +64,7 @@
                 title:'收款银行户名',
                 name:'payAmount'
               },{
-                title:'付款银行账号',
+                title:'结算金额',
                 name:'payProductName'
               }],
           },
@@ -64,14 +74,14 @@
                 title:'收款银行账号',
                 name:'productCode'
               },{
-                title:'结算金额',
+                title:'转账批次号',
                 name:'productName'
               }],
           },
           {
             cols:[
               {
-                title:'结算订单号',
+                title:'操作员',
                 name:'merchantName'
               },{
                 title:'结算时间',
@@ -81,11 +91,11 @@
           {
             cols:[
               {
-                title:'操作员',
+                title:'状态',
                 name:'merchantSourceNo'
               },{
-                title:'结算状态',
-                name:'userSourceNo'
+                title:'',
+                name:''
               }],
           }],
         tableUrl:'/payorder/detail/'+this.$route.query.id,
