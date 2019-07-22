@@ -23,7 +23,12 @@
                 {{sitem.title}}
               </td>
             </template>
-            <td v-for="tdItem in sitem1.list" :class="{background:sitem.title=='合计'}">{{tdItem}}</td>
+            <td v-for="(tdItem,tdIndex) in sitem1.list" :class="{background:sitem.title=='合计'}">
+              <render  v-if="tableData.th[tdIndex+2].render" :params="{title:tdItem}" :render="tableData.th[tdIndex+2].render"></render>
+              <template  v-else>
+                {{tdItem}}
+              </template>
+            </td>
           </tr>
         </template>
       </template>
@@ -34,9 +39,9 @@
 <script>
   import searchForm from "@/components/global/searchForm";
   import myChart from "@/components/global/myChart";
-
+  import render from "@/components/global/render";
   export default {
-    components: {searchForm, myChart},
+    components: {searchForm, myChart,render},
     data() {
       return {
         params:{},
@@ -169,6 +174,7 @@
           if(res.data && res.data.subChannelPayProductsVoList){
             rows = rows.concat(res.data.subChannelPayProductsVoList)
           }
+          console.log(res)
           rows.forEach(ele=>{
              // 商户名存在
             let ssItem = [ele.channelPayProductName,ele.tradeNum,ele.tradeMoneyAmount]
@@ -183,13 +189,13 @@
                 // 支付场景存在
                 item.list[sceneTmp.index].list.push({list:ssItem})
               }else{
-                tempList[ele.merchantName].list[ele.sceneName] = {index:item.list.length-1}
-                item.list =  [{
+                tempList[ele.merchantName].list[ele.sceneName] = {index:item.list.length}
+                item.list.push({
                   title:ele.sceneName,
                   list:[
                     {list:ssItem}
                   ]
-                }]
+                })
               }
 
             }else{
@@ -212,15 +218,15 @@
 
               // 用于判断是否合并
               tempList[ele.merchantName] = {index:list.length-1,list:{}}
-              tempList[ele.merchantName].list[ele.sceneName] = {index:item.list.length-1}
+              tempList[ele.merchantName].list[ele.sceneName] = {index:0}
             }
           })
           // 插入合计
           this.addTotalTr(list)
           this.tableData.list = list
         },
+        // 合计
         addTotalTr(list){
-
             list.forEach(ele=>{
               let tradeNum = 0
               let tradeMoneyAmount = 0
@@ -233,7 +239,7 @@
               ele.rowspan++
               ele.list.push({
                 title:'合计',
-                list:[{list:["",tradeNum,tradeMoneyAmount]}]
+                list:[{list:["",tradeNum,tradeMoneyAmount.toFixed(2)]}]
               })
             })
         },
