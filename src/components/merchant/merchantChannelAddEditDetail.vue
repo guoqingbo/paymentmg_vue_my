@@ -31,22 +31,22 @@
           },
           {
             title: '支付产品',
-            name: 'payProductId',
+            name: 'payProductCode',
             type: 'select',
             data:'',
             onChange:this.getChannelProduct,
             rules: [
-              { required: true, type:'number',message: '请选择支付产品', trigger: 'change' }
+              { required: true,message: '请选择支付产品', trigger: 'change' }
             ]
           },
           {
             title: '渠道产品',
-            name: 'channelProductId',
+            name: 'channelProductCode',
             type: 'select',
             data:'',
             onChange:this.payConfigOnChange,
             rules: [
-              { required: true, type:'number',message: '请选择渠道产品', trigger: 'change' }
+              { required: true,message: '请选择渠道产品', trigger: 'change' }
             ]
           },
           {
@@ -54,9 +54,10 @@
             name: 'merchantFeeType',
             type: 'select',
             data:this.common.dic.feeType,
+            disabled:true,
             rules: [
               { required: true, type:'number',message: '请选择计费方式', trigger: 'change' }
-            ]
+            ],
           },
           {
             title: '商户费率',
@@ -115,7 +116,7 @@
           }else{
             // 如果是编辑
             this.formListUrl = "/merchantChannel/update"
-            this.formList[1].disabled = true
+            this.formList[0].disabled = true
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理','商户渠道编辑'])
 
@@ -135,15 +136,15 @@
                   // 如果是详情页
                   ele.type += "Text"
                   // 转换数据
-                  if(ele.name == 'channelProductId'){
+                  if(ele.name == 'channelProductCode'){
                     ele.type = 'text'
                     ele.value = res.data.channelProductName
-                  }else if(ele.name == 'payProductId'){
+                  }else if(ele.name == 'payProductCode'){
                     ele.type = 'text'
                     ele.value = res.data.payProductName
                   }
                 }else{
-                  if(ele.name == 'payProductId'){
+                  if(ele.name == 'payProductCode'){
                     // 获取渠道产品
                     this.getChannelProduct(ele.value)
                   }
@@ -164,12 +165,12 @@
         if(!e){
           return
         }
-        this.apiGet('/channelProduct/payProductId/'+e).then(res=>{
+        this.apiGet('/channelProduct/payProductCode/'+e).then(res=>{
           let channelProduct = []
           if(res.status == 200){
             res.data.forEach((ele)=>{
               channelProduct.push({
-                value:ele.id,
+                value:ele.channelProductCode,
                 label:ele.channelProductName
               })
             })
@@ -185,7 +186,7 @@
               content:'更换渠道产品将清空支付配置信息',
               onCancel:()=>{
                 // 恢复原选项
-                this.formList[2].value=this.detail.channelProductId
+                this.formList[2].value=this.detail.channelProductCode
                 // 转换支付配置
                 this.turnPayConfig(this.detail.configInfos)
               },
@@ -197,7 +198,6 @@
             // 新增的时候
             this.getPayConfig(e)
           }
-
       },
       //获取渠道产品支付配置
       getPayConfig(e){
@@ -209,8 +209,10 @@
             // 保留公共选项
             // this.formList.length = 6
             this.formList = this.formList.slice(0,6)
+            // 设置渠道计费方式
+            this.formList[3].value = res.data.feeType
             // 转换支付配置
-            this.turnPayConfig(res.data)
+            this.turnPayConfig(res.data.configs)
           }
         })
       },
@@ -231,7 +233,8 @@
           }
           this.formList.push(formListItem)
         })
-      }
+      },
+      // 获取渠道计费方式
     }
   }
 </script>

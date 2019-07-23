@@ -280,7 +280,7 @@
           str += ' 00:00:00'.substring(10-str.length)
         }
         return str
-      }
+      },
     }
   }
 </script>

@@ -57,7 +57,7 @@ const globalConfig = {
         if(res.status == 200){
           res.data.forEach((ele)=>{
             payProduct.push({
-              value:ele.id,
+              value:ele.payProductCode,
               label:ele.payProductName
             })
           })
