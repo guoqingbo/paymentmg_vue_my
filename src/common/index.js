@@ -333,4 +333,14 @@ const common = {
   apiPayPrefix: '/manage/api/pay' // 收银台的前缀
 }
 
+if(location.hostname == 'prepaycenter.zhiyoubao.com'){
+  // 预发正式
+  common.apiAdminPrefix = '/manage/api/admin'
+  common.apiPayPrefix = '/manage/api/pay'
+}else if(location.hostname == 'paycenter.zhiyoubao.com'){
+  // 测试环境
+  common.apiAdminPrefix = '/api/admin'
+  common.apiPayPrefix = '/api/pay'
+}
+
 export default common
