@@ -6,7 +6,7 @@
         <Menu mode="horizontal" theme="dark" :active-name="firstRouter" @on-select="changeTab">
           <div @click="goHome" class="layout-logo">
              <!--<img class="logo-img" src="./../assets/images/index-logo.png" alt>-->
-             <span class="logo-img">支付中心</span>
+             <span class="logo-img">支付中心({{common.env}})</span>
           </div>
 
           <div class="layout-userinfo">
