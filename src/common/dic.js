@@ -31,7 +31,7 @@ let dic = {
     {label:"按交易金额（%）",value:1},
   ],
   idType:[
-    {label:"身份张",value:1},
+    {label:"身份证",value:1},
     {label:"护照",value:2},
     {label:"港澳通行证",value:3},
   ]
