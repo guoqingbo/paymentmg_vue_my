@@ -6,7 +6,7 @@
         <Menu mode="horizontal" theme="dark" :active-name="firstRouter" @on-select="changeTab">
           <div @click="goHome" class="layout-logo">
              <!--<img class="logo-img" src="./../assets/images/index-logo.png" alt>-->
-             <span class="logo-img">支付中心({{common.env}})</span>
+             <span class="logo-img">支付中心{{envName}}</span>
           </div>
 
           <div class="layout-userinfo">
@@ -130,6 +130,7 @@
     components: {myImg},
     data() {
       return {
+        envName:'',
         showCorp: false,
         formItem: {
           corpName: "",
@@ -184,13 +185,7 @@
     //   // next()
     // },
     created() {
-      function domainURI(str) {
-        var durl = /http:\/\/([^\/]+)\//i;
-        domain = str.match(durl);
-        return domain[1];
-      }
-
-      let domain = domainURI(document.location.href);
+      // let domain = this.domainURI(document.location.href);
       // apiGet(
       //   "/manage/admin/admin/service/userLoginConfig/getLogo?domain=" + domain
       // ).then(res => {
@@ -207,6 +202,8 @@
       if (agent.indexOf("firefox") > 0) {
         this.padding = "80px";
       }
+      // 获取环境名
+      this.getEnvName()
     },
     updated() {
       // this.$store.dispatch("getCurrentUser", {
@@ -230,7 +227,7 @@
       breadcrumbList() {
         return this.$store.state.menu.breadcrumbList;
         // return this.$route.meta.breadcrumbList;
-      }
+      },
     },
     watch: {
       // breadcrumbList: {
@@ -261,6 +258,23 @@
       // this.bgheight = window.innerHeight + "px";
     },
     methods: {
+      // 获取环境名
+      getEnvName(){
+        if(this.common.config.env=='test'){
+          this.envName = '(测试)'
+        }else if(this.common.config.env=='pre'){
+          this.envName = '(预发)'
+        }else if(this.common.config.env=='production'){
+          this.envName = ''
+        }if(this.common.config.env=='dev'){
+          this.envName = '(开发)'
+        }
+      },
+      domainURI(str) {
+        var durl = /http:\/\/([^\/]+)\//i;
+        domain = str.match(durl);
+        return domain[1];
+      },
       lookingKey() {
         this.apiGet("/manage/admin/getUserByUserId").then(res => {
           this.showKey = true;

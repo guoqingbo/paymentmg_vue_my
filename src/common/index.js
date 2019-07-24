@@ -1,6 +1,7 @@
 import * as api from '@/fetch/api'
 // select下拉常量
 import dic from '@/common/dic'
+import config from '@/config'
 import {Message} from 'iview'
 
 const common = {
@@ -329,24 +330,6 @@ const common = {
     }
   },
   dic,
-  apiAdminPrefix: '/manage/api/admin',// 后台的前缀（默认的前缀）
-  apiPayPrefix: '/manage/api/pay', // 收银台的前缀
-  env:'production'
+  config,
 }
-
-if(location.hostname == 'prepaycenter.zhiyoubao.com'){
-  // 预发正式
-  common.apiAdminPrefix = '/manage/api/admin'
-  common.apiPayPrefix = '/manage/api/pay'
-  common.env = 'production'
-}else if(location.hostname == 'paycenter.zhiyoubao.com'){
-  // 测试环境
-  common.apiAdminPrefix = '/api/admin'
-  common.apiPayPrefix = '/api/pay'
-  common.env = 'test'
-}else{
-  // 开发环境
-  common.env = 'dev'
-}
-
 export default common

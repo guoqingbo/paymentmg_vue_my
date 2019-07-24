@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import common from '@/common/index'
 axios.defaults.timeout = 5000
-axios.defaults.baseURL = common.apiAdminPrefix;
+axios.defaults.baseURL = common.config.apiAdminPrefix;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 // request 拦截器

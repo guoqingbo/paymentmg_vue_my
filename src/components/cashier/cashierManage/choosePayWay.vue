@@ -119,7 +119,7 @@
       getCashierIniInfo(){
         let url = '/initcrashier'
         let params  = this.$route.query
-        let apiPrefix = this.common.apiPayPrefix
+        let apiPrefix = this.common.config.apiPayPrefix
         if(params.merchantSourceNo && params.orderNo && params.orderSource){
           this.apiGet(url,params,apiPrefix).then(res=>{
             if(res.status == 200){
@@ -232,7 +232,7 @@
         this.loading = true
         let url = '/unifiedorder'
         let params  = {requestXml:this.json2xml({xml:this.params})}
-        let apiPrefix = this.common.apiPayPrefix
+        let apiPrefix = this.common.config.apiPayPrefix
         this.apiPost(url,params,apiPrefix).then(res=>{
           res = this.xml2json(res)
           this.loading = false
