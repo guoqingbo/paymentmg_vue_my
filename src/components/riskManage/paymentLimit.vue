@@ -246,7 +246,7 @@
         }
         let regexp = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
         if (rule.required && !value) {
-          callback(new Error(rule.message))
+          callback(new Error(message))
         } else if (value <= 0 || value >= 100000000) {
           callback(new Error('请输入大于0小于1亿的数'))
         } else if (!(regexp.test(value))) {
