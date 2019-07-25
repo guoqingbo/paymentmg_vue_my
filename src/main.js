@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import './validate'
+// import './validate'
 import router from './router'
 import store from './store'
 import iView from 'iview'

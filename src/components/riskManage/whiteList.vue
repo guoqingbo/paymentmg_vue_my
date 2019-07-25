@@ -44,7 +44,7 @@
           },
           {
             title: '操作员',
-            key: 'modifyBy',
+            key: 'createBy',
             sortable: true,
           },
            {
@@ -86,18 +86,18 @@
           {
             label: '用户标识',
             type: 'input',
-            name: 'merchantName'
+            name: 'userSourceNo'
           },
           {
             label: '支付渠道',
             type: 'select',
-            name: 'source',
+            name: 'channelCode',
             data: ''
           },
           {
             label: '订单来源',
             type: 'select',
-            name: 'source',
+            name: 'orderSource',
             data: ''
           },
         ],

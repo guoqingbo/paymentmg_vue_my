@@ -11,14 +11,14 @@
       * 收银台 paycenter.zhiyoubao.com/cashier/cashierManage/choosePayWay?
       
   ## 测试环境
-      * admin-swagger  http://192.168.200.88:6071/swagger-ui.html
+      * admin-swagger  http://192.168.200.88:10806/swagger-ui.html
       * pay-swagger  http://192.168.200.88:6073/swagger-ui.html
       * 后台接口 http://192.168.200.88:6071/
       * 域名 paycenter.zhiyoubao.com
       * 普通账号 15010001000/123456
       * 超级账号 superadmin/123456
       
-  ## 正式环境
+  ## 预发环境
       * 域名 prepaycenter.zhiyoubao.com
       * 普通账号 15010001000/123456
       * 超级账号 superadmin/123456

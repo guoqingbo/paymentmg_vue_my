@@ -1,6 +1,6 @@
 <template>
 <div>
-      <Upload 
+      <Upload
           ref="upload"
           :show-upload-list="false"
           :on-success="handleSuccess"
@@ -12,7 +12,7 @@
           :on-exceeded-size="handleMaxSize"
           action="/manage/admin/admin/ui/upload">
           <Button type="primary" :loading="loading">点击上传</Button>
-      </Upload> 
+      </Upload>
  <div class="demo-upload-list-box" v-for="(item,index) in uploadList" :key="index">
         <span>
              <Icon type="ios-musical-notes" class="icon-music"></Icon>
@@ -75,7 +75,7 @@ export default {
    handleMaxSize (file) {
         this.$Notice.warning({
         title: '上传的文件过大',
-        desc: '文件  ' + file.name + ' 过大, 不能超过 10M'
+        desc: '文件  ' + file.name + ' 过大, 不能超过 2M'
     });
     },
      handleFormatError(file){

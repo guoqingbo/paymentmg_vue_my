@@ -133,13 +133,14 @@
             rules: [
               {required: false, type:'number',message: '请选择证件类型', trigger: 'change'}
             ],
+            onChange:this.idTypeChange,
             value: 1
           },
           {
             title: '证件号码',
             name: 'idCard',
             type: 'input',
-            rules: [{required: false, message: "请输入证件号码",trigger: 'blur'}],
+            rules: [{ required: false,validator:this.common.validate.IdCodeValid,trigger: 'blur'}],
             value: ""
           },
           {
@@ -209,8 +210,19 @@
       this.getDetail()
     },
     methods: {
+      // 证件类型改变时
+      idTypeChange(e){
+        // 1身份证 2护照 3港澳通行证
+        if(e==1){
+          this.formList1[3].rules[0].validator = this.common.validate.IdCodeValid
+        }else if(e==2){
+          this.formList1[3].rules[0].validator = this.common.validate.passport
+        }else if(e==3){
+          this.formList1[3].rules[0].validator = this.common.validate.passportHM
+        }
+      },
+      // 确认保存之前
       beforeSave(formItem) {
-        // 确认保存之前
         if (formItem.area) {
           // 转换省市区
           let area = formItem.area
