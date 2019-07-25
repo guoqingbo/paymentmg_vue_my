@@ -259,6 +259,9 @@
       },
       // 设置详情页
       setDetail(){
+        this.formItems[0].disabled = true
+        this.formItems[1].disabled = true
+        this.formItems[2].disabled = true
         this.formItems.forEach((ele,index)=>{
           ele.value = this.detail[ele.name]
           // 新增时默认是否启用为停用
