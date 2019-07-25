@@ -146,17 +146,19 @@
             title: '单笔限额（元）',
             name: 'singleLimit',
             type: 'input',
-            rules: [{required: true,validator: this.validateLimit, trigger: "blur",message1: "请输入单笔限额"},
+            rules: [{required: true,validator: this.validateLimit, trigger: "blur"},
               // {max: 20, message: "单笔限额不超过20字符", trigger: 'blur'}
-            ]
+            ],
+            value:'',
           },
           {
             title: '单日累计限额（元）',
             name: 'dayLimit',
             type: 'input',
-            rules: [{required: true,validator: this.validateLimit, trigger: "blur",message1: "请输入单日累计限额"},
+            rules: [{required: true,validator: this.validateLimit, trigger: "blur"},
               // {max: 20, message: "单日累计限额不超过20字符", trigger: 'blur'}
-            ]
+            ],
+            value:'',
           },
           {
             title: '是否启用',
@@ -227,14 +229,30 @@
       },
       // 单笔交易限额、单日累计交易限额校验
       validateLimit(rule, value, callback) {
-
+        // 单笔限额
+        let message = ''
+        let singleLimit = ''
+        let dayLimit = ''
+        if(rule.field=="singleLimit"){
+          singleLimit = value
+          dayLimit = this.formItems[4].value
+          message = '请输入单笔限额'
+        }
+        // 单日累计
+        if(rule.field=="dayLimit"){
+          singleLimit = this.formItems[3].value
+          dayLimit = value
+          message = '请输入单日累计限额'
+        }
         let regexp = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
         if (rule.required && !value) {
-          callback(new Error(rule.message1))
+          callback(new Error(rule.message))
         } else if (value <= 0 || value >= 100000000) {
           callback(new Error('请输入大于0小于1亿的数'))
         } else if (!(regexp.test(value))) {
           callback(new Error('数据格式不正确！'))
+        }else if (singleLimit>dayLimit) {
+          callback(new Error('单笔限额不得大于单日累计限额'))
         } else {
           callback()
         }

@@ -69,6 +69,9 @@
             title: '操作',
             key: 'action',
             render: (h, params) => {
+              if(params.row.status !==0){
+                return
+              }
               const actions = [
                 {
                   title: "加入白名单",

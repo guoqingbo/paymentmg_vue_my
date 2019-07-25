@@ -63,7 +63,7 @@ export default {
             url: _this.url,
             params: _this.param,
             callback: res => {
-              if (res.success || res.status == 200) {
+              if (res.success) {
                 this.$store.dispatch("getList");
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
