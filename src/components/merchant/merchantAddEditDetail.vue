@@ -100,7 +100,7 @@
             title: '上传营业执照',
             name: 'licenseUrl',
             type: 'uploadFile',
-            tip: '建议上传小于10M的png、jpg、jpeg格式的图片'
+            tip: '建议上传小于2M的png、jpg、jpeg格式的图片'
           },
         ],// 商户类型为企业时
         formList1: [

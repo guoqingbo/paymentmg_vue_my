@@ -74,6 +74,9 @@
                     this.formTitle = '修改'
                     this.formShow = true
                     this.detail = params.row
+                    this.formItems[0].disabled = true
+                    this.formItems[1].disabled = true
+                    this.formItems[2].disabled = true
                     this.setDetail()
                   }
                 },
@@ -109,6 +112,10 @@
               this.formShow = true
               // 清空详情
               this.detail = ''
+              this.formTitle = '添加'
+              this.formItems[0].disabled = false
+              this.formItems[1].disabled = false
+              this.formItems[2].disabled = false
               this.setDetail()
             }
           }
@@ -260,9 +267,6 @@
       },
       // 设置详情页
       setDetail(){
-        this.formItems[0].disabled = true
-        this.formItems[1].disabled = true
-        this.formItems[2].disabled = true
         this.formItems.forEach((ele,index)=>{
           ele.value = this.detail[ele.name]
           // 新增时默认是否启用为停用
