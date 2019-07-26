@@ -259,7 +259,7 @@
           callback(new Error('请输入大于0小于1亿的数'))
         } else if (!(regexp.test(value))) {
           callback(new Error('数据格式不正确！'))
-        }else if (singleLimit>dayLimit) {
+        }else if (singleLimit - dayLimit > 0) {
           callback(new Error('单笔限额不得大于单日累计限额'))
         } else {
           callback()

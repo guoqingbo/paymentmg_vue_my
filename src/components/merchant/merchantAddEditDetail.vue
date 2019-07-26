@@ -257,6 +257,13 @@
             if (res.status == 200 && res.data) {
               // 更改账户类型
               this.merchantTypeChange(res.data.merchantType)
+              if (this.routeType == 'detail') {
+                // 如果是详情页
+              } else {
+                // 如果是编辑
+                // 更改证件类型验证
+                this.idTypeChange(res.data.idType)
+              }
               this.formList[0].disabled = true
               this.formList.forEach((ele) => {
                 ele.value = res.data[ele.name]
