@@ -71,6 +71,7 @@
                   {
                   title: "修改",
                   action: () => {
+                    this.formTitle = '修改'
                     this.formShow = true
                     this.detail = params.row
                     this.setDetail()
