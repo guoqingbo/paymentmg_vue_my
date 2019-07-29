@@ -74,11 +74,17 @@ export default {
     },
   },
   watch: {
-    value(val, oldVal){
-      if(val!==oldVal){
-        this.updateArea()
-      }
+    value:{
+      handler(val, oldVal){
+        console.log(val)
+        console.log(oldVal)
+        if(val!==oldVal){
+          this.updateArea()
+        }
+      },
+      immediate: true
     },
+    // value
   },
   mounted() {
     // this.$nextTick(async () => {
