@@ -60,7 +60,7 @@
                      :disabled="item.disabled"
                      :fieldName="item.name"
                      @getQu="getQu"
-                    :addrCode="item.addrCode"
+                    v-model="item.value"
                     :span='8'></selectList>
         <span class="detail-text" v-if="item.type=='areaText'">
           {{item.areaText}}
@@ -164,7 +164,7 @@ export default {
     //   //市
     // },
     getQu(areaCode,fieldName) {
-      this.formItem[fieldName] = areaCode
+      this.formItem[fieldName+"Obj"] = areaCode
     },
     uploadSuccess(fileUrl,fieldName){
       this.formItem[fieldName] = fileUrl

@@ -58,7 +58,10 @@ export default {
     };
   },
   props: {
-    addrCode: {
+    // addrCode: {
+    //   type: String,
+    // },
+    value: {
       type: String,
     },
     fieldName:{
@@ -71,8 +74,10 @@ export default {
     },
   },
   watch: {
-    addrCode(val, oldVal){
-      this.updateArea()
+    value(val, oldVal){
+      if(val!==oldVal){
+        this.updateArea()
+      }
     },
   },
   mounted() {
@@ -81,13 +86,52 @@ export default {
     // }, 200);
   },
   created() {
-    this.getCityData();
+
   },
   methods: {
     getCityData() {
       this.$store.dispatch("getCityData").then(res => {
         this.province = res.data;
       });
+    },
+    // 更新市或区
+    updateArea(){
+      if (this.value){
+        console.log(123)
+        let [sheng,shi,qu] = this.value.split("-")
+        // if(sheng && shi && qu){
+        //
+        // }
+        this.sheng = sheng;
+        this.shi = shi;
+        this.qu = qu;
+        this.$store.dispatch("getCityData").then(res => {
+          this.province = res.data;
+          for (let index2 in this.province) {
+            if (sheng === this.province[index2].areaCode) {
+              this.shi1 =  this.province[index2].subList
+              this.shengName = this.province[index2].areaName
+              break;
+            }
+          }
+          for (let index3 in this.shi1) {
+            if (shi === this.shi1[index3].areaCode) {
+              this.qu1 =  this.shi1[index3].subList
+              this.shiName =  this.shi1[index3].areaName
+              break;
+            }
+          }
+          for (let index4 in this.qu1) {
+            if (qu === this.qu1[index4].areaCode) {
+              this.quName = this.qu1[index4].areaName
+              break;
+            }
+          }
+          this.emitArea()
+        });
+      }else{
+        this.getCityData();
+      }
     },
     // 选省
     choseProvince(e) {
@@ -97,10 +141,12 @@ export default {
           this.shi1 =  this.province[index2].subList
           this.shengName = this.province[index2].areaName
 
+          this.shi = ''
+          this.shiName = ''
+
           this.qu =  ''
           this.qu1 =  []
           this.quName = ''
-
           break;
         }
       }
@@ -113,6 +159,10 @@ export default {
           // this.$emit("getProvince", this.province[index2].areaName, e);
           this.qu1 =  this.shi1[index3].subList
           this.shiName =  this.shi1[index3].areaName
+
+          this.qu =  ''
+          this.quName = ''
+
           break;
         }
       }
@@ -161,41 +211,6 @@ export default {
       }]
       this.$emit("getQu", area,this.fieldName)
     },
-    // 更新市或区
-    updateArea(){
-      if (this.addrCode){
-        let [sheng,shi,qu] = this.addrCode.split("-")
-        // if(sheng && shi && qu){
-        //
-        // }
-        this.sheng = sheng;
-        this.shi = shi;
-        this.qu = qu;
-        this.$store.dispatch("getCityData").then(res => {
-          this.province = res.data;
-          for (let index2 in this.province) {
-            if (sheng === this.province[index2].areaCode) {
-              this.shi1 =  this.province[index2].subList
-              this.shengName = this.province[index2].areaName
-              break;
-            }
-          }
-          for (let index3 in this.shi1) {
-            if (shi === this.shi1[index3].areaCode) {
-              this.qu1 =  this.shi1[index3].subList
-              this.shiName =  this.shi1[index3].areaName
-              break;
-            }
-          }
-          for (let index4 in this.qu1) {
-            if (qu === this.qu1[index4].areaCode) {
-              this.quName = this.qu1[index4].areaName
-              break;
-            }
-          }
-        });
-      }
-    }
   }
 };
 </script>

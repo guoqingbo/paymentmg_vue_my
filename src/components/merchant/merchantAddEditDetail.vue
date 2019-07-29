@@ -86,9 +86,10 @@
             title: '所在地区',
             name: 'area',
             type: 'area',
-            addrCode: "",
+            // addrCode: "",
             areaText:"",
-            rules: []
+            rules: [],
+            value:''
           },
           {
             title: '详细地址',
@@ -186,9 +187,10 @@
             title: '所在地区',
             name: 'area',
             type: 'area',
-            addrCode: "",
+            // addrCode: "",
             areaText:"",
             rules: [],
+            value: "",
           },
           {
             title: '详细地址',
@@ -222,16 +224,16 @@
       },
       // 确认保存之前
       beforeSave(formItem) {
-        console.log(formItem)
-        if (formItem.area) {
+        if (formItem.areaObj) {
           // 转换省市区
-          let area = formItem.area
+          let area = formItem.areaObj
           formItem.provinceCode = area[0].value;
           formItem.province = area[0].label;
           formItem.cityCode = area[1].value;
           formItem.city = area[1].label;
           formItem.districtCode = area[2].value;
           formItem.district = area[2].label;
+          delete formItem.areaObj
           delete formItem.area
         }
         if (this.$route.query.id) {
@@ -284,7 +286,8 @@
                   // 如果是编辑页
                   if (ele.name == 'area') {
                     let addrCode = [res.data.provinceCode, res.data.cityCode, res.data.districtCode]
-                    ele.addrCode = addrCode.join("-")
+                    // ele.addrCode = addrCode.join("-")
+                    ele.value = addrCode.join("-")
                     // if (addrCode[0] && addrCode[1] && addrCode[2]) {
                     //   ele.addrCode = addrCode.join("-")
                     // }
