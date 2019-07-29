@@ -189,7 +189,6 @@
             addrCode: "",
             areaText:"",
             rules: [],
-            value: ""
           },
           {
             title: '详细地址',
@@ -223,6 +222,7 @@
       },
       // 确认保存之前
       beforeSave(formItem) {
+        console.log(formItem)
         if (formItem.area) {
           // 转换省市区
           let area = formItem.area

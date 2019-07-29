@@ -27,13 +27,13 @@ const config = {
   },
 }
 let env = 'production'
-if(location.hostname == 'paycenter.zhiyoubao.com'){
+if(location.hostname == 'testpaycenter.zhiyoubao.com'){
   // 测试环境
   env = 'test'
 }else if(location.hostname == 'prepaycenter.zhiyoubao.com'){
   // 预发环境
   env = 'pre'
-}else if(location.hostname == '正式域名'){
+}else if(location.hostname == 'paycenter.zhiyoubao.com'){
   // 正式环境
   env = 'production'
 }else{
