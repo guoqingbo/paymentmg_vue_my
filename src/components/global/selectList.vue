@@ -76,8 +76,6 @@ export default {
   watch: {
     value:{
       handler(val, oldVal){
-        console.log(val)
-        console.log(oldVal)
         if(val!==oldVal){
           this.updateArea()
         }
@@ -103,7 +101,6 @@ export default {
     // 更新市或区
     updateArea(){
       if (this.value){
-        console.log(123)
         let [sheng,shi,qu] = this.value.split("-")
         // if(sheng && shi && qu){
         //

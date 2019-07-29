@@ -62,7 +62,7 @@
           {
             title: '支付产品代码',
             key: 'payProductCode',
-              ktable: true,
+            sortable: true,
           },
           {
             title: '渠道产品状态',
@@ -134,7 +134,7 @@
           {
             label: '支付产品名称',
             type: 'select',
-            name: 'payProductId',
+            name: 'payProductCode',
             data: ''
           },
           {
