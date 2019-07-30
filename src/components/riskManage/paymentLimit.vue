@@ -66,6 +66,8 @@
           {
             title: '操作',
             key: 'action',
+            width:120,
+            align:'center',
             render: (h, params) => {
               const actions = [
                   {
