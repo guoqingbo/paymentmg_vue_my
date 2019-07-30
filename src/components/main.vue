@@ -418,17 +418,17 @@
 
   .layout-logo {
     width: 150px;
-    /*height: 60px;*/
+    height: 64px;
     float: left;
   }
 
   .layout-logo .logo-img {
-    width: 130px;
+    /*width: 130px;*/
     height: 28px;
     vertical-align: middle;
     color: #fff;
     font-size: 21px;
-    /*float: left;*/
+    float: left;
   }
 
   .breadcrumb {

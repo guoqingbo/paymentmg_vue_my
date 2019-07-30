@@ -33,7 +33,7 @@ if(location.hostname == 'testpaycenter.zhiyoubao.com'){
 }else if(location.hostname == 'prepaycenter.zhiyoubao.com'){
   // 预发环境
   env = 'pre'
-}else if(location.hostname == 'paycenter.zhiyoubao.com'){
+}else if(location.hostname == 'paycenter.zhiyoubao.com' || location.hostname == '119.3.63.43'){
   // 正式环境
   env = 'production'
 }else{

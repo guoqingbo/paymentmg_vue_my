@@ -22,7 +22,7 @@
           {
             title: '序号',
             type:'index',
-            width:60,
+            width:70,
             align:'center'
           },
           {
@@ -51,6 +51,8 @@
           {
             title: '操作',
             key: 'action',
+            width:140,
+            align:'center',
             render: (h, params) => {
               const actions = [
                 {

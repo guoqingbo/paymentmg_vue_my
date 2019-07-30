@@ -22,7 +22,7 @@
           {
             title: '序号',
             type:'index',
-            width:60,
+            width:70,
             align:'center'
           },
           {
