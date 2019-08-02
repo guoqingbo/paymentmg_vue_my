@@ -43,6 +43,14 @@
                   :selected="sitem.value == item.value"
                   :key="sitem.value">{{ sitem.label }}</Option>
         </Select>
+        <AutoComplete class="my-autoComplete"
+                      v-if="item.type=='autoComplete'"
+                      v-model="item.value"
+                      @on-search="item.search?item.search($event):''"
+                      icon="ios-search"
+                      :placeholder="'请输入'+item.label">
+          <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
+        </AutoComplete>
         <Input v-if="item.type=='textarea'"
                :disabled="item.disabled"
                v-model="item.value"
@@ -195,5 +203,9 @@ export default {
     text-align: center;
     line-height: 70px;
     color: #999;
+  }
+  .my-autoComplete .ivu-select-dropdown-list{
+    max-height: 300px;
+    overflow: auto;
   }
 </style>

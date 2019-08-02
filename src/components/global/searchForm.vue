@@ -8,12 +8,13 @@
              v-model="item.value"
              :placeholder="'请输入'+item.label"
              :style="item.style"></Input>
-      <AutoComplete v-if="item.type=='autoComplete'"
+      <AutoComplete class="my-autoComplete"
+                    v-if="item.type=='autoComplete'"
                     v-model="item.value"
                     @on-search="item.search?item.search($event):''"
                     icon="ios-search"
                     :placeholder="'请输入'+item.label">
-        <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sitem.value">{{ sitem.label }}</Option>
+        <Option style="max-width: 180px" v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
       </AutoComplete>
       <DatePicker v-if="item.type=='date' || item.type=='month'"
                   @on-change="item.onChange?item.onChange($event):''"
@@ -178,3 +179,9 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .my-autoComplete .ivu-select-dropdown-list{
+    max-height: 300px;
+    overflow: auto;
+  }
+</style>

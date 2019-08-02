@@ -9,7 +9,7 @@
       * master分支 正式发布代码备份
       * jekins地址 http://192.168.200.24:9002 guoqingbo/Gqb123456
       * 收银台 paycenter.zhiyoubao.com/cashier/cashierManage/choosePayWay
-      
+      * 微信支付唤起 paycenter.zhiyoubao.com/cashier/cashierManage/callWxPay
   ## 测试环境
       * admin-swagger  http://192.168.200.88:10806/swagger-ui.html
       * pay-swagger  http://192.168.200.88:6073/swagger-ui.html
