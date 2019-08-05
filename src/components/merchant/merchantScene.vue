@@ -124,8 +124,22 @@
           {
             title: '商户号',
             name: 'merchantCode',
-            type: 'input',
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
+          },
+          {
+            title: '商户名称',
+            label: '商户名称',
+            name: 'merchantName',
+            data: [],
+            type: 'autoComplete',
+            rules: [
+              { required: true, message: '请输入商户名称', trigger: 'blur' },
+              // { max: 20, message: "商户名称不超过20字符" }
+            ],
+            search: (value)=>{
+              this.searchMerchantListAdd(value,2,"formItems",1)
+            },
+            value: ""
           },
           {
             title: '场景名称',
@@ -148,6 +162,29 @@
     },
     components: {list,confirm,modalForm},
     methods: {
+      // 商户信息模糊查询
+      searchMerchantListAdd(keyword,columnType,form,index){
+        if(keyword){
+          let params = {
+            vagueMerchantMark:keyword,
+            columnType,
+          }
+          let url = '/merchant/queryMerchantListByVagueMerchantMark'
+          this.apiGet(url,params).then(res=>{
+            if(res.status == 200){
+              let data = []
+              if(res.data.length){
+                res.data.forEach(ele=>{
+                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
+                })
+              }else{
+                data = [{label:'暂无数据',value:''}]
+              }
+              this[form][index].data = data
+            }
+          })
+        }
+      },
       // 商户信息模糊查询
       searchMerchantList(keyword,columnType){
         // columnType，1:code查询，2:name查询

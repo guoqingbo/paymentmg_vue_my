@@ -27,13 +27,18 @@
           return {
             searchItems: [
               {
-                label: '商户号',
+                label: '商户名称',
                 type: 'autoComplete',
-                name: 'merchantNo',
+                name: 'merchantNa',
                 data:[],
                 search: (value)=>{
-                  this.searchMerchantList(value,1)
+                  this.searchMerchantList(value,2)
                 }
+              },
+              {
+                label: '商户号',
+                type: 'hidden',
+                name: 'merchantNo',
               }
             ],
             chartSearchItems: [
@@ -239,17 +244,18 @@
                   res.data.forEach(ele=>{
                     if(columnType == 1){
                       // 1:code查询
-                      data.push({label:ele.merchantCode,value:ele.merchantCode})
+                      data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
                     }else{
                       // 2:name查询
-                      data.push({label:ele.merchantName,value:ele.merchantName})
+                      data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName})
                     }
-
                   })
                 }else{
                   data = [{label:'暂无数据',value:''}]
                 }
                 if(columnType == 1){
+                  this.searchItems[1].data = data
+                }else{
                   this.searchItems[0].data = data
                 }
               }

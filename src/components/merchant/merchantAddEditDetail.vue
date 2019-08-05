@@ -47,8 +47,19 @@
           {
             title: '上级商户号',
             name: 'parentMerchantCode',
-            type: 'input',
             rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
+          },
+          {
+            title: '上级商户名称',
+            label: '上级商户名称',
+            name: 'parentMerchantName',
+            type: 'autoComplete',
+            value: '',
+            data:[],
+            search: (value)=>{
+              this.searchMerchantList(value,2,"formList0",4)
+            },
+            rules: [{max: 50, message: "上级商户名称不超过50字符", trigger: 'blur'}]
           },
           {
             title: '法定代表人姓名',
@@ -147,9 +158,20 @@
           {
             title: '上级商户号',
             name: 'parentMerchantCode',
-            type: 'input',
             rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
             value: ""
+          },
+          {
+            title: '上级商户名称',
+            label: '上级商户名称',
+            name: 'parentMerchantName',
+            type: 'autoComplete',
+            value: '',
+            data:[],
+            search: (value)=>{
+              this.searchMerchantList(value,2,"formList1",5)
+            },
+            rules: [{max: 50, message: "上级商户名称不超过50字符", trigger: 'blur'}]
           },
           {
             title: '手机号码',
@@ -211,6 +233,29 @@
       this.getDetail()
     },
     methods: {
+      // 商户信息模糊查询
+      searchMerchantList(keyword,columnType,form,index){
+        if(keyword){
+          let params = {
+            vagueMerchantMark:keyword,
+            columnType,
+          }
+          let url = '/merchant/queryMerchantListByVagueMerchantMark'
+          this.apiGet(url,params).then(res=>{
+            if(res.status == 200){
+              let data = []
+              if(res.data.length){
+                res.data.forEach(ele=>{
+                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
+                })
+              }else{
+                data = [{label:'暂无数据',value:''}]
+              }
+              this[form][index].data = data
+            }
+          })
+        }
+      },
       // 证件类型改变时
       idTypeChange(e){
         // 1身份证 2护照 3港澳通行证

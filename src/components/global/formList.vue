@@ -67,6 +67,7 @@
       },
       mySubmit() {
         this.btnLoading = true
+        console.log(this.$refs.myForm.formItem);
         this.$refs.myForm.validate(async valid => {
           if (valid) {
             let saveMethod = 'apiPost'

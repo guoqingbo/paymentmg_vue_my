@@ -12,9 +12,11 @@
                     v-if="item.type=='autoComplete'"
                     v-model="item.value"
                     @on-search="item.search?item.search($event):''"
+                    @on-select="autoSelect($event,item)"
+                    @on-change="autoChange($event,item)"
                     icon="ios-search"
                     :placeholder="'请输入'+item.label">
-        <Option style="max-width: 180px" v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
+        <Option style="max-width: 180px" v-for="(sitem,sindex) in item.data" :value="sitem.label" :key="sindex">{{ sitem.label }}</Option>
       </AutoComplete>
       <DatePicker v-if="item.type=='date' || item.type=='month'"
                   @on-change="item.onChange?item.onChange($event):''"
@@ -49,6 +51,7 @@ export default {
   data () {
     return {
       searchForm: {},
+      autoSelected: false,
     }
   },
   props: ['searchItems','exportItem','url','params'],
@@ -72,7 +75,9 @@ export default {
               if(element.value instanceof Date){
                 element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
               }
-
+              if(element.type == 'autoComplete'){
+                return
+              }
               // if(element.name == 'startDate' ||
               //   element.name == 'orderTimeStart' ||
               //   element.name == 'date'){
@@ -144,6 +149,53 @@ export default {
 
   },
   methods: {
+    autoChange(val,item) {
+      if(this.autoSelected){ // 判断是否是自动填充
+        this.autoSelected = false;
+        if(this.searchForm.merchantCode!=undefined){
+          this.searchItems.forEach(ele=>{
+            if(ele.name=='merchantCode'){
+              ele.value = item.code;
+            }
+          });
+          this.$set(this.searchForm, "merchantName", item.keyword);
+        }
+        if(this.searchForm.merchantNo!=undefined){
+          this.searchItems.forEach(ele=>{
+            if(ele.name=='merchantNo'){
+              ele.value = item.code;
+            }
+          });
+          this.$set(this.searchForm, "merchantNa", item.keyword);
+        }
+      }else{
+        if(this.searchForm.merchantCode!=undefined){
+          this.searchItems.forEach(ele=>{
+            if(ele.name=='merchantCode'){
+              ele.value = '';
+            }
+          });
+          this.$set(this.searchForm, "merchantName", item.value);
+        }
+        if(this.searchForm.merchantNo!=undefined){
+          this.searchItems.forEach(ele=>{
+            if(ele.name=='merchantNo'){
+              ele.value = '';
+            }
+          });
+          this.$set(this.searchForm, "merchantNa", item.value);
+        }
+      }
+    },
+    autoSelect(val,item) {
+      this.autoSelected = true;
+      let newValue = val.match(/\(.+\)/g);
+      if(newValue instanceof Array) {
+        item.code = newValue[0];
+        item.keyword = val.replace(/\(.+\)/g,'');
+      }
+      item.code = item.code.replace(/\(|\)/g,'');
+    },
     searchSubmit () {
       // 格式化日期
       this.formateDate()

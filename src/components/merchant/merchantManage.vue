@@ -106,7 +106,7 @@
           },
           {
             label: '商户号',
-            type: 'autoComplete',
+            type: 'hidden',
             name: 'merchantCode',
             data:[],
             search: (value)=>{
@@ -169,10 +169,10 @@
                 res.data.forEach(ele=>{
                   if(columnType == 1){
                     // 1:code查询
-                    data.push({label:ele.merchantName+" ("+ele.merchantCode+")",value:ele.merchantCode})
+                    data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
                   }else{
                     // 2:name查询
-                    data.push({label:ele.merchantName+" ("+ele.merchantCode+")",value:ele.merchantName})
+                    data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName})
                   }
 
                 })

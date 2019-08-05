@@ -96,12 +96,9 @@
           },
           {
             label: '商户编号',
-            type: 'autoComplete',
+            type: 'hidden',
             name: 'merchantCode',
             data:[],
-            search: (value)=>{
-              this.searchMerchantList(value,1)
-            }
           },
           {
             label: '商户来源',
@@ -142,9 +139,22 @@
               {max: 20, message: "来源商户号不超过20字符", trigger: 'blur'}]
           },
           {
+            title: '支付中心商户名称',
+            label: '支付中心商户名称',
+            name: 'merchantName',
+            type: 'autoComplete',
+            value: '',
+            data:[],
+            search: (value)=>{
+              this.searchMerchantListAdd(value,2,"formItems",2)
+            },
+             rules: [{ required: true, message: '请输入来源支付中心商户名称', trigger: 'blur' },
+              // {max: 20, message: "支付中心商户名称不超过20字符", trigger: 'blur'}
+              ]
+          },
+          {
             title: '支付中心商户号',
             name: 'merchantCode',
-            type: 'input',
             rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
               {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
           }
@@ -180,6 +190,29 @@
         })
       },
       // 商户信息模糊查询
+      searchMerchantListAdd(keyword,columnType,form,index){
+        if(keyword){
+          let params = {
+            vagueMerchantMark:keyword,
+            columnType,
+          }
+          let url = '/merchant/queryMerchantListByVagueMerchantMark'
+          this.apiGet(url,params).then(res=>{
+            if(res.status == 200){
+              let data = []
+              if(res.data.length){
+                res.data.forEach(ele=>{
+                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
+                })
+              }else{
+                data = [{label:'暂无数据',value:''}]
+              }
+              this[form][index].data = data
+            }
+          })
+        }
+      },
+      // 商户信息模糊查询
       searchMerchantList(keyword,columnType){
         // columnType，1:code查询，2:name查询
         if(keyword && columnType){
@@ -193,14 +226,7 @@
               let data = []
               if(res.data.length){
                 res.data.forEach(ele=>{
-                  if(columnType == 1){
-                    // 1:code查询
-                    data.push({label:ele.merchantCode,value:ele.merchantCode})
-                  }else{
-                    // 2:name查询
-                    data.push({label:ele.merchantName,value:ele.merchantName})
-                  }
-
+                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
                 })
               }else{
                 data = [{label:'暂无数据',value:''}]

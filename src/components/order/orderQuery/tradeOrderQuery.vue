@@ -114,7 +114,7 @@
             label: '起始日期',
             type: 'date',
             name: 'orderTimeStart',
-            format:'yyyy-MM-dd 00:00:00',
+            format:'yyyy-MM-dd',
             value: new Date(new Date().setMonth(new Date().getMonth()-1)),
             options:{}
           },
@@ -122,18 +122,25 @@
             label: '结束日期',
             type: 'date',
             name: 'orderTimeEnd',
-            format:'yyyy-MM-dd 23:59:59',
+            format:'yyyy-MM-dd',
             value: new Date(),
             options:{}
           },
           {
-            label: '商户号',
-            name: 'merchantNo',
+            label: '商户名称',
+            name: 'merchantNa',
             type: 'autoComplete',
+            value: '',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,1)
+              this.searchMerchantList(value,2)
             }
+          },
+          {
+            label: '商户号',
+            name: 'merchantNo',
+            type: 'hidden',
+            data:[],
           },
           {
             label: '支付状态',
@@ -231,21 +238,12 @@
               let data = []
               if(res.data.length){
                 res.data.forEach(ele=>{
-                  if(columnType == 1){
-                    // 1:code查询
-                    data.push({label:ele.merchantCode,value:ele.merchantCode})
-                  }else{
-                    // 2:name查询
-                    data.push({label:ele.merchantName,value:ele.merchantName})
-                  }
-
+                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
                 })
               }else{
                 data = [{label:'暂无数据',value:''}]
               }
-              if(columnType == 1){
-                this.searchItems[4].data = data
-              }
+              this.searchItems[4].data = data
             }
           })
         }

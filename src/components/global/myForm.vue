@@ -47,9 +47,11 @@
                       v-if="item.type=='autoComplete'"
                       v-model="item.value"
                       @on-search="item.search?item.search($event):''"
+                      @on-select="autoSelect($event,item)"
+                      @on-change="autoChange($event,item)"
                       icon="ios-search"
                       :placeholder="'请输入'+item.label">
-          <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
+          <Option v-for="(sitem,sindex) in item.data" :value="sitem.label" :key="sindex">{{ sitem.label }}</Option>
         </AutoComplete>
         <Input v-if="item.type=='textarea'"
                :disabled="item.disabled"
@@ -99,6 +101,7 @@ export default {
     return {
       formItem: {
       },
+      autoSelected: false,
     }
   },
   props: {
@@ -138,6 +141,9 @@ export default {
             this.$set(element, 'value','')
           }
           if(element.name){
+            if(element.type == 'autoComplete'){
+              return
+            }
             // this.formItem[element.name] = element.value
             this.$set(this.formItem, element.name, element.value)
           }
@@ -148,6 +154,56 @@ export default {
     }
   },
   methods: {
+    autoChange(val,item) {
+      console.log(item);
+      if(this.autoSelected){ // 判断是否是自动填充
+        this.autoSelected = false;
+        if(this.formItem.parentMerchantCode!=undefined){
+          this.formItems.forEach(ele=>{
+            if(ele.name=='parentMerchantCode'){
+              ele.value = item.code;
+            }
+          });
+          this.$set(this.formItem, "parentMerchantName", item.keyword)
+        }
+        if(this.formItem.merchantCode!=undefined){
+          this.formItems.forEach(ele=>{
+            if(ele.name=='merchantCode'){
+              ele.value = item.code;
+            }
+          });
+          this.$set(this.formItem, "merchantName", item.keyword)
+        }
+      }else{
+        if(this.formItem.parentMerchantCode!=undefined){
+          this.formItems.forEach(ele=>{
+            if(ele.name=='parentMerchantCode'){
+              ele.value = '';
+            }
+          });
+          this.$set(this.formItem, "parentMerchantName", item.value)
+        }
+        if(this.formItem.merchantCode!=undefined){
+          this.formItems.forEach(ele=>{
+            if(ele.name=='merchantCode'){
+              ele.value = '';
+            }
+          });
+          this.$set(this.formItem, "merchantName", item.value)
+        }
+      }
+    },
+    autoSelect(val,item) {
+      console.log(val);
+      console.log(item);
+      this.autoSelected = true;
+      let newValue = val.match(/\(.+\)/g);
+      if(newValue instanceof Array) {
+        item.code = newValue[0];
+        item.keyword = val.replace(/\(.+\)/g,'');
+      }
+      item.code = item.code.replace(/\(|\)/g,'');
+    },
     validate(cb){
       this.$refs.formRef.validate(cb)
     },
