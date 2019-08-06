@@ -52,6 +52,16 @@
             ]
           },
           {
+            title: '渠道产品',
+            name: 'channelProductCode',
+            type: 'select',
+            data:'',
+            onChange:this.payConfigOnChange,
+            rules: [
+              { required: true,message: '请选择渠道产品', trigger: 'change' }
+            ]
+          },
+          {
             title: '默认推荐支付方式',
             name: 'defaultChannel',
             type: 'radio',
@@ -61,16 +71,6 @@
               {label:"否",value:"0"},
             ],
             rules: [{ required: true, message: '请选择默认推荐支付方式', trigger: 'change' }]
-          },
-          {
-            title: '渠道产品',
-            name: 'channelProductCode',
-            type: 'select',
-            data:'',
-            onChange:this.payConfigOnChange,
-            rules: [
-              { required: true,message: '请选择渠道产品', trigger: 'change' }
-            ]
           },
           {
             title: '渠道计费方式',

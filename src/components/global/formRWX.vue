@@ -89,6 +89,14 @@
           <span v-else class="no-img">未上传</span>
         </div>
       </FormItem>
+      <FormItem v-if="type!=='r'" :label-width="150">
+        <Button type="primary"
+                @click="btn.cb"
+                >{{btn.text}}
+        </Button>
+        <Icon v-if='btn.desc' style="font-size: 20px;color: red;" type="ios-alert" />
+        <span style="color: red;vertical-align: middle;">{{btn.desc}}</span>
+      </FormItem>
     </Form>
   </div>
 </template>
@@ -105,6 +113,13 @@ export default {
     }
   },
   props: {
+    btn: {
+      type: Object,
+    },
+    type: {
+      type: String,
+      default: 'r'
+    },
     formItems: {
       type: Array
     },

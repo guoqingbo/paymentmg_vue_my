@@ -8,13 +8,33 @@
            width="750">
       <myForm ref='myForm'
               :formItems='formItems'
+              :btn='btn'
+              :type='type'
               :value="value"
       ></myForm>
+      <div slot="footer">
+        <div v-if='type!="r"'>
+          <Button
+                  @click="cancel"
+                  >取消
+          </Button>
+          <Button type="primary"
+                  @click="ok"
+                  >确定
+          </Button>
+        </div>
+        <div v-else>
+          <Button type="primary"
+                  @click="cancel"
+                  >关闭
+          </Button>
+        </div>
+      </div>
     </Modal>
   </div>
 </template>
 <script>
-  import myForm from './myForm'
+  import myForm from './formRWX'
 
   export default {
     components:{myForm},
@@ -26,6 +46,13 @@
       }
     },
     props: {
+      btn: {
+        type: Object,
+      },
+      type: {
+        type: String,
+        default: "r"
+      },
       value: {
         type: Boolean,
         default: false
@@ -109,7 +136,6 @@
         })
       },
       cancel() {
-        console.log(this.$refs.myForm)
         this.$refs.myForm.resetFields()
         this.$emit('input', this.modal)
       }

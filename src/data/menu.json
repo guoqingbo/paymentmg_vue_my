@@ -195,6 +195,30 @@
           "functionType": "column"
         }
       ]
+    },
+    {
+      "funName": "系统设置",
+      "funCode": "systemSetting",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "秘钥管理",
+          "funCode": "rsaManage",
+          "functionType": "column",
+          "list": [
+            {
+              "funName": "平台密钥",
+              "funCode": "platformRsa",
+              "functionType": "column"
+            },
+            {
+              "funName": "商户密钥",
+              "funCode": "merchantRsa",
+              "functionType": "column"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
