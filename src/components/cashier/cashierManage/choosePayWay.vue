@@ -231,7 +231,11 @@
       submit(){
         this.loading = true
         let url = '/unifiedorder'
-        let params  = {requestXml:this.json2xml({xml:this.params})}
+        let params  = {
+          version:"V1.0",
+          submit_source:1,
+          rsa_data:this.json2xml({xml:this.params})
+        }
         let apiPrefix = this.common.config.apiPayPrefix
         this.apiPost(url,params,apiPrefix).then(res=>{
           res = this.xml2json(res)
