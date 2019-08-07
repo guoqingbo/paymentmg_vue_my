@@ -4,7 +4,7 @@
               :routeType="routeType"
               :url="formListUrl"
               @beforeSave="beforeSave">
-      <div v-if="formList.length==7" class="select-channel-product" slot="bottom">请选择渠道产品</div>
+      <div v-if="formList.length==6" class="select-channel-product" slot="bottom">请选择渠道产品</div>
     </formList>
   </div>
 </template>
@@ -19,33 +19,23 @@
         formListUrl: "/merchantChannel/save",
         formList: [
           {
-            title: '商户名称',
-            label: '商户名称',
-            name: 'merchantName',
+            title: '商户号',
+            name: 'merchantCode',
             data: [],
             type: 'autoComplete',
-            rules: [
-              { required: true, message: '请输入商户名称', trigger: 'blur' },
-              // { max: 20, message: "商户名称不超过20字符" }
-            ],
-            search: (value)=>{
-              this.searchMerchantList(value,2,"formList",0)
-            },
-            value: ""
-          },
-          {
-            title: '商户号',
-            label: '商户号',
-            name: 'merchantCode',
             value: '',
+            disabled:false,
+            search: (value)=>{
+              this.common.searchMerchantList(value,this.formList[0])
+            },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },
-              { max: 20, message: "商户号不超过20字符" }]
+              { max: 60, message: "商户号不超过60字符" }]
           },
           {
             title: '支付产品',
             name: 'payProductCode',
             type: 'select',
-            data:'',
+            data:[],
             onChange:this.getChannelProduct,
             rules: [
               { required: true,message: '请选择支付产品', trigger: 'change' }
@@ -66,10 +56,7 @@
             name: 'defaultChannel',
             type: 'radio',
             value: "1",
-            data: [
-              {label:"是",value:"1"},
-              {label:"否",value:"0"},
-            ],
+            data:this.common.dic.defaultChannel,
             rules: [{ required: true, message: '请选择默认推荐支付方式', trigger: 'change' }]
           },
           {
@@ -106,29 +93,7 @@
       this.getDetail()
     },
     methods: {
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType,form,index){
-        if(keyword){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              this[form][index].data = data
-            }
-          })
-        }
-      },
+      // 商户费率验证
       validateMerchantFeeRate(rule, value, callback){
         if(rule.required && !value){
           callback(new Error('请输入商户费率'))
@@ -145,6 +110,8 @@
         if(this.$route.query.id){
           formItem.id = this.$route.query.id
         }
+        // 商户名，商户号拆分
+        this.common.splitMerchant(formItem)
       },
       getDetail(){
         this.routeType = this.$route.query.routeType
@@ -162,7 +129,7 @@
           }else{
             // 如果是编辑
             this.formListUrl = "/merchantChannel/update"
-            this.formList[1].disabled = true
+            this.formList[0].disabled = true
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理','商户渠道编辑'])
 
@@ -203,7 +170,7 @@
       // 获取支付产品
       getPayProduct(){
         this.$store.dispatch("getPayProduct").then(res=>{
-          this.formList[2].data = this.$store.state.global.payProduct
+          this.formList[1].data = this.$store.state.global.payProduct
         })
       },
       // 根据支付产品获取渠道产品
@@ -221,7 +188,7 @@
               })
             })
           }
-          this.formList[4].data = channelProduct
+          this.formList[2].data = channelProduct
         })
       },
       // 渠道产品更改时
@@ -232,7 +199,7 @@
               content:'更换渠道产品将清空支付配置信息',
               onCancel:()=>{
                 // 恢复原选项
-                this.formList[4].value=this.detail.channelProductCode
+                this.formList[3].value=this.detail.channelProductCode
                 // 转换支付配置
                 this.turnPayConfig(this.detail.configInfos)
               },
@@ -248,15 +215,15 @@
       //获取渠道产品支付配置
       getPayConfig(e){
         let params = {
-          merchantCode:this.formList[1].value
+          merchantCode:this.formList[0].value
         }
         this.apiGet('/merchantChannel/payConfig/channelProduct/'+e,params).then(res=>{
           if(res.status == 200){
             // 保留公共选项
             // this.formList.length = 6
-            this.formList = this.formList.slice(0,8)
+            this.formList = this.formList.slice(0,7)
             // 设置渠道计费方式
-            this.formList[5].value = res.data.feeType
+            this.formList[4].value = res.data.feeType
             // 转换支付配置
             this.turnPayConfig(res.data.configs)
           }
@@ -265,7 +232,7 @@
       // 转换支付配置
       turnPayConfig(configInfos){
         // 清空配置
-        this.formList = this.formList.slice(0,8)
+        this.formList = this.formList.slice(0,7)
         configInfos.forEach((ele)=>{
           let formListItem = {
             title: ele.configName,

@@ -5,6 +5,7 @@
           :url="url"
           :params="params"
           :searchItems="searchItems"
+          @beforeSubmit="beforeSubmit"
           :hannleItems="hannleItems"
           :exportItem="exportItem"></list>
     <confirm ref="confirmModel"
@@ -128,20 +129,20 @@
           },
           {
             label: '商户名称',
-            name: 'merchantNa',
+            name: 'merchantNo',
             type: 'autoComplete',
             value: '',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,2)
+              this.common.searchMerchantList(value,this.searchItems[4])
             }
           },
-          {
-            label: '商户号',
-            name: 'merchantNo',
-            type: 'hidden',
-            data:[],
-          },
+          // {
+          //   label: '商户号',
+          //   name: 'merchantNo',
+          //   type: 'hidden',
+          //   data:[],
+          // },
           {
             label: '支付状态',
             type: 'select',
@@ -200,6 +201,11 @@
       this.checkDate()
     },
     methods: {
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
       // 获取支付状态
       getPayStatus(){
         this.$store.dispatch("getPayStatus").then(res=>{
@@ -223,30 +229,6 @@
         this.$store.dispatch("getChannel").then(res=>{
           this.searchItems[7].data = res
         })
-      },
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType){
-        // columnType，1:code查询，2:name查询
-        if(keyword && columnType){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              this.searchItems[4].data = data
-            }
-          })
-        }
       },
       // 日期限制
       checkDate(){

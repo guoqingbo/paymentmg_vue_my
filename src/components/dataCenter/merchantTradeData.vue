@@ -27,18 +27,13 @@
           return {
             searchItems: [
               {
-                label: '商户名称',
+                label: '商户号',
                 type: 'autoComplete',
-                name: 'merchantNa',
+                name: 'merchantNo',
                 data:[],
                 search: (value)=>{
-                  this.searchMerchantList(value,2)
+                  this.common.searchMerchantList(value,this.searchItems[0])
                 }
-              },
-              {
-                label: '商户号',
-                type: 'hidden',
-                name: 'merchantNo',
               }
             ],
             chartSearchItems: [
@@ -184,6 +179,8 @@
         searchSubmit(params){
           // 合并搜索条件
           this.params = Object.assign(this.$refs.search.searchForm,this.$refs.chartSearch.searchForm)
+          // 商户名，商户号拆分
+          this.common.splitMerchant(this.params)
 
           // 检查搜素条件
           if(this.checkSearch()){
@@ -205,7 +202,6 @@
             this.formatRes(res)
           }else{
             this.$Message.error(res.message);
-
           }
         },
         // 格式化图标数据
@@ -227,40 +223,6 @@
 
           // 设置副标题
            this.chartOption.title.subtext = `${res.data.merchantVo.merchantName} ${res.data.merchantVo.merchantCode}`
-        },
-        // 商户信息模糊查询
-        searchMerchantList(keyword,columnType){
-          // columnType，1:code查询，2:name查询
-          if(keyword && columnType){
-            let params = {
-              vagueMerchantMark:keyword,
-              columnType,
-            }
-            let url = '/merchant/queryMerchantListByVagueMerchantMark'
-            this.apiGet(url,params).then(res=>{
-              if(res.status == 200){
-                let data = []
-                if(res.data.length){
-                  res.data.forEach(ele=>{
-                    if(columnType == 1){
-                      // 1:code查询
-                      data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
-                    }else{
-                      // 2:name查询
-                      data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName})
-                    }
-                  })
-                }else{
-                  data = [{label:'暂无数据',value:''}]
-                }
-                if(columnType == 1){
-                  this.searchItems[1].data = data
-                }else{
-                  this.searchItems[0].data = data
-                }
-              }
-            })
-          }
         },
       }
     }

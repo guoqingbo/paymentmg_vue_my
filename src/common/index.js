@@ -8,6 +8,59 @@ import {Message} from 'iview'
 import validate from "@/validate";
 
 const common = {
+  // 商户信息模糊查询
+  searchMerchantList(keyword,autoComplete){
+    if(keyword){
+      let params = {
+        vagueMerchantMark:keyword,
+        columnType:2,// 1 商户号模糊查询 2 商户名模糊查询
+      }
+      let url = '/merchant/queryMerchantListByVagueMerchantMark'
+      api.apiGet(url,params).then(res=>{
+        if(res.status == 200){
+          let data = []
+          if(res.data.length){
+            res.data.forEach(ele=>{
+              data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName+"("+ele.merchantCode+")"})
+            })
+          }else{
+            data = [{label:'暂无数据',value:''}]
+          }
+          autoComplete.data = data
+        }
+      })
+    }
+  },
+  // 商户名，商户号拆分 aaaaaaa(1005260929072019)
+  // 括号里的是商户号 外面的是商户名
+  splitMerchant(params){
+    // 商户号可能的字段名
+    let merchantCodeFiled = ''
+    if(params.merchantNo){
+      merchantCodeFiled = 'merchantNo'
+    }else if(params.merchantCode){
+      merchantCodeFiled = 'merchantCode'
+    }else if(params.parentMerchantCode){
+      merchantCodeFiled = 'parentMerchantCode'
+    }
+    if(params[merchantCodeFiled]){
+      let newValueArr = params[merchantCodeFiled].split("(");
+      if(newValueArr[1]){
+        let merchantCode = newValueArr[1].replace(/\)/g,'');
+        params[merchantCodeFiled] = merchantCode
+      }
+    }
+    // 商户名可能的字段名
+    let merchantNameFild = ''
+    if(params.merchantName){
+      merchantNameFild = 'merchantName'
+    }
+    if(params[merchantNameFild]){
+      let newValueArr = params[merchantNameFild].split("(");
+      let merchantName = newValueArr[0]
+      params[merchantNameFild] = merchantName
+    }
+  },
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
     api.apiGetBlob(url,params).then(res=>{

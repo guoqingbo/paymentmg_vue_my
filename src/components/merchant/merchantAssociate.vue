@@ -4,6 +4,7 @@
           :columns="columns"
           :url="url"
           :params="params"
+          @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
@@ -12,6 +13,7 @@
              :mode="mode"></confirm>
     <modalForm v-model="formShow"
                :formItems="formItems"
+               @beforeSave="beforeSave"
                :url="formUrl"
                :title="formTitle"></modalForm>
   </div>
@@ -91,15 +93,15 @@
             name: 'merchantName',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,2)
+              this.common.searchMerchantList(value,this.searchItems[0])
             }
           },
-          {
-            label: '商户编号',
-            type: 'hidden',
-            name: 'merchantCode',
-            data:[],
-          },
+          // {
+          //   label: '商户编号',
+          //   type: 'hidden',
+          //   name: 'merchantCode',
+          //   data:[],
+          // },
           {
             label: '商户来源',
             type: 'select',
@@ -139,25 +141,24 @@
               {max: 20, message: "来源商户号不超过20字符", trigger: 'blur'}]
           },
           {
-            title: '支付中心商户名称',
-            label: '支付中心商户名称',
-            name: 'merchantName',
+            title: '支付中心商户号',
+            name: 'merchantCode',
             type: 'autoComplete',
             value: '',
             data:[],
             search: (value)=>{
-              this.searchMerchantListAdd(value,2,"formItems",2)
+              this.common.searchMerchantList(value,this.formItems[2])
             },
              rules: [{ required: true, message: '请输入来源支付中心商户名称', trigger: 'blur' },
               // {max: 20, message: "支付中心商户名称不超过20字符", trigger: 'blur'}
               ]
           },
-          {
-            title: '支付中心商户号',
-            name: 'merchantCode',
-            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
-              {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
-          }
+          // {
+          //   title: '支付中心商户号',
+          //   name: 'merchantCode',
+          //   rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
+          //     {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
+          // }
         ],
         formUrl: '/merchantRelation/save'
       }
@@ -173,11 +174,21 @@
     },
     components: {list,confirm,modalForm},
     methods: {
+      // 弹框保存之前
+      beforeSave (params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
       // 获取商户来源
       getMerchantSource(){
         this.$store.dispatch("getMerchantSource").then(res=>{
           let merchantSource = this.$store.state.global.merchantSource
-          this.formItems[0].data = this.searchItems[2].data = merchantSource
+          this.formItems[0].data = this.searchItems[1].data = merchantSource
 
           // 表格商户来源转换
           let source={}
@@ -188,57 +199,6 @@
             return h('span', source[params.row.source])
           }
         })
-      },
-      // 商户信息模糊查询
-      searchMerchantListAdd(keyword,columnType,form,index){
-        if(keyword){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              this[form][index].data = data
-            }
-          })
-        }
-      },
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType){
-        // columnType，1:code查询，2:name查询
-        if(keyword && columnType){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantCode})
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              if(columnType == 1){
-                this.searchItems[1].data = data
-              }else{
-                this.searchItems[0].data = data
-              }
-            }
-          })
-        }
       },
     }
   }
