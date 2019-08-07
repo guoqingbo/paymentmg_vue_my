@@ -65,7 +65,8 @@
                           query:{
                             orderNo:params.orderNo,
                             orderSource:params.orderSource,
-                            merchantSourceNo:params.merchantSourceNo
+                            merchantNo:this.orderInfo.merchantNo,
+                            // merchantSourceNo:params.merchantSourceNo
                           }
                         }).href;
                         window.open(href, '_blank');
@@ -160,10 +161,10 @@
       },
       // 根据订单号和订单来源查询支付订单详情
       getOrderByOrderNo(){
-        let {refundOrderNo,orderNo,orderSource,merchantSourceNo}= this.$route.query
-        if(refundOrderNo && orderSource && merchantSourceNo){
+        let {refundOrderNo,orderNo,orderSource,merchantNo}= this.$route.query
+        if(refundOrderNo && orderSource && merchantNo){
           this.tableUrl = '/refundorder/detail'
-          this.tableParams = {refundOrderNo,orderNo,orderSource,merchantSourceNo}
+          this.tableParams = this.$route.query
         }
       },
       // 获取退款状态
