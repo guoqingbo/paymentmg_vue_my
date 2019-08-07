@@ -108,15 +108,11 @@
         this.$refs.formInline.validate(async valid => {
           if (valid) {
             // this.$Message.success('提交成功!')
-            let url = "",
-              params = this.formInline;
-            if (this.$route.path == "/login") {
-              url = "/login";
-            } else if (this.$route.path == "/adminLogin") {
-              url = "/manage/admin/admin/logining";
-            }
+            let url = "/login";
+            let params = this.formInline;
             let res = await this.$store.dispatch("login", {url, params});
-            // let res = require('../data/user')
+            // 更新验证码
+            this.getCode();
             if (res.success) {
               //sesstionstorage缓存登录用户token，vuex中缓存userId，用户后续路由beforeEach中判断也是是刷新还是只是路由变化
               this.$cookies.set("token", res.data.token);
@@ -136,7 +132,7 @@
               // this.formaterRouterHandle()
               this.$router.push(this.$store.state.menu.asyncRouter[0].path);
             } else {
-              this.$Message.error(res.message);
+              this.$Message.error(res.message || '登陆失败');
             }
           }
         });
