@@ -120,19 +120,21 @@
         let url = '/initcrashier'
         let params  = this.$route.query
         let apiPrefix = this.common.config.apiPayPrefix
-        if(params.merchantSourceNo && params.orderNo && params.orderSource){
-          this.apiGet(url,params,apiPrefix).then(res=>{
-            if(res.status == 200){
-              this.initCrashier = res.data
-              // 是否有上次支付方式
-              this.latestPayInfo()
-              // 可使用的支付产品
-              this.availablePayProducts()
-              // 初始化表单参数
-              this.setParams()
-            }
-          })
-        }
+        // if((params.merchantSourceNo || params.merchantNo) && params.orderNo && params.orderSource){
+        //
+        // }
+        this.apiGet(url,params,apiPrefix).then(res=>{
+          if(res.status == 200){
+            this.initCrashier = res.data
+            // 是否有上次支付方式
+            this.latestPayInfo()
+            // 可使用的支付产品
+            this.availablePayProducts()
+            // 初始化表单参数
+            this.setParams()
+          }
+        })
+
       },
       // 获取订单信息
       // getOrderInfo(){
