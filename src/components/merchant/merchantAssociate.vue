@@ -93,7 +93,8 @@
             name: 'merchantName',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.searchItems[0])
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
           // {
@@ -187,17 +188,20 @@
       // 获取商户来源
       getMerchantSource(){
         this.$store.dispatch("getMerchantSource").then(res=>{
-          let merchantSource = this.$store.state.global.merchantSource
-          this.formItems[0].data = this.searchItems[1].data = merchantSource
+          let merchantSource = res
+          this.common.setArrItem(this.formItems,'source',{data:res,})
+          this.common.setArrItem(this.searchItems,'source',{data:res,})
 
           // 表格商户来源转换
           let source={}
           merchantSource.forEach(ele=>{
             source[ele.value] = ele.label
           })
-          this.columns[3].render = (h, params) => {
-            return h('span', source[params.row.source])
-          }
+          this.common.setArrItem(this.columns,'key=source',{
+            render:(h, params) => {
+              return h('span', source[params.row.source])
+            }
+          })
         })
       },
     }

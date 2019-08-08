@@ -32,7 +32,8 @@
                 name: 'merchantNo',
                 data:[],
                 search: (value)=>{
-                  this.common.searchMerchantList(value,this.searchItems[0])
+                  let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
+                  this.common.searchMerchantList(value,arrItem)
                 }
               }
             ],
@@ -114,8 +115,8 @@
       methods: {
         // 检查搜索条件
         checkSearchDate(){
-          let startSearchItem=this.chartSearchItems[0]
-          let endSearchItem=this.chartSearchItems[1]
+          let startSearchItem=this.common.getArrItem(this.chartSearchItems,'startDate')
+          let endSearchItem=this.common.getArrItem(this.chartSearchItems,'endDate')
 
           startSearchItem.onChange=(date1)=>{
             endSearchItem.options.disabledDate=date2=>{

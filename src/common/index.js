@@ -8,11 +8,61 @@ import {Message} from 'iview'
 import validate from "@/validate";
 
 const common = {
+  // 根据条件设置数组的某一项
+  setArrItem(arr,condition,itemData){
+    // condition 可以直接为value 或 key = value 自定义
+    // 默认key
+    let key = 'name'
+    let value = ''
+    let itemIndex = ''
+    if (typeof condition === 'string'){
+      let conditionArr = condition.split("=")
+      if (conditionArr.length == 2) {
+        key = conditionArr[0]
+        value = conditionArr[1]
+      }else{
+        value =  conditionArr[0]
+      }
+    }
+    for(let i = 0,length = arr.length;i<length;i++){
+      if(arr[i][key] == value){
+        itemIndex = i
+        break
+      }
+    }
+    // 合并数组的项
+    arr[itemIndex] = Object.assign(arr[itemIndex],itemData)
+  },
+  // 根据条件获取数组的某一项
+  getArrItem(arr,condition){
+    // condition 可以直接为value 或 key = value 自定义
+    // 默认key
+    let key = 'name'
+    let value = ''
+    let itemIndex = ''
+    if (typeof condition === 'string'){
+      let conditionArr = condition.split("=")
+      if (conditionArr.length == 2) {
+        key = conditionArr[0]
+        value = conditionArr[1]
+      }else{
+        value =  conditionArr[0]
+      }
+    }
+    for(let i = 0,length = arr.length;i<length;i++){
+      if(arr[i][key] == value){
+        itemIndex = i
+        break
+      }
+    }
+    return arr[itemIndex]
+  },
   // 商户信息模糊查询
   searchMerchantList(keyword,autoComplete){
     if(keyword){
+      let newValueArr = keyword.split("(");
       let params = {
-        vagueMerchantMark:keyword,
+        vagueMerchantMark:newValueArr[0],
         columnType:2,// 1 商户号模糊查询 2 商户名模糊查询
       }
       let url = '/merchant/queryMerchantListByVagueMerchantMark'

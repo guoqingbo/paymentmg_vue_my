@@ -131,7 +131,8 @@
             name: 'merchantName',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.searchItems[0])
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
           {
@@ -216,14 +217,16 @@
       // 获取支付产品
       getPayProduct(){
         this.$store.dispatch("getPayProduct").then(res=>{
-          this.searchItems[1].data = this.$store.state.global.payProduct
+          this.common.setArrItem(this.searchItems,'payProductCode',{
+            data:res
+          })
         })
       },
       // 日期限制
       checkDate(){
         // 开始时间结束时间限制
-        let startDateItem = this.searchItems[2]
-        let endDateItem = this.searchItems[3]
+        let startDateItem = this.common.getArrItem(this.searchItems,'startDate')
+        let endDateItem = this.common.getArrItem(this.searchItems,'endDate')
         if(startDateItem && endDateItem){
           startDateItem.onChange=(date1)=>{
             endDateItem.options.disabledDate=date2=>{

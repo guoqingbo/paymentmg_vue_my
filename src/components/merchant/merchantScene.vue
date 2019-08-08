@@ -97,7 +97,8 @@
             type: 'autoComplete',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.searchItems[0])
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
           {
@@ -133,7 +134,8 @@
               // { max: 20, message: "商户名称不超过20字符" }
             ],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.formItems[0])
+              let arrItem = this.common.getArrItem(this.formItems,'merchantCode')
+              this.common.searchMerchantList(value,arrItem)
             },
             value: ""
           },

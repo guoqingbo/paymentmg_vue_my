@@ -51,7 +51,8 @@
             value: '',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.formList0[3])
+              let arrItem = this.common.getArrItem(this.formList0,'parentMerchantCode')
+              this.common.searchMerchantList(value,arrItem)
             },
             rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
           },
@@ -157,7 +158,8 @@
             value: '',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.formList1[4])
+              let arrItem = this.common.getArrItem(this.formList1,'parentMerchantCode')
+              this.common.searchMerchantList(value,arrItem)
             },
           },
           {
@@ -223,12 +225,13 @@
       // 证件类型改变时
       idTypeChange(e){
         // 1身份证 2护照 3港澳通行证
+        let arrItem = this.common.getArrItem(this.formList1,'idCard')
         if(e==1){
-          this.formList1[3].rules[0].validator = this.common.validate.IdCodeValid
+          arrItem.rules[0].validator = this.common.validate.IdCodeValid
         }else if(e==2){
-          this.formList1[3].rules[0].validator = this.common.validate.passport
+          arrItem.rules[0].validator = this.common.validate.passport
         }else if(e==3){
-          this.formList1[3].rules[0].validator = this.common.validate.passportHM
+          arrItem.rules[0].validator = this.common.validate.passportHM
         }
       },
       // 确认保存之前
@@ -279,7 +282,7 @@
                 // 更改证件类型验证
                 this.idTypeChange(res.data.idType)
               }
-              this.formList[0].disabled = true
+              this.common.setArrItem(this.formList,'merchantType',{disabled:true})
               this.formList.forEach((ele) => {
                 ele.value = res.data[ele.name]
                 if (this.routeType == 'detail' && ele.type != 'text') {
@@ -315,10 +318,10 @@
       merchantTypeChange(type){
         // 100 个人商户 200企业商户
         if(type == 100){
-          this.formList1[0].value = 100
+          this.common.setArrItem(this.formList1,'merchantType',{value:100})
           this.formList = this.formList1
         }else{
-          this.formList0[0].value = 200
+          this.common.setArrItem(this.formList0,'merchantType',{value:200})
           this.formList = this.formList0
         }
       }
