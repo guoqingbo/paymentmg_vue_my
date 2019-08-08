@@ -72,7 +72,7 @@
                     });
                     this.formUrl = '/rsaKeyPlatform/update'
                     this.routeType = 'add'
-                    this.formTitle = '修改'
+                    this.formTitle = '修改秘钥'
                     this.detail = params.row
                     this.setDetail(params.row.orderSource)
                   }
@@ -93,7 +93,7 @@
                       }
                     });
                     this.routeType = 'detail'
-                    this.formTitle = '查看'
+                    this.formTitle = '查看秘钥'
                     this.detail = params.row
                     this.formItems.forEach(item=>{
                       item.value = null

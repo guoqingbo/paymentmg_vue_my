@@ -258,12 +258,12 @@
           "functionType": "column",
           "list": [
             {
-              "funName": "平台密钥",
+              "funName": "平台秘钥",
               "funCode": "platformRsa",
               "functionType": "column"
             },
             {
-              "funName": "商户密钥",
+              "funName": "商户秘钥",
               "funCode": "merchantRsa",
               "functionType": "column"
             }

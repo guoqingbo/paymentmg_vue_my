@@ -65,7 +65,7 @@
                         item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
                       }
                     });
-                    this.formTitle = '修改'
+                    this.formTitle = '修改秘钥'
                     this.routeType = 'modify'
                     this.setDetail(params.row.merchantCode)
                   }
@@ -85,7 +85,7 @@
                         item.desc=''
                       }
                     });
-                    this.formTitle = '查看'
+                    this.formTitle = '查看秘钥'
                     this.routeType = 'detail'
                     this.setDetail(params.row.merchantCode)
                   }
@@ -102,7 +102,7 @@
         url: '/rsaKeyMerchant/grid',
         searchItems: [
           {
-            label: '商户名称',
+            label: '商户简称',
             type: 'autoComplete',
             name: 'merchantName',
             data:[],
