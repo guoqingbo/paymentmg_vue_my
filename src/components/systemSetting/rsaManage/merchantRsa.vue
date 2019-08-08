@@ -134,7 +134,7 @@
         formShow: false,
         formItems: [
           {
-            title: '商户简介',
+            title: '商户简称',
             name: 'merchantName',
             type: 'input',
             disabled: true,

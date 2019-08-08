@@ -30,7 +30,8 @@
               this.common.searchMerchantList(value,arrItem)
             },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },
-              { max: 60, message: "商户号不超过60字符" }]
+              // { max: 60, message: "商户号不超过60字符" }
+              ]
           },
           {
             title: '支付产品',
