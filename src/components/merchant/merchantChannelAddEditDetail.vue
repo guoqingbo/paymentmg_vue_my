@@ -54,10 +54,10 @@
           },
           {
             title: '默认推荐支付方式',
-            name: 'defaultChannel',
+            name: 'priority',
             type: 'radio',
-            value: "1",
-            data:this.common.dic.defaultChannel,
+            value: 999,
+            data:this.common.dic.priority,
             rules: [{ required: true, message: '请选择默认推荐支付方式', trigger: 'change' }]
           },
           {

@@ -34,12 +34,14 @@
           {
             title: '商户简称',
             key: 'merchantName',
-            sortable: true,
+            // sortable: true,
+            align:'center'
           },
           {
             title: '商户号',
             key: 'merchantCode',
-            sortable: true,
+            // sortable: true,
+            align:'center'
           },
           {
             title: '操作',
@@ -102,7 +104,7 @@
           {
             label: '商户名称',
             type: 'autoComplete',
-            name: 'merchantNa',
+            name: 'merchantName',
             data:[],
             search: (value)=>{
               this.common.searchMerchantList(value,this.searchItems[0])

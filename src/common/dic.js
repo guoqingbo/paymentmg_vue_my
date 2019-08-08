@@ -36,9 +36,9 @@ let dic = {
     {label:"港澳通行证",value:3},
   ],
   // 默认推荐支付方式
-  defaultChannel: [
-    {label:"是",value:"1"},
-    {label:"否",value:"0"},
+  priority: [
+    {label:"是",value:999},
+    {label:"否",value:0},
   ]
 }
 export default dic
