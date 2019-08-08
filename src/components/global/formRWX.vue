@@ -260,7 +260,10 @@ export default {
     border: 1px solid #e5e5e5;
     border-radius: 5px;
     padding: 0 10px;
-    height: 33px;
+    word-break: break-all;
+    overflow-y: scroll;
+    max-height: 99px;
+    min-height: 33px;
   }
   .upload-img-box img{
     width: 70px;

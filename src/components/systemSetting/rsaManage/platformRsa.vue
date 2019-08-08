@@ -70,7 +70,7 @@
                         item.type='textarea'
                       }
                     });
-                    this.formUrl = '/api/admin/rsaKeyPlatform/update'
+                    this.formUrl = '/rsaKeyPlatform/update'
                     this.btn.text = "重新生成秘钥"
                     this.btn.cb = this.rsaCreate
                     this.btn.desc = '重新生成秘钥可能导致支付错误，请谨慎操作！'
@@ -100,6 +100,7 @@
                     this.formItems.forEach(item=>{
                       item.value = null
                     })
+                    this.setDetail(params.row.orderSource)
                   }
                 },
               ];
@@ -111,7 +112,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/api/admin/rsaKeyPlatform/grid',
+        url: '/rsaKeyPlatform/grid',
         searchItems: [],
         hannleItems: [
           {
@@ -121,6 +122,8 @@
               this.formShow = true
               this.formItems.forEach((item,index)=>{
                 if(!index){
+                  item.disabled = false;
+                }else{
                   item.disabled = true;
                 }
                 if(item.type=='inputText'){
@@ -129,13 +132,12 @@
                   item.type='textarea'
                 }
               });
-              this.formUrl = '/api/admin/rsaKeyPlatform/save'
+              this.formUrl = '/rsaKeyPlatform/save'
               this.btn.text = "生成秘钥"
               this.btn.cb = this.rsaCreate
               this.btn.desc = ''
               this.type = 'w'
               this.formTitle = '添加'
-              this.setDetail()
             }
           }
         ],
@@ -153,7 +155,7 @@
             type: 'select',
             data: [],
             rules: [
-              {required: true, type: 'number', message: '请选择平台名称', trigger: 'change'}
+              {required: true, message: '请选择平台名称', trigger: 'change'}
             ],
             value: null,
           },
@@ -162,22 +164,23 @@
             label: '私钥',
             name: 'privateKey',
             type: 'textarea',
-            value: '',
             disabled: true,
+            value: '',
             rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
             ]
           },
           {
             title: '公钥',
-            name: 'rsa1',
-            type: 'publicKey',
+            label: '公钥',
+            name: 'publicKey',
+            type: 'textarea',
             disabled: true,
             value: '',
             rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },
             ]
           }
         ],
-        formUrl: '/api/admin/rsaKeyPlatform/save'
+        formUrl: '/rsaKeyPlatform/save'
       }
     },
     created(){
@@ -197,15 +200,15 @@
           // vagueMerchantMark: '',
           // columnType: 2,
         }
-        let url = '/api/admin/constant/ordersource'
+        let url = '/constant/rsaKey/create'
         this.apiGet(url,params).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
-              if(item.name=='rsa0'){
-                item.value = 'rsa0'+Math.random();
+              if(item.name=='privateKey'){
+                item.value = res.data.privateKey
               }
-              if(item.name=='rsa1'){
-                item.value = 'rsa1'+Math.random();
+              if(item.name=='publicKey'){
+                item.value = res.data.publicKey
               }
             });
           }else{
@@ -222,17 +225,17 @@
       },
       // 设置详情页
       setDetail(orderSource){
-        this.apiGet('/api/admin/rsaKeyMerchant/'+orderSource).then(res=>{
+        this.apiGet('/rsaKeyMerchant/detail/'+orderSource).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
               if(item.name=='orderSource'){
-                item.value = res.orderSource
+                item.value = res.data.orderSource
               }
               if(item.name=='privateKey'){
-                item.value = res.privateKey
+                item.value = res.data.privateKey
               }
               if(item.name=='publicKey'){
-                item.value = res.publicKey
+                item.value = res.data.publicKey
               }
             });
           }else{

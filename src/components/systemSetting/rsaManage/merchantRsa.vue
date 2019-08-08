@@ -43,7 +43,7 @@
           },
           {
             title: '商户号',
-            key: 'merchantNo',
+            key: 'merchantCode',
             sortable: true,
           },
           {
@@ -69,7 +69,7 @@
                     this.btn.desc = '重新生成秘钥可能导致支付错误，请谨慎操作！'
                     this.formTitle = '修改'
                     this.type = 'w'
-                    this.setDetail(params.row.merchantNo)
+                    this.setDetail(params.row.merchantCode)
                   }
                 },
                 {
@@ -88,7 +88,7 @@
                     this.btn.desc = ''
                     this.formTitle = '查看'
                     this.type = 'r'
-                    this.setDetail(params.row.merchantNo)
+                    this.setDetail(params.row.merchantCode)
                   }
                 },
               ];
@@ -100,7 +100,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/api/admin/rsaKeyMerchant/grid',
+        url: '/rsaKeyMerchant/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -114,7 +114,7 @@
           {
             label: '商户编号',
             type: 'hidden',
-            name: 'merchantNo',
+            name: 'merchantCode',
             data:[],
           },
         ],
@@ -138,8 +138,8 @@
           {
             title: '私钥',
             label: '私钥',
-            name: 'rsa0',
-            type: 'privateKey',
+            name: 'privateKey',
+            type: 'textarea',
             value: '',
             disabled: true,
             rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
@@ -155,7 +155,7 @@
             ]
           }
         ],
-        formUrl: '/api/admin/rsaKeyMerchant/updatemerchantNo'
+        formUrl: '/rsaKeyMerchant/updatemerchantNo'
       }
     },
     computed:{
@@ -179,18 +179,18 @@
         this.formShow = false;
       },
       // 设置详情页
-      setDetail(merchantNo){
-        this.apiGet('/api/admin/rsaKeyMerchant/'+merchantNo).then(res=>{
+      setDetail(merchantCode){
+        this.apiGet('/rsaKeyMerchant/detail/'+merchantCode).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
               if(item.name=='merchantName'){
-                item.value = res.merchantName
+                item.value = res.data.merchantName
               }
               if(item.name=='privateKey'){
-                item.value = res.privateKey
+                item.value = res.data.privateKey
               }
               if(item.name=='publicKey'){
-                item.value = res.publicKey
+                item.value = res.data.publicKey
               }
             });
           }else{
@@ -204,15 +204,15 @@
           // vagueMerchantMark: '',
           // columnType: 2,
         }
-        let url = '/api/admin/rsaKey/create'
+        let url = '/constant/rsaKey/create'
         this.apiGet(url,params).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
               if(item.name=='privateKey'){
-                item.value = res.privateKey
+                item.value = res.data.privateKey
               }
               if(item.name=='publicKey'){
-                item.value = res.publicKey
+                item.value = res.data.publicKey
               }
             });
           }else{
