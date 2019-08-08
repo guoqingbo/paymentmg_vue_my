@@ -13,25 +13,19 @@
     <modalForm v-model="formShow"
                :formItems="formItems"
                :url="formUrl"
-               :type='type'
+               :routeType='routeType'
                @input='closeModal'
-               :btn='btn'
                :title="formTitle"></modalForm>
   </div>
 </template>
 <script>
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
-  import modalForm from '@/components/global/modalRWX'
+  import modalForm from '@/components/global/modalForm'
   export default {
     data () {
       return {
-        btn:{
-          text: '生成秘钥',
-          cb: null,
-          desc: '',
-        },
-        type: 'r',
+        routeType: 'add',
         columns: [
           {
             title: '序号',
@@ -68,13 +62,14 @@
                         item.type='input'
                       }else if(item.type=='textareaText'){
                         item.type='textarea'
+                      }else if(item.type=='btn'){
+                        item.disabled=false
+                        item.value='重新生成秘钥'
+                        item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
                       }
                     });
                     this.formUrl = '/rsaKeyPlatform/update'
-                    this.btn.text = "重新生成秘钥"
-                    this.btn.cb = this.rsaCreate
-                    this.btn.desc = '重新生成秘钥可能导致支付错误，请谨慎操作！'
-                    this.type = 'w'
+                    this.routeType = 'add'
                     this.formTitle = '修改'
                     this.detail = params.row
                     this.setDetail(params.row.orderSource)
@@ -89,12 +84,13 @@
                         item.type='inputText'
                       }else if(item.type=='textarea'){
                         item.type='textareaText'
+                      }else if(item.type=='btn'){
+                        item.disabled=true
+                        item.value='null'
+                        item.desc=''
                       }
                     });
-                    this.btn.text = null
-                    this.btn.cb = null
-                    this.type = 'r'
-                    this.btn.desc = ''
+                    this.routeType = 'detail'
                     this.formTitle = '查看'
                     this.detail = params.row
                     this.formItems.forEach(item=>{
@@ -130,13 +126,14 @@
                   item.type='input'
                 }else if(item.type=='textareaText'){
                   item.type='textarea'
+                }else if(item.type=='btn'){
+                  item.disabled=false
+                  item.value='生成秘钥'
+                  item.desc=''
                 }
               });
               this.formUrl = '/rsaKeyPlatform/save'
-              this.btn.text = "生成秘钥"
-              this.btn.cb = this.rsaCreate
-              this.btn.desc = ''
-              this.type = 'w'
+              this.routeType = 'add'
               this.formTitle = '添加'
             }
           }
@@ -178,7 +175,16 @@
             value: '',
             rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },
             ]
-          }
+          },
+          {
+            title: '',
+            name: '',
+            type: 'btn',
+            disabled: false,
+            value: '生成秘钥',
+            desc: '',
+            cb: this.rsaCreate
+          },
         ],
         formUrl: '/rsaKeyPlatform/save'
       }
@@ -225,7 +231,7 @@
       },
       // 设置详情页
       setDetail(orderSource){
-        this.apiGet('/rsaKeyMerchant/detail/'+orderSource).then(res=>{
+        this.apiGet('/rsaKeyPlatform/detail/'+orderSource).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
               if(item.name=='orderSource'){

@@ -6,15 +6,18 @@
                 label-position="right"
                 :key="item.name"
                 :label-width="item.type!=='divider'?150:0"
-                :label="item.type!=='divider'?item.title+'：':''"
+                :label="(item.type!=='divider'&&item.type!=='btn')?item.title+'：':''"
                 :prop="item.name"
                 :rules="item.rules||{}"
                 v-if="item.type">
         <span class="detail-text"
               v-if="item.type=='text'||
               item.type=='inputText'||
-              item.type=='textareaText' ||
               item.type=='autoCompleteText'">
+          {{item.value}}
+        </span>
+        <span class="detail-text detail-textareaText"
+              v-if="item.type=='textareaText'">
           {{item.value}}
         </span>
         <Divider v-if="item.type=='divider'"> {{item.title}}</Divider>
@@ -75,6 +78,15 @@
         <span class="detail-text" v-if="item.type=='areaText'">
           {{item.areaText}}
         </span>
+        <div v-if="item.type=='btn'&&!item.disabled">
+          <Button type="primary"
+               :disabled="item.disabled"
+                @click="item.cb"
+                >{{item.value}}
+          </Button>
+          <Icon v-if='item.desc' style="font-size: 20px;color: red;" type="ios-alert" />
+          <span style="color: red;vertical-align: middle;">{{item.desc}}</span>
+        </div>
         <div v-if="item.type=='uploadFile'">
           <uploadFile v-model="item.value"
                       :limitNum="item.limitNum||1"
@@ -246,6 +258,13 @@ export default {
     border-radius: 5px;
     padding: 0 10px;
     height: 33px;
+  }
+  .detail-textareaText {
+    word-break: break-all;
+    overflow-y: scroll;
+    max-height: 99px;
+    min-height: 33px;
+    height: auto;
   }
   .upload-img-box img{
     width: 70px;

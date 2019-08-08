@@ -9,9 +9,8 @@
           :hannleItems="hannleItems"></list>
     <modalForm v-model="formShow"
                :formItems="formItems"
-               :type='type'
+               :routeType='routeType'
                @input='closeModal'
-               :btn='btn'
                :url="formUrl"
                :title="formTitle"></modalForm>
   </div>
@@ -19,16 +18,11 @@
 <script>
   import list from '@/components/global/list'
   import confirm from '@/components/global/confirm'
-  import modalForm from '@/components/global/modalRWX'
+  import modalForm from '@/components/global/modalForm'
   export default {
     data () {
       return {
-        btn:{
-          text: '生成秘钥',
-          cb: null,
-          desc: '',
-        },
-        type: 'r',
+        routeType: 'add',
         columns: [
           {
             title: '序号',
@@ -62,13 +56,15 @@
                         item.type='input'
                       }else if(item.type=='textareaText'){
                         item.type='textarea'
+                      }else if(item.type=='btn'){
+                        item.disabled=false
+                        item.value='重新生成秘钥'
+                        item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
                       }
                     });
-                    this.btn.text = "重新生成秘钥"
-                    this.btn.cb = this.rsaCreate
-                    this.btn.desc = '重新生成秘钥可能导致支付错误，请谨慎操作！'
+                    console.log(this.formItems)
                     this.formTitle = '修改'
-                    this.type = 'w'
+                    this.routeType = 'add'
                     this.setDetail(params.row.merchantCode)
                   }
                 },
@@ -81,13 +77,14 @@
                         item.type='inputText'
                       }else if(item.type=='textarea'){
                         item.type='textareaText'
+                      }else if(item.type=='btn'){
+                        item.disabled=true
+                        item.value=null
+                        item.desc=''
                       }
                     });
-                    this.btn.text = null
-                    this.btn.cb = null
-                    this.btn.desc = ''
                     this.formTitle = '查看'
-                    this.type = 'r'
+                    this.routeType = 'detail'
                     this.setDetail(params.row.merchantCode)
                   }
                 },
@@ -153,9 +150,18 @@
             value: '',
             rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },
             ]
-          }
+          },
+          {
+            title: '',
+            name: '',
+            type: 'btn',
+            disabled: false,
+            value: '生成秘钥',
+            desc: '',
+            cb: this.rsaCreate
+          },
         ],
-        formUrl: '/rsaKeyMerchant/updatemerchantNo'
+        formUrl: '/rsaKeyMerchant/update'
       }
     },
     computed:{
