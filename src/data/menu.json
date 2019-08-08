@@ -197,6 +197,57 @@
       ]
     },
     {
+      "funName": "结算中心",
+      "funCode": "settleCenter",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "商户结算管理",
+          "funCode": "merchantSettleManage",
+          "functionType": "column",
+          "list": [
+            {
+              "funName": "商户待结算查询",
+              "funCode": "merchantWaitSettleQuery",
+              "functionType": "column"
+            },
+            {
+              "funName": "历史结算查询",
+              "funCode": "merchantHistorySettleQuery",
+              "functionType": "column"
+            },
+            {
+              "funName": "查询明细",
+              "funCode": "merchantHistorySettleDetail",
+              "functionType": "button"
+            }
+          ]
+        },
+        {
+          "funName": "个人结算管理",
+          "funCode": "personSettleManage",
+          "functionType": "column",
+          "list": [
+            {
+              "funName": "个人待结算查询",
+              "funCode": "personWaitSettleQuery",
+              "functionType": "column"
+            },
+            {
+              "funName": "历史结算查询",
+              "funCode": "personHistorySettleQuery",
+              "functionType": "column"
+            },
+            {
+              "funName": "查询明细",
+              "funCode": "personHistorySettleDetail",
+              "functionType": "button"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "funName": "系统设置",
       "funCode": "systemSetting",
       "functionType": "menu",

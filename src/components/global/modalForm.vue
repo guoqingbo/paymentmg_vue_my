@@ -109,7 +109,6 @@
         })
       },
       cancel() {
-        console.log(this.$refs.myForm)
         this.$refs.myForm.resetFields()
         this.$emit('input', this.modal)
       }
