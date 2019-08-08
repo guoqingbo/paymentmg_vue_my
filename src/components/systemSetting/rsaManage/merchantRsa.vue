@@ -11,6 +11,7 @@
                :formItems="formItems"
                :routeType='routeType'
                @input='closeModal'
+               @beforeSave='beforeSave'
                :url="formUrl"
                :title="formTitle"></modalForm>
   </div>
@@ -62,9 +63,8 @@
                         item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
                       }
                     });
-                    console.log(this.formItems)
                     this.formTitle = '修改'
-                    this.routeType = 'add'
+                    this.routeType = 'modify'
                     this.setDetail(params.row.merchantCode)
                   }
                 },
@@ -120,7 +120,12 @@
         mode: "",
         content: "",
         sucessMsg: "",
-
+        detail: {
+          merchantName: '',
+          merchantCode: '',
+          privateKey: '',
+          publicKey: '',
+        },
         formTitle:"添加关联商户",
         formShow: false,
         formItems: [
@@ -180,6 +185,11 @@
         // 商户名，商户号拆分
         this.common.splitMerchant(params)
       },
+      // 弹框保存之前
+      beforeSave(params){
+        if(this.routeType=='modify')
+        this.$set(params, "merchantCode", this.detail.merchantCode);
+      },
       // 关闭弹框
       closeModal() {
         this.formShow = false;
@@ -199,6 +209,7 @@
                 item.value = res.data.publicKey
               }
             });
+            this.detail.merchantCode = res.data.merchantCode;
           }else{
             this.$Message.error(res.message)
           }
