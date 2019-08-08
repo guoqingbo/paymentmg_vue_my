@@ -56,7 +56,7 @@
             title: '默认推荐支付方式',
             name: 'priority',
             type: 'radio',
-            value: "999",
+            value: 999,
             data:this.common.dic.priority,
             rules: [{ required: true, message: '请选择默认推荐支付方式', trigger: 'change' }]
           },

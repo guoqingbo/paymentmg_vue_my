@@ -264,6 +264,7 @@ export default {
     overflow-y: scroll;
     max-height: 99px;
     min-height: 33px;
+    line-height: 16px;
     height: auto;
   }
   .upload-img-box img{
