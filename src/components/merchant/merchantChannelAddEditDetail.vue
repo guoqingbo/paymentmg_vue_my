@@ -26,7 +26,8 @@
             value: '',
             disabled:false,
             search: (value)=>{
-              this.common.searchMerchantList(value,this.formList[0])
+              let arrItem = this.common.getArrItem(this.formList,'merchantCode')
+              this.common.searchMerchantList(value,arrItem)
             },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },
               { max: 60, message: "商户号不超过60字符" }]
@@ -129,7 +130,9 @@
           }else{
             // 如果是编辑
             this.formListUrl = "/merchantChannel/update"
-            this.formList[0].disabled = true
+            this.common.setArrItem(this.formList,'merchantCode',{
+              disabled:true
+            })
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理','商户渠道编辑'])
 
@@ -170,7 +173,9 @@
       // 获取支付产品
       getPayProduct(){
         this.$store.dispatch("getPayProduct").then(res=>{
-          this.formList[1].data = this.$store.state.global.payProduct
+          this.common.setArrItem(this.formList,'payProductCode',{
+            data:res
+          })
         })
       },
       // 根据支付产品获取渠道产品
@@ -188,7 +193,9 @@
               })
             })
           }
-          this.formList[2].data = channelProduct
+          this.common.setArrItem(this.formList,'channelProductCode',{
+            data:channelProduct
+          })
         })
       },
       // 渠道产品更改时
@@ -199,7 +206,9 @@
               content:'更换渠道产品将清空支付配置信息',
               onCancel:()=>{
                 // 恢复原选项
-                this.formList[3].value=this.detail.channelProductCode
+                this.setArrItem(this.formList,'channelProductCode',{
+                  value:this.detail.channelProductCode
+                })
                 // 转换支付配置
                 this.turnPayConfig(this.detail.configInfos)
               },
@@ -214,8 +223,9 @@
       },
       //获取渠道产品支付配置
       getPayConfig(e){
+        let arrItem = this.common.getArrItem(this.formList,'merchantCode')
         let params = {
-          merchantCode:this.formList[0].value
+          merchantCode:arrItem.value
         }
         this.apiGet('/merchantChannel/payConfig/channelProduct/'+e,params).then(res=>{
           if(res.status == 200){
@@ -223,7 +233,9 @@
             // this.formList.length = 6
             this.formList = this.formList.slice(0,7)
             // 设置渠道计费方式
-            this.formList[4].value = res.data.feeType
+            this.common.setArrItem(this.formList,'merchantFeeType',{
+              value:res.data.feeType
+            })
             // 转换支付配置
             this.turnPayConfig(res.data.configs)
           }
