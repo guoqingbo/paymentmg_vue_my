@@ -27,6 +27,7 @@
                     @on-change="onChange(payProductCode)">
           <Radio v-for="(item,index) in payWays" :key="index"
                  class="pay-way-item"
+                 v-if='!item.disabled'
                  :disabled="item.disabled"
                  :label="item.label"
                  :class="{active:item.label==payProductCode}">
