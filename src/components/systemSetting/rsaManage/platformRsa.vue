@@ -36,12 +36,14 @@
           {
             title: '平台名称',
             key: 'orderSourceName',
-            sortable: true,
+            // sortable: true,
+            align:'center'
           },
           {
             title: '平台代码',
             key: 'orderSource',
-            sortable: true,
+            // sortable: true,
+            align:'center'
           },
           {
             title: '操作',
