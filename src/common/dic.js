@@ -37,8 +37,8 @@ let dic = {
   ],
   // 默认推荐支付方式
   priority: [
-    {label:"是",value:"999"},
-    {label:"否",value:"0"},
+    {label:"是",value:999},
+    {label:"否",value:0},
   ]
 }
 export default dic
