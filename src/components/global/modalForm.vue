@@ -134,6 +134,7 @@
       },
       cancel() {
         this.$refs.myForm.resetFields()
+        this.modal = false
         this.$emit('input', this.modal)
       }
     }

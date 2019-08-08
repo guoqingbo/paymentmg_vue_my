@@ -55,6 +55,7 @@
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{
+                      item.clipboard=false
                       if(item.type=='inputText'){
                         item.type='input'
                       }else if(item.type=='textareaText'){
@@ -65,7 +66,7 @@
                         item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
                       }
                     });
-                    this.formTitle = '修改'
+                    this.formTitle = '修改秘钥'
                     this.routeType = 'modify'
                     this.setDetail(params.row.merchantCode)
                   }
@@ -78,6 +79,7 @@
                       if(item.type=='input'){
                         item.type='inputText'
                       }else if(item.type=='textarea'){
+                        item.clipboard=true
                         item.type='textareaText'
                       }else if(item.type=='btn'){
                         item.disabled=true
@@ -85,7 +87,7 @@
                         item.desc=''
                       }
                     });
-                    this.formTitle = '查看'
+                    this.formTitle = '查看秘钥'
                     this.routeType = 'detail'
                     this.setDetail(params.row.merchantCode)
                   }
@@ -102,7 +104,7 @@
         url: '/rsaKeyMerchant/grid',
         searchItems: [
           {
-            label: '商户名称',
+            label: '商户简称',
             type: 'autoComplete',
             name: 'merchantName',
             data:[],
@@ -132,7 +134,7 @@
         formShow: false,
         formItems: [
           {
-            title: '商户简介',
+            title: '商户简称',
             name: 'merchantName',
             type: 'input',
             disabled: true,
@@ -144,6 +146,8 @@
             label: '私钥',
             name: 'privateKey',
             type: 'textarea',
+            clipboard: true,
+            clipboardText: '复制私钥',
             value: '',
             disabled: true,
             rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
@@ -151,8 +155,11 @@
           },
           {
             title: '公钥',
+            label: '公钥',
             name: 'publicKey',
             type: 'textarea',
+            clipboard: true,
+            clipboardText: '复制公钥',
             disabled: true,
             value: '',
             rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },

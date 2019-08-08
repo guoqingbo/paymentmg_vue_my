@@ -30,7 +30,8 @@
               this.common.searchMerchantList(value,arrItem)
             },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },
-              { max: 60, message: "商户号不超过60字符" }]
+              // { max: 60, message: "商户号不超过60字符" }
+              ]
           },
           {
             title: '支付产品',
@@ -58,7 +59,7 @@
             type: 'radio',
             value: 999,
             data:this.common.dic.priority,
-            rules: [{ required: true, message: '请选择默认推荐支付方式', trigger: 'change' }]
+            rules: [{ required: true, type:'number', message: '请选择默认推荐支付方式', trigger: 'change' }]
           },
           {
             title: '渠道计费方式',

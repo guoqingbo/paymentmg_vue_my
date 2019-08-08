@@ -106,14 +106,15 @@ const common = {
       merchantNameFild = 'merchantName'
       merchantCodeFiled = 'merchantCode'
     }
-    if(params[merchantNameFild]){
+      params[merchantCodeFiled] = ''
+      if(params[merchantNameFild]){
       let newValueArr = params[merchantNameFild].split("(");
       let merchantName = newValueArr[0]
-      if(newValueArr[1]){
-        let merchantCode = newValueArr[1].replace(/\)/g,'');
-        params[merchantCodeFiled] = merchantCode
+      let arr = params[merchantNameFild].match(/\(.+\)/g)
+      if(arr&&arr.length){
+        params[merchantNameFild] = merchantName
+        params[merchantCodeFiled] = arr[0].replace(/\(|\)/g,'')
       }
-      params[merchantNameFild] = merchantName
     }
   },
   // 导出excel表格方法
