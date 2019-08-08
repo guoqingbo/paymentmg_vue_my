@@ -1,131 +1,97 @@
 {
   "data": [
     {
-      "funName": "商户管理",
-      "funCode": "merchant",
+      "name": "商户管理",
+      "code": "merchant",
       "functionType": "menu",
-      "list": [
+      "menus": [
         {
-          "funName": "商户管理",
-          "funCode": "merchantManage",
+          "name": "商户管理",
+          "code": "merchantManage",
           "functionType": "column"
         },
         {
-          "funName": "商户渠道管理",
-          "funCode": "merchantChannel",
+          "name": "商户渠道管理",
+          "code": "merchantChannel",
           "functionType": "column"
         },
         {
-          "funName": "商户场景管理",
-          "funCode": "merchantScene",
+          "name": "商户场景管理",
+          "code": "merchantScene",
           "functionType": "column"
         },
         {
-          "funName": "关联商户管理",
-          "funCode": "merchantAssociate",
+          "name": "关联商户管理",
+          "code": "merchantAssociate",
           "functionType": "column"
         },
         {
-          "funName": "添加商户",
-          "funCode": "merchantAddEditDetail",
+          "name": "添加商户",
+          "code": "merchantAddEditDetail",
           "functionType": "button"
         },
         {
-          "funName": "添加渠道",
-          "funCode": "merchantChannelAddEditDetail",
+          "name": "添加渠道",
+          "code": "merchantChannelAddEditDetail",
           "functionType": "button"
         }
       ]
     },
     {
-      "funName": "产品渠道管理",
-      "funCode": "productChannel",
+      "name": "产品渠道管理",
+      "code": "productChannel",
       "functionType": "menu",
-      "list": [
+      "menus": [
         {
-          "funName": "渠道管理",
-          "funCode": "channel",
+          "name": "渠道管理",
+          "code": "channel",
           "functionType": "column",
-          "list": [
+          "menus": [
             {
-              "funName": "渠道管理",
-              "funCode": "channelManage",
+              "name": "渠道管理",
+              "code": "channelManage",
               "functionType": "column"
             },
             {
-              "funName": "渠道产品管理",
-              "funCode": "channelProductManage",
+              "name": "渠道产品管理",
+              "code": "channelProductManage",
               "functionType": "column"
             },
             {
-              "funName": "添加渠道",
-              "funCode": "channelAddEditDetail",
+              "name": "添加渠道",
+              "code": "channelAddEditDetail",
               "functionType": "button"
             },
             {
-              "funName": "添加渠道产品",
-              "funCode": "channelProductAddEditDetail",
+              "name": "添加渠道产品",
+              "code": "channelProductAddEditDetail",
               "functionType": "button"
             }
           ]
         },
         {
-          "funName": "支付产品管理",
-          "funCode": "payProduct",
+          "name": "支付产品管理",
+          "code": "payProduct",
           "functionType": "menu",
-          "list": [
+          "menus": [
             {
-              "funName": "支付产品管理",
-              "funCode": "payProductManage",
+              "name": "支付产品管理",
+              "code": "payProductManage",
               "functionType": "column"
             },
             {
-              "funName": "渠道产品管理",
-              "funCode": "payChannelManage",
+              "name": "渠道产品管理",
+              "code": "payChannelManage",
               "functionType": "column"
             },
             {
-              "funName": "添加支付产品",
-              "funCode": "payProductAddEditDetail",
+              "name": "添加支付产品",
+              "code": "payProductAddEditDetail",
               "functionType": "button"
             },
             {
-              "funName": "添加支付产品渠道",
-              "funCode": "payProductChannelAddDetail",
-              "functionType": "button"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "funName": "订单查询",
-      "funCode": "order",
-      "functionType": "menu",
-      "list": [
-        {
-          "funName": "订单查询",
-          "funCode": "orderQuery",
-          "functionType": "column",
-          "list": [
-            {
-              "funName": "交易订单查询",
-              "funCode": "tradeOrderQuery",
-              "functionType": "column"
-            },
-            {
-              "funName": "退款订单查询",
-              "funCode": "refundOrderQuery",
-              "functionType": "column"
-            },
-            {
-              "funName": "交易订单明细",
-              "funCode": "tradeOrderDetail",
-              "functionType": "button"
-            },
-            {
-              "funName": "退款订单明细",
-              "funCode": "refundOrderDetail",
+              "name": "添加支付产品渠道",
+              "code": "payProductChannelAddDetail",
               "functionType": "button"
             }
           ]
@@ -133,114 +99,33 @@
       ]
     },
     {
-      "funName": "数据中心",
-      "funCode": "dataCenter",
+      "name": "订单查询",
+      "code": "order",
       "functionType": "menu",
-      "list": [
+      "menus": [
         {
-          "funName": "平台交易统计图表",
-          "funCode": "platformTradeData",
-          "functionType": "column"
-        },
-        {
-          "funName": "商户交易统计图表",
-          "funCode": "merchantTradeData",
-          "functionType": "column"
-        },
-        {
-          "funName": "按支付渠道统计",
-          "funCode": "payChannelData",
-          "functionType": "column"
-        },
-        {
-          "funName": "按订单来源统计",
-          "funCode": "orderSourceData",
-          "functionType": "column"
-        },
-        {
-          "funName": "渠道佣金统计",
-          "funCode": "channelCommissionData",
-          "functionType": "column"
-        },
-        {
-          "funName": "按支付场景统计",
-          "funCode": "paySceneData",
-          "functionType": "column"
-        },
-        {
-          "funName": "担保交易图表",
-          "funCode": "warrantTradeData",
-          "functionType": "column"
-        }
-      ]
-    },
-    {
-      "funName": "风控管理",
-      "funCode": "riskManage",
-      "functionType": "menu",
-      "list": [
-        {
-          "funName": "支付限额管理",
-          "funCode": "paymentLimit",
-          "functionType": "column"
-        },
-        {
-          "funName": "拦截记录",
-          "funCode": "interceptionRecord",
-          "functionType": "column"
-        },
-        {
-          "funName": "白名单",
-          "funCode": "whiteList",
-          "functionType": "column"
-        }
-      ]
-    },
-    {
-      "funName": "结算中心",
-      "funCode": "settleCenter",
-      "functionType": "menu",
-      "list": [
-        {
-          "funName": "商户结算管理",
-          "funCode": "merchantSettleManage",
+          "name": "订单查询",
+          "code": "orderQuery",
           "functionType": "column",
-          "list": [
+          "menus": [
             {
-              "funName": "商户待结算查询",
-              "funCode": "merchantWaitSettleQuery",
+              "name": "交易订单查询",
+              "code": "tradeOrderQuery",
               "functionType": "column"
             },
             {
-              "funName": "历史结算查询",
-              "funCode": "merchantHistorySettleQuery",
+              "name": "退款订单查询",
+              "code": "refundOrderQuery",
               "functionType": "column"
             },
             {
-              "funName": "查询明细",
-              "funCode": "merchantHistorySettleDetail",
+              "name": "交易订单明细",
+              "code": "tradeOrderDetail",
               "functionType": "button"
-            }
-          ]
-        },
-        {
-          "funName": "个人结算管理",
-          "funCode": "personSettleManage",
-          "functionType": "column",
-          "list": [
-            {
-              "funName": "个人待结算查询",
-              "funCode": "personWaitSettleQuery",
-              "functionType": "column"
             },
             {
-              "funName": "历史结算查询",
-              "funCode": "personHistorySettleQuery",
-              "functionType": "column"
-            },
-            {
-              "funName": "查询明细",
-              "funCode": "personHistorySettleDetail",
+              "name": "退款订单明细",
+              "code": "refundOrderDetail",
               "functionType": "button"
             }
           ]
@@ -248,23 +133,138 @@
       ]
     },
     {
-      "funName": "系统设置",
-      "funCode": "systemSetting",
+      "name": "数据中心",
+      "code": "dataCenter",
       "functionType": "menu",
-      "list": [
+      "menus": [
         {
-          "funName": "秘钥管理",
-          "funCode": "rsaManage",
+          "name": "平台交易统计图表",
+          "code": "platformTradeData",
+          "functionType": "column"
+        },
+        {
+          "name": "商户交易统计图表",
+          "code": "merchantTradeData",
+          "functionType": "column"
+        },
+        {
+          "name": "按支付渠道统计",
+          "code": "payChannelData",
+          "functionType": "column"
+        },
+        {
+          "name": "按订单来源统计",
+          "code": "orderSourceData",
+          "functionType": "column"
+        },
+        {
+          "name": "渠道佣金统计",
+          "code": "channelCommissionData",
+          "functionType": "column"
+        },
+        {
+          "name": "按支付场景统计",
+          "code": "paySceneData",
+          "functionType": "column"
+        },
+        {
+          "name": "担保交易图表",
+          "code": "warrantTradeData",
+          "functionType": "column"
+        }
+      ]
+    },
+    {
+      "name": "风控管理",
+      "code": "riskManage",
+      "functionType": "menu",
+      "menus": [
+        {
+          "name": "支付限额管理",
+          "code": "paymentLimit",
+          "functionType": "column"
+        },
+        {
+          "name": "拦截记录",
+          "code": "interceptionRecord",
+          "functionType": "column"
+        },
+        {
+          "name": "白名单",
+          "code": "whiteList",
+          "functionType": "column"
+        }
+      ]
+    },
+    {
+      "name": "结算中心",
+      "code": "settleCenter",
+      "functionType": "menu",
+      "menus": [
+        {
+          "name": "商户结算管理",
+          "code": "merchantSettleManage",
           "functionType": "column",
-          "list": [
+          "menus": [
             {
-              "funName": "平台秘钥",
-              "funCode": "platformRsa",
+              "name": "商户待结算查询",
+              "code": "merchantWaitSettleQuery",
               "functionType": "column"
             },
             {
-              "funName": "商户秘钥",
-              "funCode": "merchantRsa",
+              "name": "历史结算查询",
+              "code": "merchantHistorySettleQuery",
+              "functionType": "column"
+            },
+            {
+              "name": "查询明细",
+              "code": "merchantHistorySettleDetail",
+              "functionType": "button"
+            }
+          ]
+        },
+        {
+          "name": "个人结算管理",
+          "code": "personSettleManage",
+          "functionType": "column",
+          "menus": [
+            {
+              "name": "个人待结算查询",
+              "code": "personWaitSettleQuery",
+              "functionType": "column"
+            },
+            {
+              "name": "历史结算查询",
+              "code": "personHistorySettleQuery",
+              "functionType": "column"
+            },
+            {
+              "name": "查询明细",
+              "code": "personHistorySettleDetail",
+              "functionType": "button"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "系统设置",
+      "code": "systemSetting",
+      "functionType": "menu",
+      "menus": [
+        {
+          "name": "秘钥管理",
+          "code": "rsaManage",
+          "functionType": "column",
+          "menus": [
+            {
+              "name": "平台密钥",
+              "code": "platformRsa",
+              "functionType": "column"
+            },
+            {
+              "name": "商户密钥",
+              "code": "merchantRsa",
               "functionType": "column"
             }
           ]

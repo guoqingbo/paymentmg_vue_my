@@ -32,8 +32,8 @@
             </Dropdown>
           </div>
           <div class="layout-nav">
-            <MenuItem v-for="item in menuList.data" :key="item.id" :name="item.funCode">
-              {{item.funName}}
+            <MenuItem v-for="item in menuList.data" :key="item.id" :name="item.code">
+              {{item.name}}
             </MenuItem>
           </div>
         </Menu>
@@ -84,25 +84,25 @@
                 :accordion="true"
                 :open-names="vexOpenNames?[vexOpenNames]:openNames"
                 @on-select="changeMenu">
-            <template v-for="item in subMenuList.list">
+            <template v-for="item in subMenuList.menus">
               <!--如果存在3级菜单-->
-              <Submenu :name="item.funCode"
-                       v-if="item.list && item.list.length">
+              <Submenu :name="item.code"
+                       v-if="item.menus && item.menus.length">
                 <template slot="title">
                   <!-- <Icon type="ios-navigate"></Icon> -->
-                  {{item.funName}}
+                  {{item.name}}
                 </template>
-                <MenuItem v-for="sitem in item.list"
-                          :name="'/'+firstRouter+'/'+item.funCode+'/'+sitem.funCode"
+                <MenuItem v-for="sitem in item.menus"
+                          :name="'/'+firstRouter+'/'+item.code+'/'+sitem.code"
                           :key="sitem.id"
                           v-if="sitem.functionType=='column'">
-                  <span>{{sitem.funName}}</span>
+                  <span>{{sitem.name}}</span>
                 </MenuItem>
               </Submenu>
               <!--如果存在2级菜单-->
-              <MenuItem :name="'/'+firstRouter+'/'+item.funCode"
-                        v-if="(!item.list || item.list.length== 0) && item.functionType == 'column'">
-                <span>{{item.funName}}</span>
+              <MenuItem :name="'/'+firstRouter+'/'+item.code"
+                        v-if="(!item.menus || item.menus.length== 0) && item.functionType == 'column'">
+                <span>{{item.name}}</span>
               </MenuItem>
             </template>
           </Menu>
@@ -247,7 +247,7 @@
       },
       firstRouter(newValue, oldValue) {
         // this.$store.state.menu.menuList.data.forEach(element => {
-        //   if (element.funCode === newValue) {
+        //   if (element.code === newValue) {
         //     this.subMenuList = element;
         //   }
         // });
@@ -330,18 +330,18 @@
       changeMenu(active) {
         // this.$emit("on-change", active);
         this.$router.push(active);
-          // this.subMenuList.list.forEach(element => {
+          // this.subMenuList.menus.forEach(element => {
           //   // 如果存在3级菜单
-          //   if(element.list){
-          //     element.list.forEach(item => {
-          //       if (item.funCode === active) {
-          //         this.$cookies.set("openName", element.funCode);
+          //   if(element.menus){
+          //     element.menus.forEach(item => {
+          //       if (item.code === active) {
+          //         this.$cookies.set("openName", element.code);
           //       }
           //     });
           //   }else{
           //     // 如果存在2级菜单
-          //     if(element.funCode == active){
-          //       this.$cookies.set("openName", element.funCode);
+          //     if(element.code == active){
+          //       this.$cookies.set("openName", element.code);
           //     }
           //   }
           // });
@@ -350,14 +350,14 @@
         this.menuPosite(active);
         // this.$cookies.set("activeName", active);
 
-        if(this.subMenuList.list[0].list){
+        if(this.subMenuList.menus[0].menus){
           // 如果存在3级菜单
-          this.openNames = [this.subMenuList.list[0].funCode];
-          this.$router.push("/" +active+'/'+this.subMenuList.list[0].funCode+'/'+this.subMenuList.list[0].list[0].funCode);
+          this.openNames = [this.subMenuList.menus[0].code];
+          this.$router.push("/" +active+'/'+this.subMenuList.menus[0].code+'/'+this.subMenuList.menus[0].menus[0].code);
         }else{
           // 如果存在2级菜单
-          this.openNames = [this.subMenuList.list[0].funCode];
-          this.$router.push("/" +active+'/'+this.subMenuList.list[0].funCode);
+          this.openNames = [this.subMenuList.menus[0].code];
+          this.$router.push("/" +active+'/'+this.subMenuList.menus[0].code);
         }
         this.$nextTick(() => {
           this.$refs.contactMenu.updateOpened();
@@ -375,7 +375,7 @@
       },
       menuPosite(active) {
         this.$store.state.menu.menuList.data.forEach(element => {
-          if (element.funCode === active) {
+          if (element.code === active) {
             this.subMenuList = element;
           }
         });
