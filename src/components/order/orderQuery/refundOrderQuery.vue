@@ -155,7 +155,7 @@
           },
           {
             label: '商户名称',
-            name: 'merchantNo',
+            name: 'merchantName',
             type: 'autoComplete',
             value: '',
             data:[],

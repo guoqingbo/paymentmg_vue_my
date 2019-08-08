@@ -142,8 +142,8 @@
               {max: 20, message: "来源商户号不超过20字符", trigger: 'blur'}]
           },
           {
-            title: '支付中心商户号',
-            name: 'merchantCode',
+            title: '支付中心商户名称',
+            name: 'merchantName',
             type: 'autoComplete',
             value: '',
             data:[],

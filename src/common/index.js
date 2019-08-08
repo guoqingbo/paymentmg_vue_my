@@ -86,6 +86,7 @@ const common = {
   splitMerchant(params){
     // 商户号可能的字段名
     let merchantCodeFiled = ''
+    let merchantCodeFiled1 = ''
     if(params.merchantNo){
       merchantCodeFiled = 'merchantNo'
     }else if(params.merchantCode){
@@ -105,15 +106,18 @@ const common = {
     if(params.merchantName){
       merchantNameFild = 'merchantName'
       merchantCodeFiled = 'merchantCode'
+      merchantCodeFiled1 = 'merchantNo'
     }
-      params[merchantCodeFiled] = ''
-      if(params[merchantNameFild]){
+    params[merchantCodeFiled] = ''
+    params[merchantCodeFiled1] = ''
+    if(params[merchantNameFild]){
       let newValueArr = params[merchantNameFild].split("(");
       let merchantName = newValueArr[0]
       let arr = params[merchantNameFild].match(/\(.+\)/g)
       if(arr&&arr.length){
         params[merchantNameFild] = merchantName
         params[merchantCodeFiled] = arr[0].replace(/\(|\)/g,'')
+        params[merchantCodeFiled1] = arr[0].replace(/\(|\)/g,'')
       }
     }
   },
