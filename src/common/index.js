@@ -104,10 +104,15 @@ const common = {
     let merchantNameFild = ''
     if(params.merchantName){
       merchantNameFild = 'merchantName'
+      merchantCodeFiled = 'merchantCode'
     }
     if(params[merchantNameFild]){
       let newValueArr = params[merchantNameFild].split("(");
       let merchantName = newValueArr[0]
+      if(newValueArr[1]){
+        let merchantCode = newValueArr[1].replace(/\)/g,'');
+        params[merchantCodeFiled] = merchantCode
+      }
       params[merchantNameFild] = merchantName
     }
   },
