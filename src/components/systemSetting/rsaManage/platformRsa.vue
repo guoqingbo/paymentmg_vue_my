@@ -63,6 +63,7 @@
                       if(item.type=='inputText'){
                         item.type='input'
                       }else if(item.type=='textareaText'){
+                        item.clipboard=false
                         item.type='textarea'
                       }else if(item.type=='btn'){
                         item.disabled=false
@@ -85,6 +86,7 @@
                       if(item.type=='input'){
                         item.type='inputText'
                       }else if(item.type=='textarea'){
+                        item.clipboard=true
                         item.type='textareaText'
                       }else if(item.type=='btn'){
                         item.disabled=true
@@ -127,6 +129,7 @@
                 if(item.type=='inputText'){
                   item.type='input'
                 }else if(item.type=='textareaText'){
+                  item.clipboard=false
                   item.type='textarea'
                 }else if(item.type=='btn'){
                   item.disabled=false
@@ -163,6 +166,8 @@
             label: '私钥',
             name: 'privateKey',
             type: 'textarea',
+            clipboard: true,
+            clipboardText: '复制私钥',
             disabled: true,
             value: '',
             rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
@@ -173,6 +178,8 @@
             label: '公钥',
             name: 'publicKey',
             type: 'textarea',
+            clipboard: true,
+            clipboardText: '复制公钥',
             disabled: true,
             value: '',
             rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },

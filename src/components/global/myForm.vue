@@ -20,6 +20,14 @@
               v-if="item.type=='textareaText'">
           {{item.value}}
         </span>
+        <div v-if='item.clipboard' style="text-align: right;">
+          <Button
+          type="primary"
+          v-clipboard:copy="item.value"
+          v-clipboard:success="onCopySuccess"
+          v-clipboard:error="onCopyError"
+        >{{item.clipboardText}}</Button>
+        </div>
         <Divider v-if="item.type=='divider'"> {{item.title}}</Divider>
         <span class="detail-text"
               v-if="item.type=='selectText' ||
@@ -213,6 +221,12 @@ export default {
     //   }
     //   item.code = item.code.replace(/\(|\)/g,'');
     // },
+    onCopySuccess(){
+      this.$Message.success("复制成功")
+    },
+    onCopyError(){
+      this.$Message.error("复制失败")
+    },
     validate(cb){
       this.$refs.formRef.validate(cb)
     },
@@ -257,15 +271,13 @@ export default {
     border: 1px solid #e5e5e5;
     border-radius: 5px;
     padding: 0 10px;
-    height: 33px;
+    min-height: 33px;
   }
   .detail-textareaText {
     word-break: break-all;
     overflow-y: scroll;
     max-height: 99px;
-    min-height: 33px;
     line-height: 16px;
-    height: auto;
   }
   .upload-img-box img{
     width: 70px;
