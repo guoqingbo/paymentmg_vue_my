@@ -153,7 +153,7 @@
           {
             title: '上级商户号',
             name: 'parentMerchantCode',
-            rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
+            // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
             type: 'autoComplete',
             value: '',
             data:[],
