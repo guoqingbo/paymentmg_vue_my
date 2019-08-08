@@ -60,10 +60,10 @@
                       if(!index){
                         item.disabled = true;
                       }
+                      item.clipboard=false
                       if(item.type=='inputText'){
                         item.type='input'
                       }else if(item.type=='textareaText'){
-                        item.clipboard=false
                         item.type='textarea'
                       }else if(item.type=='btn'){
                         item.disabled=false
@@ -116,7 +116,7 @@
         searchItems: [],
         hannleItems: [
           {
-            title: '添加平台密钥',
+            title: '添加平台秘钥',
             icon: 'md-add',
             callback: () => {
               this.formShow = true
@@ -126,10 +126,10 @@
                 }else{
                   item.disabled = true;
                 }
+                item.clipboard=false
                 if(item.type=='inputText'){
                   item.type='input'
                 }else if(item.type=='textareaText'){
-                  item.clipboard=false
                   item.type='textarea'
                 }else if(item.type=='btn'){
                   item.disabled=false
@@ -163,26 +163,26 @@
           },
           {
             title: '私钥',
-            label: '私钥',
+            placeholder: '请生成秘钥',
             name: 'privateKey',
             type: 'textarea',
             clipboard: true,
             clipboardText: '复制私钥',
             disabled: true,
             value: '',
-            rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
+            rules: [{ required: true, message: '请生成秘钥', trigger: 'blur' },
             ]
           },
           {
             title: '公钥',
-            label: '公钥',
+            placeholder: '请生成秘钥',
             name: 'publicKey',
             type: 'textarea',
             clipboard: true,
             clipboardText: '复制公钥',
             disabled: true,
             value: '',
-            rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },
+            rules: [{ required: true, message: '请生成秘钥', trigger: 'blur' },
             ]
           },
           {

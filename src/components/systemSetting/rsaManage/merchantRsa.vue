@@ -55,10 +55,10 @@
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{
+                      item.clipboard=false
                       if(item.type=='inputText'){
                         item.type='input'
                       }else if(item.type=='textareaText'){
-                        item.clipboard=false
                         item.type='textarea'
                       }else if(item.type=='btn'){
                         item.disabled=false
