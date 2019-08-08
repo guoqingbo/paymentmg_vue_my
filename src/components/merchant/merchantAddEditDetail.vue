@@ -34,7 +34,7 @@
             type: 'input',
             rules: [
               {required: true, message: '请输入商户简称', trigger: 'blur'},
-              // {max: 50, message: "商户简称不超过50字符", trigger: 'blur'}
+              {max: 50, message: "商户简称不超过50字符", trigger: 'blur'}
             ]
           },
           {
@@ -54,7 +54,7 @@
               let arrItem = this.common.getArrItem(this.formList0,'parentMerchantCode')
               this.common.searchMerchantList(value,arrItem)
             },
-            rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
+            // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
           },
           {
             title: '法定代表人姓名',
