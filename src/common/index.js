@@ -106,7 +106,8 @@ const common = {
       merchantNameFild = 'merchantName'
       merchantCodeFiled = 'merchantCode'
     }
-    if(params[merchantNameFild]){
+      params[merchantCodeFiled] = ''
+      if(params[merchantNameFild]){
       let newValueArr = params[merchantNameFild].split("(");
       let merchantName = newValueArr[0]
       if(newValueArr[1]){
