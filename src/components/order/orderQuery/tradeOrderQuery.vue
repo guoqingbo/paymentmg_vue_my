@@ -204,7 +204,7 @@
       // 搜索之前
       beforeSubmit(params){
         // 商户名，商户号拆分
-        this.common.splitMerchant(params)
+        this.common.splitMerchant(params,this.searchItems)
       },
       // 获取支付状态
       getPayStatus(){

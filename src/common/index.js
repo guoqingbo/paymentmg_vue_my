@@ -71,7 +71,7 @@ const common = {
           let data = []
           if(res.data.length){
             res.data.forEach(ele=>{
-              data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName+"("+ele.merchantCode+")"})
+              data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName+"("+ele.merchantCode+")",merchantCode:ele.merchantCode,merchantName:ele.merchantName})
             })
           }else{
             data = [{label:'暂无数据',value:''}]
@@ -83,43 +83,16 @@ const common = {
   },
   // 商户名，商户号拆分 aaaaaaa(1005260929072019)
   // 括号里的是商户号 外面的是商户名
-  splitMerchant(params){
-    // 商户号可能的字段名
-    let merchantCodeFiled = ''
-    let merchantCodeFiled1 = ''
-    if(params.merchantNo){
-      merchantCodeFiled = 'merchantNo'
-    }else if(params.merchantCode){
-      merchantCodeFiled = 'merchantCode'
-    }else if(params.parentMerchantCode){
-      merchantCodeFiled = 'parentMerchantCode'
-    }
-    if(params[merchantCodeFiled]){
-      let newValueArr = params[merchantCodeFiled].split("(");
-      if(newValueArr[1]){
-        let merchantCode = newValueArr[1].replace(/\)/g,'');
-        params[merchantCodeFiled] = merchantCode
+  splitMerchant(params,form){
+    form.forEach(item=>{
+      if(item.name == "merchantName"){
+        item.data.forEach(merchant=>{
+          params.merchantName = merchant.merchantName
+          params.merchantCode = merchant.merchantCode
+          params.merchantNo = merchant.merchantCode
+        })
       }
-    }
-    // 商户名可能的字段名
-    let merchantNameFild = ''
-    if(params.merchantName){
-      merchantNameFild = 'merchantName'
-      merchantCodeFiled = 'merchantCode'
-      merchantCodeFiled1 = 'merchantNo'
-    }
-    params[merchantCodeFiled] = ''
-    params[merchantCodeFiled1] = ''
-    if(params[merchantNameFild]){
-      let newValueArr = params[merchantNameFild].split("(");
-      let merchantName = newValueArr[0]
-      let arr = params[merchantNameFild].match(/\(.+\)/g)
-      if(arr&&arr.length){
-        params[merchantNameFild] = merchantName
-        params[merchantCodeFiled] = arr[0].replace(/\(|\)/g,'')
-        params[merchantCodeFiled1] = arr[0].replace(/\(|\)/g,'')
-      }
-    }
+    })
   },
   // 导出excel表格方法
   exportData({url,params, callback,text}) {

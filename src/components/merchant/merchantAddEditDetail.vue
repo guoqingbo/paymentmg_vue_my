@@ -250,7 +250,7 @@
         }
 
         // 商户名，商户号拆分
-        this.common.splitMerchant(formItem)
+        this.common.splitMerchant(formItem,this.formList)
 
         if (this.$route.query.id) {
           formItem.id = this.$route.query.id
