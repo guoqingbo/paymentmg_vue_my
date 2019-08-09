@@ -293,7 +293,7 @@ export default {
     color: #999;
   }
   .my-autoComplete .ivu-select-dropdown-list{
-    max-height: 300px;
+    max-height: 280px;
     overflow: auto;
   }
 </style>

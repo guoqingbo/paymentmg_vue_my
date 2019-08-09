@@ -87,9 +87,11 @@ const common = {
     form.forEach(item=>{
       if(item.name == "merchantName"){
         item.data.forEach(merchant=>{
-          params.merchantName = merchant.merchantName
-          params.merchantCode = merchant.merchantCode
-          params.merchantNo = merchant.merchantCode
+          if((merchant.merchantName+"("+merchant.merchantCode+")")==params.merchantName){
+            params.merchantName = merchant.merchantName
+            params.merchantCode = merchant.merchantCode
+            params.merchantNo = merchant.merchantCode
+          }
         })
       }
     })
