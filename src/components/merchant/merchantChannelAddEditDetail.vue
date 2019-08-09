@@ -20,13 +20,13 @@
         formList: [
           {
             title: '商户名称',
-            name: 'merchantName',
+            name: 'merchantCode',
             data: [],
             type: 'autoComplete',
             value: '',
             disabled:false,
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList,'merchantName')
+              let arrItem = this.common.getArrItem(this.formList,'merchantCode')
               this.common.searchMerchantList(value,arrItem)
             },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },
@@ -131,9 +131,6 @@
           }else{
             // 如果是编辑
             this.formListUrl = "/merchantChannel/update"
-            this.common.setArrItem(this.formList,'merchantCode',{
-              disabled:true
-            })
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理','商户渠道编辑'])
 
@@ -149,6 +146,11 @@
                   // 支付配置之前的选型需要赋值
                   ele.value = res.data[ele.name]
                 }
+                if(ele.name=='merchantCode'){
+                  ele.disabled = true
+                  ele.value =  res.data.merchantName + "("+res.data.merchantCode+")"
+                }
+
                 if(this.routeType == 'detail'&&ele.type!='text'&&ele.type!='divider'){
                   // 如果是详情页
                   ele.type += "Text"
@@ -207,9 +209,8 @@
               content:'更换渠道产品将清空支付配置信息',
               onCancel:()=>{
                 // 恢复原选项
-                this.setArrItem(this.formList,'channelProductCode',{
-                  value:this.detail.channelProductCode
-                })
+                // let arrItem = this.common.getArrItem(this.formList,'channelProductCode')
+                // arrItem.value = this.detail.channelProductCode
                 // 转换支付配置
                 this.turnPayConfig(this.detail.configInfos)
               },
@@ -246,19 +247,21 @@
       turnPayConfig(configInfos){
         // 清空配置
         this.formList = this.formList.slice(0,7)
-        configInfos.forEach((ele)=>{
-          let formListItem = {
-            title: ele.configName,
-            name: ele.configKey,
-            type: ele.ifFile == 'F'?'input':'uploadFile',
-            rules: [
-              { required: ele.required=='T'?true:false, message:'请输入'+ele.configName, trigger: 'blur'}
-            ],
-            placeholder:ele.tips?ele.tips:'',
-            value:ele.configValue?ele.configValue:''
-          }
-          this.formList.push(formListItem)
-        })
+        if(configInfos){
+          configInfos.forEach((ele)=>{
+            let formListItem = {
+              title: ele.configName,
+              name: ele.configKey,
+              type: ele.ifFile == 'F'?'input':'uploadFile',
+              rules: [
+                { required: ele.required=='T'?true:false, message:'请输入'+ele.configName, trigger: 'blur'}
+              ],
+              placeholder:ele.tips?ele.tips:'',
+              value:ele.configValue?ele.configValue:''
+            }
+            this.formList.push(formListItem)
+          })
+        }
       },
       // 获取渠道计费方式
     }
