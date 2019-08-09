@@ -235,4 +235,7 @@ export default {
     max-height: 300px;
     overflow: auto;
   }
+  .ivu-select-dropdown {
+    left: 0px !important;
+  }
 </style>

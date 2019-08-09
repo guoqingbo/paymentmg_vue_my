@@ -262,6 +262,11 @@ export default {
   }
 }
 </script>
+<style>
+.ivu-select-dropdown {
+  left: 0px !important;
+}
+</style>
 <style scoped>
   .detail-text{
     box-sizing: border-box;
