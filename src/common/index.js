@@ -86,10 +86,13 @@ const common = {
   splitMerchant(params,form){
     params.merchantCode = ''
     params.merchantNo = ''
+    params.parentMerchantCode = ''
     form.forEach(item=>{
-      if(item.name == "merchantName"){
+      if(item.name == "merchantName"||item.name == "parentMerchantName"){
         item.data.forEach(merchant=>{
           if((merchant.merchantName+"("+merchant.merchantCode+")")==params.merchantName){
+            params.parentMerchantName = merchant.merchantName
+            params.parentMerchantCode = merchant.merchantCode
             params.merchantName = merchant.merchantName
             params.merchantCode = merchant.merchantCode
             params.merchantNo = merchant.merchantCode
