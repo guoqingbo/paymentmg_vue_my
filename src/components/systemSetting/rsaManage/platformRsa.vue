@@ -139,7 +139,7 @@
               });
               this.formUrl = '/rsaKeyPlatform/save'
               this.routeType = 'add'
-              this.formTitle = '添加'
+              this.formTitle = '添加秘钥'
             }
           }
         ],

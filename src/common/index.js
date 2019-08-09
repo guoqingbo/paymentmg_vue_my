@@ -84,6 +84,8 @@ const common = {
   // 商户名，商户号拆分 aaaaaaa(1005260929072019)
   // 括号里的是商户号 外面的是商户名
   splitMerchant(params,form){
+    params.merchantCode = ''
+    params.merchantNo = ''
     form.forEach(item=>{
       if(item.name == "merchantName"){
         item.data.forEach(merchant=>{
