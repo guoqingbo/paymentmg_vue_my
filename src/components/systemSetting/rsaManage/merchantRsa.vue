@@ -106,7 +106,7 @@
           {
             label: '商户简称',
             type: 'autoComplete',
-            name: 'merchantName',
+            name: 'merchantNameSearch',
             data:[],
             search: (value)=>{
               this.common.searchMerchantList(value,this.searchItems[0])

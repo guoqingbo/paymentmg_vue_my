@@ -87,10 +87,14 @@ const common = {
     params.merchantCode = ''
     params.merchantNo = ''
     params.parentMerchantCode = ''
+    params.parentMerchantName = ''
+    params.merchantName = ''
     form.forEach(item=>{
-      if(item.name == "merchantName"||item.name == "parentMerchantName"){
+      if(item.name == "merchantNameSearch"){
+        params.merchantName = params.merchantNameSearch
+        params.parentMerchantName = params.merchantNameSearch
         item.data.forEach(merchant=>{
-          if((merchant.merchantName+"("+merchant.merchantCode+")")==params.merchantName){
+          if((merchant.merchantName+"("+merchant.merchantCode+")")==params.merchantNameSearch){
             params.parentMerchantName = merchant.merchantName
             params.parentMerchantCode = merchant.merchantCode
             params.merchantName = merchant.merchantName

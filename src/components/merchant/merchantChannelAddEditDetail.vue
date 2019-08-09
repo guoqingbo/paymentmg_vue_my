@@ -20,13 +20,13 @@
         formList: [
           {
             title: '商户号',
-            name: 'merchantName',
+            name: 'merchantNameSearch',
             data: [],
             type: 'autoComplete',
             value: '',
             disabled:false,
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList,'merchantName')
+              let arrItem = this.common.getArrItem(this.formList,'merchantNameSearch')
               this.common.searchMerchantList(value,arrItem)
             },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },

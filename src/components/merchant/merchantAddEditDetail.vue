@@ -46,12 +46,12 @@
           },
           {
             title: '上级商户号',
-            name: 'parentMerchantName',
+            name: 'merchantNameSearch',
             type: 'autoComplete',
             value: '',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList0,'parentMerchantName')
+              let arrItem = this.common.getArrItem(this.formList0,'merchantNameSearch')
               this.common.searchMerchantList(value,arrItem)
             },
             // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
@@ -152,13 +152,13 @@
           },
           {
             title: '上级商户号',
-            name: 'parentMerchantName',
+            name: 'merchantNameSearch',
             // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
             type: 'autoComplete',
             value: '',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList1,'parentMerchantName')
+              let arrItem = this.common.getArrItem(this.formList1,'merchantNameSearch')
               this.common.searchMerchantList(value,arrItem)
             },
           },
