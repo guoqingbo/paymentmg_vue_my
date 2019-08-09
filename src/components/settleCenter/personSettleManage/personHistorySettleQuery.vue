@@ -155,7 +155,7 @@
       // 搜索之前
       beforeSubmit(params){
         // 商户名，商户号拆分
-        this.common.splitMerchant(params,this.searchItems)
+        this.common.splitMerchant(params)
       },
       // 日期限制
       checkDate(){

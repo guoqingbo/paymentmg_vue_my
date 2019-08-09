@@ -163,12 +163,12 @@
       // 谭宽保存之前
       beforeSave(params){
         // 商户名，商户号拆分
-        this.common.splitMerchant(params,this.formItems)
+        this.common.splitMerchant(params)
       },
       // 搜索之前
       beforeSubmit(params){
         // 商户名，商户号拆分
-        this.common.splitMerchant(params,this.searchItems)
+        this.common.splitMerchant(params)
       },
     }
   }

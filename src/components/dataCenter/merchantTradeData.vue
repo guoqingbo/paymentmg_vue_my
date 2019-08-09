@@ -181,7 +181,7 @@
           // 合并搜索条件
           this.params = Object.assign(this.$refs.search.searchForm,this.$refs.chartSearch.searchForm)
           // 商户名，商户号拆分
-          this.common.splitMerchant(this.params,this.searchItems)
+          this.common.splitMerchant(this.params)
 
           // 检查搜素条件
           if(this.checkSearch()){

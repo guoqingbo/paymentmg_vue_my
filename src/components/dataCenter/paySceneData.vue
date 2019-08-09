@@ -140,7 +140,7 @@
           // 搜索条件
           this.params = params
           // 商户名，商户号拆分
-          this.common.splitMerchant(this.params,this.searchItems)
+          this.common.splitMerchant(this.params)
           // 检查搜素条件
           if(this.checkSearch()){
             // 执行搜索初始化，获取数据

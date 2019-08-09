@@ -1,12 +1,13 @@
-import * as api from '@/fetch/api'
+// import * as api from '@/fetch/api'
 // select下拉常量
 import dic from '@/common/dic'
 // 配置文件
 import config from '@/config'
-import {Message} from 'iview'
+// import {Message} from 'iview'
 // 表单验证扩展
 import validate from "@/validate";
-
+// app实例
+import App from '@/main'
 const common = {
   // 根据条件设置数组的某一项
   setArrItem(arr,condition,itemData){
@@ -66,48 +67,38 @@ const common = {
         columnType:2,// 1 商户号模糊查询 2 商户名模糊查询
       }
       let url = '/merchant/queryMerchantListByVagueMerchantMark'
-      api.apiGet(url,params).then(res=>{
+      App.apiGet(url,params).then(res=>{
         if(res.status == 200){
           let data = []
+          let searchMerchantList = {}
           if(res.data.length){
             res.data.forEach(ele=>{
-              data.push({label:ele.merchantName+"("+ele.merchantCode+")",value:ele.merchantName+"("+ele.merchantCode+")",merchantCode:ele.merchantCode,merchantName:ele.merchantName})
+              let label = ele.merchantName+"("+ele.merchantCode+")"
+              searchMerchantList[label] = ele
+              data.push({label,value:label})
             })
           }else{
             data = [{label:'暂无数据',value:''}]
           }
           autoComplete.data = data
+          App.$store.state.global.searchMerchantList = searchMerchantList
         }
       })
     }
   },
   // 商户名，商户号拆分 aaaaaaa(1005260929072019)
   // 括号里的是商户号 外面的是商户名
-  splitMerchant(params,form){
-    params.merchantCode = ''
-    params.merchantNo = ''
-    params.parentMerchantCode = ''
-    params.parentMerchantName = ''
-    params.merchantName = ''
-    form.forEach(item=>{
-      if(item.name == "merchantNameSearch"){
-        params.merchantName = params.merchantNameSearch
-        params.parentMerchantName = params.merchantNameSearch
-        item.data.forEach(merchant=>{
-          if((merchant.merchantName+"("+merchant.merchantCode+")")==params.merchantNameSearch){
-            params.parentMerchantName = merchant.merchantName
-            params.parentMerchantCode = merchant.merchantCode
-            params.merchantName = merchant.merchantName
-            params.merchantCode = merchant.merchantCode
-            params.merchantNo = merchant.merchantCode
-          }
-        })
-      }
-    })
+  splitMerchant(params){
+    if(params.merchantNameSearch){
+      let merchant = App.$store.state.global.searchMerchantList[params.merchantNameSearch]
+      params.parentMerchantName = params.merchantName = merchant.merchantName
+      params.parentMerchantCode = params.merchantCode = params.merchantNo = merchant.merchantCode
+      delete params.merchantNameSearch
+    }
   },
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
-    api.apiGetBlob(url,params).then(res=>{
+    App.apiGetBlob(url,params).then(res=>{
       if(res){
         let url = window.URL.createObjectURL(res)
         let a = document.createElement('a')
@@ -118,7 +109,7 @@ const common = {
         $(a).remove()
         callback()
       }else {
-        Message.error('报表没有记录')
+        App.Message.error('报表没有记录')
       }
     })
   },
@@ -166,7 +157,7 @@ const common = {
   formPost(obj, options) {
     obj.$refs[options.modalName ? options.modalName : 'formItem'].validate(async (valid) => {
       if (valid) {
-        let res = await api.apiPost(options.url, options.params)
+        let res = await App.apiPost(options.url, options.params)
         // console.log(res)
         if (res.success) {
           switch (options.mold) {
@@ -195,11 +186,11 @@ const common = {
     })
   },
   async listDelete(obj, options) {
-    let res = await api.apiPost(options.url, options.params || {})
+    let res = await App.apiPost(options.url, options.params || {})
     options.callback(res)
   },
   async listDone(obj, options) {
-    let res = await api.apiPost(options.url, options.params || {})
+    let res = await App.apiPost(options.url, options.params || {})
     options.callback(res)
   },
   columnsHandle(h, actions) {

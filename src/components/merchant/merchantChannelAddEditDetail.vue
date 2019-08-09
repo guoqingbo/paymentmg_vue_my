@@ -113,7 +113,7 @@
           formItem.id = this.$route.query.id
         }
         // 商户名，商户号拆分
-        this.common.splitMerchant(formItem,this.formList)
+        this.common.splitMerchant(formItem)
       },
       getDetail(){
         this.routeType = this.$route.query.routeType
