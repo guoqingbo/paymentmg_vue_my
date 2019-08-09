@@ -27,12 +27,12 @@
           return {
             searchItems: [
               {
-                label: '商户号',
+                label: '商户名称',
                 type: 'autoComplete',
-                name: 'merchantNameSearch',
+                name: 'merchantNo',
                 data:[],
                 search: (value)=>{
-                  let arrItem = this.common.getArrItem(this.searchItems,'merchantNameSearch')
+                  let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
                   this.common.searchMerchantList(value,arrItem)
                 }
               }

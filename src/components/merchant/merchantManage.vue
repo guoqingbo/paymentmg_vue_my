@@ -99,10 +99,10 @@
           {
             label: '商户名称',
             type: 'autoComplete',
-            name: 'merchantNameSearch',
+            name: 'merchantName',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.searchItems,'merchantNameSearch')
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
               this.common.searchMerchantList(value,arrItem)
             }
           },

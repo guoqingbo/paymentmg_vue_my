@@ -129,7 +129,7 @@
           },
           {
             label: '商户名称',
-            name: 'merchantNameSearch',
+            name: 'merchantNo',
             type: 'autoComplete',
             value: '',
             data:[],

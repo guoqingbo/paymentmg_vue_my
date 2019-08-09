@@ -19,14 +19,14 @@
         formListUrl: "/merchantChannel/save",
         formList: [
           {
-            title: '商户号',
-            name: 'merchantNameSearch',
+            title: '商户名称',
+            name: 'merchantName',
             data: [],
             type: 'autoComplete',
             value: '',
             disabled:false,
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList,'merchantNameSearch')
+              let arrItem = this.common.getArrItem(this.formList,'merchantName')
               this.common.searchMerchantList(value,arrItem)
             },
             rules: [{ required: true, message: '请输入商户号', trigger: 'blur' },

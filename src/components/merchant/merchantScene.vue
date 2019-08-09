@@ -93,11 +93,11 @@
         searchItems: [
           {
             label: '商户名称',
-            name: 'merchantNameSearch',
+            name: 'merchantName',
             type: 'autoComplete',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.searchItems,'merchantNameSearch')
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
               this.common.searchMerchantList(value,arrItem)
             }
           },
@@ -126,7 +126,7 @@
         formItems: [
           {
             title: '商户名称',
-            name: 'merchantNameSearch',
+            name: 'merchantName',
             data: [],
             type: 'autoComplete',
             rules: [
@@ -134,7 +134,7 @@
               // { max: 20, message: "商户名称不超过20字符" }
             ],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formItems,'merchantNameSearch')
+              let arrItem = this.common.getArrItem(this.formItems,'merchantName')
               this.common.searchMerchantList(value,arrItem)
             },
             value: ""

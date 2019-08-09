@@ -70,6 +70,7 @@ const common = {
       App.apiGet(url,params).then(res=>{
         if(res.status == 200){
           let data = []
+          // 用于匹配获取商户名商户号
           let searchMerchantList = {}
           if(res.data.length){
             res.data.forEach(ele=>{
@@ -86,14 +87,41 @@ const common = {
       })
     }
   },
-  // 商户名，商户号拆分 aaaaaaa(1005260929072019)
-  // 括号里的是商户号 外面的是商户名
+  // 商户名，商户号拆分
   splitMerchant(params){
-    if(params.merchantNameSearch){
-      let merchant = App.$store.state.global.searchMerchantList[params.merchantNameSearch]
-      params.parentMerchantName = params.merchantName = merchant.merchantName
-      params.parentMerchantCode = params.merchantCode = params.merchantNo = merchant.merchantCode
-      delete params.merchantNameSearch
+    let merchantCodeField = ''
+    let merchantNameField = ''
+    if(typeof params.parentMerchantCode != 'undefined'){
+      merchantCodeField = 'parentMerchantCode'
+      merchantNameField = 'parentMerchantName'
+    }else if (typeof params.merchantCode != 'undefined'){
+      merchantCodeField = 'merchantCode'
+      merchantNameField = 'merchantName'
+    }else if (typeof params.merchantName != 'undefined'){
+      merchantCodeField = 'merchantCode'
+      merchantNameField = 'merchantName'
+    }
+    if(params[merchantCodeField] || params[merchantNameField]){
+      let searchMerchantList = App.$store.state.global.searchMerchantList
+      let merchant = searchMerchantList[params[merchantCodeField]] ||
+        searchMerchantList[params[merchantNameField]] ||
+        searchMerchantList[params[merchantNameField]+"("+params[merchantCodeField]+")"]
+      if(merchant){
+        params[merchantNameField] = merchant.merchantName
+        params[merchantCodeField] = merchant.merchantCode
+      }else{
+        let newValueArr = params[merchantNameField].split("(") || params[merchantCodeField].split("(");
+        params[merchantNameField] = newValueArr[0]
+        if(newValueArr[1]){
+          let merchantCode = newValueArr[1].replace(/\)/g,'');
+          params[merchantCodeField] = merchantCode
+        } else {
+          params[merchantCodeField] = ''
+        }
+      }
+    }else{
+      params[merchantNameField] = ''
+      params[merchantCodeField] = ''
     }
   },
   // 导出excel表格方法

@@ -29,7 +29,7 @@
               {
                 label: '商户名称',
                 type: 'autoComplete',
-                name: 'merchantNameSearch',
+                name: 'merchantNo',
                 data:[],
                 search: (value)=>{
                   this.common.searchMerchantList(value,this.searchItems[0])

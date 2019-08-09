@@ -46,12 +46,12 @@
           },
           {
             title: '上级商户号',
-            name: 'merchantNameSearch',
+            name: 'parentMerchantCode',
             type: 'autoComplete',
             value: '',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList0,'merchantNameSearch')
+              let arrItem = this.common.getArrItem(this.formList0,'parentMerchantCode')
               this.common.searchMerchantList(value,arrItem)
             },
             // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
@@ -152,13 +152,13 @@
           },
           {
             title: '上级商户号',
-            name: 'merchantNameSearch',
+            name: 'parentMerchantCode',
             // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
             type: 'autoComplete',
             value: '',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.formList1,'merchantNameSearch')
+              let arrItem = this.common.getArrItem(this.formList1,'parentMerchantCode')
               this.common.searchMerchantList(value,arrItem)
             },
           },
@@ -271,7 +271,7 @@
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
-          this.apiGet("/merchant/" + id).then(res => {
+          this.apiGet("/merchant/detail/" + id).then(res => {
             if (res.status == 200 && res.data) {
               // 更改账户类型
               this.merchantTypeChange(res.data.merchantType)
@@ -282,6 +282,7 @@
                 // 更改证件类型验证
                 this.idTypeChange(res.data.idType)
               }
+
               this.common.setArrItem(this.formList,'merchantType',{disabled:true})
               this.formList.forEach((ele) => {
                 ele.value = res.data[ele.name]
@@ -308,6 +309,9 @@
                     //   ele.addrCode = addrCode.join("-")
                     // }
                   }
+                }
+                if(ele.name == 'parentMerchantCode' && res.data.parentMerchantCode){
+                  ele.value=res.data.parentMerchantName+"("+res.data.parentMerchantCode+")"
                 }
               })
             }
