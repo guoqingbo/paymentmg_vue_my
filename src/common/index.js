@@ -75,11 +75,11 @@ const common = {
     if(keyword){
       let newValueArr = keyword.split("(");
       let params = {
-        vagueMerchantMark:newValueArr[0],
+        vagueMerchantMark: newValueArr[0],
         columnType:2,// 1 商户号模糊查询 2 商户名模糊查询
       }
       let url = '/merchant/queryMerchantListByVagueMerchantMark'
-      App.apiGet(url,params).then(res=>{
+      App.apiPost(url,params).then(res=>{
         if(res.status == 200){
           let data = []
           // 用于匹配获取商户名商户号
