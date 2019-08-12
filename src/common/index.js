@@ -60,6 +60,18 @@ const common = {
   },
   // 商户信息模糊查询
   searchMerchantList(keyword,autoComplete){
+
+    // 清空旧的搜索商户赋值
+    if(App.$store.state.list.params.merchantNo){
+      delete App.$store.state.list.params.merchantNo
+    }
+    if(App.$store.state.list.params.merchantCode){
+      delete App.$store.state.list.params.merchantCode
+    }
+    if(App.$store.state.list.params.merchantName){
+      delete App.$store.state.list.params.merchantName
+    }
+
     if(keyword){
       let newValueArr = keyword.split("(");
       let params = {
@@ -94,11 +106,11 @@ const common = {
     if(typeof params.parentMerchantCode != 'undefined'){
       merchantCodeField = 'parentMerchantCode'
       merchantNameField = 'parentMerchantName'
-    }else if (typeof params.merchantCode != 'undefined'){
+    }else if (typeof params.merchantCode != 'undefined' || typeof params.merchantName != 'undefined'){
       merchantCodeField = 'merchantCode'
       merchantNameField = 'merchantName'
-    }else if (typeof params.merchantName != 'undefined'){
-      merchantCodeField = 'merchantCode'
+    }else if (typeof params.merchantNo != 'undefined'){
+      merchantCodeField = 'merchantNo'
       merchantNameField = 'merchantName'
     }
     if(params[merchantCodeField] || params[merchantNameField]){
