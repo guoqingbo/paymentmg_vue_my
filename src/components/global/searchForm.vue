@@ -232,7 +232,7 @@ export default {
 </script>
 <style lang="scss">
   .my-autoComplete .ivu-select-dropdown-list{
-    max-height: 300px;
+    max-height: 280px;
     overflow: auto;
   }
   .ivu-select-dropdown {
