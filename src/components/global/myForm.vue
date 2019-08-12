@@ -60,6 +60,7 @@
                       v-if="item.type=='autoComplete'"
                       v-model="item.value"
                       @on-search="item.search?item.search($event):''"
+                      :clearable="true"
                       icon="ios-search"
                       :placeholder="'请输入'+item.title">
           <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
@@ -263,8 +264,8 @@ export default {
 }
 </script>
 <style>
-.ivu-select-dropdown {
-  left: 0px !important;
+  .my-autoComplete .ivu-select-dropdown {
+  left: 0 !important;
 }
 </style>
 <style scoped>

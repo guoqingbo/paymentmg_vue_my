@@ -101,7 +101,6 @@ const common = {
   },
   // 商户名，商户号拆分
   splitMerchant(params){
-    console.log(params)
     let merchantCodeField = ''
     let merchantNameField = ''
     if(typeof params.parentMerchantCode != 'undefined'){

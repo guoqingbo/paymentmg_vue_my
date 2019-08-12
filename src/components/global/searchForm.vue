@@ -14,6 +14,7 @@
                     v-model="item.value"
                     @on-search="item.search?item.search($event):''"
                     icon="ios-search"
+                    :clearable="true"
                     :placeholder="'请输入'+item.label">
         <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
       </AutoComplete>
@@ -234,8 +235,9 @@ export default {
   .my-autoComplete .ivu-select-dropdown-list{
     max-height: 280px;
     overflow: auto;
+    width: 180px;
   }
-  .ivu-select-dropdown {
-    left: 0px !important;
+  .my-autoComplete .ivu-select-dropdown {
+    /*left: 0 !important;*/
   }
 </style>
