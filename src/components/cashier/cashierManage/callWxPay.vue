@@ -10,13 +10,14 @@
     },
     methods: {
       wxPay() {
+        let {appid,timestamp,noncestr,packagestr,signtype,paysign} = this.$route.query
         let payParams = {
-          appId,
-          timeStamp,
-          nonceStr,
-          package:'',
-          signType,
-          paySign
+          appId:appid,
+          timeStamp:timestamp,
+          nonceStr:noncestr,
+          package:packagestr,
+          signType:signtype,
+          paySign:paysign
         }
         function onBridgeReady() {
           WeixinJSBridge.invoke(
