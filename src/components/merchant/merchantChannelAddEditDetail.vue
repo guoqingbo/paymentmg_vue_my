@@ -1,6 +1,7 @@
 <template>
   <div>
-    <formList :formItems="formList"
+    <formList ref="formList"
+              :formItems="formList"
               :routeType="routeType"
               :url="formListUrl"
               @beforeSave="beforeSave">
@@ -225,9 +226,15 @@
       },
       //获取渠道产品支付配置
       getPayConfig(e){
-        let arrItem = this.common.getArrItem(this.formList,'merchantCode')
+        // let arrItem = this.common.getArrItem(this.formList,'merchantCode')
+        let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
+        console.log(formItem)
+        if(!formItem.merchantCode){
+          this.$Message.info("请先输入商户号")
+          return
+        }
         let params = {
-          merchantCode:arrItem.value
+          merchantCode:formItem.merchantCode
         }
         this.apiGet('/merchantChannel/payConfig/channelProduct/'+e,params).then(res=>{
           if(res.status == 200){

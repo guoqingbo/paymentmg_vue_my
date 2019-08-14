@@ -111,6 +111,9 @@
             // }, 500)
           }
         })
+      },
+      getFormItem(){
+        return this.$refs.myForm.formItem
       }
     }
   }

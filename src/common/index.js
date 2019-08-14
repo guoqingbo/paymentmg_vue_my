@@ -135,6 +135,7 @@ const common = {
       params[merchantNameField] = ''
       params[merchantCodeField] = ''
     }
+    return params
   },
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
