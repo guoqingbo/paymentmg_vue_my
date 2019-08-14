@@ -237,7 +237,7 @@
           merchantCode:formItem.merchantCode
         }
         this.apiGet('/merchantChannel/payConfig/channelProduct/'+e,params).then(res=>{
-          if(res.status == 200){
+          if(res.success){
             // 保留公共选项
             // this.formList.length = 6
             this.formList = this.formList.slice(0,7)
