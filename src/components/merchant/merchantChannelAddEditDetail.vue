@@ -228,7 +228,6 @@
       getPayConfig(e){
         // let arrItem = this.common.getArrItem(this.formList,'merchantCode')
         let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
-        console.log(formItem)
         if(!formItem.merchantCode){
           this.$Message.info("请先输入商户号")
           return
