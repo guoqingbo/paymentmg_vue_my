@@ -106,13 +106,17 @@ const common = {
     if(typeof params.parentMerchantCode != 'undefined'){
       merchantCodeField = 'parentMerchantCode'
       merchantNameField = 'parentMerchantName'
-    }else if (typeof params.merchantCode != 'undefined' || typeof params.merchantName != 'undefined'){
+    }else if (typeof params.merchantCode != 'undefined'){
       merchantCodeField = 'merchantCode'
       merchantNameField = 'merchantName'
     }else if (typeof params.merchantNo != 'undefined'){
       merchantCodeField = 'merchantNo'
       merchantNameField = 'merchantName'
+    }else if(typeof params.merchantName != 'undefined'){
+      merchantCodeField = 'merchantCode'
+      merchantNameField = 'merchantName'
     }
+    console.log(123)
     if(params[merchantCodeField] || params[merchantNameField]){
       let searchMerchantList = App.$store.state.global.searchMerchantList
       let merchant = searchMerchantList[params[merchantCodeField]] ||
