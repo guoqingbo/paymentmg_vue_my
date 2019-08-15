@@ -155,7 +155,8 @@
                         refundOrderNo:params.row.refundOrderNo,
                         orderNo:params.row.orderNo,
                         orderSource:params.row.orderSource,
-                        merchantSourceNo:this.orderInfo.merchantSourceNo
+                        merchantNo:this.orderInfo.merchantNo,
+                        // merchantSourceNo:this.orderInfo.merchantSourceNo
                       }
                     }).href;
                     window.open(href, '_blank');
@@ -229,10 +230,10 @@
       },
       // 根据订单号和订单来源查询支付订单详情
       getOrderByOrderNo(){
-        let {orderNo,orderSource,merchantSourceNo}= this.$route.query
-        if(orderNo && orderSource && merchantSourceNo){
+        let {orderNo,orderSource,merchantNo}= this.$route.query
+        if(orderNo && orderSource && merchantNo){
             this.tableUrl = '/payorder/detail'
-            this.tableParams = {orderNo,orderSource,merchantSourceNo}
+            this.tableParams = this.$route.query
         }
       },
       // 获取支付状态

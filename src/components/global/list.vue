@@ -3,6 +3,7 @@
     <searchForm ref='search'
                 :searchItems="searchItems"
                 :exportItem="exportItem"
+                @beforeSubmit="$emit('beforeSubmit',$store.state.list.params)"
                 :url="url"
                 :params="params"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">

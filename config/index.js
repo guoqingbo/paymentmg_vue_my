@@ -12,7 +12,6 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/api/admin':{
-            // target:'http://pms.sendinfo.com.cn/',
             target:'http://192.168.200.88:10806/',
             // target:'http://192.168.66.246:6071/',
             // target:'http://192.168.200.55:6071/',

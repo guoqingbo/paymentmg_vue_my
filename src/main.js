@@ -79,7 +79,7 @@ Vue.prototype.apiPut = apiPut
 
 
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   router,
   store,

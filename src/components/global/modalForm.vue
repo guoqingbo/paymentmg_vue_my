@@ -8,8 +8,27 @@
            width="750">
       <myForm ref='myForm'
               :formItems='formItems'
+              :routeType='routeType'
               :value="value"
       ></myForm>
+      <div slot="footer">
+        <div v-if='routeType!="detail"'>
+          <Button
+                  @click="cancel"
+                  >取消
+          </Button>
+          <Button type="primary"
+                  @click="ok"
+                  >确定
+          </Button>
+        </div>
+        <div v-else>
+          <Button type="primary"
+                  @click="cancel"
+                  >关闭
+          </Button>
+        </div>
+      </div>
     </Modal>
   </div>
 </template>
@@ -26,6 +45,11 @@
       }
     },
     props: {
+      routeType:{
+        // 区分是详情，新增，编辑
+        type: String,
+        default: 'add'
+      },
       value: {
         type: Boolean,
         default: false
@@ -110,8 +134,14 @@
       },
       cancel() {
         this.$refs.myForm.resetFields()
+        this.modal = false
         this.$emit('input', this.modal)
       }
     }
   }
 </script>
+<style>
+.ivu-modal-footer {
+  border-top: none !important;
+}
+</style>

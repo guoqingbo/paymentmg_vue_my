@@ -4,6 +4,7 @@
           :columns="columns"
           :url="url"
           :params="params"
+          @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
@@ -12,6 +13,7 @@
              :mode="mode"></confirm>
     <modalForm v-model="formShow"
                :formItems="formItems"
+               @beforeSave="beforeSave"
                :url="formUrl"
                :title="formTitle"></modalForm>
   </div>
@@ -91,18 +93,16 @@
             name: 'merchantName',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,2)
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
-          {
-            label: '商户编号',
-            type: 'autoComplete',
-            name: 'merchantCode',
-            data:[],
-            search: (value)=>{
-              this.searchMerchantList(value,1)
-            }
-          },
+          // {
+          //   label: '商户编号',
+          //   type: 'hidden',
+          //   name: 'merchantCode',
+          //   data:[],
+          // },
           {
             label: '商户来源',
             type: 'select',
@@ -144,10 +144,22 @@
           {
             title: '支付中心商户号',
             name: 'merchantCode',
-            type: 'input',
-            rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
-              {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
-          }
+            type: 'autoComplete',
+            value: '',
+            data:[],
+            search: (value)=>{
+              this.common.searchMerchantList(value,this.formItems[2])
+            },
+             rules: [{ required: true, message: '请输入来源支付中心商户名称', trigger: 'blur' },
+              // {max: 20, message: "支付中心商户名称不超过20字符", trigger: 'blur'}
+              ]
+          },
+          // {
+          //   title: '支付中心商户号',
+          //   name: 'merchantCode',
+          //   rules: [{ required: true, message: '请输入支付中心商户号', trigger: 'blur' },
+          //     {max: 20, message: "支付中心商户号不超过20字符", trigger: 'blur'}]
+          // }
         ],
         formUrl: '/merchantRelation/save'
       }
@@ -163,56 +175,34 @@
     },
     components: {list,confirm,modalForm},
     methods: {
+      // 弹框保存之前
+      beforeSave (params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
       // 获取商户来源
       getMerchantSource(){
         this.$store.dispatch("getMerchantSource").then(res=>{
-          let merchantSource = this.$store.state.global.merchantSource
-          this.formItems[0].data = this.searchItems[2].data = merchantSource
+          let merchantSource = res
+          this.common.setArrItem(this.formItems,'source',{data:res,})
+          this.common.setArrItem(this.searchItems,'source',{data:res,})
 
           // 表格商户来源转换
           let source={}
           merchantSource.forEach(ele=>{
             source[ele.value] = ele.label
           })
-          this.columns[3].render = (h, params) => {
-            return h('span', source[params.row.source])
-          }
-        })
-      },
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType){
-        // columnType，1:code查询，2:name查询
-        if(keyword && columnType){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  if(columnType == 1){
-                    // 1:code查询
-                    data.push({label:ele.merchantCode,value:ele.merchantCode})
-                  }else{
-                    // 2:name查询
-                    data.push({label:ele.merchantName,value:ele.merchantName})
-                  }
-
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              if(columnType == 1){
-                this.searchItems[1].data = data
-              }else{
-                this.searchItems[0].data = data
-              }
+          this.common.setArrItem(this.columns,'key=source',{
+            render:(h, params) => {
+              return h('span', source[params.row.source])
             }
           })
-        }
+        })
       },
     }
   }

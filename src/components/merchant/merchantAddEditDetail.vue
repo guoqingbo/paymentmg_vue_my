@@ -47,8 +47,14 @@
           {
             title: '上级商户号',
             name: 'parentMerchantCode',
-            type: 'input',
-            rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
+            type: 'autoComplete',
+            value: '',
+            data:[],
+            search: (value)=>{
+              let arrItem = this.common.getArrItem(this.formList0,'parentMerchantCode')
+              this.common.searchMerchantList(value,arrItem)
+            },
+            // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}]
           },
           {
             title: '法定代表人姓名',
@@ -147,9 +153,14 @@
           {
             title: '上级商户号',
             name: 'parentMerchantCode',
-            type: 'input',
-            rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
-            value: ""
+            // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
+            type: 'autoComplete',
+            value: '',
+            data:[],
+            search: (value)=>{
+              let arrItem = this.common.getArrItem(this.formList1,'parentMerchantCode')
+              this.common.searchMerchantList(value,arrItem)
+            },
           },
           {
             title: '手机号码',
@@ -214,12 +225,13 @@
       // 证件类型改变时
       idTypeChange(e){
         // 1身份证 2护照 3港澳通行证
+        let arrItem = this.common.getArrItem(this.formList1,'idCard')
         if(e==1){
-          this.formList1[3].rules[0].validator = this.common.validate.IdCodeValid
+          arrItem.rules[0].validator = this.common.validate.IdCodeValid
         }else if(e==2){
-          this.formList1[3].rules[0].validator = this.common.validate.passport
+          arrItem.rules[0].validator = this.common.validate.passport
         }else if(e==3){
-          this.formList1[3].rules[0].validator = this.common.validate.passportHM
+          arrItem.rules[0].validator = this.common.validate.passportHM
         }
       },
       // 确认保存之前
@@ -236,6 +248,10 @@
           delete formItem.areaObj
           delete formItem.area
         }
+
+        // 商户名，商户号拆分
+        this.common.splitMerchant(formItem)
+
         if (this.$route.query.id) {
           formItem.id = this.$route.query.id
         }
@@ -255,7 +271,7 @@
             // 更新位置占位符
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
-          this.apiGet("/merchant/" + id).then(res => {
+          this.apiGet("/merchant/detail/" + id).then(res => {
             if (res.status == 200 && res.data) {
               // 更改账户类型
               this.merchantTypeChange(res.data.merchantType)
@@ -266,7 +282,8 @@
                 // 更改证件类型验证
                 this.idTypeChange(res.data.idType)
               }
-              this.formList[0].disabled = true
+
+              this.common.setArrItem(this.formList,'merchantType',{disabled:true})
               this.formList.forEach((ele) => {
                 ele.value = res.data[ele.name]
                 if (this.routeType == 'detail' && ele.type != 'text') {
@@ -293,6 +310,9 @@
                     // }
                   }
                 }
+                if(ele.name == 'parentMerchantCode' && res.data.parentMerchantCode){
+                  ele.value=res.data.parentMerchantName+"("+res.data.parentMerchantCode+")"
+                }
               })
             }
           });
@@ -302,10 +322,10 @@
       merchantTypeChange(type){
         // 100 个人商户 200企业商户
         if(type == 100){
-          this.formList1[0].value = 100
+          this.common.setArrItem(this.formList1,'merchantType',{value:100})
           this.formList = this.formList1
         }else{
-          this.formList0[0].value = 200
+          this.common.setArrItem(this.formList0,'merchantType',{value:200})
           this.formList = this.formList0
         }
       }

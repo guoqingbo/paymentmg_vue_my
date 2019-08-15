@@ -27,6 +27,7 @@
                     @on-change="onChange(payProductCode)">
           <Radio v-for="(item,index) in payWays" :key="index"
                  class="pay-way-item"
+                 v-if='!item.disabled'
                  :disabled="item.disabled"
                  :label="item.label"
                  :class="{active:item.label==payProductCode}">
@@ -120,19 +121,21 @@
         let url = '/initcrashier'
         let params  = this.$route.query
         let apiPrefix = this.common.config.apiPayPrefix
-        if(params.merchantSourceNo && params.orderNo && params.orderSource){
-          this.apiGet(url,params,apiPrefix).then(res=>{
-            if(res.status == 200){
-              this.initCrashier = res.data
-              // 是否有上次支付方式
-              this.latestPayInfo()
-              // 可使用的支付产品
-              this.availablePayProducts()
-              // 初始化表单参数
-              this.setParams()
-            }
-          })
-        }
+        // if((params.merchantSourceNo || params.merchantNo) && params.orderNo && params.orderSource){
+        //
+        // }
+        this.apiGet(url,params,apiPrefix).then(res=>{
+          if(res.status == 200){
+            this.initCrashier = res.data
+            // 是否有上次支付方式
+            this.latestPayInfo()
+            // 可使用的支付产品
+            this.availablePayProducts()
+            // 初始化表单参数
+            this.setParams()
+          }
+        })
+
       },
       // 获取订单信息
       // getOrderInfo(){
@@ -217,8 +220,9 @@
           // product_code:payOrder.productCode,//商品编码
           // product_num:'',//商品数量
           order_source:payOrder.orderSource,//订单来源
+          merchant_no:payOrder.merchantNo,//商户标识g
           merchant_source_no:payOrder.merchantSourceNo,//来源商户标识
-          // user_source_no:payOrder.userSourceNo,//来源用户标识
+          user_source_no:payOrder.userSourceNo,//来源用户标识
           // pay_scene_no:payOrder.payScene,//支付场景编号
           // time_expire:'',//交易过期时间
           // audit_type:'',//清算类型 1：T+1清算 2：担保交易
@@ -231,7 +235,11 @@
       submit(){
         this.loading = true
         let url = '/unifiedorder'
-        let params  = {requestXml:this.json2xml({xml:this.params})}
+        let params  = {
+          version:"V1.0",
+          submit_source:1,
+          rsa_data:this.json2xml({xml:this.params})
+        }
         let apiPrefix = this.common.config.apiPayPrefix
         this.apiPost(url,params,apiPrefix).then(res=>{
           res = this.xml2json(res)

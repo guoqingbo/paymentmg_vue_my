@@ -54,6 +54,17 @@ export const loginRouter = [
     }
   },
   {
+    path: '/cashier/cashierManage/callWxPay',
+    name: 'callWxPay',
+    meta: {
+      title: '微信支付',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/callWxPay.vue'], resolve)
+    }
+  },
+  {
     path: '/main',
     name: ' Main',
     component: Main,

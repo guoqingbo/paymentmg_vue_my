@@ -4,6 +4,7 @@
           :columns="columns"
           :url="url"
           :params="params"
+          @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
@@ -101,18 +102,19 @@
             name: 'merchantName',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,2)
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
-          {
-            label: '商户号',
-            type: 'autoComplete',
-            name: 'merchantCode',
-            data:[],
-            search: (value)=>{
-              this.searchMerchantList(value,1)
-            }
-          },
+          // {
+          //   label: '商户号',
+          //   type: 'hidden',
+          //   name: 'merchantCode',
+          //   data:[],
+          //   search: (value)=>{
+          //     this.common.searchMerchantList(value,1)
+          //   }
+          // },
           {
             label: '开始日期',
             type: 'date',
@@ -153,46 +155,16 @@
     },
     components: {list,confirm},
     methods: {
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType){
-        // columnType，1:code查询，2:name查询
-        if(keyword && columnType){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  if(columnType == 1){
-                    // 1:code查询
-                    data.push({label:ele.merchantCode,value:ele.merchantCode})
-                  }else{
-                    // 2:name查询
-                    data.push({label:ele.merchantName,value:ele.merchantName})
-                  }
-
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              if(columnType == 1){
-                this.searchItems[1].data = data
-              }else{
-                this.searchItems[0].data = data
-              }
-            }
-          })
-        }
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
       },
       // 日期限制
       checkDate(){
         // 开始时间结束时间限制
-        let startDateItem = this.searchItems[2]
-        let endDateItem = this.searchItems[3]
+        let startDateItem = this.common.getArrItem(this.searchItems,'startDate')
+        let endDateItem = this.common.getArrItem(this.searchItems,'endDate')
         if(startDateItem && endDateItem){
           startDateItem.onChange=(date1)=>{
             endDateItem.options.disabledDate=date2=>{

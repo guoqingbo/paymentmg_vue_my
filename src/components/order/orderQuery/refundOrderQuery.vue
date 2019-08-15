@@ -4,6 +4,7 @@
           :columns="columns"
           :url="url"
           :params="params"
+          @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :exportItem="exportItem"></list>
     <confirm ref="confirmModel"
@@ -130,14 +131,14 @@
             label: '起始日期',
             type: 'date',
             name: 'orderTimeStart',
-            format:'yyyy-MM-dd 00:00:00',
+            format:'yyyy-MM-dd',
             value: new Date(new Date().setMonth(new Date().getMonth()-1))
           },
           {
             label: '结束日期',
             type: 'date',
             name: 'orderTimeEnd',
-            format:'yyyy-MM-dd 23:59:59',
+            format:'yyyy-MM-dd',
             value: new Date()
           },
           {
@@ -153,14 +154,21 @@
             data: ''
           },
           {
-            label: '商户号',
+            label: '商户名称',
             name: 'merchantNo',
             type: 'autoComplete',
+            value: '',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,1)
+              this.common.searchMerchantList(value,this.searchItems[7])
             }
           },
+          // {
+          //   label: '商户号',
+          //   name: 'merchantNo',
+          //   type: 'hidden',
+          //   data:[],
+          // },
           {
             label: '退款状态',
             type: 'select',
@@ -207,6 +215,11 @@
     },
     components: {list,confirm},
     methods: {
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
       // 获取退款状态
       getRefundStatus(){
         this.$store.dispatch("getRefundStatus").then(res=>{
@@ -233,39 +246,6 @@
           }
           this.searchItems[6].data = res
         })
-      },
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType){
-        // columnType，1:code查询，2:name查询
-        if(keyword && columnType){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  if(columnType == 1){
-                    // 1:code查询
-                    data.push({label:ele.merchantCode,value:ele.merchantCode})
-                  }else{
-                    // 2:name查询
-                    data.push({label:ele.merchantName,value:ele.merchantName})
-                  }
-
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              if(columnType == 1){
-                this.searchItems[7].data = data
-              }
-            }
-          })
-        }
       },
       // 日期限制
       checkDate(){

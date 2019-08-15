@@ -4,6 +4,7 @@
           :columns="columns"
           :url="url"
           :params="params"
+          @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
@@ -12,6 +13,7 @@
              :mode="mode"></confirm>
     <modalForm v-model="formShow"
                :formItems="formItems"
+               @beforeSave="beforeSave"
                :url="formUrl"
                :title="formTitle"></modalForm>
   </div>
@@ -95,7 +97,8 @@
             type: 'autoComplete',
             data:[],
             search: (value)=>{
-              this.searchMerchantList(value,2)
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
           {
@@ -122,10 +125,19 @@
         formShow: false,
         formItems: [
           {
-            title: '商户号',
-            name: 'merchantCode',
-            type: 'input',
-            rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
+            title: '商户名称',
+            name: 'merchantName',
+            data: [],
+            type: 'autoComplete',
+            rules: [
+              { required: true, message: '请输入商户号', trigger: 'blur' },
+              // { max: 20, message: "商户名称不超过20字符" }
+            ],
+            search: (value)=>{
+              let arrItem = this.common.getArrItem(this.formItems,'merchantName')
+              this.common.searchMerchantList(value,arrItem)
+            },
+            value: ""
           },
           {
             title: '场景名称',
@@ -148,40 +160,15 @@
     },
     components: {list,confirm,modalForm},
     methods: {
-      // 商户信息模糊查询
-      searchMerchantList(keyword,columnType){
-        // columnType，1:code查询，2:name查询
-        if(keyword && columnType){
-          let params = {
-            vagueMerchantMark:keyword,
-            columnType,
-          }
-          let url = '/merchant/queryMerchantListByVagueMerchantMark'
-          this.apiGet(url,params).then(res=>{
-            if(res.status == 200){
-              let data = []
-              if(res.data.length){
-                res.data.forEach(ele=>{
-                  if(columnType == 1){
-                    // 1:code查询
-                    data.push({label:ele.merchantCode,value:ele.merchantCode})
-                  }else{
-                    // 2:name查询
-                    data.push({label:ele.merchantName,value:ele.merchantName})
-                  }
-
-                })
-              }else{
-                data = [{label:'暂无数据',value:''}]
-              }
-              if(columnType == 1){
-                this.searchItems[1].data = data
-              }else{
-                this.searchItems[0].data = data
-              }
-            }
-          })
-        }
+      // 谭宽保存之前
+      beforeSave(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
+      },
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+        this.common.splitMerchant(params)
       },
     }
   }

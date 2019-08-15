@@ -1,16 +1,145 @@
-import * as api from '@/fetch/api'
+// import * as api from '@/fetch/api'
 // select下拉常量
 import dic from '@/common/dic'
 // 配置文件
 import config from '@/config'
-import {Message} from 'iview'
+// import {Message} from 'iview'
 // 表单验证扩展
 import validate from "@/validate";
-
+// app实例
+import App from '@/main'
 const common = {
+  // 根据条件设置数组的某一项
+  setArrItem(arr,condition,itemData){
+    // condition 可以直接为value 或 key = value 自定义
+    // 默认key
+    let key = 'name'
+    let value = ''
+    let itemIndex = ''
+    if (typeof condition === 'string'){
+      let conditionArr = condition.split("=")
+      if (conditionArr.length == 2) {
+        key = conditionArr[0]
+        value = conditionArr[1]
+      }else{
+        value =  conditionArr[0]
+      }
+    }
+    for(let i = 0,length = arr.length;i<length;i++){
+      if(arr[i][key] == value){
+        itemIndex = i
+        break
+      }
+    }
+    // 合并数组的项
+    arr[itemIndex] = Object.assign(arr[itemIndex],itemData)
+  },
+  // 根据条件获取数组的某一项
+  getArrItem(arr,condition){
+    // condition 可以直接为value 或 key = value 自定义
+    // 默认key
+    let key = 'name'
+    let value = ''
+    let itemIndex = ''
+    if (typeof condition === 'string'){
+      let conditionArr = condition.split("=")
+      if (conditionArr.length == 2) {
+        key = conditionArr[0]
+        value = conditionArr[1]
+      }else{
+        value =  conditionArr[0]
+      }
+    }
+    for(let i = 0,length = arr.length;i<length;i++){
+      if(arr[i][key] == value){
+        itemIndex = i
+        break
+      }
+    }
+    return arr[itemIndex]
+  },
+  // 商户信息模糊查询
+  searchMerchantList(keyword,autoComplete){
+
+    // 清空旧的搜索商户赋值
+    if(App.$store.state.list.params.merchantNo){
+      delete App.$store.state.list.params.merchantNo
+    }
+    if(App.$store.state.list.params.merchantCode){
+      delete App.$store.state.list.params.merchantCode
+    }
+    if(App.$store.state.list.params.merchantName){
+      delete App.$store.state.list.params.merchantName
+    }
+
+    if(keyword){
+      let newValueArr = keyword.split("(");
+      let params = {
+        vagueMerchantMark: newValueArr[0],
+        columnType:2,// 1 商户号模糊查询 2 商户名模糊查询
+      }
+      let url = '/merchant/queryMerchantListByVagueMerchantMark'
+      App.apiPost(url,params).then(res=>{
+        if(res.status == 200){
+          let data = []
+          // 用于匹配获取商户名商户号
+          let searchMerchantList = {}
+          if(res.data.length){
+            res.data.forEach(ele=>{
+              let label = ele.merchantName+"("+ele.merchantCode+")"
+              searchMerchantList[label] = ele
+              data.push({label,value:label})
+            })
+          }else{
+            data = [{label:'暂无数据',value:''}]
+          }
+          autoComplete.data = data
+          App.$store.state.global.searchMerchantList = searchMerchantList
+        }
+      })
+    }
+  },
+  // 商户名，商户号拆分
+  splitMerchant(params){
+    let merchantCodeField = ''
+    let merchantNameField = ''
+    if(typeof params.parentMerchantCode != 'undefined'){
+      merchantCodeField = 'parentMerchantCode'
+      merchantNameField = 'parentMerchantName'
+    }else if (typeof params.merchantCode != 'undefined' || typeof params.merchantName != 'undefined'){
+      merchantCodeField = 'merchantCode'
+      merchantNameField = 'merchantName'
+    }else if (typeof params.merchantNo != 'undefined'){
+      merchantCodeField = 'merchantNo'
+      merchantNameField = 'merchantName'
+    }
+    if(params[merchantCodeField] || params[merchantNameField]){
+      let searchMerchantList = App.$store.state.global.searchMerchantList
+      let merchant = searchMerchantList[params[merchantCodeField]] ||
+        searchMerchantList[params[merchantNameField]] ||
+        searchMerchantList[params[merchantNameField]+"("+params[merchantCodeField]+")"]
+      if(merchant){
+        params[merchantNameField] = merchant.merchantName
+        params[merchantCodeField] = merchant.merchantCode
+      }else{
+        let newValueArr = params[merchantNameField].split("(") || params[merchantCodeField].split("(");
+        params[merchantNameField] = newValueArr[0]
+        if(newValueArr[1]){
+          let merchantCode = newValueArr[1].replace(/\)/g,'');
+          params[merchantCodeField] = merchantCode
+        } else {
+          params[merchantCodeField] = ''
+        }
+      }
+    }else{
+      params[merchantNameField] = ''
+      params[merchantCodeField] = ''
+    }
+    return params
+  },
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
-    api.apiGetBlob(url,params).then(res=>{
+    App.apiGetBlob(url,params).then(res=>{
       if(res){
         let url = window.URL.createObjectURL(res)
         let a = document.createElement('a')
@@ -21,7 +150,7 @@ const common = {
         $(a).remove()
         callback()
       }else {
-        Message.error('报表没有记录')
+        App.Message.error('报表没有记录')
       }
     })
   },
@@ -69,7 +198,7 @@ const common = {
   formPost(obj, options) {
     obj.$refs[options.modalName ? options.modalName : 'formItem'].validate(async (valid) => {
       if (valid) {
-        let res = await api.apiPost(options.url, options.params)
+        let res = await App.apiPost(options.url, options.params)
         // console.log(res)
         if (res.success) {
           switch (options.mold) {
@@ -98,11 +227,11 @@ const common = {
     })
   },
   async listDelete(obj, options) {
-    let res = await api.apiPost(options.url, options.params || {})
+    let res = await App.apiPost(options.url, options.params || {})
     options.callback(res)
   },
   async listDone(obj, options) {
-    let res = await api.apiPost(options.url, options.params || {})
+    let res = await App.apiPost(options.url, options.params || {})
     options.callback(res)
   },
   columnsHandle(h, actions) {
