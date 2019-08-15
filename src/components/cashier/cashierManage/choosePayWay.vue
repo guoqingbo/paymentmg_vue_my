@@ -220,6 +220,7 @@
           // product_code:payOrder.productCode,//商品编码
           // product_num:'',//商品数量
           order_source:payOrder.orderSource,//订单来源
+          merchant_no:payOrder.merchantNo,//商户标识
           merchant_source_no:payOrder.merchantSourceNo,//来源商户标识
           // user_source_no:payOrder.userSourceNo,//来源用户标识
           // pay_scene_no:payOrder.payScene,//支付场景编号

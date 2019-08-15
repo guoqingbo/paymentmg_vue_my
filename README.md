@@ -26,3 +26,7 @@
   ## 预发环境
    * 域名 prepaycenter.zhiyoubao.com
    * 超级账号 superadmin/123456
+   
+ ## 正式环境
+   * 域名 paycenter.zhiyoubao.com
+   * 超级账号 superadmin/123456
