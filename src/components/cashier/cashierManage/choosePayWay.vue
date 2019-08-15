@@ -222,7 +222,7 @@
           order_source:payOrder.orderSource,//订单来源
           merchant_no:payOrder.merchantNo,//商户标识g
           merchant_source_no:payOrder.merchantSourceNo,//来源商户标识
-          // user_source_no:payOrder.userSourceNo,//来源用户标识
+          user_source_no:payOrder.userSourceNo,//来源用户标识
           // pay_scene_no:payOrder.payScene,//支付场景编号
           // time_expire:'',//交易过期时间
           // audit_type:'',//清算类型 1：T+1清算 2：担保交易
