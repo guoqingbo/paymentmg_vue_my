@@ -21,12 +21,12 @@
           {{item.value}}
         </span>
         <div v-if='item.clipboard' style="text-align: right;">
-          <Button
-          type="primary"
-          v-clipboard:copy="item.value"
-          v-clipboard:success="onCopySuccess"
-          v-clipboard:error="onCopyError"
-        >{{item.clipboardText}}</Button>
+          <Button type="primary"
+                  v-clipboard:copy="item.value"
+                  v-clipboard:success="onCopySuccess"
+                  v-clipboard:error="onCopyError">
+            {{item.clipboardText}}
+          </Button>
         </div>
         <Divider v-if="item.type=='divider'"> {{item.title}}</Divider>
         <span class="detail-text"
