@@ -101,6 +101,7 @@
                       :limitNum="item.limitNum||1"
                       :disabled="item.disabled"
                       :format="item.format"
+                      :accept="item.accept"
                       :fieldName="item.name"
                       @on-success="uploadSuccess"></uploadFile>
           <p>{{item.tip}}</p>

@@ -36,6 +36,7 @@
             :on-exceeded-size="handleMaxSize"
             :on-format-error="handleFormatError"
             :format="defaultFormat"
+            :accept="defaultAccept"
             :max-size="2048"
             type="drag"
             :action="url"
@@ -59,7 +60,8 @@ export default {
     return {
       url:this.common.config.apiAdminPrefix+"/file/upload",
       uploadList: [],
-      defaultFormat: ['jpg', 'jpeg', 'png'],
+      defaultAccept:'.jpg,.jpeg,.png,.gif',
+      defaultFormat: ['jpg', 'jpeg', 'png','gif'],
       isImg: true
     }
   },
@@ -74,6 +76,9 @@ export default {
     format: {
       type: Array
     },
+    accept:{
+      type: String,
+    },
     fieldName:{
       type: String,
       default: "fileUrl"
@@ -83,6 +88,7 @@ export default {
     value: {
       handler (value) {
         this.defaultFormat = this.format || this.defaultFormat
+        this.defaultAccept = this.accept || this.defaultAccept
         this.defaultFormat.forEach(element => {
           if (element === 'jpg' || element === 'jpeg' || element === 'png' || element === 'gif') {
             this.isImg = true

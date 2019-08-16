@@ -258,12 +258,24 @@
             let formListItem = {
               title: ele.configName,
               name: ele.configKey,
-              type: ele.ifFile == 'F'?'input':'uploadFile',
+              type: 'input',
               rules: [
                 { required: ele.required=='T'?true:false, message:'请输入'+ele.configName, trigger: 'blur'}
               ],
               placeholder:ele.tips?ele.tips:'',
               value:ele.configValue?ele.configValue:''
+            }
+            if(ele.ifFile == 'T'){
+              formListItem.type = 'uploadFile';
+              if(ele.fileSuffix){
+                let fileSuffixArr = ele.fileSuffix.split(",")
+                let acceptArr = []
+                formListItem.format = fileSuffixArr
+                fileSuffixArr.forEach(ele=>{
+                  acceptArr.push("."+ele)
+                })
+                formListItem.accept = acceptArr.join(",")
+              }
             }
             this.formList.push(formListItem)
           })
