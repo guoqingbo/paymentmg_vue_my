@@ -264,11 +264,13 @@ export default {
       this.formItem[fieldName+"Obj"] = areaCode
     },
     uploadSuccess(fileUrl,fieldName){
-      // let arrItem = this.common.getArrItem(this.formItems,fieldName)
-      // arrItem.value = fileUrl
+      let arrItem = this.common.getArrItem(this.formItems,fieldName)
+      arrItem.value = fileUrl
       this.formItem[fieldName] = fileUrl
     },
     onRemove(fileUrl,fieldName){
+      let arrItem = this.common.getArrItem(this.formItems,fieldName)
+      arrItem.value = fileUrl
       this.formItem[fieldName] = fileUrl
     }
   }
