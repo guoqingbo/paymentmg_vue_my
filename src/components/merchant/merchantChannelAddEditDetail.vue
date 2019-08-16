@@ -280,7 +280,7 @@
                   acceptArr.push("."+ele)
                 })
                 formListItem.accept = acceptArr.join(",")
-                formListItem.rules = [{ required: ele.required=='T'?true:false, message:'请上传'+ele.configName, trigger: 'blur'}]
+                formListItem.rules = [{ required: ele.required=='T'?true:false, message:'请上传'+ele.configName, trigger: 'change'}]
               }
             }
             this.formList.push(formListItem)

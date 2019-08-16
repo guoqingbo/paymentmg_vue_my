@@ -106,7 +106,8 @@
                       :params ="item.params"
                       :fieldName="item.name"
                       :url="item.url"
-                      @beforeUpload="item.beforeUpload"
+                      @beforeUpload="item.beforeUpload?item.beforeUpload:''"
+                      @on-remove="onRemove"
                       @on-success="uploadSuccess"></uploadFile>
           <p>{{item.tip}}</p>
         </div>
@@ -263,6 +264,11 @@ export default {
       this.formItem[fieldName+"Obj"] = areaCode
     },
     uploadSuccess(fileUrl,fieldName){
+      // let arrItem = this.common.getArrItem(this.formItems,fieldName)
+      // arrItem.value = fileUrl
+      this.formItem[fieldName] = fileUrl
+    },
+    onRemove(fileUrl,fieldName){
       this.formItem[fieldName] = fileUrl
     }
   }

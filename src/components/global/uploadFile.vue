@@ -123,7 +123,7 @@ export default {
     handleRemove (index) {
       this.uploadList.splice(index, 1)
       // this.$emit('input', this.uploadList.join(','))
-      this.$emit('on-remove')
+      this.$emit('on-remove',this.uploadList.join(','),this.fieldName)
     },
     handleSuccess (res, file) {
       if (res.status == 200) {
