@@ -253,6 +253,10 @@
       turnPayConfig(configInfos){
         // 清空配置
         this.formList = this.formList.slice(0,7)
+
+        // 是否为农行商
+        let abc = {}
+
         if(configInfos){
           configInfos.forEach((ele)=>{
             let formListItem = {
@@ -267,6 +271,7 @@
             }
             if(ele.ifFile == 'T'){
               formListItem.type = 'uploadFile';
+              // 限制文件类型
               if(ele.fileSuffix){
                 let fileSuffixArr = ele.fileSuffix.split(",")
                 let acceptArr = []
@@ -275,13 +280,47 @@
                   acceptArr.push("."+ele)
                 })
                 formListItem.accept = acceptArr.join(",")
+                formListItem.rules = [{ required: ele.required=='T'?true:false, message:'请上传'+ele.configName, trigger: 'blur'}]
               }
             }
             this.formList.push(formListItem)
+
+            if(ele.configKey == 'merchantCertFile'){
+              abc.merchantCertFile = formListItem
+            }else if(ele.configKey == 'abcMerchantId'){
+              abc.abcMerchantId = formListItem
+            }
           })
+
+          // 农行商
+          if(Object.keys(abc).length){
+            this.turnPayConfigAbc(abc)
+          }
         }
       },
-      // 获取渠道计费方式
+      // 渠道产品是农行商时特殊处理，上传商户证书时，商户号也传入
+      turnPayConfigAbc(abc){
+        // 渠道产品编号前三位是104，则是农行商
+        // 获取商户代码项
+        let abcNoItem = abc.abcMerchantId
+        // 获取商户证书项
+        let abcCertFileItem = abc.merchantCertFile
+
+        if(abcNoItem && abcCertFileItem){
+          abcNoItem.onChange = (e) =>{
+            if(e){
+              abcCertFileItem.disabled  = false
+            }else{
+              abcCertFileItem.disabled  = true
+            }
+          }
+          abcCertFileItem.disabled  = true
+          abcCertFileItem.url = '/file/merchantcertfile'
+          abcCertFileItem.beforeUpload = (params)=>{
+            params.merchantId = abcNoItem.value
+          }
+        }
+      }
     }
   }
 </script>

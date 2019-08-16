@@ -35,18 +35,21 @@
             :before-upload="handleBeforeUpload"
             :on-exceeded-size="handleMaxSize"
             :on-format-error="handleFormatError"
-            :format="defaultFormat"
-            :accept="defaultAccept"
+            :disabled="disabled"
+            :format="format"
+            :accept="accept"
             :max-size="2048"
             type="drag"
-            :action="url"
+            :data="params"
+            :action="common.config.apiAdminPrefix+url"
             style="display: inline-block;width:58px;"
+            :class="{uploadDisabled:disabled,uploadabled:!disabled}"
             v-if="uploadList.length !== limitNum">
       <div style="width: 58px;height:58px;line-height: 58px;">
         <Icon type="ios-camera"
               size="20"
               v-if="isImg"></Icon>
-        <Icon type="ios-cloud-upload-outline"
+        <Icon type="ios-cloud-upload"
               size="20"
               v-else></Icon>
       </div>
@@ -58,38 +61,51 @@
 export default {
   data () {
     return {
-      url:this.common.config.apiAdminPrefix+"/file/upload",
       uploadList: [],
-      defaultAccept:'.jpg,.jpeg,.png,.gif',
-      defaultFormat: ['jpg', 'jpeg', 'png','gif'],
       isImg: true
     }
   },
   props: {
     limitNum: {
       type: Number,
-      default: 9
+      default: 1
     },
     value: {
       type: String
     },
     format: {
-      type: Array
+      type: Array,
+      default(){
+        return ['jpg', 'jpeg', 'png','gif']
+      }
     },
     accept:{
       type: String,
+      default:'.jpg,.jpeg,.png,.gif'
+    },
+    url:{
+      type: String,
+      default:"/file/upload"
     },
     fieldName:{
       type: String,
       default: "fileUrl"
+    },
+    params:{
+      type: Object,
+      default(){
+        return {}
+      }
+    },
+    disabled:{
+      type: Boolean,
+      default:false
     }
   },
   watch: {
     value: {
       handler (value) {
-        this.defaultFormat = this.format || this.defaultFormat
-        this.defaultAccept = this.accept || this.defaultAccept
-        this.defaultFormat.forEach(element => {
+        this.format.forEach(element => {
           if (element === 'jpg' || element === 'jpeg' || element === 'png' || element === 'gif') {
             this.isImg = true
           } else {
@@ -122,6 +138,9 @@ export default {
       const check = this.uploadList.length < this.limitNum
       if (!check) {
         this.$Message.error('上传的照片不能超过' + this.limitNum + '张')
+      }
+      if (this._events.beforeUpload){
+        this.$emit("beforeUpload",this.params)
       }
       return check
     },
@@ -179,5 +198,12 @@ export default {
 .demo-upload-list-box span .icon-music {
   margin-right: 10px;
   vertical-align: middle;
+}
+.uploadDisabled{
+  color: #ccc;
+}
+.uploadabled{
+  /*border: 1px dashed #aef090;*/
+  color: #2d8cf0;
 }
 </style>

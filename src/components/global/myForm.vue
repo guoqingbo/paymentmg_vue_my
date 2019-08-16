@@ -36,6 +36,7 @@
         </span>
         <Input v-if="item.type=='input'"
                :disabled="item.disabled"
+               :on-change="item.onChange?item.onChange(item.value):''"
                v-model="item.value"
                :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
         <DatePicker v-if="item.type=='date'"
@@ -98,11 +99,14 @@
         </div>
         <div v-if="item.type=='uploadFile'">
           <uploadFile v-model="item.value"
-                      :limitNum="item.limitNum||1"
+                      :limitNum="item.limitNum"
                       :disabled="item.disabled"
                       :format="item.format"
                       :accept="item.accept"
+                      :params ="item.params"
                       :fieldName="item.name"
+                      :url="item.url"
+                      @beforeUpload="item.beforeUpload"
                       @on-success="uploadSuccess"></uploadFile>
           <p>{{item.tip}}</p>
         </div>
