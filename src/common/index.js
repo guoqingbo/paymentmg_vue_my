@@ -9,6 +9,13 @@ import validate from "@/validate";
 // app实例
 import App from '@/main'
 const common = {
+  // 日期转为时间戳，如果不带时分秒，则存在时差
+  formateDateStr(str){
+    if(str.length <19){
+      str += ' 00:00:00'.substring(10-str.length)
+    }
+    return str
+  },
   // 根据条件设置数组的某一项
   setArrItem(arr,condition,itemData){
     // condition 可以直接为value 或 key = value 自定义

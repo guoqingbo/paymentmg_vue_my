@@ -2,8 +2,16 @@
   <div class="form-list" >
     <myForm ref='myForm'
             :formItems='formItems'
-            :routeType="routeType"
-    ></myForm>
+            :routeType="routeType">
+      <template v-for="(item,index) in formItems">
+        <template :slot="item.name+'Before'">
+          <slot :name="item.name+'Before'"></slot>
+        </template>
+        <template :slot="item.name+'After'">
+          <slot :name="item.name+'After'"></slot>
+        </template>
+      </template>
+    </myForm>
     <slot name="bottom"></slot>
     <div class="bottom-btn-box">
       <Button v-if="routeType!=='detail'"

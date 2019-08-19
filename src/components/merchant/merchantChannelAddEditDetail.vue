@@ -287,6 +287,8 @@
 
             if(ele.configKey == 'merchantCertFile'){
               abc.merchantCertFile = formListItem
+            }else if(ele.configKey == 'merchantCertPassword'){
+              abc.merchantCertPassword = formListItem
             }else if(ele.configKey == 'abcMerchantId'){
               abc.abcMerchantId = formListItem
             }
@@ -301,12 +303,17 @@
       // 渠道产品是农行商时特殊处理，上传商户证书时，商户号也传入
       turnPayConfigAbc(abc){
         // 渠道产品编号前三位是104，则是农行商
+        // 商户密钥
+        let merchantCertPassword = abc.merchantCertPassword
         // 获取商户代码项
         let abcNoItem = abc.abcMerchantId
         // 获取商户证书项
         let abcCertFileItem = abc.merchantCertFile
-
+        if(merchantCertPassword){
+          merchantCertPassword.rules.push({max: 5000, message: merchantCertPassword.title+"不超过5000字符", trigger: 'blur'})
+        }
         if(abcNoItem && abcCertFileItem){
+          abcNoItem.rules.push({max: 100, message: abcNoItem.title+"不超过100字符", trigger: 'blur'})
           abcNoItem.onChange = (e) =>{
             if(e){
               abcCertFileItem.disabled  = false

@@ -145,7 +145,7 @@ export default {
       return check
     },
     handleMaxSize (file) {
-      this.$Message.error('照片  ' + file.name + ' 过大, 不能超过 2M')
+      this.$Message.error('文件  ' + file.name + ' 过大, 不能超过 2M')
     },
     handleFormatError (file) {
       this.$Message.error('文件  ' + file.name + ' 类型不正确!')

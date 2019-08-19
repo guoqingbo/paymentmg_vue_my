@@ -256,7 +256,7 @@
           startDateItem.onChange=(date1)=>{
             endDateItem.options.disabledDate=date2=>{
               let disabled = false
-              if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
+              if(date2.getTime()<new Date(this.common.formateDateStr(date1)).getTime()){
                 // 结束日期不得小于开始日期
                 disabled = true
               }
@@ -266,7 +266,7 @@
           endDateItem.onChange=(date1)=>{
             startDateItem.options.disabledDate=date2=>{
               let disabled = false
-              if(date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
+              if(date2.getTime()>new Date(this.common.formateDateStr(date1)).getTime()){
                 // 开始日期不得大于结束日期
                 disabled = true
               }
@@ -274,13 +274,6 @@
             }
           }
         }
-      },
-      // 日期转为时间戳，如果不带时分秒，则存在时差
-      formateDateStr(str){
-        if(str.length <19){
-          str += ' 00:00:00'.substring(10-str.length)
-        }
-        return str
       }
     }
   }

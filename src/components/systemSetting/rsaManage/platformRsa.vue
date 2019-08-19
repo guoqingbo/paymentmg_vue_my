@@ -15,7 +15,41 @@
                :url="formUrl"
                :routeType='routeType'
                @input='closeModal'
-               :title="formTitle"></modalForm>
+               :title="formTitle">
+      <!--新增-->
+      <template v-if="routeType=='add'">
+        <div style="padding-left: 150px" slot="publicKeyAfter">
+          <Button type="primary" @click="rsaCreate">生成密钥</Button>
+        </div>
+      </template>
+      <!--编辑-->
+      <template v-if="routeType=='edit'">
+        <div style="padding-left: 150px" slot="publicKeyAfter">
+          <Button type="primary" @click="rsaCreate">重新生成密钥</Button>
+          <Icon style="font-size: 20px;color: red;" type="ios-alert" />
+          <span style="color: red;vertical-align: middle;">重新生成秘钥可能导致支付错误，请谨慎操作！</span>
+        </div>
+      </template>
+      <!--查看-->
+      <template v-if="routeType=='detail'">
+        <div style="text-align: right;margin: -20px 0 10px" slot="privateKeyAfter">
+          <Button type="primary"
+                  v-clipboard:copy="formItems[1].value"
+                  v-clipboard:success="onCopySuccess"
+                  v-clipboard:error="onCopyError">
+            复制私钥
+          </Button>
+        </div>
+        <div style="text-align: right;margin: -20px 0 10px" slot="publicKeyAfter">
+          <Button type="primary"
+                  v-clipboard:copy="formItems[2].value"
+                  v-clipboard:success="onCopySuccess"
+                  v-clipboard:error="onCopyError">
+            复制公钥
+          </Button>
+        </div>
+      </template>
+    </modalForm>
   </div>
 </template>
 <script>
@@ -57,22 +91,24 @@
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach((item,index)=>{
-                      if(!index){
-                        item.disabled = true;
-                      }
-                      item.clipboard=false
-                      if(item.type=='inputText'){
-                        item.type='input'
-                      }else if(item.type=='textareaText'){
-                        item.type='textarea'
-                      }else if(item.type=='btn'){
-                        item.disabled=false
-                        item.value='重新生成秘钥'
-                        item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
-                      }
+                      item.disabled = true;
+                      item.type = item.type.replace(/(Text)$/g,'')
+                      // if(!index){
+                      //   item.disabled = true;
+                      // }
+                      // item.clipboard=false
+                      // if(item.type=='inputText'){
+                      //   item.type='input'
+                      // }else if(item.type=='textareaText'){
+                      //   item.type='textarea'
+                      // }else if(item.type=='btn'){
+                      //   item.disabled=false
+                      //   item.value='重新生成秘钥'
+                      //   item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
+                      // }
                     });
                     this.formUrl = '/rsaKeyPlatform/update'
-                    this.routeType = 'add'
+                    this.routeType = 'edit'
                     this.formTitle = '修改秘钥'
                     this.detail = params.row
                     this.setDetail(params.row.orderSource)
@@ -83,23 +119,28 @@
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{
-                      if(item.type=='input'){
-                        item.type='inputText'
-                      }else if(item.type=='textarea'){
-                        item.clipboard=true
-                        item.type='textareaText'
-                      }else if(item.type=='btn'){
-                        item.disabled=true
-                        item.value='null'
-                        item.desc=''
+                      // item.type = item.type.replace(/(Text)$/g,'')
+                      if(!/(Text)$/g.test( item.type)){
+                        item.type += 'Text'
                       }
+                      // item.type += 'Text'
+                      // if(item.type=='input'){
+                      //   item.type='inputText'
+                      // }else if(item.type=='textarea'){
+                      //   item.clipboard=true
+                      //   item.type='textareaText'
+                      // }else if(item.type=='btn'){
+                      //   item.disabled=true
+                      //   item.value='null'
+                      //   item.desc=''
+                      // }
                     });
                     this.routeType = 'detail'
                     this.formTitle = '查看秘钥'
                     this.detail = params.row
-                    this.formItems.forEach(item=>{
-                      item.value = null
-                    })
+                    // this.formItems.forEach(item=>{
+                    //   item.value = null
+                    // })
                     this.setDetail(params.row.orderSource)
                   }
                 },
@@ -120,22 +161,24 @@
             icon: 'md-add',
             callback: () => {
               this.formShow = true
+              this.formItems[0].disabled = false
               this.formItems.forEach((item,index)=>{
-                if(!index){
-                  item.disabled = false;
-                }else{
-                  item.disabled = true;
-                }
-                item.clipboard=false
-                if(item.type=='inputText'){
-                  item.type='input'
-                }else if(item.type=='textareaText'){
-                  item.type='textarea'
-                }else if(item.type=='btn'){
-                  item.disabled=false
-                  item.value='生成秘钥'
-                  item.desc=''
-                }
+                item.type = item.type.replace(/(Text)$/g,'')
+                // if(!index){
+                //   item.disabled = false;
+                // }else{
+                //   item.disabled = true;
+                // }
+                // item.clipboard=false
+                // if(item.type=='inputText'){
+                //   item.type='input'
+                // }else if(item.type=='textareaText'){
+                //   item.type='textarea'
+                // }else if(item.type=='btn'){
+                //   item.disabled=false
+                //   item.value='生成秘钥'
+                //   item.desc=''
+                // }
               });
               this.formUrl = '/rsaKeyPlatform/save'
               this.routeType = 'add'
@@ -166,8 +209,8 @@
             placeholder: '请生成秘钥',
             name: 'privateKey',
             type: 'textarea',
-            clipboard: true,
-            clipboardText: '复制私钥',
+            // clipboard: true,
+            // clipboardText: '复制私钥',
             disabled: true,
             value: '',
             rules: [{ required: true, message: '请生成秘钥', trigger: 'blur' },
@@ -178,22 +221,22 @@
             placeholder: '请生成秘钥',
             name: 'publicKey',
             type: 'textarea',
-            clipboard: true,
-            clipboardText: '复制公钥',
+            // clipboard: true,
+            // clipboardText: '复制公钥',
             disabled: true,
             value: '',
             rules: [{ required: true, message: '请生成秘钥', trigger: 'blur' },
             ]
           },
-          {
-            title: '',
-            name: '',
-            type: 'btn',
-            disabled: false,
-            value: '生成秘钥',
-            desc: '',
-            cb: this.rsaCreate
-          },
+          // {
+          //   title: '',
+          //   name: '',
+          //   type: 'btn',
+          //   disabled: false,
+          //   value: '生成秘钥',
+          //   desc: '',
+          //   cb: this.rsaCreate
+          // },
         ],
         formUrl: '/rsaKeyPlatform/save'
       }
@@ -206,6 +249,12 @@
     },
     components: {list,confirm,modalForm},
     methods: {
+      onCopySuccess(){
+        this.$Message.success("复制成功")
+      },
+      onCopyError(){
+        this.$Message.error("复制失败")
+      },
       closeModal() {
         this.formShow = false;
       },
@@ -243,16 +292,18 @@
         this.apiGet('/rsaKeyPlatform/detail/'+orderSource).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
-              if(item.name=='orderSource'){
-                item.value = res.data.orderSource
-              }
-              if(item.name=='privateKey'){
-                item.value = res.data.privateKey
-              }
-              if(item.name=='publicKey'){
-                item.value = res.data.publicKey
-              }
+              item.value = res.data[item.name]
+              // if(item.name=='orderSource'){
+              //   item.value = res.data.orderSource
+              // }
+              // if(item.name=='privateKey'){
+              //   item.value = res.data.privateKey
+              // }
+              // if(item.name=='publicKey'){
+              //   item.value = res.data.publicKey
+              // }
             });
+            console.log(this.formItems)
           }else{
             this.$Message.error(res.message)
           }
