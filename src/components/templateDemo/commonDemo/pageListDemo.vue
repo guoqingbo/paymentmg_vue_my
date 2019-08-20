@@ -58,19 +58,10 @@
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{
-                      item.clipboard=false
-                      if(item.type=='inputText'){
-                        item.type='input'
-                      }else if(item.type=='textareaText'){
-                        item.type='textarea'
-                      }else if(item.type=='btn'){
-                        item.disabled=false
-                        item.value='重新生成秘钥'
-                        item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
-                      }
+                      item.type=item.type.replace(/(Text)$/,'')
                     });
                     this.formTitle = '修改秘钥'
-                    this.routeType = 'modify'
+                    this.routeType = 'edit'
                     this.setDetail(params.row.merchantCode)
                   }
                 },
@@ -79,15 +70,9 @@
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{
-                      if(item.type=='input'){
-                        item.type='inputText'
-                      }else if(item.type=='textarea'){
-                        item.clipboard=true
-                        item.type='textareaText'
-                      }else if(item.type=='btn'){
-                        item.disabled=true
-                        item.value=null
-                        item.desc=''
+                     // 如果没有Text后缀则添加Text后缀
+                      if(!/(Text)$/.test(item.type)){
+                        item.type+='Text'
                       }
                     });
                     this.formTitle = '查看秘钥'
@@ -149,10 +134,20 @@
             icon: 'md-add',
             callback: () => {
               this.formShow = true
+              this.formItems.forEach(item=>{
+                item.type=item.type.replace(/(Text)$/,'')
+              });
               // 请求接口
               this.formUrl = '/rsaKeyPlatform/save'
               this.routeType = 'add'
               this.formTitle = '添加'
+            }
+          },
+          {
+            title: '跳转',
+            // icon: 'md-add',
+            callback: () => {
+              this.$router.push("/merchant/merchantAddEditDetail");
             }
           }
         ],
@@ -316,44 +311,14 @@
         this.apiGet('/rsaKeyMerchant/detail/'+merchantCode).then(res=>{
           if(res.status == 200){
             this.formItems.forEach(item=>{
-              if(item.name=='merchantName'){
-                item.value = res.data.merchantName
-              }
-              if(item.name=='privateKey'){
-                item.value = res.data.privateKey
-              }
-              if(item.name=='publicKey'){
-                item.value = res.data.publicKey
-              }
+              item.value = res.data[item.name]
             });
             this.detail.merchantCode = res.data.merchantCode;
           }else{
             this.$Message.error(res.message)
           }
         })
-      },
-      // 生成秘钥
-      rsaCreate() {
-        let params = {
-          // vagueMerchantMark: '',
-          // columnType: 2,
-        }
-        let url = '/constant/rsaKey/create'
-        this.apiGet(url,params).then(res=>{
-          if(res.status == 200){
-            this.formItems.forEach(item=>{
-              if(item.name=='privateKey'){
-                item.value = res.data.privateKey
-              }
-              if(item.name=='publicKey'){
-                item.value = res.data.publicKey
-              }
-            });
-          }else{
-            this.$Message.error(res.message)
-          }
-        })
-      },
+      }
     }
   }
 </script>
