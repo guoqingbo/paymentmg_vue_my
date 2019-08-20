@@ -16,14 +16,16 @@
            v-for="(item,index) in uploadList"
            :key="index">
         <span style="vertical-align: middle; display:inline-block;">
-          <Icon type="document"
-                size="20"
-                class="icon-music"></Icon>
-          {{item}}
+          <!--<Icon type="ios-cloud-done-outline" />-->
+           <!--<Icon type="ios-document" />-->
+          <!--<Icon type="ios-document-outline"-->
+                <!--size="20"></Icon>-->
+          <span v-if="showUploadUrl">{{item}}</span>
+          <span v-else>已上传</span>
         </span>
         <span class="demo-upload-list-del"
               style="vertical-align: middle; margin-left:10px; display:inline-block; cursor: pointer;">
-          <Icon type="md-trash"
+          <Icon type="ios-trash-outline"
                 size="20"
                 @click.native="handleRemove(index)"></Icon>
         </span>
@@ -100,7 +102,11 @@ export default {
     disabled:{
       type: Boolean,
       default:false
-    }
+    },
+    showUploadUrl:{
+      type: Boolean,
+      default:true
+    },
   },
   watch: {
     value: {
@@ -140,7 +146,6 @@ export default {
         this.$Message.error('上传的照片不能超过' + this.limitNum + '张')
       }
       if (this._events.beforeUpload){
-        console.log(123456)
         this.$emit("beforeUpload",this.params)
       }
       return check

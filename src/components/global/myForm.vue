@@ -108,6 +108,7 @@
                         :params ="item.params"
                         :fieldName="item.name"
                         :url="item.url"
+                        :showUploadUrl="item.showUploadUrl"
                         @beforeUpload="(params)=>{item.beforeUpload?item.beforeUpload(params):''}"
                         @on-remove="onRemove"
                         @on-success="uploadSuccess"></uploadFile>

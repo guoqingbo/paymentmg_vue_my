@@ -324,6 +324,7 @@
           }
           abcCertFileItem.disabled  = true
           abcCertFileItem.url = '/file/merchantcertfile'
+          abcCertFileItem.showUploadUrl = false
           abcCertFileItem.beforeUpload = (params)=>{
             params.merchantId = abcNoItem.value
           }
