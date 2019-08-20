@@ -123,7 +123,6 @@ const common = {
       merchantCodeField = 'merchantCode'
       merchantNameField = 'merchantName'
     }
-    console.log(123)
     if(params[merchantCodeField] || params[merchantNameField]){
       let searchMerchantList = App.$store.state.global.searchMerchantList
       let merchant = searchMerchantList[params[merchantCodeField]] ||

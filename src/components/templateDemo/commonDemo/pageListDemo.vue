@@ -173,42 +173,28 @@
             title: '商户简称',
             name: 'merchantName',
             type: 'input',
-            disabled: true,
+            disabled: false,
             data: '',
             // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
           },
           {
             title: '私钥',
-            label: '私钥',
             name: 'privateKey',
             type: 'textarea',
-            clipboard: true,
-            clipboardText: '复制私钥',
             value: '',
-            disabled: true,
+            disabled: false,
             rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
             ]
           },
           {
-            title: '公钥',
-            label: '公钥',
-            name: 'publicKey',
-            type: 'textarea',
-            clipboard: true,
-            clipboardText: '复制公钥',
-            disabled: true,
-            value: '',
-            rules: [{ required: true, message: '请输入公钥', trigger: 'blur' },
-            ]
-          },
-          {
-            title: '',
-            name: '',
-            type: 'btn',
-            disabled: false,
-            value: '生成秘钥',
-            desc: '',
-            cb: this.rsaCreate
+            title: '上传营业执照',
+            name: 'licenseUrl',
+            type: 'uploadFile',
+            tip: '建议上传小于2M的png、jpg、jpeg格式的图片',
+            accept:'.jpg,.jpeg,.png',
+            format:['jpg', 'jpeg', 'png'],
+            rules: [{ required: true, message:'请上传上传营业执照', trigger: 'change'}],
+            beforeUpload:(params)=>{}
           },
         ],
         formUrl: '/rsaKeyMerchant/update'

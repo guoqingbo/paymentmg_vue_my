@@ -118,7 +118,7 @@
             <!--如果是图片-->
             <template v-if="item.value">
               <img v-if="/[(.png)(.jpg)(.jpeg)(.gif)]$/.test(item.value)"  :src="item.value">
-              <span v-else>{{item.value}}</span>
+              <span v-else>{{item.showUploadUrl?item.value:'已上传'}}</span>
             </template>
             <span v-else class="no-img">未上传</span>
           </div>

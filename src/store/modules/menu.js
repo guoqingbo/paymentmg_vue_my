@@ -68,7 +68,6 @@ const mutations = {
         }
       })
     })
-    console.log(roleRouter)
     state.asyncRouter = roleRouter
   }
 }
