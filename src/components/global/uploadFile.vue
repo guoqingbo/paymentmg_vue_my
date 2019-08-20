@@ -140,6 +140,7 @@ export default {
         this.$Message.error('上传的照片不能超过' + this.limitNum + '张')
       }
       if (this._events.beforeUpload){
+        console.log(123456)
         this.$emit("beforeUpload",this.params)
       }
       return check

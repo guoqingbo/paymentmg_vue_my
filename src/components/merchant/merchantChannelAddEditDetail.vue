@@ -310,7 +310,7 @@
         // 获取商户证书项
         let abcCertFileItem = abc.merchantCertFile
         if(merchantCertPassword){
-          merchantCertPassword.rules.push({max: 5000, message: merchantCertPassword.title+"不超过5000字符", trigger: 'blur'})
+          merchantCertPassword.rules.push({max: 1000, message: merchantCertPassword.title+"不超过1000字符", trigger: 'blur'})
         }
         if(abcNoItem && abcCertFileItem){
           abcNoItem.rules.push({max: 100, message: abcNoItem.title+"不超过100字符", trigger: 'blur'})
@@ -324,7 +324,9 @@
           abcCertFileItem.disabled  = true
           abcCertFileItem.url = '/file/merchantcertfile'
           abcCertFileItem.beforeUpload = (params)=>{
+            console.log(123456789)
             params.merchantId = abcNoItem.value
+            console.log(params)
           }
         }
       }

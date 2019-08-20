@@ -108,7 +108,7 @@
                         :params ="item.params"
                         :fieldName="item.name"
                         :url="item.url"
-                        @beforeUpload="item.beforeUpload?item.beforeUpload:''"
+                        @beforeUpload="(params)=>{item.beforeUpload?item.beforeUpload(params):''}"
                         @on-remove="onRemove"
                         @on-success="uploadSuccess"></uploadFile>
             <p>{{item.tip}}</p>
