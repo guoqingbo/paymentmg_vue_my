@@ -23,8 +23,7 @@
           <span v-if="showUploadUrl">{{item}}</span>
           <span v-else>已上传</span>
         </span>
-        <span class="demo-upload-list-del"
-              style="vertical-align: middle; margin-left:10px; display:inline-block; cursor: pointer;">
+        <span style="vertical-align: middle; margin-left:10px; display:inline-block; cursor: pointer;">
           <Icon type="ios-trash-outline"
                 size="20"
                 @click.native="handleRemove(index)"></Icon>
