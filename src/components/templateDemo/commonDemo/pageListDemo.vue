@@ -14,8 +14,8 @@
                @beforeSave='beforeSave'
                :url="formUrl"
                :title="formTitle">
-      <div slot="merchantNameBefore">123565</div>
-      <div slot="merchantNameAfter">123</div>
+      <div slot="merchantNameBefore">表单项前插入自定义内容，每一个type后添加Text后缀则展示文本，添加，编辑，详情页面等可共用</div>
+      <div slot="merchantNameAfter">表单项后插入自定义内容</div>
     </modalForm>
   </div>
 </template>
@@ -195,6 +195,53 @@
             format:['jpg', 'jpeg', 'png'],
             rules: [{ required: true, message:'请上传上传营业执照', trigger: 'change'}],
             beforeUpload:(params)=>{}
+          },
+          {
+            title: '所在地区',
+            name: 'area',
+            type: 'area',
+            // addrCode: "",
+            areaText:"",
+            rules: [],
+            value:''
+          },
+          {
+            title: '默认推荐支付方式',
+            name: 'priority',
+            type: 'radio',
+            value: 999,
+            data:this.common.dic.priority,
+            rules: [{ required: true, type:'number', message: '请选择默认推荐支付方式', trigger: 'change' }]
+          },
+          {
+            title: '商户名称',
+            name: 'merchantNo',
+            value: '',
+            type: 'autoComplete',
+            data:[],
+            search: (value)=>{
+              let arrItem = this.common.getArrItem(this.formItems,'merchantNo')
+              this.common.searchMerchantList(value,arrItem)
+            }
+          },
+          {
+            title: '商户类型',
+            name: 'merchantType',
+            type: 'select',
+            data: this.common.dic.merchantType,
+            onChange:this.merchantTypeChange,
+            rules: [
+              {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
+            ],
+            value: 200,
+          },
+          {
+            title: '开始日期',
+            type: 'date',
+            name: 'startDate',
+            format:'yyyy-MM-dd 00:00:00',
+            options:{},
+            value: ''
           },
         ],
         formUrl: '/rsaKeyMerchant/update'

@@ -10,7 +10,7 @@
     },
     methods: {
       wxPay() {
-        let {appid,timestamp,noncestr,packagestr,signtype,paysign,redirectUrl,orderSource} = this.$route.query
+        let {appid,timestamp,noncestr,packagestr,signtype,paysign,redirectUrl,orderSource,redirectUrlError} = this.$route.query
         let payParams = {
           appId:appid,
           timeStamp:timestamp,
@@ -29,7 +29,8 @@
                 //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 document.location.href = redirectUrl+"&orderSource="+orderSource;
               } else {
-                alert("支付成功，跳转失败")
+                document.location.href = redirectUrlError+"&orderSource="+orderSource;
+                // alert("支付成功，跳转失败")
               }
             });
         }
