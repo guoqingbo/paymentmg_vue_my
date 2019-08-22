@@ -108,7 +108,7 @@
               }else if(date2.valueOf()>new Date(date1).valueOf()+30*24*60*60*1000){
                 // 查询日期不得超过30天
                 disabled = true
-              }else if(date2.getTime()<new Date(this.formateDateStr(date1)).getTime()){
+              }else if(date2.getTime()<new Date(this.common.formateDateStr(date1)).getTime()){
                 // 结束日期不得小于开始日期
                 disabled = true
               }
@@ -124,7 +124,7 @@
               }else if(date2.valueOf()<new Date(date1).valueOf()-30*24*60*60*1000){
                 // 查询日期不得超过30天
                 disabled = true
-              }else if (date2.getTime()>new Date(this.formateDateStr(date1)).getTime()){
+              }else if (date2.getTime()>new Date(this.common.formateDateStr(date1)).getTime()){
                 // 开始日期不得大于结束日期
                 disabled = true
               }
@@ -134,13 +134,6 @@
           // 初始化时间限制
           startSearchItem.onChange(this.common.formatDate(startSearchItem.value,"yyyy-MM-dd"))
           endSearchItem.onChange(this.common.formatDate(endSearchItem.value,"yyyy-MM-dd"))
-        },
-        // 日期转为时间戳，如果不带时分秒，则存在时差
-        formateDateStr(str){
-          if(str.length <19){
-            str += ' 00:00:00'.substring(10-str.length)
-          }
-          return str
         },
         // 搜索
         searchSubmit(params){

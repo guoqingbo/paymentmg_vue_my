@@ -16,14 +16,15 @@
            v-for="(item,index) in uploadList"
            :key="index">
         <span style="vertical-align: middle; display:inline-block;">
-          <Icon type="document"
-                size="20"
-                class="icon-music"></Icon>
-          {{item}}
+          <!--<Icon type="ios-cloud-done-outline" />-->
+           <!--<Icon type="ios-document" />-->
+          <!--<Icon type="ios-document-outline"-->
+                <!--size="20"></Icon>-->
+          <span v-if="showUploadUrl">{{item}}</span>
+          <span v-else>已上传</span>
         </span>
-        <span class="demo-upload-list-del"
-              style="vertical-align: middle; margin-left:10px; display:inline-block; cursor: pointer;">
-          <Icon type="md-trash"
+        <span style="vertical-align: middle; margin-left:10px; display:inline-block; cursor: pointer;">
+          <Icon type="ios-trash-outline"
                 size="20"
                 @click.native="handleRemove(index)"></Icon>
         </span>
@@ -35,17 +36,21 @@
             :before-upload="handleBeforeUpload"
             :on-exceeded-size="handleMaxSize"
             :on-format-error="handleFormatError"
-            :format="defaultFormat"
+            :disabled="disabled"
+            :format="format"
+            :accept="accept"
             :max-size="2048"
             type="drag"
-            :action="url"
+            :data="params"
+            :action="common.config.apiAdminPrefix+url"
             style="display: inline-block;width:58px;"
+            :class="{uploadDisabled:disabled,uploadabled:!disabled}"
             v-if="uploadList.length !== limitNum">
       <div style="width: 58px;height:58px;line-height: 58px;">
         <Icon type="ios-camera"
               size="20"
               v-if="isImg"></Icon>
-        <Icon type="ios-cloud-upload-outline"
+        <Icon type="ios-cloud-upload"
               size="20"
               v-else></Icon>
       </div>
@@ -57,33 +62,55 @@
 export default {
   data () {
     return {
-      url:this.common.config.apiAdminPrefix+"/file/upload",
       uploadList: [],
-      defaultFormat: ['jpg', 'jpeg', 'png'],
       isImg: true
     }
   },
   props: {
     limitNum: {
       type: Number,
-      default: 9
+      default: 1
     },
     value: {
       type: String
     },
     format: {
-      type: Array
+      type: Array,
+      default(){
+        return ['jpg', 'jpeg', 'png','gif']
+      }
+    },
+    accept:{
+      type: String,
+      default:'.jpg,.jpeg,.png,.gif'
+    },
+    url:{
+      type: String,
+      default:"/file/upload"
     },
     fieldName:{
       type: String,
       default: "fileUrl"
-    }
+    },
+    params:{
+      type: Object,
+      default(){
+        return {}
+      }
+    },
+    disabled:{
+      type: Boolean,
+      default:false
+    },
+    showUploadUrl:{
+      type: Boolean,
+      default:true
+    },
   },
   watch: {
     value: {
       handler (value) {
-        this.defaultFormat = this.format || this.defaultFormat
-        this.defaultFormat.forEach(element => {
+        this.format.forEach(element => {
           if (element === 'jpg' || element === 'jpeg' || element === 'png' || element === 'gif') {
             this.isImg = true
           } else {
@@ -101,7 +128,7 @@ export default {
     handleRemove (index) {
       this.uploadList.splice(index, 1)
       // this.$emit('input', this.uploadList.join(','))
-      this.$emit('on-remove')
+      this.$emit('on-remove',this.uploadList.join(','),this.fieldName)
     },
     handleSuccess (res, file) {
       if (res.status == 200) {
@@ -117,10 +144,13 @@ export default {
       if (!check) {
         this.$Message.error('上传的照片不能超过' + this.limitNum + '张')
       }
+      if (this._events.beforeUpload){
+        this.$emit("beforeUpload",this.params)
+      }
       return check
     },
     handleMaxSize (file) {
-      this.$Message.error('照片  ' + file.name + ' 过大, 不能超过 2M')
+      this.$Message.error('文件  ' + file.name + ' 过大, 不能超过 2M')
     },
     handleFormatError (file) {
       this.$Message.error('文件  ' + file.name + ' 类型不正确!')
@@ -173,5 +203,12 @@ export default {
 .demo-upload-list-box span .icon-music {
   margin-right: 10px;
   vertical-align: middle;
+}
+.uploadDisabled{
+  color: #ccc;
+}
+.uploadabled{
+  /*border: 1px dashed #aef090;*/
+  color: #2d8cf0;
 }
 </style>

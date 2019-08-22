@@ -1,4 +1,4 @@
-import {apiGet} from '../../fetch/api'
+import config from '@/config'
 
 const state = {
   menuList: '',
@@ -68,7 +68,6 @@ const mutations = {
         }
       })
     })
-    console.log(roleRouter)
     state.asyncRouter = roleRouter
   }
 }
@@ -77,7 +76,11 @@ const actions = {
     // if(!context.state.menuList){
     //   let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
     // }
-    let menuList = require('../../data/menu.json')
+    let menuList = require('../../data/commonMenu.json')
+    if(config.env == 'dev'){
+      let devMenu = require('../../data/devMenu.json')
+      menuList.data = [...menuList.data,...devMenu.data]
+    }
     context.state.menuList = menuList
   },
   setActiveNameAction({commit}, name) {

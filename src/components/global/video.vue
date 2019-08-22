@@ -90,7 +90,7 @@ export default {
   mounted() {}
 };
 </script>
-<style>
+<style scoped>
 .ivu-upload-list{
     width:50%;
 }

@@ -9,8 +9,16 @@
       <myForm ref='myForm'
               :formItems='formItems'
               :routeType='routeType'
-              :value="value"
-      ></myForm>
+              :value="value">
+        <template v-for="(item,index) in formItems">
+          <template :slot="item.name+'Before'">
+            <slot :name="item.name+'Before'"></slot>
+          </template>
+          <template :slot="item.name+'After'">
+            <slot :name="item.name+'After'"></slot>
+          </template>
+        </template>
+      </myForm>
       <div slot="footer">
         <div v-if='routeType!="detail"'>
           <Button

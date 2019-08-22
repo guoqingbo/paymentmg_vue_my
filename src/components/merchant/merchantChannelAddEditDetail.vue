@@ -253,23 +253,83 @@
       turnPayConfig(configInfos){
         // 清空配置
         this.formList = this.formList.slice(0,7)
+
+        // 是否为农行商
+        let abc = {}
+
         if(configInfos){
           configInfos.forEach((ele)=>{
             let formListItem = {
               title: ele.configName,
               name: ele.configKey,
-              type: ele.ifFile == 'F'?'input':'uploadFile',
+              type: 'input',
               rules: [
                 { required: ele.required=='T'?true:false, message:'请输入'+ele.configName, trigger: 'blur'}
               ],
               placeholder:ele.tips?ele.tips:'',
               value:ele.configValue?ele.configValue:''
             }
+            if(ele.ifFile == 'T'){
+              formListItem.type = 'uploadFile';
+              // 限制文件类型
+              if(ele.fileSuffix){
+                let fileSuffixArr = ele.fileSuffix.split(",")
+                let acceptArr = []
+                formListItem.format = fileSuffixArr
+                fileSuffixArr.forEach(ele=>{
+                  acceptArr.push("."+ele)
+                })
+                formListItem.accept = acceptArr.join(",")
+                formListItem.rules = [{ required: ele.required=='T'?true:false, message:'请上传'+ele.configName, trigger: 'change'}]
+              }
+            }
             this.formList.push(formListItem)
+
+            if(ele.configKey == 'merchantCertFile'){
+              abc.merchantCertFile = formListItem
+            }else if(ele.configKey == 'merchantCertPassword'){
+              abc.merchantCertPassword = formListItem
+            }else if(ele.configKey == 'abcMerchantId'){
+              abc.abcMerchantId = formListItem
+            }
           })
+
+          // 农行商
+          if(Object.keys(abc).length){
+            this.turnPayConfigAbc(abc)
+          }
         }
       },
-      // 获取渠道计费方式
+      // 渠道产品是农行商时特殊处理，上传商户证书时，商户号也传入
+      turnPayConfigAbc(abc){
+        // 渠道产品编号前三位是104，则是农行商
+        // 商户密钥
+        let merchantCertPassword = abc.merchantCertPassword
+        // 获取商户代码项
+        let abcNoItem = abc.abcMerchantId
+        // 获取商户证书项
+        let abcCertFileItem = abc.merchantCertFile
+        if(merchantCertPassword){
+          merchantCertPassword.type = 'textarea'
+          merchantCertPassword.rules.push({max: 1000, message: merchantCertPassword.title+"不超过1000字符", trigger: 'blur'})
+        }
+        if(abcNoItem && abcCertFileItem){
+          abcNoItem.rules.push({max: 100, message: abcNoItem.title+"不超过100字符", trigger: 'blur'})
+          abcNoItem.onChange = (e) =>{
+            if(e){
+              abcCertFileItem.disabled  = false
+            }else{
+              abcCertFileItem.disabled  = true
+            }
+          }
+          abcCertFileItem.disabled  = true
+          abcCertFileItem.url = '/file/merchantcertfile'
+          abcCertFileItem.showUploadUrl = false
+          abcCertFileItem.beforeUpload = (params)=>{
+            params.merchantId = abcNoItem.value
+          }
+        }
+      }
     }
   }
 </script>
