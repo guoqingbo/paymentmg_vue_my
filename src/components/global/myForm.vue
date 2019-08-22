@@ -303,9 +303,10 @@ export default {
   }
   .detail-textareaText {
     word-break: break-all;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 99px;
-    line-height: 16px;
+    line-height: 1.7;
+    padding: 7px;
   }
   .upload-img-box img{
     width: 70px;
