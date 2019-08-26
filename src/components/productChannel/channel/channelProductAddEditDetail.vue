@@ -104,7 +104,14 @@
           callback(new Error('请输入0至100的数'))
           return
         }
-        this.common.validate.floatNumber(rule, value, callback)
+        let regexp = /^(([0-9]*)|(([0]\.\d{1,7}|[1-9][0-9]*\.\d{1,7})))$/
+        if (value === '') {
+          callback(new Error('该项不能为空！'))
+        } else if (!(regexp.test(value))) {
+          callback(new Error('数据格式不正确！'))
+        } else {
+          callback()
+        }
       },
       beforeSave(formItem){
         // 确认保存之前
