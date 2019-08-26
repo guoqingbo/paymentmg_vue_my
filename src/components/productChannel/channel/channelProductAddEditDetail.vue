@@ -67,7 +67,8 @@
               {label:"是",value:"T"},
               {label:"否",value:"F"},
             ],
-            rules: [{ required: true, message: '请选择是否退手续费', trigger: 'change' }]
+            rules: [{ required: true, message: '请选择是否退手续费', trigger: 'change' }],
+            value:'T'
           },
           {
             title: '可用状态',
@@ -99,8 +100,8 @@
           callback(new Error('请输入渠道费率'))
           return
         }
-        if(value<=0 || value>=100){
-          callback(new Error('请输入大于0小于100的数'))
+        if(value<0 || value>=100){
+          callback(new Error('请输入0至100的数'))
           return
         }
         this.common.validate.floatNumber(rule, value, callback)

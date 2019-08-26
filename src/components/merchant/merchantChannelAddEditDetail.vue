@@ -102,8 +102,8 @@
           callback(new Error('请输入商户费率'))
           return
         }
-        if(value<=0 || value>=100){
-          callback(new Error('请输入大于0小于100的数'))
+        if(value<0 || value>=100){
+          callback(new Error('请输入0至100的数'))
           return
         }
         this.common.validate.floatNumber(rule, value, callback)
