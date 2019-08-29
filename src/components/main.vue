@@ -420,15 +420,16 @@
     width: 150px;
     height: 64px;
     float: left;
+    text-align: left;
   }
 
   .layout-logo .logo-img {
     /*width: 130px;*/
-    height: 28px;
+    /*height: 28px;*/
     vertical-align: middle;
     color: #fff;
     font-size: 21px;
-    float: left;
+    /*float: left;*/
   }
 
   .breadcrumb {

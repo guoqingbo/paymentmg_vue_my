@@ -98,15 +98,20 @@
     methods: {
       // 商户费率验证
       validateMerchantFeeRate(rule, value, callback){
-        if(rule.required && !value){
+        if(rule.required && value===''){
           callback(new Error('请输入商户费率'))
           return
         }
-        if(value<=0 || value>=100){
-          callback(new Error('请输入大于0小于100的数'))
+        if(value<0 || value>=100){
+          callback(new Error('请输入0至100的数'))
           return
         }
-        this.common.validate.floatNumber(rule, value, callback)
+        let regexp = /^(([0-9]*)|(([0]\.\d{1,7}|[1-9][0-9]*\.\d{1,7})))$/
+        if (!(regexp.test(value))) {
+          callback(new Error('数据格式不正确！'))
+        } else {
+          callback()
+        }
       },
       beforeSave(formItem){
         // 确认保存之前
