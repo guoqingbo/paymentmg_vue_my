@@ -5,7 +5,6 @@
     <p class="pay-message">{{message}}</p>
   </div>
 </template>
-
 <script>
   export default {
     data() {
