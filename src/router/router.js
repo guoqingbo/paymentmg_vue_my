@@ -65,6 +65,28 @@ export const loginRouter = [
     }
   },
   {
+    path: '/cashier/cashierManage/paySuccess',
+    name: 'paySuccess',
+    meta: {
+      title: '支付成功',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/paySuccess.vue'], resolve)
+    }
+  },
+  {
+    path: '/cashier/cashierManage/payError',
+    name: 'payError',
+    meta: {
+      title: '支付失败',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/payError.vue'], resolve)
+    }
+  },
+  {
     path: '/main',
     name: ' Main',
     component: Main,
