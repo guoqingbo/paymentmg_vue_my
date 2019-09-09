@@ -12,7 +12,8 @@
     created() {
       // 判断是微信，支付宝，还是普通浏览器
       this.isWeixinOrAlipay()
-      //
+      // 调用支付
+      this.jsApiPay()
     },
     methods: {
       // 判断是微信，支付宝，还是普通浏览器
@@ -27,8 +28,8 @@
         return this.payType
       },
       // 发送支付请求
-      aggregatePay(){
-        let url = '/aggregatePay'
+      jsApiPay(){
+        let url = '/jsApiPay'
         let params = this.$route.query
         params.payType = this.payType
         let apiPrefix = this.common.config.apiPayPrefix

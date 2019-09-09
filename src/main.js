@@ -9,6 +9,7 @@ import iView from 'iview'
 import $ from 'jquery'
 import VueCookies from 'vue-cookies'
 import 'iview/dist/styles/iview.css'
+// import "./assets/styles/main.css";
 import * as filter from './filters'
 import common from './common'
 import Main from './components/main'
