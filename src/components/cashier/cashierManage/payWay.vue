@@ -44,7 +44,9 @@
             // 跳转错误页面
             this.$router.push({
               path: "/cashier/cashierManage/payError",
-              message:res.message
+              query:{
+                message:res.message
+              }
             });
             // location.href = "http://testpaycenter.zhiyoubao.com/api/pay/aggregatePay/fail?message=" + res.message;
           }
