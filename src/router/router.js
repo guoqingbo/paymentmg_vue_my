@@ -65,6 +65,17 @@ export const loginRouter = [
     }
   },
   {
+    path: '/cashier/cashierManage/payWay',
+    name: 'payWay',
+    meta: {
+      title: '微信支付',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/payWay.vue'], resolve)
+    }
+  },
+  {
     path: '/cashier/cashierManage/paySuccess',
     name: 'paySuccess',
     meta: {
