@@ -388,17 +388,22 @@ console.log(data)
           this.apiGet(url,params).then(res=>{
             if(res.success){
               // 如果是编辑页
+              console.log(this.detail)
+              let accessMode = ''
               if(this.detail){
-                if(e == this.detail.accessMode){
-                  res.data.forEach(ele=>{
-                    // if(!ele.configValue){
-                    //   ele.configValue = this.detail[ele.configKey]
-                    // }
-                    ele.configValue = this.detail[ele.configKey] || ''
-                  })
+                this.detail.configInfos.forEach(ele=>{
+                  if(ele.configKey=="accessMode"){
+                    accessMode = ele.configValue
+                  }
+                })
+                if(accessMode == e){
+                  this.turnPayConfig(this.detail.configInfos)
+                }else{
+                  this.turnPayConfig(res.data)
                 }
+              }else{
+                this.turnPayConfig(res.data)
               }
-              this.turnPayConfig(res.data)
             }
           })
         }
