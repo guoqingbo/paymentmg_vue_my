@@ -305,7 +305,6 @@
                   })
                 })
               }
-console.log(data)
               formListItem.type = 'radio'
               formListItem.data = data
               formListItem.rules = [{ required: ele.required=='T'?true:false, message: '请选择'+ele.configName, trigger: 'change' }]
@@ -388,7 +387,6 @@ console.log(data)
           this.apiGet(url,params).then(res=>{
             if(res.success){
               // 如果是编辑页
-              console.log(this.detail)
               let accessMode = ''
               if(this.detail){
                 this.detail.configInfos.forEach(ele=>{
