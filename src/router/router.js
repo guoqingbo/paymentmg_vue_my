@@ -38,6 +38,10 @@ export const loginRouter = [
   {
     path: '/404',
     name: '404',
+    meta: {
+      title: '页面丢失',
+      isLogin:false,
+    },
     component: resolve => {
       require(['@/components/nofound'], resolve)
     }
