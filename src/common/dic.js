@@ -39,6 +39,11 @@ let dic = {
   priority: [
     {label:"是",value:999},
     {label:"否",value:0},
-  ]
+  ],
+  // // 商户模式
+  // accessMode:[
+  //   {label:"服务商模式",value:'service'},
+  //   {label:"普通模式",value:'common'},
+  // ],
 }
 export default dic

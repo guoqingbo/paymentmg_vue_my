@@ -231,6 +231,9 @@
       },
       //获取渠道产品支付配置
       getPayConfig(e){
+        if(!e){
+          return
+        }
         // let arrItem = this.common.getArrItem(this.formList,'merchantCode')
         let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
         if(!formItem.merchantCode){
@@ -261,20 +264,21 @@
 
         // 是否为农行商
         let abc = {}
-
+        // 是否为微信官方
+        let wechatOfficial = {}
         if(configInfos){
           configInfos.forEach((ele)=>{
             let formListItem = {
               title: ele.configName,
               name: ele.configKey,
-              type: 'input',
+              placeholder:ele.tips?ele.tips:'',
+              value:ele.configValue?ele.configValue:'',
               rules: [
                 { required: ele.required=='T'?true:false, message:'请输入'+ele.configName, trigger: 'blur'}
               ],
-              placeholder:ele.tips?ele.tips:'',
-              value:ele.configValue?ele.configValue:''
+              type:'input'
             }
-            if(ele.ifFile == 'T'){
+           if(ele.ifFile == 'file'){
               formListItem.type = 'uploadFile';
               // 限制文件类型
               if(ele.fileSuffix){
@@ -284,12 +288,37 @@
                 fileSuffixArr.forEach(ele=>{
                   acceptArr.push("."+ele)
                 })
+
                 formListItem.accept = acceptArr.join(",")
+                formListItem.tip = '上传'+acceptArr.join(",")+'格式的文件';
                 formListItem.rules = [{ required: ele.required=='T'?true:false, message:'请上传'+ele.configName, trigger: 'change'}]
               }
+            }else if(ele.ifFile == 'checkbox'){
+              // 对象转为数组
+              let data = []
+              if(ele.tips){
+                let tipsObj = JSON.parse(ele.tips)
+                Object.keys(tipsObj).forEach(sele=>{
+                  data.push({
+                    value: sele,
+                    label: tipsObj[sele]
+                  })
+                })
+              }
+console.log(data)
+              formListItem.type = 'radio'
+              formListItem.data = data
+              formListItem.rules = [{ required: ele.required=='T'?true:false, message: '请选择'+ele.configName, trigger: 'change' }]
             }
             this.formList.push(formListItem)
 
+            // 微信官方时特殊处理
+            if(ele.configKey == 'accessMode'){
+              // 有商户模式，则认为是微信官方
+              wechatOfficial.accessMode = formListItem
+            }
+
+            // 农行商时特殊处理
             if(ele.configKey == 'merchantCertFile'){
               abc.merchantCertFile = formListItem
             }else if(ele.configKey == 'merchantCertPassword'){
@@ -302,6 +331,10 @@
           // 农行商
           if(Object.keys(abc).length){
             this.turnPayConfigAbc(abc)
+          }
+          // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
+          if(Object.keys(wechatOfficial).length){
+            this.turnPayConfigWechatOfficial(wechatOfficial)
           }
         }
       },
@@ -333,6 +366,41 @@
           abcCertFileItem.beforeUpload = (params)=>{
             params.merchantId = abcNoItem.value
           }
+        }
+      },
+      // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
+      turnPayConfigWechatOfficial(wechatOfficial){
+        let accessMode = wechatOfficial.accessMode
+        // 清空参数
+        // let params = this.$refs.formList.getFormItem()
+        // Object.keys(params).forEach(ele=>{
+        //   delete params[ele]
+        // })
+        if(!accessMode.value){
+          accessMode.value = "common"
+        }
+        accessMode.onChange = (e)=>{
+          let url = '/merchantChannel/payConfig/changemodel'
+          let params = {
+            accessModel:e,
+            channelProductCode:this.common.getArrItem(this.formList,'channelProductCode').value
+          }
+          this.apiGet(url,params).then(res=>{
+            if(res.success){
+              // 如果是编辑页
+              if(this.detail){
+                if(e == this.detail.accessMode){
+                  res.data.forEach(ele=>{
+                    // if(!ele.configValue){
+                    //   ele.configValue = this.detail[ele.configKey]
+                    // }
+                    ele.configValue = this.detail[ele.configKey] || ''
+                  })
+                }
+              }
+              this.turnPayConfig(res.data)
+            }
+          })
         }
       }
     }

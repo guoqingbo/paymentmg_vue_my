@@ -76,7 +76,8 @@
                  :autosize="{minRows: 2,maxRows: 5}"></Input>
           <RadioGroup v-if="item.type=='radio'"
                       :disabled="item.disabled"
-                      v-model="item.value">
+                      v-model="item.value"
+                      @on-change="item.onChange?item.onChange(item.value):''">
             <Radio v-for="sitem in item.data"
                    :label="sitem.value"
                    :key="sitem.value">{{ sitem.label }}</Radio>
