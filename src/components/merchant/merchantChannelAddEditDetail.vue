@@ -288,7 +288,7 @@
                 fileSuffixArr.forEach(ele=>{
                   acceptArr.push("."+ele)
                 })
-
+                formListItem.showUploadUrl = false
                 formListItem.accept = acceptArr.join(",")
                 formListItem.tip = '上传'+acceptArr.join(",")+'格式的文件';
                 formListItem.rules = [{ required: ele.required=='T'?true:false, message:'请上传'+ele.configName, trigger: 'change'}]
@@ -361,7 +361,7 @@
           }
           abcCertFileItem.disabled  = true
           abcCertFileItem.url = '/file/merchantcertfile'
-          abcCertFileItem.showUploadUrl = false
+          // abcCertFileItem.showUploadUrl = false
           abcCertFileItem.beforeUpload = (params)=>{
             params.merchantId = abcNoItem.value
           }
@@ -369,6 +369,7 @@
       },
       // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
       turnPayConfigWechatOfficial(wechatOfficial){
+        // 商户模式
         let accessMode = wechatOfficial.accessMode
         // 清空参数
         // let params = this.$refs.formList.getFormItem()
