@@ -306,7 +306,7 @@
                 })
               }
               formListItem.type = 'radio'
-              formListItem.data = data
+              formListItem.data = data.reverse()
               formListItem.rules = [{ required: ele.required=='T'?true:false, message: '请选择'+ele.configName, trigger: 'change' }]
             }
             this.formList.push(formListItem)
