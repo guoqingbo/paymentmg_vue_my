@@ -315,6 +315,7 @@
             if(ele.configKey == 'accessMode'){
               // 有商户模式，则认为是微信官方
               wechatOfficial.accessMode = formListItem
+              wechatOfficial.accessModeIndex = this.formList.length-1
             }
 
             // 农行商时特殊处理
@@ -371,6 +372,7 @@
       turnPayConfigWechatOfficial(wechatOfficial){
         // 商户模式
         let accessMode = wechatOfficial.accessMode
+        let accessModeIndex = wechatOfficial.accessModeIndex
         // 清空参数
         // let params = this.$refs.formList.getFormItem()
         // Object.keys(params).forEach(ele=>{
@@ -405,6 +407,12 @@
               }
             }
           })
+        }
+
+        //  商户模式放在配置的第一项
+        if(accessModeIndex!==7){
+          this.formList.splice(accessModeIndex , 1)
+          this.formList.splice(7 , 0,accessMode)
         }
       }
     }
