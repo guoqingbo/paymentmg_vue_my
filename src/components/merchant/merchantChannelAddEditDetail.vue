@@ -241,7 +241,8 @@
           return
         }
         let params = {
-          merchantCode:formItem.merchantCode
+          merchantCode:formItem.merchantCode,
+          // accessMode:'',
         }
         this.apiGet('/merchantChannel/payConfig/channelProduct/'+e,params).then(res=>{
           if(res.success){
@@ -382,13 +383,25 @@
           accessMode.value = "common"
         }
         accessMode.onChange = (e)=>{
-          let url = '/merchantChannel/payConfig/changemodel'
+          // let url = '/merchantChannel/payConfig/changemodel'
+          // let params = {
+          //   accessModel:e,
+          //   channelProductCode:this.common.getArrItem(this.formList,'channelProductCode').value
+          // }
+
+          let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
+          if(!formItem.merchantCode){
+            this.$Message.info("请先输入商户号")
+            return
+          }
+          let url = '/merchantChannel/payConfig/channelProduct'
           let params = {
-            accessModel:e,
-            channelProductCode:this.common.getArrItem(this.formList,'channelProductCode').value
+            merchantCode:formItem.merchantCode,
+            accessMode:e,
           }
           this.apiGet(url,params).then(res=>{
             if(res.success){
+              let configInfos = []
               // 如果是编辑页
               let accessMode = ''
               if(this.detail){
@@ -398,13 +411,17 @@
                   }
                 })
                 if(accessMode == e){
-                  this.turnPayConfig(this.detail.configInfos)
+                  configInfos = this.detail.configInfos
+                  // this.turnPayConfig(this.detail.configInfos)
                 }else{
-                  this.turnPayConfig(res.data)
+                  configInfos = res.data.configs
+                  // this.turnPayConfig(res.data)
                 }
               }else{
-                this.turnPayConfig(res.data)
+                configInfos = res.data.configs
+                // this.turnPayConfig(res.data)
               }
+              this.turnPayConfig(configInfos)
             }
           })
         }
