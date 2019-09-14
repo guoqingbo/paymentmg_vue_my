@@ -307,7 +307,7 @@
                 })
               }
               formListItem.type = 'radio'
-              formListItem.data = data.reverse()
+              formListItem.data = data
               formListItem.rules = [{ required: ele.required=='T'?true:false, message: '请选择'+ele.configName, trigger: 'change' }]
             }
             this.formList.push(formListItem)
@@ -390,11 +390,12 @@
           // }
 
           let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
+          let channelProductCode = this.common.getArrItem(this.formList,'channelProductCode').value
           if(!formItem.merchantCode){
             this.$Message.info("请先输入商户号")
             return
           }
-          let url = '/merchantChannel/payConfig/channelProduct'
+          let url = '/merchantChannel/payConfig/channelProduct/'+channelProductCode
           let params = {
             merchantCode:formItem.merchantCode,
             accessMode:e,
