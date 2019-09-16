@@ -13,6 +13,7 @@
           :rules="item.rules||{}"
           v-if="item.type">
           <span class="detail-text"
+                :class="{'detail-textareaText':item.value.length>300}"
                 v-if="item.type=='text'||
               item.type=='inputText'||
               item.type=='autoCompleteText'">
@@ -40,7 +41,15 @@
                  :disabled="item.disabled"
                  :on-change="item.onChange?item.onChange(item.value):''"
                  v-model="item.value"
+                 :type="item.value.length>200?'textarea':'text'"
+                 :autosize="{minRows: 2,maxRows: 5}"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
+          <Input v-if="item.type=='textarea'"
+                 :disabled="item.disabled"
+                 v-model="item.value"
+                 type="textarea"
+                 :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"
+                 :autosize="{minRows: 2,maxRows: 5}"></Input>
           <DatePicker v-if="item.type=='date'"
                       type="date"
                       :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"
@@ -68,15 +77,10 @@
                         :placeholder="'请输入'+item.title">
             <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
           </AutoComplete>
-          <Input v-if="item.type=='textarea'"
-                 :disabled="item.disabled"
-                 v-model="item.value"
-                 type="textarea"
-                 :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"
-                 :autosize="{minRows: 2,maxRows: 5}"></Input>
           <RadioGroup v-if="item.type=='radio'"
                       :disabled="item.disabled"
-                      v-model="item.value">
+                      v-model="item.value"
+                      @on-change="item.onChange?item.onChange(item.value):''">
             <Radio v-for="sitem in item.data"
                    :label="sitem.value"
                    :key="sitem.value">{{ sitem.label }}</Radio>

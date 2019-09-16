@@ -14,7 +14,7 @@ module.exports = {
         '/api/admin':{
             target:'http://192.168.200.88:10806/',
             // target:'http://192.168.66.246:6071/',
-            // target:'http://192.168.200.55:6071/',
+            // target:'http://192.168.66.230:10806/',
             changeOrigin:true,
             pathRewrite: {
               '^/api/admin': '/api/admin'
@@ -33,7 +33,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

@@ -38,6 +38,10 @@ export const loginRouter = [
   {
     path: '/404',
     name: '404',
+    meta: {
+      title: '页面丢失',
+      isLogin:false,
+    },
     component: resolve => {
       require(['@/components/nofound'], resolve)
     }
@@ -62,6 +66,39 @@ export const loginRouter = [
     },
     component: resolve => {
       require(['@/components/cashier/cashierManage/callWxPay.vue'], resolve)
+    }
+  },
+  {
+    path: '/cashier/cashierManage/payWay',
+    name: 'payWay',
+    meta: {
+      title: '微信支付',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/payWay.vue'], resolve)
+    }
+  },
+  {
+    path: '/cashier/cashierManage/paySuccess',
+    name: 'paySuccess',
+    meta: {
+      title: '支付成功',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/paySuccess.vue'], resolve)
+    }
+  },
+  {
+    path: '/cashier/cashierManage/payError',
+    name: 'payError',
+    meta: {
+      title: '支付失败',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/cashier/cashierManage/payError.vue'], resolve)
     }
   },
   {

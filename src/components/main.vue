@@ -388,6 +388,7 @@
 </script>
 
 <style>
+  /*@import "../assets/styles/main.css";*/
   @import url("../assets/styles/main.css");
 </style>
 
