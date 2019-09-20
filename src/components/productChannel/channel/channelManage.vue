@@ -141,17 +141,14 @@
         //   this.setChannelType()
         // }
         this.$store.dispatch("getChannelType").then(res=>{
-          this.setChannelType()
+          let channelType={}
+          res.forEach(ele=>{
+            channelType[ele.value] = ele.label
+          })
+          this.columns[3].render = (h, params) => {
+            return h('span', channelType[params.row.channelType])
+          }
         })
-      },
-      setChannelType(){
-        let channelType={}
-        this.$store.state.global.channelType.forEach(ele=>{
-          channelType[ele.value] = ele.label
-        })
-        this.columns[3].render = (h, params) => {
-          return h('span', channelType[params.row.status])
-        }
       }
     }
   }
