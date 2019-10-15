@@ -10,7 +10,6 @@
     },
     methods: {
       wxPay() {
-        alert(window.location.href)
         let {appid,timestamp,noncestr,packagestr,signtype,paysign,redirectUrl,orderSource,redirectUrlError} = this.$route.query
         let payParams = {
           appId:appid,
