@@ -134,7 +134,6 @@ export const loginRouter = [
       // ...merchant,
     ]
   },
-
   {
     path: "*", // 此处需特别注意置于最底部
     redirect: "/404"

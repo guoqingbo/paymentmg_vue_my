@@ -1,6 +1,7 @@
 <template>
     <div class="nofound">
-        404
+        <p>404</p>
+        <p>哎呀! 找不到页面了!</p>
     </div>
 </template>
 <style scoped>
