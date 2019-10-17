@@ -36,7 +36,7 @@
                   }
                   window.location.href = href;
                 }else{
-                  let href = '/api/pay/pay/weichat/success?merchantNo='+merchantNo+'&payNo='+payNo
+                  let href = '/api/pay/page/wechat/success?merchantNo='+merchantNo+'&payNo='+payNo
                     window.location.href = href;
                 }
               } else {
@@ -51,7 +51,7 @@
                   }
                   window.location.href = href;
                 }else{
-                  let href = '/api/pay/pay/weichat/fail?merchantNo='+merchantNo+'&payNo='+payNo
+                  let href = '/api/pay/page/wechat/fail?merchantNo='+merchantNo+'&payNo='+payNo
                   window.location.href = href;
                 }
               }
