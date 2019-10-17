@@ -10,6 +10,7 @@
     },
     methods: {
       wxPay() {
+        let apiPrefix = this.common.config.apiPayPrefix
         let {appid,timestamp,noncestr,packagestr,signtype,paysign,redirectUrl,orderSource,redirectUrlError,merchantNo,payNo} = this.$route.query
         let payParams = {
           appId:appid,
@@ -36,7 +37,7 @@
                   }
                   window.location.href = href;
                 }else{
-                  let href = '/api/pay/page/wechat/success?merchantNo='+merchantNo+'&payNo='+payNo
+                  let href = apiPrefix+'/page/wechat/success?merchantNo='+merchantNo+'&payNo='+payNo
                     window.location.href = href;
                 }
               } else {
@@ -51,7 +52,7 @@
                   }
                   window.location.href = href;
                 }else{
-                  let href = '/api/pay/page/wechat/fail?merchantNo='+merchantNo+'&payNo='+payNo
+                  let href = apiPrefix+'/page/wechat/fail?merchantNo='+merchantNo+'&payNo='+payNo
                   window.location.href = href;
                 }
               }
