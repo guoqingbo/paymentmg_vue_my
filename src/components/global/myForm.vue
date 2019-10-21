@@ -185,7 +185,11 @@ export default {
             //   return
             // }
             // this.formItem[element.name] = element.value
-            this.$set(this.formItem, element.name, element.value.replace(/(^\s*)|(\s*$)/g, ""))
+            let val = element.value
+            if(typeof val == 'string'){
+              val = val.replace(/(^\s*)|(\s*$)/g, "")
+            }
+            this.$set(this.formItem, element.name, val)
           }
         })
       },　　　　
