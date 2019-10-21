@@ -95,7 +95,7 @@ export default {
               //     element.options.disabledDate = element.disabledDate
               //   }
               // }
-              this.$set(this.searchForm, element.name, element.value)
+              this.$set(this.searchForm, element.name, element.value.replace(/(^\s*)|(\s*$)/g, ""))
             }
           })
 
