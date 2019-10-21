@@ -4,6 +4,7 @@
                 :searchItems="searchItems"
                 :exportItem="exportItem"
                 @beforeSubmit="$emit('beforeSubmit',$store.state.list.params)"
+                @afterSubmit="$emit('afterSubmit',$store.state.list.res)"
                 :url="url"
                 :params="params"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
@@ -50,6 +51,7 @@
 
         },
         limit:10,
+        selection:[]
       };
     },
     props: {

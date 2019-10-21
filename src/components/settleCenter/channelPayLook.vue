@@ -17,92 +17,99 @@
         columns: [
           {
             title: '订单编号',
-            key: 'merchantName',
+            key: 'payNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '结算总金额（元）',
-            key: 'merchantCode',
+            key: 'splitAmount',
             // sortable: true,
             align:'center'
           },
           {
             title: '业务结算流水号',
-            key: 'merchantCode',
+            key: 'splitNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '子订单编号',
-            key: 'merchantCode',
+            key: 'subOrderNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '业务商户编号',
-            key: 'merchantCode',
+            key: 'subMerchantNo',
             // sortable: true,
-            align:'center'
+            align:'subMerchantNo'
           },
           {
             title: '渠道商户编号',
-            key: 'merchantCode',
+            key: 'subMerchantSourceNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '结算金额（元）',
-            key: 'merchantCode',
+            key: 'amount',
             // sortable: true,
             align:'center'
           },
           {
             title: '费用类型',
-            key: 'merchantCode',
+            key: 'splitType',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.filter.turn("splitType",params.row.splitType))
+            }
           },
           {
             title: '结算状态',
-            key: 'merchantCode',
+            key: 'status',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.filter.turn("status",params.row.status))
+            }
           },
           {
             title: '备注',
-            key: 'merchantCode',
+            key: 'remark',
             // sortable: true,
             align:'center'
           },
           {
             title: '失败原因',
-            key: 'merchantCode',
+            key: 'errMsg',
             // sortable: true,
             align:'center'
           },
         ],
         params: {
-          sort:'modifyTime',
-          order:'desc'
+          // sort:'modifyTime',
+          // order:'desc',
+          batchNo:this.$route.query.batchNo,
         },
-        url: '/rsaKeyMerchant/grid',
+        url: '/splitSubMerchant/grid',
         searchItems: [
           {
             label: '订单编号',
             type: 'input',
-            name: 'orderNo'
+            name: 'payNo'
           },
           {
             label: '子订单编号',
             type: 'input',
-            name: 'orderNo'
+            name: 'subOrderNo'
           },
           {
             label: '全部状态',
             type: 'select',
-            name: 'payProductCode',
-            data: ''
+            name: 'status',
+            data: this.common.dic.busiStatus,
           },
         ],
         hannleItems: [
@@ -114,22 +121,12 @@
 
     },
     created(){
-      // 获取支付产品
-      this.getPayProduct()
     },
     mounted () {
 
     },
     components: {list},
     methods: {
-      // 获取支付产品
-      getPayProduct(){
-        this.$store.dispatch("getPayProduct").then(res=>{
-          this.common.setArrItem(this.searchItems,'payProductCode',{
-            data:res
-          })
-        })
-      },
       // 搜索之前
       beforeSubmit(params){
         // 商户名，商户号拆分

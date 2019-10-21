@@ -4,6 +4,7 @@
           :columns="columns"
           :url="url"
           @beforeSubmit="beforeSubmit"
+          @afterSubmit="afterSubmit"
           :params="params"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
@@ -22,70 +23,78 @@
           },
           {
             title: '订单编号',
-            key: 'merchantName',
+            key: 'orderNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '结算总金额（元）',
-            key: 'merchantCode',
+            key: 'splitAmount',
             // sortable: true,
             align:'center'
           },
           {
             title: '业务结算流水号',
-            key: 'merchantCode',
+            key: 'serialNum',
             // sortable: true,
             align:'center'
           },
           {
             title: '子订单编号',
-            key: 'merchantCode',
+            key: 'subOrderNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '业务商户编号',
-            key: 'merchantCode',
+            key: 'subMerchantNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '渠道商户编号',
-            key: 'merchantCode',
+            key: 'subMerchantSourceNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '结算金额（元）',
-            key: 'merchantCode',
+            key: 'amount',
             // sortable: true,
             align:'center'
           },
           {
             title: '费用类型',
-            key: 'merchantCode',
+            key: 'splitType',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.filter.turn("splitType",params.row.splitType))
+            }
           },
           {
             title: '结算状态',
-            key: 'merchantCode',
+            key: 'status',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.filter.turn("busiStatus",params.row.status))
+            }
           },
           {
             title: '备注',
-            key: 'merchantCode',
+            key: 'remark',
             // sortable: true,
             align:'center'
           },
         ],
         params: {
           sort:'modifyTime',
-          order:'desc'
+          order:'desc',
+          outBatchNo:this.$route.query.outBatchNo,
+          merchantNo:this.$route.query.merchantNo,
         },
-        url: '/rsaKeyMerchant/grid',
+        url: '/splitCustomerOrderDetail/grid',
         searchItems: [
           {
             label: '订单编号',
@@ -95,20 +104,43 @@
           {
             label: '子订单编号',
             type: 'input',
-            name: 'orderNo'
+            name: 'subOrderNo'
           },
           {
             label: '全部状态',
             type: 'select',
-            name: 'payProductCode',
-            data: ''
+            name: 'status',
+            data: this.common.dic.busiStatus
           },
         ],
         hannleItems: [
           {
             title: '批量提交',
             callback: () => {
-
+              let selection = this.$refs.gridTable.selection
+              if(!selection.length){
+                this.$Message.info('请先选择订单')
+                return
+              }
+              let serialNums = []
+              selection.forEach(ele=>{
+                serialNums.push(ele.serialNum)
+              })
+              let url = '/splitCustomerOrderDetail/splitApply'
+              let params = {
+                outBatchNo:this.$route.query.outBatchNo,
+                merchantNo:this.$route.query.merchantNo,
+                serialNums:serialNums.join(",")
+              }
+              this.apiPost(url,params).then(res=>{
+                if(res.success){
+                  this.$Message.info(res.message||'操作成功')
+                  // 刷新列表
+                  this.$store.dispatch('getList')
+                }else{
+                  this.$Message.info(res.message)
+                }
+              })
             }
           },
         ]
@@ -118,27 +150,32 @@
 
     },
     created(){
-      // 获取支付产品
-      this.getPayProduct()
+
     },
     mounted () {
 
     },
     components: {list},
     methods: {
-      // 获取支付产品
-      getPayProduct(){
-        this.$store.dispatch("getPayProduct").then(res=>{
-          this.common.setArrItem(this.searchItems,'payProductCode',{
-            data:res
-          })
-        })
-      },
-
       // 搜索之前
       beforeSubmit(params){
         // 商户名，商户号拆分
       },
+      // 结算中1、结算成功2则不可选中
+      afterSubmit(res){
+        if(res.success){
+          res.data.rows.forEach(ele=>{
+            if(ele.status == 1 || ele.status == 2){
+              this.$set(ele, '_disabled',true)
+              // this.$set(ele, '_checked',true)
+            }else{
+              ele._disabled = false
+            }
+          })
+          // this.$store.state.list.res = {...res}
+        }
+      }
+
     }
   }
 </script>

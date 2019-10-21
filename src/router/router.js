@@ -36,17 +36,6 @@ export const loginRouter = [
     }
   },
   {
-    path: '/404',
-    name: '404',
-    meta: {
-      title: '页面丢失',
-      isLogin:false,
-    },
-    component: resolve => {
-      require(['@/components/nofound'], resolve)
-    }
-  },
-  {
     path: '/cashier/cashierManage/choosePayWay',
     name: 'choosePayWay',
     meta: {
@@ -135,9 +124,20 @@ export const loginRouter = [
     ]
   },
   {
-    path: "*", // 此处需特别注意置于最底部
-    redirect: "/404"
-  }
+    path: '/404',
+    name: '404',
+    meta: {
+      title: '页面丢失',
+      isLogin:false,
+    },
+    component: resolve => {
+      require(['@/components/nofound'], resolve)
+    }
+  },
+  // {
+  //   path: "*", // 此处需特别注意置于最底部
+  //   redirect: "/404"
+  // }
 ]
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [

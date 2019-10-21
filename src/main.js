@@ -23,8 +23,7 @@ import {
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
-
-    if(to.meta.isLogin === false){
+  if(to.meta.isLogin === false){
       return next()
     }
     let token = VueCookies.get('token')
@@ -54,6 +53,9 @@ router.beforeEach(async (to, from, next) => {
         // next()
       }
     } else { // 没登录过
+      if (to.matched.length ===0) {  //如果未匹配到路由
+        return next('/404');
+      }
       if (to.name === 'login' || to.name === 'adminLogin') {
         next()
       } else {

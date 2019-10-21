@@ -23,49 +23,49 @@
           },
           {
             title: '业务批次号',
-            key: 'merchantName',
+            key: 'outBatchNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '核销日期',
-            key: 'merchantCode',
+            key: 'checkDate',
             // sortable: true,
             align:'center'
           },
           {
             title: '分账渠道',
-            key: 'merchantCode',
+            key: 'channelName',
             // sortable: true,
             align:'center'
           },
           {
             title: '分账渠道代码',
-            key: 'merchantCode',
+            key: 'splitProductCode',
             // sortable: true,
             align:'center'
           },
           {
             title: '商户名称',
-            key: 'merchantCode',
+            key: 'merchantName',
             // sortable: true,
             align:'center'
           },
           {
             title: '订单笔数',
-            key: 'merchantCode',
+            key: 'totalCount',
             // sortable: true,
             align:'center'
           },
           {
             title: '结算总金额（元）',
-            key: 'merchantCode',
+            key: 'totalAmount',
             // sortable: true,
             align:'center'
           },
           {
             title: '创建时间',
-            key: 'merchantCode',
+            key: 'createTime',
             // sortable: true,
             align:'center'
           },
@@ -82,7 +82,8 @@
                     this.$router.push({
                       path:"/settleCenter/busiPayLook",
                       query:{
-                        id:params.row.id
+                        outBatchNo:params.row.outBatchNo,
+                        merchantNo:params.row.merchantNo
                       }
                     })
                   }
@@ -96,13 +97,13 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/rsaKeyMerchant/grid',
+        url: '/splitCustomerOrder/grid',
         searchItems: [
           {
             label: '开始日期',
             type: 'date',
             name: 'startDate',
-            format:'yyyy-MM-dd 00:00:00',
+            format:'yyyy-MM-dd',
             options:{},
             value: ''
           },
@@ -110,17 +111,18 @@
             label: '结束日期',
             type: 'date',
             name: 'endDate',
-            format:'yyyy-MM-dd 23:59:59',
+            format:'yyyy-MM-dd',
             options:{},
             value: ''
           },
           {
             label: '商户简称',
             type: 'autoComplete',
-            name: 'merchantName',
+            name: 'merchantNo',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.searchItems[0])
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
+              this.common.searchMerchantList(value,arrItem)
             }
           },
         ],

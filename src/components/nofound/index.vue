@@ -7,9 +7,9 @@
 <script>
   export default {
     data() {
-      // return {
-      //   bodyBgImage: require('../../assets/images/login_bg.jpg')
-      // }
+      return {
+        // bodyBgImage: require('../../assets/images/login_bg.jpg')
+      }
     },
     // mounted () {
     //   document.querySelector('body').setAttribute('style',
