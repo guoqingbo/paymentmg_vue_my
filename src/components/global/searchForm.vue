@@ -96,7 +96,8 @@ export default {
               //   }
               // }
               let val = element.value
-              if(typeof val == 'string'){
+              console.log(typeof val)
+              if(val && typeof val == 'string'){
                 val = val.replace(/(^\s*)|(\s*$)/g, "")
               }
               this.$set(this.searchForm, element.name, val)
