@@ -71,7 +71,8 @@
             type: 'autoComplete',
             data:[],
             search: (value)=>{
-              this.common.searchMerchantList(value,this.searchItems[1])
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
+              this.common.searchMerchantList(value,arrItem)
             }
           }
         ],

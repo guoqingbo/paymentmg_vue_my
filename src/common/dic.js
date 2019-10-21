@@ -45,5 +45,17 @@ let dic = {
   //   {label:"服务商模式",value:'service'},
   //   {label:"普通模式",value:'common'},
   // ],
+  // 结算状态
+  busiStatus: [
+    {label:"待结算",value:"0"},
+    {label:"结算中",value:"1"},
+    {label:"结算成功",value:"2"},
+    {label:"结算失败",value:"3"}
+  ],
+  // 费用类型
+  splitType: [
+    {label:"普通分账",value:"0"},
+    {label:"手续费分账",value:"1"},
+  ],
 }
 export default dic

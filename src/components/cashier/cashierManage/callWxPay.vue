@@ -10,7 +10,8 @@
     },
     methods: {
       wxPay() {
-        let {appid,timestamp,noncestr,packagestr,signtype,paysign,redirectUrl,orderSource,redirectUrlError} = this.$route.query
+        let apiPrefix = this.common.config.apiPayPrefix
+        let {appid,timestamp,noncestr,packagestr,signtype,paysign,redirectUrl,orderSource,redirectUrlError,merchantNo,payNo} = this.$route.query
         let payParams = {
           appId:appid,
           timeStamp:timestamp,
@@ -25,12 +26,35 @@
             function (res) {
               // alert(JSON.stringify(res))
               if (res.err_msg == "get_brand_wcpay_request:ok") {
-                // 使用以上方式判断前端返回,微信团队郑重提示：
-                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                document.location.href = redirectUrl+"&orderSource="+orderSource;
+                if(orderSource == 101 && redirectUrl){
+                  // 订单来源为小鲸
+                  // 回掉地址如果有参数
+                  let href = ''
+                  if(/\?/.test(redirectUrl)){
+                    href = redirectUrl+"&orderSource="+orderSource;
+                  }else{
+                    href = redirectUrl+"?orderSource="+orderSource;
+                  }
+                  window.location.href = href;
+                }else{
+                  let href = apiPrefix+'/page/wechat/success?merchantNo='+merchantNo+'&payNo='+payNo
+                    window.location.href = href;
+                }
               } else {
-                document.location.href = redirectUrlError+"&orderSource="+orderSource;
-                // alert("支付成功，跳转失败")
+                if(orderSource == 101 && redirectUrlError){
+                  // 订单来源为小鲸
+                  // 回掉地址如果有参数
+                  let href = ''
+                  if(/\?/.test(redirectUrlError)){
+                    href = redirectUrlError+"&orderSource="+orderSource;
+                  }else{
+                    href = redirectUrlError+"?orderSource="+orderSource;
+                  }
+                  window.location.href = href;
+                }else{
+                  let href = apiPrefix+'/page/wechat/fail?merchantNo='+merchantNo+'&payNo='+payNo
+                  window.location.href = href;
+                }
               }
             });
         }

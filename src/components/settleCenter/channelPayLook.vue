@@ -1,0 +1,136 @@
+<template>
+  <div>
+    <list ref="gridTable"
+          :columns="columns"
+          :url="url"
+          @beforeSubmit="beforeSubmit"
+          :params="params"
+          :searchItems="searchItems"
+          :hannleItems="hannleItems"></list>
+  </div>
+</template>
+<script>
+  import list from '@/components/global/list'
+  export default {
+    data () {
+      return {
+        columns: [
+          {
+            title: '订单编号',
+            key: 'payNo',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '结算总金额（元）',
+            key: 'splitAmount',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '业务结算流水号',
+            key: 'splitNo',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '子订单编号',
+            key: 'subOrderNo',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '业务商户编号',
+            key: 'subMerchantNo',
+            // sortable: true,
+            align:'subMerchantNo'
+          },
+          {
+            title: '渠道商户编号',
+            key: 'subMerchantSourceNo',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '结算金额（元）',
+            key: 'amount',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '费用类型',
+            key: 'splitType',
+            // sortable: true,
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.filter.turn("splitType",params.row.splitType))
+            }
+          },
+          {
+            title: '结算状态',
+            key: 'status',
+            // sortable: true,
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.filter.turn("status",params.row.status))
+            }
+          },
+          {
+            title: '备注',
+            key: 'remark',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '失败原因',
+            key: 'errMsg',
+            // sortable: true,
+            align:'center'
+          },
+        ],
+        params: {
+          // sort:'modifyTime',
+          // order:'desc',
+          batchNo:this.$route.query.batchNo,
+        },
+        url: '/splitSubMerchant/grid',
+        searchItems: [
+          {
+            label: '订单编号',
+            type: 'input',
+            name: 'payNo'
+          },
+          {
+            label: '子订单编号',
+            type: 'input',
+            name: 'subOrderNo'
+          },
+          {
+            label: '全部状态',
+            type: 'select',
+            name: 'status',
+            data: this.common.dic.busiStatus,
+          },
+        ],
+        hannleItems: [
+
+        ]
+      }
+    },
+    computed:{
+
+    },
+    created(){
+    },
+    mounted () {
+
+    },
+    components: {list},
+    methods: {
+      // 搜索之前
+      beforeSubmit(params){
+        // 商户名，商户号拆分
+      },
+    }
+  }
+</script>

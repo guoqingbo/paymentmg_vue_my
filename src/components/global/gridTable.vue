@@ -8,7 +8,7 @@
 export default {
   data () {
     return {
-        loading:false,
+      loading:false,
       padding:'30px',
       data: '',
       // params: Object.assign({page: 1, limit: 10, sort: 'createTime', order: 'desc'},this.$route.params),
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     res () {
-      return  this.$store.state.list.res.data?this.$store.state.list.res.data: this.$store.state.list.res      
+      return  this.$store.state.list.res.data?this.$store.state.list.res.data: this.$store.state.list.res
     },
   },
   methods: {

@@ -2,7 +2,7 @@ import {apiPost,apiGet} from '../../fetch/api'
 const state = {
   url: '',
   params: '',
-  res: '',
+  res: {data:{rows:[]}},
   actionsParams: ''
 }
 
