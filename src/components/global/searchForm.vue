@@ -36,7 +36,7 @@
       </Select>
     </FormItem>
     <FormItem>
-      <Button type="primary" icon="ios-search" @click="searchSubmit()">搜索</Button>
+      <Button type="primary" icon="ios-search" @click="searchSubmit(1)">搜索</Button>
     </FormItem>
     <FormItem v-if="exportItem">
       <Button type="primary"
@@ -200,7 +200,10 @@ export default {
     //   }
     //   item.code = item.code.replace(/\(|\)/g,'');
     // },
-    searchSubmit () {
+    searchSubmit (page) {
+      if(page){
+        this.$store.state.list.params.page = page
+      }
       // 格式化日期
       this.formateDate()
       this.$store.state.list.url = this.url;
