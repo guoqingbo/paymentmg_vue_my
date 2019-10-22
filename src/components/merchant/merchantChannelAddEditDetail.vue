@@ -380,7 +380,11 @@
           abcCertFileItem.url = '/file/merchantcertfile'
           // abcCertFileItem.showUploadUrl = false
           abcCertFileItem.beforeUpload = (params) => {
-            params.merchantId = abcNoItem.value
+            let val = abcNoItem.value
+            if(val && typeof val == 'string'){
+              val = val.replace(/(^\s*)|(\s*$)/g, "")
+            }
+            params.merchantId = val
           }
         }
       },

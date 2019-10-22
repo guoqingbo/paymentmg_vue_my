@@ -96,7 +96,6 @@ export default {
               //   }
               // }
               let val = element.value
-              console.log(typeof val)
               if(val && typeof val == 'string'){
                 val = val.replace(/(^\s*)|(\s*$)/g, "")
               }
