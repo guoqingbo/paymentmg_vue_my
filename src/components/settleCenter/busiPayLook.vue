@@ -150,7 +150,8 @@
 
     },
     created(){
-
+      // 更新位置占位符
+      this.$store.dispatch('setBreadcrumbListAction', ['业务分账查询', '查看明细'])
     },
     mounted () {
 

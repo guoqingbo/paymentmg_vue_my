@@ -72,7 +72,7 @@
             // sortable: true,
             align:'center',
             render: (h, params) => {
-              return h('span', this.filter.turn("status",params.row.status))
+              return h('span', this.filter.turn("busiStatus",params.row.status))
             }
           },
           {
@@ -121,6 +121,8 @@
 
     },
     created(){
+      // 更新位置占位符
+      this.$store.dispatch('setBreadcrumbListAction', ['渠道分账查询', '查看明细'])
     },
     mounted () {
 
