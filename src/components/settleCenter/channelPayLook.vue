@@ -106,7 +106,7 @@
             name: 'subOrderNo'
           },
           {
-            label: '全部状态',
+            label: '状态',
             type: 'select',
             name: 'status',
             data: this.common.dic.busiStatus,

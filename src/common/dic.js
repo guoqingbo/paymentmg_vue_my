@@ -47,6 +47,7 @@ let dic = {
   // ],
   // 结算状态
   busiStatus: [
+    {label:"全部状态",value:""},
     {label:"待结算",value:"0"},
     {label:"结算中",value:"1"},
     {label:"结算成功",value:"2"},
