@@ -17,7 +17,7 @@
         columns: [
           {
             title: '订单编号',
-            key: 'payNo',
+            key: 'orderNo',
             // sortable: true,
             align:'center'
           },
