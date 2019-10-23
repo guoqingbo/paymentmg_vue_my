@@ -132,6 +132,11 @@
               this.common.searchMerchantList(value,this.searchItems[2])
             }
           },
+          {
+            label: '批次号',
+            type: 'input',
+            name: 'batchNo'
+          },
         ],
         hannleItems: [
 

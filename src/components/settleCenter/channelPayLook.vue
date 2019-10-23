@@ -98,7 +98,7 @@
           {
             label: '订单编号',
             type: 'input',
-            name: 'payNo'
+            name: 'orderNo'
           },
           {
             label: '子订单编号',
