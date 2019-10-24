@@ -244,6 +244,11 @@
           "name": "渠道分账查看",
           "code": "channelPayLook",
           "functionType": "button"
+        },
+        {
+          "name": "分账汇总查询",
+          "code": "paySummaryQuery",
+          "functionType": "column"
         }
       ]
     }
