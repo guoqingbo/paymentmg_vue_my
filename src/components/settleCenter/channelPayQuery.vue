@@ -136,9 +136,9 @@
             }
           },
           {
-            label: '批次号',
+            label: '业务批次号',
             type: 'input',
-            name: 'batchNo'
+            name: 'outBatchNo'
           },
         ],
         hannleItems: [
