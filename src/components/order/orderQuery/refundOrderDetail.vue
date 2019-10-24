@@ -41,7 +41,10 @@
               },
               {
                 title:'退款金额（元）',
-                name:'refundAmount'
+                name:'refundAmount',
+                render: (h, params) => {
+                  return h('span', this.common.formatNumber(params.refundAmount))
+                }
               },
               {
                 title:'退款状态',
@@ -78,7 +81,10 @@
               },
               {
                 title:'实付金额（元）',
-                name:'payAmount'
+                name:'payAmount',
+                render: (h, params) => {
+                  return h('span', this.common.formatNumber(params.payAmount))
+                }
               },
               {
                 title:'支付渠道',

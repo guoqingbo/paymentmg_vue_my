@@ -60,6 +60,9 @@
               {
                 title: '交易金额（万元）',
                 key: 'tradeMoney',
+                render: (h, params) => {
+                  return h('span', this.common.formatNumber(params.row.tradeMoney))
+                }
               },
               {
                 title: '环比',

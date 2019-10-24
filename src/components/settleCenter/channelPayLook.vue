@@ -25,7 +25,10 @@
             title: '结算总金额（元）',
             key: 'splitAmount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.splitAmount))
+            }
           },
           {
             title: '业务结算流水号',
@@ -55,7 +58,10 @@
             title: '结算金额（元）',
             key: 'amount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.amount))
+            }
           },
           {
             title: '费用类型',

@@ -31,7 +31,11 @@
             title: '结算总金额（元）',
             key: 'splitAmount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              // params.row.status
+              return h('span', this.common.formatNumber(params.row.splitAmount))
+            }
           },
           {
             title: '业务结算流水号',
@@ -61,7 +65,11 @@
             title: '结算金额（元）',
             key: 'amount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              // params.row.status
+              return h('span', this.common.formatNumber(params.row.amount))
+            }
           },
           {
             title: '费用类型',
@@ -84,6 +92,12 @@
           {
             title: '备注',
             key: 'remark',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '失败原因',
+            key: 'errMsg',
             // sortable: true,
             align:'center'
           },

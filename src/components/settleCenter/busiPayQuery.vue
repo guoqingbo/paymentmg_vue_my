@@ -61,7 +61,11 @@
             title: '结算总金额（元）',
             key: 'totalAmount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              // params.row.status
+              return h('span', this.common.formatNumber(params.row.totalAmount))
+            }
           },
           {
             title: '创建时间',
