@@ -127,7 +127,7 @@
             value: ''
           },
           {
-            label: '商户简称',
+            label: '商户名称',
             type: 'autoComplete',
             name: 'merchantNo',
             data:[],

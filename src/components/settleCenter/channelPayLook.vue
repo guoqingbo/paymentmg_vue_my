@@ -116,6 +116,7 @@
             type: 'select',
             name: 'status',
             data: this.common.dic.busiStatus,
+            value:"all",
           },
         ],
         hannleItems: [
@@ -137,7 +138,9 @@
     methods: {
       // 搜索之前
       beforeSubmit(params){
-        // 商户名，商户号拆分
+        if(params.status=='all'){
+          params.status = ''
+        }
       },
     }
   }

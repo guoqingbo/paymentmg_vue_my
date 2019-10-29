@@ -120,7 +120,7 @@
             value: ''
           },
           {
-            label: '商户简称',
+            label: '商户名称',
             type: 'autoComplete',
             name: 'merchantNo',
             data:[],
@@ -128,6 +128,13 @@
               let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
               this.common.searchMerchantList(value,arrItem)
             }
+          },
+          {
+            label: '状态',
+            type: 'select',
+            name: 'status',
+            data: this.common.dic.busiStatus,
+            value:"all",
           },
         ],
         hannleItems: [
@@ -177,6 +184,9 @@
       },
       // 搜索之前
       beforeSubmit(params){
+        if(params.status=='all'){
+          params.status = ''
+        }
         // 商户名，商户号拆分
         this.common.splitMerchant(params)
       }
