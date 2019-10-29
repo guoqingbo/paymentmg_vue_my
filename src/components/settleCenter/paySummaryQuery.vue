@@ -31,23 +31,23 @@
         lookColumns:[
           {
             title: '业务商户编号',
-            key: 'merchantName',
+            key: 'subMerchantNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '渠道商户编号',
-            key: 'merchantName',
+            key: 'subMerchantSourceNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '结算金额（元）',
-            key: 'totalAmount',
+            key: 'sumAmount',
             // sortable: true,
             align:'center',
             render: (h, params) => {
-              return h('span', this.common.formatNumber(params.row.totalAmount))
+              return h('span', this.common.formatNumber(params.row.sumAmount))
             }
           },
         ],
@@ -73,7 +73,7 @@
           },
           {
             title: '订单笔数',
-            key: 'splitProductCode',
+            key: 'totalCount',
             // sortable: true,
             align:'center'
           },
@@ -109,7 +109,7 @@
           // sort:'modifyTime',
           // order:'desc'
         },
-        url: '/splitOrder/grid',
+        url: '/splitStatistics/total',
         searchItems: [
           {
             label: '开始日期',
@@ -188,12 +188,15 @@
         this.common.splitMerchant(params)
       },
       // 商户结算汇总列表
-      merchantPaySummarry(){
-        let url = ""
-        let params = {}
-        this.apiPost(url,params).then(res=>{
+      merchantPaySummarry(row){
+        let url = "/splitStatistics/detail"
+        let params = {
+          merchantNo:row.merchantNo,
+          checkDate:row.checkDate,
+        }
+        this.apiGet(url,params).then(res=>{
           if(res.success){
-            this.lookRows = res.data.rows
+            this.lookRows = res.data
           }else{
             this.lookRows = []
           }
