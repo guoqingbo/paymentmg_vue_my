@@ -150,11 +150,12 @@
               this.apiPost(url,params).then(res=>{
                 if(res.success){
                   this.$Message.info(res.message||'操作成功')
-                  // 刷新列表
-                  this.$store.dispatch('getList')
+
                 }else{
                   this.$Message.info(res.message)
                 }
+                // 刷新列表
+                this.$refs.gridTable.searchSubmit()
               })
             }
           },

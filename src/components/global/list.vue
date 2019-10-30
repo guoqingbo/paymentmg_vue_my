@@ -117,6 +117,9 @@
       }
     },
     methods: {
+      searchSubmit(params){
+        this.$refs.search.searchSubmit(params)
+      },
       pageSizeShange(limit){
         this.$store.state.list.params.limit = this.limit = limit
         this.$refs.search.searchSubmit()
