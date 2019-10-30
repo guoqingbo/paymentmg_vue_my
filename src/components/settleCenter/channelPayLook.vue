@@ -17,7 +17,7 @@
         columns: [
           {
             title: '订单编号',
-            key: 'payNo',
+            key: 'orderNo',
             // sortable: true,
             align:'center'
           },
@@ -25,7 +25,10 @@
             title: '结算总金额（元）',
             key: 'splitAmount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.splitAmount))
+            }
           },
           {
             title: '业务结算流水号',
@@ -55,7 +58,10 @@
             title: '结算金额（元）',
             key: 'amount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.amount))
+            }
           },
           {
             title: '费用类型',
@@ -72,7 +78,7 @@
             // sortable: true,
             align:'center',
             render: (h, params) => {
-              return h('span', this.filter.turn("status",params.row.status))
+              return h('span', this.filter.turn("busiStatus",params.row.status))
             }
           },
           {
@@ -98,7 +104,7 @@
           {
             label: '订单编号',
             type: 'input',
-            name: 'payNo'
+            name: 'orderNo'
           },
           {
             label: '子订单编号',
@@ -106,10 +112,11 @@
             name: 'subOrderNo'
           },
           {
-            label: '全部状态',
+            label: '状态',
             type: 'select',
             name: 'status',
             data: this.common.dic.busiStatus,
+            value:"all",
           },
         ],
         hannleItems: [
@@ -121,6 +128,8 @@
 
     },
     created(){
+      // 更新位置占位符
+      this.$store.dispatch('setBreadcrumbListAction', ['渠道分账查询', '查看明细'])
     },
     mounted () {
 
@@ -129,7 +138,9 @@
     methods: {
       // 搜索之前
       beforeSubmit(params){
-        // 商户名，商户号拆分
+        if(params.status=='all'){
+          params.status = ''
+        }
       },
     }
   }

@@ -46,11 +46,17 @@
             title: '订单金额',
             key: 'orderAmount',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.orderAmount))
+            }
           },
           {
             title: '实付金额',
             key: 'payAmount',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.payAmount))
+            }
           },
           {
             title: '支付状态',

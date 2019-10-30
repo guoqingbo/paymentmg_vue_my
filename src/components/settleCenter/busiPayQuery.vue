@@ -61,7 +61,11 @@
             title: '结算总金额（元）',
             key: 'totalAmount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              // params.row.status
+              return h('span', this.common.formatNumber(params.row.totalAmount))
+            }
           },
           {
             title: '创建时间',
@@ -94,7 +98,7 @@
           }
         ],
         params: {
-          sort:'modifyTime',
+          sort:'checkDate',
           order:'desc'
         },
         url: '/splitCustomerOrder/grid',
@@ -116,7 +120,7 @@
             value: ''
           },
           {
-            label: '商户简称',
+            label: '商户名称',
             type: 'autoComplete',
             name: 'merchantNo',
             data:[],
@@ -124,6 +128,13 @@
               let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
               this.common.searchMerchantList(value,arrItem)
             }
+          },
+          {
+            label: '状态',
+            type: 'select',
+            name: 'status',
+            data: this.common.dic.busiStatus,
+            value:"all",
           },
         ],
         hannleItems: [
@@ -173,6 +184,9 @@
       },
       // 搜索之前
       beforeSubmit(params){
+        if(params.status=='all'){
+          params.status = ''
+        }
         // 商户名，商户号拆分
         this.common.splitMerchant(params)
       }

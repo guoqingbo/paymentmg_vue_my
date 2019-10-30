@@ -7,6 +7,19 @@
           :params="params"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
+    <Modal v-model="lookModal"
+           title="商户结算汇总"
+           width="750">
+      <Table style="position:static;" stripe  :columns="lookColumns" :data="lookRows"></Table>
+      <div slot="footer">
+        <div>
+          <Button type="primary"
+                  @click="lookModal=false"
+          >关闭
+          </Button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -14,6 +27,31 @@
   export default {
     data () {
       return {
+        lookModal:false,
+        lookColumns:[
+          {
+            title: '业务商户编号',
+            key: 'subMerchantNo',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '渠道商户编号',
+            key: 'subMerchantSourceNo',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '结算金额（元）',
+            key: 'sumAmount',
+            // sortable: true,
+            align:'center',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.sumAmount))
+            }
+          },
+        ],
+        lookRows:[],
         columns: [
           {
             title: '序号',
@@ -22,38 +60,14 @@
             align:'center'
           },
           {
-            title: '业务批次号',
-            key: 'outBatchNo',
-            // sortable: true,
-            align:'center'
-          },
-          {
-            title: '支付中心批次号',
-            key: 'batchNo',
+            title: '商户名称',
+            key: 'merchantName',
             // sortable: true,
             align:'center'
           },
           {
             title: '核销日期',
             key: 'checkDate',
-            // sortable: true,
-            align:'center'
-          },
-          {
-            title: '分账渠道',
-            key: 'splitProductCode',
-            // sortable: true,
-            align:'center'
-          },
-          {
-            title: '分账渠道代码',
-            key: 'channelCode',
-            // sortable: true,
-            align:'center'
-          },
-          {
-            title: '商户名称',
-            key: 'merchantName',
             // sortable: true,
             align:'center'
           },
@@ -73,12 +87,6 @@
             }
           },
           {
-            title: '创建时间',
-            key: 'createTime',
-            // sortable: true,
-            align:'center'
-          },
-          {
             title: '操作',
             key: 'action',
             width: 130,
@@ -88,15 +96,8 @@
                 {
                   title: "查看",
                   action: () => {
-                    this.$router.push({
-                      path:"/settleCenter/channelPayLook",
-                      query:{
-                        batchNo:params.row.batchNo,
-                        // payNo:params.row.payNo,
-                        // subOrderNo:params.row.subOrderNo,
-                        // status:params.row.status
-                      }
-                    })
+                    this.merchantPaySummarry(params.row)
+                    this.lookModal = true
                   }
                 },
               ];
@@ -108,7 +109,7 @@
           sort:'checkDate',
           order:'desc'
         },
-        url: '/splitOrder/grid',
+        url: '/splitStatistics/total',
         searchItems: [
           {
             label: '开始日期',
@@ -134,12 +135,7 @@
             search: (value)=>{
               this.common.searchMerchantList(value,this.searchItems[2])
             }
-          },
-          {
-            label: '业务批次号',
-            type: 'input',
-            name: 'outBatchNo'
-          },
+          }
         ],
         hannleItems: [
 
@@ -190,6 +186,21 @@
       beforeSubmit(params){
         // 商户名，商户号拆分
         this.common.splitMerchant(params)
+      },
+      // 商户结算汇总列表
+      merchantPaySummarry(row){
+        let url = "/splitStatistics/detail"
+        let params = {
+          merchantNo:row.merchantNo,
+          checkDate:row.checkDate,
+        }
+        this.apiGet(url,params).then(res=>{
+          if(res.success){
+            this.lookRows = res.data
+          }else{
+            this.lookRows = []
+          }
+        })
       }
     }
   }
