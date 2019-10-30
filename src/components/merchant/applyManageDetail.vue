@@ -7,7 +7,8 @@
         <div class="apply-info-box">
           <div class="apply-info-top">
             <span>胡杨林小鲸商城</span>
-            <span class="apply-edit-btn" @click="openApplyEdit">编辑</span>
+            <Button type="primary" size="small" @click="openApplyEdit">编辑</Button>
+            <!--<span class="apply-edit-btn" @click="openApplyEdit">编辑</span>-->
           </div>
           <div class="apply-info-bottom">
             <span>PAYID</span>
@@ -17,14 +18,82 @@
       </div>
       <!--tab选项卡-->
       <div class="tab-box">
-
+        <div class="tab-item" @click="tabClick(1)" :class="{active:tabIndex==1}">
+          <span class="tab-item-name">应用概述</span>
+        </div>
+        <div class="tab-item" @click="tabClick(2)" :class="{active:tabIndex==2}">
+          <span class="tab-item-tag">未配置</span>
+          <span class="tab-item-name">功能管理</span>
+        </div>
+        <div class="tab-item" @click="tabClick(3)" :class="{active:tabIndex==3}">
+          <span class="tab-item-name">开发配置</span>
+        </div>
       </div>
-      <!--应用概述-->
-      <div class="apply-summary-box"></div>
-      <!--功能管理-->
-      <div class="fun-manage-box"></div>
-      <!--开发配置-->
-      <div class="dev-config-box"></div>
+      <!--选项卡内容-->
+      <div class="tab-content-box">
+        <!--应用概述-->
+        <div class="apply-summary-box" v-if="tabIndex==1">
+          <table class="apply-info-table">
+            <tr>
+              <td>
+                <span class="apply-info-label">应用名称：</span>
+                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+              </td>
+              <td>
+                <span class="apply-info-label">应用来源：</span>
+                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+              </td>
+              <td>
+                <span class="apply-info-label">创建时间：</span>
+                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="apply-info-label">所属商户：</span>
+                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+              </td>
+              <td>
+                <span class="apply-info-label">应用状态：</span>
+                <span class="apply-info-value">已上线</span>
+              </td>
+              <td>
+                <span class="apply-info-label">最近更新时间：</span>
+                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <span class="apply-info-label">应用描述：</span>
+                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+              </td>
+            </tr>
+          </table>
+          <div class="apply-fun-box">
+            <div class="apply-section-title">应用功能：</div>
+            <Table stripe
+                   border
+                   :columns="funColumns"
+                   :data="funData"></Table>
+          </div>
+        </div>
+        <!--功能管理-->
+        <div class="fun-manage-box" v-if="tabIndex==2">
+          <div class="add-fun-btn-box">
+            <Button type="primary" @click="openFucAdd" icon="md-add">添加功能</Button>
+            <span class="add-fun-tip">
+            <Icon type="md-alert" size="16"/>
+            请先通过“添加功能”添加所需的功能，再通过“配置”功能服务配置参数
+          </span>
+          </div>
+          <Table stripe
+                 border
+                 :columns="addFunColumns"
+                 :data="funData"></Table>
+        </div>
+        <!--开发配置-->
+        <div class="dev-config-box" v-if="tabIndex==3"></div>
+      </div>
     </div>
 
     <!--编辑应用-->
@@ -44,82 +113,138 @@
         headerImg:require("../../assets/images/touxiang.png"),
         applyEditformShow:false,
         applyEditformItems: [
-        {
-          title: '商户简称',
-          name: 'merchantName',
-          type: 'input',
-          disabled: false,
-          data: '',
-          // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
-        },
-        {
-          title: '私钥',
-          name: 'privateKey',
-          type: 'textarea',
-          value: '',
-          disabled: false,
-          rules: [{ required: true, message: '请输入私钥', trigger: 'blur' },
-          ]
-        },
-        {
-          title: '上传营业执照',
-          name: 'licenseUrl',
-          type: 'uploadFile',
-          tip: '建议上传小于2M的png、jpg、jpeg格式的图片',
-          accept:'.jpg,.jpeg,.png',
-          format:['jpg', 'jpeg', 'png'],
-          rules: [{ required: true, message:'请上传上传营业执照', trigger: 'change'}],
-          beforeUpload:(params)=>{}
-        },
-        {
-          title: '所在地区',
-          name: 'area',
-          type: 'area',
-          // addrCode: "",
-          areaText:"",
-          rules: [],
-          value:''
-        },
-        {
-          title: '默认推荐支付方式',
-          name: 'priority',
-          type: 'radio',
-          value: 999,
-          data:this.common.dic.priority,
-          rules: [{ required: true, type:'number', message: '请选择默认推荐支付方式', trigger: 'change' }]
-        },
-        {
-          title: '商户名称',
-          name: 'merchantNo',
-          value: '',
-          type: 'autoComplete',
-          data:[],
-          search: (value)=>{
-            let arrItem = this.common.getArrItem(this.formItems,'merchantNo')
-            this.common.searchMerchantList(value,arrItem)
-          }
-        },
-        {
-          title: '商户类型',
-          name: 'merchantType',
-          type: 'select',
-          data: this.common.dic.merchantType,
-          onChange:this.merchantTypeChange,
-          rules: [
-            {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
-          ],
-          value: 200,
-        },
-        {
-          title: '开始日期',
-          type: 'date',
-          name: 'startDate',
-          format:'yyyy-MM-dd 00:00:00',
-          options:{},
-          value: ''
-        },
+          {
+            title: '应用名称',
+            name: 'merchantName',
+            type: 'input',
+            rules: [
+              {required: true, message: '请输入应用名称', trigger: 'blur'},
+              {max: 32, message: "应用名称不超过32字符", trigger: 'blur'}
+            ],
+            value: ""
+          },
+          {
+            title: '应用图标',
+            name: 'licenseUrl',
+            type: 'uploadFile',
+            tip: '请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于2M'
+          },
+          {
+            title: '应用简介',
+            name: 'privateKey',
+            type: 'textarea',
+            value: '',
+            disabled: false,
+          },
+          {
+            title: '适用场景',
+            name: 'idType',
+            type: 'select',
+            data: this.common.dic.idType,
+            rules: [
+              {required: true,message: '请选择适用场景', trigger: 'change'}
+            ],
+            value: ''
+          },
       ],
         applyEditFormUrl:'',
+        funColumns:[
+          {
+            title: '功能名称',
+            key: 'name'
+          },
+          {
+            title: '功能服务商',
+            key: 'name'
+          },
+          {
+            title: '支付产品',
+            key: 'name'
+          },
+          {
+            title: '功能代码',
+            key: 'name'
+          },
+          {
+            title: '功能分类',
+            key: 'name'
+          },
+          {
+            title: '状态',
+            key: 'name'
+          },
+          {
+            title: '添加时间',
+            key: 'name'
+          }
+        ],
+        funData:[
+          {
+            name:'gggg'
+          }
+        ],
+        tabIndex:1,
+        addFunColumns:[
+          {
+            title: '功能名称',
+            key: 'name'
+          },
+          {
+            title: '功能服务商',
+            key: 'name'
+          },
+          {
+            title: '支付产品',
+            key: 'name'
+          },
+          {
+            title: '功能代码',
+            key: 'name'
+          },
+          {
+            title: '功能分类',
+            key: 'name'
+          },
+          {
+            title: '状态',
+            key: 'name'
+          },
+          {
+            title: '添加时间',
+            key: 'name'
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width:140,
+            align:'center',
+            render: (h, params) => {
+              const actions = [
+                {
+                  title: "配置",
+                  action: () => {
+                    this.$router.push({
+                      path: "/merchant/applyManageDetail",
+                      query: {id: params.row.id}
+                    });
+                  }
+                },
+                {
+                  title: "删除",
+                  action: () => {
+                    this.mode = "delete";
+                    this.sucessMsg = "删除成功！";
+                    this.content = "确定删除？";
+                    this.$refs.confirmModel.confirm(
+                      "/merchant/delete/" + params.row.id
+                    );
+                  }
+                }
+              ];
+              return this.common.columnsHandle(h, actions);
+            }
+          }
+        ],
       }
     },
     mounted () {
@@ -130,9 +255,85 @@
     },
     components: {modalForm},
     methods: {
+      // 打开编辑弹框
       openApplyEdit(){
         this.applyEditformShow = true
+      },
+      //  tab切换
+      tabClick(index){
+        this.tabIndex = index
       }
     }
   }
 </script>
+<style scoped lang="scss">
+  .apply-manage-box{
+    .apply-manage-top{
+      padding-bottom: 30px;
+      .apply-icon{
+        width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        vertical-align: middle;
+      }
+      .apply-info-box {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+        .apply-edit-btn{
+          margin-left: 10px;
+          color: #3720d4;
+        }
+      }
+    }
+    .tab-box{
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 13px;
+      .tab-item{
+        display: inline-block;
+        margin-right: 20px;
+        font-size: 14px;
+        position: relative;
+        .tab-item-tag{
+          position: absolute;
+          bottom:20px;
+          right: 0;
+          font-size: 12px;
+          background-color: #cc7d0d;
+          color: #fff;
+          border-radius: 5px;
+          padding: 2px 5px;
+        }
+      }
+      .tab-item.active{
+        .tab-item-name{
+          font-weight: bold;
+          color: #409EFF;
+          padding-bottom: 15px;
+          border-bottom: 2px solid #409EFF;
+        }
+      }
+    }
+    .apply-info-table{
+      padding-bottom: 20px;
+      width: 100%;
+      td{
+        height: 35px;
+      }
+      .apply-info-label{
+        color: #999;
+      }
+    }
+    .apply-section-title{
+      font-weight: bold;
+      font-size: 14px;
+      padding: 10px 0;
+    }
+    .tab-content-box{
+      padding: 20px 0;
+    }
+    .add-fun-btn-box{
+      margin-bottom: 20px;
+    }
+  }
+</style>

@@ -74,10 +74,9 @@
             type: 'select',
             data: this.common.dic.idType,
             rules: [
-              {required: true,message: '请选择证件类型', trigger: 'change'}
+              {required: true,message: '请选择适用场景', trigger: 'change'}
             ],
-            onChange:this.idTypeChange,
-            value: 1
+            value: ''
           },
           {
             title: '应用状态',
