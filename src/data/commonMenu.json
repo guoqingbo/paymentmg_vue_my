@@ -219,6 +219,38 @@
           ]
         }
       ]
+    },
+    {
+      "name": "结算中心",
+      "code": "settleCenter",
+      "functionType": "menu",
+      "menus": [
+        {
+          "name": "业务分账查询",
+          "code": "busiPayQuery",
+          "functionType": "column"
+        },
+        {
+          "name": "业务分账查看",
+          "code": "busiPayLook",
+          "functionType": "button"
+        },
+        {
+          "name": "渠道分账查询",
+          "code": "channelPayQuery",
+          "functionType": "column"
+        },
+        {
+          "name": "渠道分账查看",
+          "code": "channelPayLook",
+          "functionType": "button"
+        },
+        {
+          "name": "分账汇总查询",
+          "code": "paySummaryQuery",
+          "functionType": "column"
+        }
+      ]
     }
   ]
 }

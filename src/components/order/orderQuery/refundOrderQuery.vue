@@ -51,11 +51,17 @@
             title: '实付金额',
             key: 'payAmount',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.payAmount))
+            }
           },
           {
             title: '退款金额',
             key: 'refundAmount',
             sortable: true,
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.refundAmount))
+            }
           },
           {
             title: '退款状态',

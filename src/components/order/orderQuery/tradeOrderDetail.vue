@@ -48,14 +48,20 @@
                 render: ''
               },{
                 title:'订单金额（元）',
-                name:'orderAmount'
+                name:'orderAmount',
+                render: (h, params) => {
+                  return h('span', this.common.formatNumber(params.orderAmount))
+                }
               }],
           },
           {
             cols:[
               {
                 title:'实付金额（元）',
-                name:'payAmount'
+                name:'payAmount',
+                render: (h, params) => {
+                  return h('span', this.common.formatNumber(params.payAmount))
+                }
               },{
                 title:'支付产品',
                 name:'payProductName'
@@ -122,7 +128,10 @@
             cols:[
               {
                 title:'手续费',
-                name:'thirdPartyFee'
+                name:'thirdPartyFee',
+                render: (h, params) => {
+                  return h('span', this.common.formatNumber(params.thirdPartyFee))
+                }
               },{
                 title:'备注',
                 name:'extra',
