@@ -31,7 +31,11 @@
             title: '结算总金额（元）',
             key: 'splitAmount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              // params.row.status
+              return h('span', this.common.formatNumber(params.row.splitAmount))
+            }
           },
           {
             title: '业务结算流水号',
@@ -61,7 +65,11 @@
             title: '结算金额（元）',
             key: 'amount',
             // sortable: true,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              // params.row.status
+              return h('span', this.common.formatNumber(params.row.amount))
+            }
           },
           {
             title: '费用类型',
@@ -87,6 +95,12 @@
             // sortable: true,
             align:'center'
           },
+          {
+            title: '失败原因',
+            key: 'errMsg',
+            // sortable: true,
+            align:'center'
+          },
         ],
         params: {
           sort:'modifyTime',
@@ -107,10 +121,11 @@
             name: 'subOrderNo'
           },
           {
-            label: '全部状态',
+            label: '状态',
             type: 'select',
             name: 'status',
-            data: this.common.dic.busiStatus
+            data: this.common.dic.busiStatus,
+            value:"all",
           },
         ],
         hannleItems: [
@@ -135,11 +150,12 @@
               this.apiPost(url,params).then(res=>{
                 if(res.success){
                   this.$Message.info(res.message||'操作成功')
-                  // 刷新列表
-                  this.$store.dispatch('getList')
+
                 }else{
                   this.$Message.info(res.message)
                 }
+                // 刷新列表
+                this.$refs.gridTable.searchSubmit()
               })
             }
           },
@@ -150,7 +166,8 @@
 
     },
     created(){
-
+      // 更新位置占位符
+      this.$store.dispatch('setBreadcrumbListAction', ['业务分账查询', '查看明细'])
     },
     mounted () {
 
@@ -159,7 +176,9 @@
     methods: {
       // 搜索之前
       beforeSubmit(params){
-        // 商户名，商户号拆分
+        if(params.status=='all'){
+          params.status = ''
+        }
       },
       // 结算中1、结算成功2则不可选中
       afterSubmit(res){

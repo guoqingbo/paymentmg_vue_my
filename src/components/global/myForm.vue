@@ -38,6 +38,7 @@
           {{item.value|selectFilter(item.data)}}
         </span>
           <Input v-if="item.type=='input'"
+                 clearable
                  :disabled="item.disabled"
                  :on-change="item.onChange?item.onChange(item.value):''"
                  v-model="item.value"

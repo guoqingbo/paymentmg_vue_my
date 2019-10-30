@@ -5,6 +5,7 @@
         v-if="searchItems && searchItems.length">
     <FormItem v-for="item in searchItems" :key="item.label">
       <Input v-if="item.type=='input'"
+             clearable
              v-model="item.value"
              :placeholder="'请输入'+item.label"
              :style="item.style"></Input>
@@ -14,7 +15,7 @@
                     v-model="item.value"
                     @on-search="item.search?item.search($event):''"
                     icon="ios-search"
-                    :clearable="true"
+                    clearable
                     :placeholder="'请输入'+item.label">
         <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
       </AutoComplete>
@@ -27,6 +28,7 @@
                   :format="item.format||'yyyy-MM-dd'"
                   :style="item.style"></DatePicker>
       <Select v-if="item.type=='select'"
+              clearable
               v-model="item.value"
               :placeholder="'请选择'+item.label"
               :style="item.style">

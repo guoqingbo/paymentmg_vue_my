@@ -51,10 +51,16 @@
           {
             title: '单笔交易限额',
             key: 'singleLimit',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.singleLimit))
+            }
           },
           {
             title: '单日累计交易限额',
             key: 'dayLimit',
+            render: (h, params) => {
+              return h('span', this.common.formatNumber(params.row.dayLimit))
+            }
           },
           {
             title: '状态',
