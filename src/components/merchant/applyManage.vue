@@ -27,27 +27,49 @@
             align:'center'
           },
           {
-            title: '商户号',
-            key: 'merchantCode',
-            sortable: true,
-          },
-          {
             title: '商户名称',
             key: 'merchantName',
-            sortable: true,
           },
           {
-            title: '商户类型',
-            key: 'merchantType',
-            sortable: true,
+            title: '商户号',
+            key: 'merchantCode',
+          },
+          {
+            title: '企业码',
+            key: 'merchantCode',
+          },
+          {
+            title: '应用名称',
+            key: 'merchantCode',
+          },
+          {
+            title: '应用来源',
+            key: 'merchantCode',
+            // render: (h, params) => {
+            //   return h('span', this.filter.turn("merchantType",params.row.merchantType))
+            // }
+          },
+          {
+            title: 'PAYID',
+            key: 'merchantCode',
+          },
+          {
+            title: '应用状态',
+            key: 'status',
             render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
+              return h('span', this.filter.turn("applyStatus",params.row.status))
+            }
+          },
+          {
+            title: '应用功能',
+            key: 'status',
+            render: (h, params) => {
+              return h('span', this.filter.turn("applyStatus",params.row.status))
             }
           },
           {
             title: '创建时间',
             key: 'createTime',
-            sortable: 'custom',
           },
           {
             title: '操作',
@@ -57,19 +79,10 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "详情",
+                  title: "管理",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
-                      query: { id: params.row.id,routeType:"detail"}
-                    });
-                  }
-                },
-                {
-                  title: "编辑",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
+                      path: "/merchant/applyManageDetail",
                       query: {id: params.row.id}
                     });
                   }
@@ -107,15 +120,15 @@
             }
           },
           {
-            label: 'PAYID',
-            type: 'input',
-            name: 'payId',
-          },
-          {
             label: '商户来源',
             type: 'select',
             name: 'source',
             data: ''
+          },
+          {
+            label: 'PAYID',
+            type: 'input',
+            name: 'payId',
           },
           {
             label: '应用状态',
@@ -129,7 +142,7 @@
             title: '添加应用',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchantAddEditDetail");
+              this.$router.push("/merchant/applyAdd");
             }
           }
         ],

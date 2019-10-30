@@ -117,7 +117,6 @@
                         @beforeUpload="(params)=>{item.beforeUpload?item.beforeUpload(params):''}"
                         @on-remove="onRemove"
                         @on-success="uploadSuccess"></uploadFile>
-            <p>{{item.tip}}</p>
           </div>
           <div class="upload-img-box" v-if="item.type=='uploadFileText'">
             <!--如果是图片-->
@@ -127,6 +126,8 @@
             </template>
             <span v-else class="no-img">未上传</span>
           </div>
+
+          <p v-if="item.tip">{{item.tip}}</p>
         </FormItem>
         <slot :name="item.name+'After'"></slot>
       </template>
