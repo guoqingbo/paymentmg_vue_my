@@ -58,5 +58,10 @@ let dic = {
     {label:"普通分账",value:"0"},
     {label:"手续费分账",value:"1"},
   ],
+  // 应用状态
+  applyStatus: [
+    {label:"下架",value:"0"},
+    {label:"已上线",value:"1"},
+  ],
 }
 export default dic
