@@ -92,7 +92,50 @@
                  :data="funData"></Table>
         </div>
         <!--开发配置-->
-        <div class="dev-config-box" v-if="tabIndex==3"></div>
+        <div class="dev-config-box" v-if="tabIndex==3">
+          <div class="dev-config-info-top">
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">商户号（merchantNo）：</span>
+              <span class="dev-config-info-value">45665363</span>
+            </div>
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">支付标识（PayID）：</span>
+              <span class="dev-config-info-value">45665363</span>
+            </div>
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">商户/平台私钥（RSA私钥）：</span>
+              <span class="dev-config-info-value">45665363</span>
+              <Button v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+            </div>
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">支付中心公钥（RSA公钥）：</span>
+              <span class="dev-config-info-value">45665363</span>
+              <Button v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+            </div>
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">正式环境地址：</span>
+              <span class="dev-config-info-value">45665363</span>
+            </div>
+          </div>
+          <div class="apply-section-title">
+            <span>开发作者信息</span>
+            <Button type="primary" @click="openDeveloperEdit">编辑</Button>
+          </div>
+          <div class="developer-info-box">
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">开发管理员：</span>
+              <span class="dev-config-info-value">45665363</span>
+            </div>
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">手机号码：</span>
+              <span class="dev-config-info-value">45665363</span>
+            </div>
+            <div class="dev-config-info-group">
+              <span class="dev-config-info-label">邮箱地址：</span>
+              <span class="dev-config-info-value">45665363</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -103,10 +146,45 @@
                :url="applyEditFormUrl"
                title="编辑应用">
     </modalForm>
+    <!--添加功能-->
+    <Modal v-model="addFunModal"
+           title="添加功能"
+           @on-ok="ok"
+           @on-cancel="cancel"
+           width="750">
+      <div class="fun-type-box">
+        <div class="fun-type-btn-box">
+          <Button v-for="(item,index) in funType"
+                  :key="index"
+                  style="margin-right: 20px"
+                  :type="item.value==funTypeValue?'primary':'default'"
+                  @click="chooseFunType(item)">{{item.label}}</Button>
+          <div class="search-box">
+            <Select v-model="searchParams.server" style="width:200px" placeholder="请选择服务商">
+              <Option v-for="item in common.dic.splitType" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Button type="primary"
+                    @click="query()">查询</Button>
+          </div>
+          <Table stripe
+                 border
+                 :columns="funListColumns"
+                 @on-selection-change="changeSelection"
+                 :data="funListData"></Table>
+        </div>
+      </div>
+    </Modal>
+    <!--编辑开发者信息-->
+    <modalForm v-model="developerEditformShow"
+               :formItems="developerEditformItems"
+               :url="developerEditFormUrl"
+               title="开发者信息">
+    </modalForm>
   </div>
 </template>
 <script>
   import modalForm from '@/components/global/modalForm'
+  import list from '@/components/global/list'
   export default {
     data () {
       return {
@@ -245,6 +323,85 @@
             }
           }
         ],
+        addFunModal:false,
+        funType:[
+          {label:"支付",value:"1"},
+          {label:"分账",value:"2"},
+          {label:"保险",value:"3"},
+          {label:"金融",value:"4"},
+        ],
+        funTypeValue:'1',
+        funListColumns:[
+          {
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: '服务商',
+            key: 'name'
+          },
+          {
+            title: '支付产品',
+            key: 'name'
+          },
+          {
+            title: '功能名称',
+            key: 'name'
+          },
+          {
+            title: '功能分类',
+            key: 'name'
+          },
+          {
+            title: '功能代码',
+            key: 'name'
+          }
+        ],
+        funListData:[
+          {
+            name:'gggg'
+          }
+        ],
+        selection:'',
+        searchParams:{
+          server:''
+        },
+        copyUrl:'',
+        developerEditformShow:false,
+        developerEditformItems: [
+          {
+            title: '开发管理员',
+            name: 'merchantName',
+            type: 'input',
+            rules: [
+              {required: true, message: '请输入开发管理员', trigger: 'blur'},
+              {max: 32, message: "应用名称不超过32字符", trigger: 'blur'}
+            ],
+            value: ""
+          },
+          {
+            title: '手机号码',
+            name: 'phone',
+            type: 'input',
+            rules: [{
+              validator: this.common.validate.phone,
+              required: true,
+              trigger: "blur"
+            }],
+            value:'',
+          },
+          {
+            title: '邮箱地址',
+            name: 'contactEmail',
+            type: 'input',
+            rules: [
+              // {required: false, type:'email',trigger: "blur"},
+              {validator: this.common.validate.email, required: true, trigger: "blur"}
+            ]
+          },
+        ],
+        developerEditFormUrl:'',
       }
     },
     mounted () {
@@ -253,8 +410,29 @@
     created(){
 
     },
-    components: {modalForm},
+    components: {modalForm,list},
     methods: {
+      // 打开编辑开发者信息弹框
+      openDeveloperEdit(){
+        this.developerEditformShow = true
+      },
+      onCopy() {
+        this.$Message.success("复制成功！");
+      },
+      onError() {
+        this.$Message.error("复制失败！");
+      },
+      // 添加功能取消
+      cancel(){
+
+      },
+      // 添加功能确认
+      ok(){
+        console.log(this.selection)
+      },
+      changeSelection (selection) {
+        this.selection = selection
+      },
       // 打开编辑弹框
       openApplyEdit(){
         this.applyEditformShow = true
@@ -262,6 +440,17 @@
       //  tab切换
       tabClick(index){
         this.tabIndex = index
+      },
+      //  打开添加功能弹框
+      openFucAdd(){
+        this.addFunModal = true
+      },
+      // 选择功能分类
+      chooseFunType(item){
+        this.funTypeValue = item.value
+      },
+      beforeSave(formItem){
+        console.log(formItem)
       }
     }
   }
@@ -335,5 +524,14 @@
     .add-fun-btn-box{
       margin-bottom: 20px;
     }
+  }
+  .fun-type-btn-box{
+    margin-bottom: 20px;
+  }
+  .search-box{
+    padding: 20px 0;
+  }
+  .dev-config-info-group{
+    padding: 10px 0;
   }
 </style>
