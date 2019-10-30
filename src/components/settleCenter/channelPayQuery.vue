@@ -105,8 +105,8 @@
           }
         ],
         params: {
-          // sort:'modifyTime',
-          // order:'desc'
+          sort:'checkDate',
+          order:'desc'
         },
         url: '/splitOrder/grid',
         searchItems: [

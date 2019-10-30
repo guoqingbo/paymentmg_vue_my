@@ -98,7 +98,7 @@
           }
         ],
         params: {
-          sort:'modifyTime',
+          sort:'checkDate',
           order:'desc'
         },
         url: '/splitCustomerOrder/grid',
