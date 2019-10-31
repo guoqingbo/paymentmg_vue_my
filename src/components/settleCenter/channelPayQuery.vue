@@ -41,13 +41,14 @@
           },
           {
             title: '分账渠道',
-            key: 'splitProductCode',
+            // key: 'channelCode',
+            key: 'channelName',
             // sortable: true,
             align:'center'
           },
           {
             title: '分账渠道代码',
-            key: 'channelCode',
+            key: 'splitProductCode',
             // sortable: true,
             align:'center'
           },
