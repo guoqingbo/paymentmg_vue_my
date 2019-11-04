@@ -95,12 +95,20 @@
     },
     watch: {},
     created() {
+      // 获取商户来源
+      this.getMerchantSource()
       // 更改商户类型
       this.merchantTypeChange(200)
       // 如果是编辑，详情
       this.getDetail()
     },
     methods: {
+      // 获取商户来源
+      getMerchantSource(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          this.common.setArrItem(this.formList,'source',{data:res,})
+        })
+      },
       // 证件类型改变时
       idTypeChange(e){
         // 1身份证 2护照 3港澳通行证

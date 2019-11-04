@@ -49,6 +49,11 @@
           "name": "应用管理详情",
           "code": "applyManageDetail",
           "functionType": "button"
+        },
+        {
+          "name": "应用配置",
+          "code": "applyConfig",
+          "functionType": "button"
         }
 
       ]

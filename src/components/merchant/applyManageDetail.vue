@@ -105,12 +105,12 @@
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">商户/平台私钥（RSA私钥）：</span>
               <span class="dev-config-info-value">45665363</span>
-              <Button v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <Button type="primary" v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">支付中心公钥（RSA公钥）：</span>
               <span class="dev-config-info-value">45665363</span>
-              <Button v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <Button type="primary" v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">正式环境地址：</span>
@@ -261,7 +261,7 @@
             name:'gggg'
           }
         ],
-        tabIndex:1,
+        // tabIndex:1,
         addFunColumns:[
           {
             title: '功能名称',
@@ -302,7 +302,7 @@
                   title: "配置",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/applyManageDetail",
+                      path: "/merchant/applyConfig",
                       query: {id: params.row.id}
                     });
                   }
@@ -367,7 +367,7 @@
         searchParams:{
           server:''
         },
-        copyUrl:'',
+        copyUrl:'123456',
         developerEditformShow:false,
         developerEditformItems: [
           {
@@ -404,6 +404,11 @@
         developerEditFormUrl:'',
       }
     },
+    computed: {
+      tabIndex() {
+        return this.$store.state.merchant.tabIndex;
+      },
+    },
     mounted () {
 
     },
@@ -439,7 +444,8 @@
       },
       //  tab切换
       tabClick(index){
-        this.tabIndex = index
+        this.$store.state.merchant.tabIndex=index;
+        // this.tabIndex = index
       },
       //  打开添加功能弹框
       openFucAdd(){
@@ -488,10 +494,12 @@
           bottom:20px;
           right: 0;
           font-size: 12px;
-          background-color: #cc7d0d;
+          /*background-color: #cc7d0d;*/
           color: #fff;
           border-radius: 5px;
-          padding: 2px 5px;
+          padding: 5px 5px 7px;
+          background: url("../../assets/images/tip.png") no-repeat;
+          background-size: 100% 100%;
         }
       }
       .tab-item.active{
