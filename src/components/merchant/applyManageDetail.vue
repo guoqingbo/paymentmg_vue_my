@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <div class="apply-manage-box">
+  <div class="apply-manage-box">
+    <div>
       <!--头部信息-->
       <div class="apply-manage-top">
         <img class="apply-icon" :src='headerImg'>
         <div class="apply-info-box">
           <div class="apply-info-top">
-            <span>胡杨林小鲸商城</span>
+            <span class="apply-info-name">胡杨林小鲸商城</span>
             <Button type="primary" size="small" @click="openApplyEdit">编辑</Button>
             <!--<span class="apply-edit-btn" @click="openApplyEdit">编辑</span>-->
           </div>
           <div class="apply-info-bottom">
-            <span>PAYID</span>
+            <span class="apply-info-payId">PAYID</span>
             <span>120596655888</span>
           </div>
         </div>
@@ -229,7 +229,17 @@
         funColumns:[
           {
             title: '功能名称',
-            key: 'name'
+            key: 'name',
+            className:'fun-name',
+            render: (h, params) => {
+              let array = []
+              if(params.row.name){
+                array.push(h('span', {class: 'fun-name-tip'},'优先')
+                )
+              }
+              array.push(h('span', params.row.name))
+              return array
+            }
           },
           {
             title: '功能服务商',
@@ -265,7 +275,17 @@
         addFunColumns:[
           {
             title: '功能名称',
-            key: 'name'
+            key: 'name',
+            className:'fun-name',
+            render: (h, params) => {
+              let array = []
+              if(params.row.name){
+                array.push(h('span', {class: 'fun-name-tip'},'优先')
+                )
+              }
+              array.push(h('span', params.row.name))
+              return array
+            }
           },
           {
             title: '功能服务商',
@@ -461,7 +481,7 @@
     }
   }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
   .apply-manage-box{
     .apply-manage-top{
       padding-bottom: 30px;
@@ -478,6 +498,18 @@
         .apply-edit-btn{
           margin-left: 10px;
           color: #3720d4;
+        }
+        .apply-info-name{
+          font-weight: bold;
+          font-size: 14px;
+        }
+        .apply-info-payId{
+          padding: 3px 5px;
+          font-size: 12px;
+          display: inline-block;
+          border: 1px solid #e5e5e5;
+          border-radius: 10px;
+          color: #999;
         }
       }
     }
@@ -532,14 +564,37 @@
     .add-fun-btn-box{
       margin-bottom: 20px;
     }
+    .dev-config-info-group{
+      padding: 10px 0;
+    }
+    td.fun-name{
+      .ivu-table-cell{
+        overflow:visible;
+        position: relative;
+        padding-left: 50px;
+        .fun-name-tip{
+          position: absolute;
+          left: 0;
+          top: 10%;
+          transform: translateY(-50%);
+          /*background-color: #f00;*/
+          background: url("../../assets/images/tip.png") no-repeat;
+          background-size: 100% 100%;
+          width: 45px;
+          /*height: 20px;*/
+          /*line-height: 20px;*/
+          padding: 10px;
+          text-align: right;
+          color: #fff;
+        }
+      }
+    }
   }
+
   .fun-type-btn-box{
     margin-bottom: 20px;
   }
   .search-box{
     padding: 20px 0;
-  }
-  .dev-config-info-group{
-    padding: 10px 0;
   }
 </style>

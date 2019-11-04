@@ -27,6 +27,7 @@
             type: 'autoComplete',
             value: '',
             disabled: false,
+            hoverTip:'说明一二三',
             search: (value) => {
               let arrItem = this.common.getArrItem(this.formList, 'merchantCode')
               this.common.searchMerchantList(value, arrItem)

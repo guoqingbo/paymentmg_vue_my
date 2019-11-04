@@ -12,6 +12,12 @@
           :prop="item.name"
           :rules="item.rules||{}"
           v-if="item.type">
+          <label slot="label" v-if="(item.type!=='divider'&&item.type!=='btn')">
+            <Tooltip v-if="item.hoverTip" :content="item.hoverTip" placement="top">
+              <Icon type="md-help-circle" size="20" color="#999" />
+            </Tooltip>
+            <span>{{item.title+'：'}}</span>
+          </label>
           <span class="detail-text"
                 :class="{'detail-textareaText':item.value.length>300}"
                 v-if="item.type=='text'||
@@ -335,4 +341,8 @@ export default {
     max-height: 280px;
     overflow: auto;
   }
+  /*.hoverTip{*/
+    /*position: absolute;*/
+    /*left: 0;*/
+  /*}*/
 </style>
