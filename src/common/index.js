@@ -186,6 +186,7 @@ const common = {
   },
   // 导出excel表格方法
   exportData({url,params, callback,text}) {
+    console.log(url)
     App.apiGetBlob(url,params).then(res=>{
       if(res){
         let url = window.URL.createObjectURL(res)
