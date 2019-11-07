@@ -18,7 +18,8 @@ import {
   apiPut,
   apiGet,
   apiPost,
-  apiPostJson
+  apiPostJson,
+  apiGetBlob
 } from '@/fetch/api'
 
 // 防止页面刷新路由失效
@@ -76,7 +77,7 @@ Vue.prototype.common = common
 Vue.prototype.apiGet = apiGet
 Vue.prototype.apiPost = apiPost
 Vue.prototype.apiPut = apiPut
-
+Vue.prototype.apiGetBlob = apiGetBlob
 // Object.keys(filter).forEach(key => {
 //   Vue.filter(key, filter[key])
 // })
