@@ -580,11 +580,11 @@
           /*background-color: #f00;*/
           background: url("../../assets/images/tip.png") no-repeat;
           background-size: 100% 100%;
-          width: 45px;
+          /*width: 45px;*/
           /*height: 20px;*/
           /*line-height: 20px;*/
-          padding: 10px;
-          text-align: right;
+          padding: 6px;
+          text-align: center;
           color: #fff;
         }
       }
