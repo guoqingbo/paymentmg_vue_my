@@ -91,6 +91,8 @@
           if (res.success) {
             this.detail = res.data
             if(res.data.configInfos && res.data.configInfos.length){
+              // 隐藏优先支付
+              this.formList.splice(3, 1)
               // 转换支付配置
               this.turnPayConfig(res.data.configInfos)
             }else{
