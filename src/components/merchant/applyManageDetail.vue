@@ -105,12 +105,12 @@
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">商户/平台私钥（RSA私钥）：</span>
               <span class="dev-config-info-value">{{configInfo.mchPrivateKeyShort}}</span>
-              <Button type="primary" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <Button type="primary" size="small" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">支付中心公钥（RSA公钥）：</span>
               <span class="dev-config-info-value">{{configInfo.publicKeyShort}}</span>
-              <Button type="primary" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <Button type="primary" size="small" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">正式环境地址：</span>
@@ -119,7 +119,7 @@
           </div>
           <div class="apply-section-title">
             <span>开发者信息</span>
-            <Button type="primary" @click="openDeveloperEdit">编辑</Button>
+            <Button type="primary" size="small" @click="openDeveloperEdit">编辑</Button>
           </div>
           <div class="developer-info-box">
             <div class="dev-config-info-group">
@@ -205,6 +205,7 @@
         content: "",
         sucessMsg: "",
         appDetail:{},
+        funSelected:[],
         configInfo:{},
         headerImg:require("../../assets/images/touxiang.png"),
         applyEditformShow:false,
@@ -252,11 +253,12 @@
             className:'fun-name',
             render: (h, params) => {
               let array = []
+              let payProductNameClass = ''
               if(params.row.priority){
-                array.push(h('span', {class: 'fun-name-tip'},'优先')
-                )
+                array.push(h('span', {class: 'fun-name-tip'},'优先'))
+                payProductNameClass = 'fun-name-value'
               }
-              array.push(h('span', params.row.payProductName))
+              array.push(h('span', {class: payProductNameClass},params.row.payProductName))
               return array
             }
           },
@@ -442,6 +444,13 @@
             this.appDetail.functionStatusName = this.filter.turn("functionStatus",this.appDetail.functionStatus)
             // 应用状态
             this.appDetail.appStatusName = this.filter.turn("applyStatus",this.appDetail.appStatus)
+            this.appDetail.appScene = this.appDetail.appScene+""
+
+            // 设置选中项
+            this.funSelected = []
+            this.appDetail.merchantChannelList.forEach(ele=>{
+              this.funSelected.push(ele.channelProductCode)
+            })
             // 商户来源转换
             this.$store.dispatch("getMerchantSource").then(res2=>{
               // 表格商户来源转换
@@ -456,6 +465,8 @@
               // 如果选项卡处于开发配置
               this.getDevelopConfig()
             }
+          }else{
+            this.$Message.warning(res.message)
           }
         })
       },
@@ -500,7 +511,10 @@
         }
         let ids = []
         this.selection.forEach(ele=>{
-          ids.push(ele.id)
+          // 去除已经添加的功能
+          if(!this.funSelected.includes(ele.channelProductCode)){
+            ids.push(ele.id)
+          }
         })
         params.ids = ids.join(',')
         this.apiPost(url,params).then(res=>{
@@ -576,6 +590,16 @@
         this.apiGet(url,this.funSearchParams).then(res=>{
           if(res.success){
             this.funListData = res.data.rows
+
+            this.funListData.forEach(ele=>{
+              if(this.funSelected.includes(ele.channelProductCode)){
+                ele._checked = true
+                ele._disabled = true
+              }else{
+                ele._checked = false
+                ele._disabled = false
+              }
+            })
           }else{
             this.funListData = []
           }
@@ -685,11 +709,10 @@
       .ivu-table-cell{
         overflow:visible;
         position: relative;
-        padding-left: 50px;
         .fun-name-tip{
           position: absolute;
           left: 0;
-          top: 10%;
+          top: 13px;
           transform: translateY(-50%);
           /*background-color: #f00;*/
           background: url("../../assets/images/tip.png") no-repeat;
@@ -700,6 +723,10 @@
           padding: 6px;
           text-align: center;
           color: #fff;
+        }
+        .fun-name-value{
+          padding-left: 20px;
+          display: block;
         }
       }
     }

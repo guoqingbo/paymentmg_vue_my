@@ -5,7 +5,6 @@
               :routeType="routeType"
               :url="formListUrl"
               @beforeSave="beforeSave">
-      <div v-if="formList.length==6" class="select-channel-product" slot="bottom">请选择渠道产品</div>
     </formList>
   </div>
 </template>
@@ -22,7 +21,7 @@
         formList: [
           {
             title: '功能名称',
-            name: 'channelProductCode',
+            name: 'channelProductName',
             type: 'input',
             disabled:true
           },
@@ -35,6 +34,7 @@
             rules: [
               {required: true, type: 'number', message: '请选择收费模式', trigger: 'change'}
             ],
+            value:0
           },
           {
             title: '商户费率',
@@ -83,11 +83,12 @@
         formItem.id = this.detail.id
         formItem.merchantCode = this.detail.merchantCode
         formItem.payProductCode = this.detail.payProductCode
+        formItem.channelProductCode = this.detail.channelProductCode
       },
       // 获取功能详情
       getDetail(){
         let id = this.$route.query.id
-        this.apiGet("/merchantChannel/" + id).then(res => {
+        this.apiGet("/merchantChannel/detail/" + id).then(res => {
           if (res.success) {
             this.detail = res.data
             if(!this.detail.sameFlag){
@@ -105,6 +106,8 @@
                 ele.value = this.detail[ele.name]
               }
             })
+          }else{
+            this.$Message.warning(res.message)
           }
         });
       },
@@ -129,6 +132,15 @@
       },
       // 转换支付配置
       turnPayConfig(configInfos) {
+        // 清空配置
+        // this.formList = this.formList.slice(0, 7)
+        // 判断是否有优先支付选项
+        let accessModeIndexInit = 3
+        if( this.formList[3]&&this.formList[3].name == 'priority'){
+          accessModeIndexInit = 4
+        }
+        this.formList = this.formList.slice(0, accessModeIndexInit)
+
         // 是否为农行商
         let abc = {}
         // 是否为微信官方
@@ -212,7 +224,6 @@
             this.turnPayConfigAbc(abc)
           }
           // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
-          console.log(Object.keys(wechatOfficial).length)
           if (Object.keys(wechatOfficial).length) {
             this.turnPayConfigWechatOfficial(wechatOfficial)
           }
@@ -258,6 +269,12 @@
       },
       // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
       turnPayConfigWechatOfficial(wechatOfficial) {
+        // 判断是否有优先支付选项
+        let accessModeIndexInit = 3
+        if( this.formList[3].name == 'priority'){
+          accessModeIndexInit = 4
+        }
+
         // 商户模式
         let accessMode = wechatOfficial.accessMode
         let accessModeIndex = wechatOfficial.accessModeIndex
@@ -309,11 +326,7 @@
           })
         }
 
-        // 判断是否有优先支付选项
-        let accessModeIndexInit = 3
-        if( this.formList[3].name == 'priority'){
-          accessModeIndexInit = 4
-        }
+
         //  商户模式放在配置的第一项
         if (accessModeIndex !== accessModeIndexInit) {
           this.formList.splice(accessModeIndex, 1)

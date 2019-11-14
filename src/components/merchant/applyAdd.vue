@@ -60,7 +60,7 @@
             name: 'payId',
             type: 'input',
             rules: [
-              {required: true, message: '支付标识（PayID）', trigger: 'blur'},
+              {required: true, message: '请输入支付标识（PayID）', trigger: 'blur'},
             ],
             tip:'平台与支付中心约定的平台的支付标识，小鲸商城的店铺ID、云pms的店铺编号等',
             value: ""
