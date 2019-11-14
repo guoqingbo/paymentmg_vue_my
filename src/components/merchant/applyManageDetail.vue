@@ -311,7 +311,9 @@
                   action: () => {
                     this.$router.push({
                       path: "/merchant/applyConfig",
-                      query: {id: params.row.id}
+                      query: {
+                        id: params.row.id,
+                      }
                     });
                   }
                 },

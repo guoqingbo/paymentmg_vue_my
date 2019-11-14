@@ -21,57 +21,19 @@
         formListUrl: "/merchantChannel/save",
         formList: [
           {
-            title: '商户名称',
-            name: 'merchantCode',
-            data: [],
-            type: 'autoComplete',
-            value: '',
-            disabled: false,
-            hoverTip:'说明一二三',
-            search: (value) => {
-              let arrItem = this.common.getArrItem(this.formList, 'merchantCode')
-              this.common.searchMerchantList(value, arrItem)
-            },
-            rules: [{required: true, message: '请输入商户号', trigger: 'blur'},
-              // { max: 60, message: "商户号不超过60字符" }
-            ]
-          },
-          {
-            title: '支付产品',
-            name: 'payProductCode',
-            type: 'select',
-            data: [],
-            onChange: this.getChannelProduct,
-            rules: [
-              {required: true, message: '请选择支付产品', trigger: 'change'}
-            ]
-          },
-          {
-            title: '渠道产品',
+            title: '功能名称',
             name: 'channelProductCode',
-            type: 'select',
-            data: '',
-            onChange: this.payConfigOnChange,
-            rules: [
-              {required: true, message: '请选择渠道产品', trigger: 'change'}
-            ]
+            type: 'input',
+            disabled:true
           },
           {
-            title: '默认推荐支付方式',
-            name: 'priority',
-            type: 'radio',
-            value: 999,
-            data: this.common.dic.priority,
-            rules: [{required: true, type: 'number', message: '请选择默认推荐支付方式', trigger: 'change'}]
-          },
-          {
-            title: '渠道计费方式',
+            title: '收费模式',
             name: 'merchantFeeType',
             type: 'select',
             data: this.common.dic.feeType,
             disabled: true,
             rules: [
-              {required: true, type: 'number', message: '请选择计费方式', trigger: 'change'}
+              {required: true, type: 'number', message: '请选择收费模式', trigger: 'change'}
             ],
           },
           {
@@ -83,12 +45,16 @@
             ]
           },
           {
-            title: '支付配置信息',
-            type: 'divider',
+            title: '优先支付',
+            name: 'priority',
+            type: 'radio',
+            value: 999,
+            data: this.common.dic.priority,
+            rules: [{required: true, type: 'number', message: '请选择优先支付方式', trigger: 'change'}]
           }
         ],
         routeType: "",// 判断是新增，详情，编辑
-        detail: '',//获取的详情
+        detail: {},//获取的详情
       }
     },
     watch: {},
@@ -114,141 +80,40 @@
         }
       },
       beforeSave(formItem) {
-        // 确认保存之前
-        if (this.$route.query.id) {
-          formItem.id = this.$route.query.id
-        }
-        // 商户名，商户号拆分
-        this.common.splitMerchant(formItem)
+        formItem.id = this.detail.id
+        formItem.merchantCode = this.detail.merchantCode
+        formItem.payProductCode = this.detail.payProductCode
       },
-      getDetail() {
-        this.routeType = this.$route.query.routeType
-        if (this.routeType !== 'detail') {
-          // 获取支付产品
-          this.getPayProduct()
-        }
-        if (this.$route.query.id) {
-          let id = this.$route.query.id
-          if (this.routeType == 'detail') {
-            // 如果是详情页
-
-            // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户渠道详情'])
-          } else {
-            // 如果是编辑
-            this.formListUrl = "/merchantChannel/update"
-            // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户渠道编辑'])
-
-          }
-          this.apiGet("/merchantChannel/" + id).then(res => {
-            if (res.status == 200 && res.data) {
-              this.detail = res.data
+      // 获取功能详情
+      getDetail(){
+        let id = this.$route.query.id
+        this.apiGet("/merchantChannel/" + id).then(res => {
+          if (res.success) {
+            this.detail = res.data
+            if(res.data.configInfos && res.data.configInfos.length){
               // 转换支付配置
               this.turnPayConfig(res.data.configInfos)
-
-              this.formList.forEach((ele, index) => {
-                if (index <= 6) {
-                  // 支付配置之前的选型需要赋值
-                  ele.value = res.data[ele.name]
-                }
-                if (ele.name == 'merchantCode') {
-                  ele.disabled = true
-                  ele.value = res.data.merchantName + "(" + res.data.merchantCode + ")"
-                }
-
-                if (this.routeType == 'detail' && ele.type != 'text' && ele.type != 'divider') {
-                  // 如果是详情页
-                  ele.type += "Text"
-                  // 转换数据
-                  if (ele.name == 'channelProductCode') {
-                    ele.type = 'text'
-                    ele.value = res.data.channelProductName
-                  } else if (ele.name == 'payProductCode') {
-                    ele.type = 'text'
-                    ele.value = res.data.payProductName
-                  }
-                } else {
-                  if (ele.name == 'payProductCode') {
-                    // 获取渠道产品
-                    this.getChannelProduct(ele.value)
-                  }
-                }
-              })
+            }else{
+              this.getPayConfig()
             }
-          });
-        }
-      },
-      // 获取支付产品
-      getPayProduct() {
-        this.$store.dispatch("getPayProduct").then(res => {
-          this.common.setArrItem(this.formList, 'payProductCode', {
-            data: res
-          })
-        })
-      },
-      // 根据支付产品获取渠道产品
-      getChannelProduct(e) {
-        if (!e) {
-          return
-        }
-        this.apiGet('/channelProduct/payProductCode/' + e).then(res => {
-          let channelProduct = []
-          if (res.status == 200) {
-            res.data.forEach((ele) => {
-              channelProduct.push({
-                value: ele.channelProductCode,
-                label: ele.channelProductName
-              })
+            this.formList.forEach(ele => {
+              if(typeof this.detail[ele.name]!='undefined'){
+                ele.value = this.detail[ele.name]
+              }
             })
           }
-          this.common.setArrItem(this.formList, 'channelProductCode', {
-            data: channelProduct
-          })
-        })
-      },
-      // 渠道产品更改时
-      payConfigOnChange(e) {
-        if (this.$route.query.id) {
-          // 如果是编辑页面，并且产品支付配置存在，则弹出提示
-          this.$Modal.confirm({
-            content: '更换渠道产品将清空支付配置信息',
-            onCancel: () => {
-              // 恢复原选项
-              // let arrItem = this.common.getArrItem(this.formList,'channelProductCode')
-              // arrItem.value = this.detail.channelProductCode
-              // 转换支付配置
-              this.turnPayConfig(this.detail.configInfos)
-            },
-            onOk: () => {
-              this.getPayConfig(e)
-            }
-          })
-        } else {
-          // 新增的时候
-          this.getPayConfig(e)
-        }
+        });
       },
       //获取渠道产品支付配置
-      getPayConfig(e) {
-        if (!e) {
-          return
-        }
-        // let arrItem = this.common.getArrItem(this.formList,'merchantCode')
-        let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
-        if (!formItem.merchantCode) {
-          this.$Message.info("请先输入商户号")
-          return
-        }
+      getPayConfig() {
+        let channelProductCode = this.detail.channelProductCode
         let params = {
-          merchantCode: formItem.merchantCode,
+          merchantCode: this.detail.merchantCode,
           // accessMode:'',
         }
-        this.apiGet('/merchantChannel/payConfig/channelProduct/' + e, params).then(res => {
+        this.apiGet('/merchantChannel/payConfig/channelProduct/' + channelProductCode, params).then(res => {
           if (res.success) {
             // 保留公共选项
-            // this.formList.length = 6
-            this.formList = this.formList.slice(0, 7)
             // 设置渠道计费方式
             this.common.setArrItem(this.formList, 'merchantFeeType', {
               value: res.data.feeType
@@ -260,9 +125,6 @@
       },
       // 转换支付配置
       turnPayConfig(configInfos) {
-        // 清空配置
-        this.formList = this.formList.slice(0, 7)
-
         // 是否为农行商
         let abc = {}
         // 是否为微信官方
@@ -445,12 +307,6 @@
               this.turnPayConfig(configInfos)
             }
           })
-        }
-
-        //  商户模式放在配置的第一项
-        if (accessModeIndex !== 7) {
-          this.formList.splice(accessModeIndex, 1)
-          this.formList.splice(7, 0, accessMode)
         }
       }
     }
