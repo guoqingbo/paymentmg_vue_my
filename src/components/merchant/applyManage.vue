@@ -32,39 +32,39 @@
           },
           {
             title: '商户号',
-            key: 'merchantCode',
+            key: 'merchantNo',
           },
           {
             title: '企业码',
-            key: 'merchantCode',
+            key: 'corpCode',
           },
           {
             title: '应用名称',
-            key: 'merchantCode',
+            key: 'appName',
           },
           {
             title: '应用来源',
-            key: 'merchantCode',
-            // render: (h, params) => {
-            //   return h('span', this.filter.turn("merchantType",params.row.merchantType))
-            // }
-          },
-          {
-            title: 'PAYID',
-            key: 'merchantCode',
-          },
-          {
-            title: '应用状态',
-            key: 'status',
+            key: 'orderSource',
             render: (h, params) => {
-              return h('span', this.filter.turn("applyStatus",params.row.status))
+
             }
           },
           {
-            title: '应用功能',
-            key: 'status',
+            title: 'PAYID',
+            key: 'payId',
+          },
+          {
+            title: '应用状态',
+            key: 'appStatus',
             render: (h, params) => {
-              return h('span', this.filter.turn("applyStatus",params.row.status))
+              return h('span', this.filter.turn("applyStatus",params.row.appStatus))
+            }
+          },
+          {
+            title: '功能状态',
+            key: 'functionStatus',
+            render: (h, params) => {
+              return h('span', this.filter.turn("functionStatus",params.row.functionStatus))
             }
           },
           {
@@ -94,7 +94,9 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchant/delete/" + params.row.id
+                      "/merchantApp/delete/" + params.row.id,
+                      {},
+                      'get'
                     );
                   }
                 }
@@ -107,22 +109,22 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchant/grid',
+        url: '/merchantApp/grid',
         searchItems: [
           {
             label: '商户名称',
             type: 'autoComplete',
-            name: 'merchantName',
+            name: 'merchantNo',
             data:[],
             search: (value)=>{
-              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+              let arrItem = this.common.getArrItem(this.searchItems,'merchantNo')
               this.common.searchMerchantList(value,arrItem)
             }
           },
           {
-            label: '商户来源',
+            label: '应用来源',
             type: 'select',
-            name: 'source',
+            name: 'orderSource',
             data: ''
           },
           {
@@ -133,7 +135,7 @@
           {
             label: '应用状态',
             type: 'select',
-            name: 'source',
+            name: 'appStatus',
             data: this.common.dic.applyStatus
           },
         ],
@@ -155,7 +157,7 @@
 
     },
     created(){
-      // 获取商户来源
+      // 获取应用来源
       this.getMerchantSource()
     },
     components: {list,confirm},
@@ -165,22 +167,22 @@
         // 商户名，商户号拆分
         this.common.splitMerchant(params)
       },
-      // 获取商户来源
+      // 获取应用来源
       getMerchantSource(){
         this.$store.dispatch("getMerchantSource").then(res=>{
           let merchantSource = res
-          this.common.setArrItem(this.searchItems,'source',{data:res,})
+          this.common.setArrItem(this.searchItems,'orderSource',{data:res,})
 
           // 表格商户来源转换
-          // let source={}
-          // merchantSource.forEach(ele=>{
-          //   source[ele.value] = ele.label
-          // })
-          // this.common.setArrItem(this.columns,'key=source',{
-          //   render:(h, params) => {
-          //     return h('span', source[params.row.source])
-          //   }
-          // })
+          let source={}
+          merchantSource.forEach(ele=>{
+            source[ele.value] = ele.label
+          })
+          this.common.setArrItem(this.columns,'key=orderSource',{
+            render:(h, params) => {
+              return h('span', source[params.row.orderSource])
+            }
+          })
         })
       },
     }

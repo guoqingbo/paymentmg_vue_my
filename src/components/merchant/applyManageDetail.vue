@@ -3,16 +3,16 @@
     <div>
       <!--头部信息-->
       <div class="apply-manage-top">
-        <img class="apply-icon" :src='headerImg'>
+        <img class="apply-icon" :src='appDetail.appLogo || headerImg'>
         <div class="apply-info-box">
           <div class="apply-info-top">
-            <span class="apply-info-name">胡杨林小鲸商城</span>
+            <span class="apply-info-name">{{appDetail.appName}}</span>
             <Button type="primary" size="small" @click="openApplyEdit">编辑</Button>
             <!--<span class="apply-edit-btn" @click="openApplyEdit">编辑</span>-->
           </div>
           <div class="apply-info-bottom">
             <span class="apply-info-payId">PAYID</span>
-            <span>120596655888</span>
+            <span>{{appDetail.payId}}</span>
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@
           <span class="tab-item-name">应用概述</span>
         </div>
         <div class="tab-item" @click="tabClick(2)" :class="{active:tabIndex==2}">
-          <span class="tab-item-tag">未配置</span>
+          <span class="tab-item-tag">{{appDetail.functionStatusName}}</span>
           <span class="tab-item-name">功能管理</span>
         </div>
         <div class="tab-item" @click="tabClick(3)" :class="{active:tabIndex==3}">
@@ -37,35 +37,35 @@
             <tr>
               <td>
                 <span class="apply-info-label">应用名称：</span>
-                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+                <span class="apply-info-value">{{appDetail.appName}}</span>
               </td>
               <td>
                 <span class="apply-info-label">应用来源：</span>
-                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+                <span class="apply-info-value">{{appDetail.orderSourceName}}</span>
               </td>
               <td>
                 <span class="apply-info-label">创建时间：</span>
-                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+                <span class="apply-info-value">{{appDetail.createTime}}</span>
               </td>
             </tr>
             <tr>
               <td>
                 <span class="apply-info-label">所属商户：</span>
-                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+                <span class="apply-info-value">{{appDetail.merchantName}}</span>
               </td>
               <td>
                 <span class="apply-info-label">应用状态：</span>
-                <span class="apply-info-value">已上线</span>
+                <span class="apply-info-value">{{appDetail.appStatusName}}</span>
               </td>
               <td>
                 <span class="apply-info-label">最近更新时间：</span>
-                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+                <span class="apply-info-value">{{appDetail.modifyTime}}</span>
               </td>
             </tr>
             <tr>
               <td colspan="3">
                 <span class="apply-info-label">应用描述：</span>
-                <span class="apply-info-value">胡杨小靓衫唱歌和那个</span>
+                <span class="apply-info-value">{{appDetail.description}}</span>
               </td>
             </tr>
           </table>
@@ -74,7 +74,7 @@
             <Table stripe
                    border
                    :columns="funColumns"
-                   :data="funData"></Table>
+                   :data="appDetail.merchantChannelList"></Table>
           </div>
         </div>
         <!--功能管理-->
@@ -88,51 +88,51 @@
           </div>
           <Table stripe
                  border
-                 :columns="addFunColumns"
-                 :data="funData"></Table>
+                 :columns="[...funColumns,...addFunColumns]"
+                 :data="appDetail.merchantChannelList"></Table>
         </div>
         <!--开发配置-->
         <div class="dev-config-box" v-if="tabIndex==3">
           <div class="dev-config-info-top">
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">商户号（merchantNo）：</span>
-              <span class="dev-config-info-value">45665363</span>
+              <span class="dev-config-info-value">{{configInfo.merchantNo}}</span>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">支付标识（PayID）：</span>
-              <span class="dev-config-info-value">45665363</span>
+              <span class="dev-config-info-value">{{configInfo.payId}}</span>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">商户/平台私钥（RSA私钥）：</span>
-              <span class="dev-config-info-value">45665363</span>
-              <Button type="primary" v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <span class="dev-config-info-value">{{configInfo.mchPrivateKeyShort}}</span>
+              <Button type="primary" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">支付中心公钥（RSA公钥）：</span>
-              <span class="dev-config-info-value">45665363</span>
-              <Button type="primary" v-clipboard:copy="copyUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <span class="dev-config-info-value">{{configInfo.publicKeyShort}}</span>
+              <Button type="primary" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">正式环境地址：</span>
-              <span class="dev-config-info-value">45665363</span>
+              <span class="dev-config-info-value">{{configInfo.url}}</span>
             </div>
           </div>
           <div class="apply-section-title">
-            <span>开发作者信息</span>
+            <span>开发者信息</span>
             <Button type="primary" @click="openDeveloperEdit">编辑</Button>
           </div>
           <div class="developer-info-box">
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">开发管理员：</span>
-              <span class="dev-config-info-value">45665363</span>
+              <span class="dev-config-info-value">{{configInfo.developer}}</span>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">手机号码：</span>
-              <span class="dev-config-info-value">45665363</span>
+              <span class="dev-config-info-value">{{configInfo.phone}}</span>
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">邮箱地址：</span>
-              <span class="dev-config-info-value">45665363</span>
+              <span class="dev-config-info-value">{{configInfo.email}}</span>
             </div>
           </div>
         </div>
@@ -143,28 +143,27 @@
     <modalForm v-model="applyEditformShow"
                :formItems="applyEditformItems"
                @beforeSave='beforeSave'
+               @on-success="onSuccess"
                :url="applyEditFormUrl"
                title="编辑应用">
     </modalForm>
     <!--添加功能-->
     <Modal v-model="addFunModal"
            title="添加功能"
-           @on-ok="ok"
-           @on-cancel="cancel"
            width="750">
       <div class="fun-type-box">
         <div class="fun-type-btn-box">
-          <Button v-for="(item,index) in funType"
+          <Button v-for="(item,index) in common.dic.funType"
                   :key="index"
                   style="margin-right: 20px"
-                  :type="item.value==funTypeValue?'primary':'default'"
+                  :type="item.value==funSearchParams.type?'primary':'default'"
                   @click="chooseFunType(item)">{{item.label}}</Button>
           <div class="search-box">
-            <Select v-model="searchParams.server" style="width:200px" placeholder="请选择服务商">
-              <Option v-for="item in common.dic.splitType" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Select clearable v-model="funSearchParams.channelCode" style="width:200px" placeholder="请选择服务商">
+              <Option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Button type="primary"
-                    @click="query()">查询</Button>
+                    @click="getChannelProduct()">查询</Button>
           </div>
           <Table stripe
                  border
@@ -173,27 +172,46 @@
                  :data="funListData"></Table>
         </div>
       </div>
+      <div slot="footer">
+        <Button @click="cancel">取消
+        </Button>
+        <Button type="primary" @click="addFun">确定</Button>
+      </div>
     </Modal>
     <!--编辑开发者信息-->
     <modalForm v-model="developerEditformShow"
                :formItems="developerEditformItems"
+               @beforeSave='beforeSave'
+               @on-success="onSuccessDeveloper"
                :url="developerEditFormUrl"
                title="开发者信息">
     </modalForm>
+
+    <confirm ref="confirmModel"
+             :content="content"
+             @sucessDone="sucessDone"
+             :sucessMsg="sucessMsg"
+             :mode="mode"></confirm>
   </div>
 </template>
 <script>
   import modalForm from '@/components/global/modalForm'
   import list from '@/components/global/list'
+  import confirm from '@/components/global/confirm'
   export default {
     data () {
       return {
+        mode: "",
+        content: "",
+        sucessMsg: "",
+        appDetail:{},
+        configInfo:{},
         headerImg:require("../../assets/images/touxiang.png"),
         applyEditformShow:false,
         applyEditformItems: [
           {
             title: '应用名称',
-            name: 'merchantName',
+            name: 'appName',
             type: 'input',
             rules: [
               {required: true, message: '请输入应用名称', trigger: 'blur'},
@@ -203,67 +221,75 @@
           },
           {
             title: '应用图标',
-            name: 'licenseUrl',
+            name: 'appLogo',
             type: 'uploadFile',
-            tip: '请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于2M'
+            tip: '请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于2M',
+            value:''
           },
           {
             title: '应用简介',
-            name: 'privateKey',
+            name: 'description',
             type: 'textarea',
             value: '',
             disabled: false,
           },
           {
             title: '适用场景',
-            name: 'idType',
+            name: 'appScene',
             type: 'select',
-            data: this.common.dic.idType,
+            data: this.common.dic.appScene,
             rules: [
               {required: true,message: '请选择适用场景', trigger: 'change'}
             ],
             value: ''
           },
       ],
-        applyEditFormUrl:'',
+        applyEditFormUrl:'/merchantApp/updateAppInfo',
         funColumns:[
           {
             title: '功能名称',
-            key: 'name',
+            key: 'payProductName',
             className:'fun-name',
             render: (h, params) => {
               let array = []
-              if(params.row.name){
+              if(params.row.priority){
                 array.push(h('span', {class: 'fun-name-tip'},'优先')
                 )
               }
-              array.push(h('span', params.row.name))
+              array.push(h('span', params.row.payProductName))
               return array
             }
           },
           {
             title: '功能服务商',
-            key: 'name'
+            key: 'channelName'
           },
           {
             title: '支付产品',
-            key: 'name'
+            key: 'channelProductName'
           },
           {
             title: '功能代码',
-            key: 'name'
+            key: 'channelProductCode'
           },
           {
             title: '功能分类',
-            key: 'name'
+            key: 'type',
+            render: (h, params) => {
+              return h('span', this.filter.turn("funType",params.row.type))
+            }
+
           },
           {
             title: '状态',
-            key: 'name'
+            key: 'functionStatus',
+            render: (h, params) => {
+              return h('span', this.filter.turn("functionStatus",params.row.functionStatus))
+            }
           },
           {
             title: '添加时间',
-            key: 'name'
+            key: 'createTime'
           }
         ],
         funData:[
@@ -273,44 +299,6 @@
         ],
         // tabIndex:1,
         addFunColumns:[
-          {
-            title: '功能名称',
-            key: 'name',
-            className:'fun-name',
-            render: (h, params) => {
-              let array = []
-              if(params.row.name){
-                array.push(h('span', {class: 'fun-name-tip'},'优先')
-                )
-              }
-              array.push(h('span', params.row.name))
-              return array
-            }
-          },
-          {
-            title: '功能服务商',
-            key: 'name'
-          },
-          {
-            title: '支付产品',
-            key: 'name'
-          },
-          {
-            title: '功能代码',
-            key: 'name'
-          },
-          {
-            title: '功能分类',
-            key: 'name'
-          },
-          {
-            title: '状态',
-            key: 'name'
-          },
-          {
-            title: '添加时间',
-            key: 'name'
-          },
           {
             title: '操作',
             key: 'action',
@@ -334,7 +322,7 @@
                     this.sucessMsg = "删除成功！";
                     this.content = "确定删除？";
                     this.$refs.confirmModel.confirm(
-                      "/merchant/delete/" + params.row.id
+                      "/merchantChannel/delete/" + params.row.id
                     );
                   }
                 }
@@ -344,13 +332,7 @@
           }
         ],
         addFunModal:false,
-        funType:[
-          {label:"支付",value:"1"},
-          {label:"分账",value:"2"},
-          {label:"保险",value:"3"},
-          {label:"金融",value:"4"},
-        ],
-        funTypeValue:'1',
+        channelList:[],
         funListColumns:[
           {
             type: 'selection',
@@ -359,40 +341,39 @@
           },
           {
             title: '服务商',
-            key: 'name'
+            key: 'channelName'
           },
           {
             title: '支付产品',
-            key: 'name'
+            key: 'payProductName'
           },
           {
             title: '功能名称',
-            key: 'name'
+            key: 'channelProductName'
           },
           {
             title: '功能分类',
-            key: 'name'
+            key: 'type',
+            render: (h, params) => {
+              return h('span', this.filter.turn("funType",params.row.type))
+            }
           },
           {
             title: '功能代码',
-            key: 'name'
+            key: 'channelProductCode'
           }
         ],
-        funListData:[
-          {
-            name:'gggg'
-          }
-        ],
-        selection:'',
-        searchParams:{
-          server:''
+        funListData:[],
+        selection:[],
+        funSearchParams:{
+          type:'0',
+          channelCode:''
         },
-        copyUrl:'123456',
         developerEditformShow:false,
         developerEditformItems: [
           {
             title: '开发管理员',
-            name: 'merchantName',
+            name: 'developer',
             type: 'input',
             rules: [
               {required: true, message: '请输入开发管理员', trigger: 'blur'},
@@ -413,17 +394,19 @@
           },
           {
             title: '邮箱地址',
-            name: 'contactEmail',
+            name: 'email',
             type: 'input',
             rules: [
               // {required: false, type:'email',trigger: "blur"},
               {validator: this.common.validate.email, required: true, trigger: "blur"}
-            ]
+            ],
+            value:''
           },
         ],
-        developerEditFormUrl:'',
+        developerEditFormUrl:'/merchantApp/updateDeveloperInfo',
       }
     },
+    components: {modalForm,list,confirm},
     computed: {
       tabIndex() {
         return this.$store.state.merchant.tabIndex;
@@ -433,13 +416,64 @@
 
     },
     created(){
+      // 获取应用详情
+      this.getDetail()
 
     },
-    components: {modalForm,list},
     methods: {
+      sucessDone(){
+        this.getDetail()
+      },
+      // 获取应用来源
+      getMerchantSource(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+
+        })
+      },
+      // 获取应用详情
+      getDetail(){
+        let url = '/merchantApp/detail/'+this.$route.query.id
+        this.apiGet(url).then(res=>{
+          if(res.success){
+            this.appDetail = res.data
+            // 功能状态
+            this.appDetail.functionStatusName = this.filter.turn("functionStatus",this.appDetail.functionStatus)
+            // 应用状态
+            this.appDetail.appStatusName = this.filter.turn("applyStatus",this.appDetail.appStatus)
+            // 商户来源转换
+            this.$store.dispatch("getMerchantSource").then(res2=>{
+              // 表格商户来源转换
+              res2.forEach(ele=>{
+                if(ele.value == this.appDetail.orderSource){
+                  this.$set(this.appDetail,'orderSourceName',ele.label)
+                }
+              })
+            })
+
+            if(this.$store.state.merchant.tabIndex == 3){
+              // 如果选项卡处于开发配置
+              this.getDevelopConfig()
+            }
+          }
+        })
+      },
       // 打开编辑开发者信息弹框
       openDeveloperEdit(){
         this.developerEditformShow = true
+        this.developerEditformItems.forEach(ele=>{
+          if(typeof this.configInfo[ele.name] !='undefined'){
+            ele.value = this.configInfo[ele.name]
+          }
+        })
+      },
+      // 密钥字符串使用******替换中间
+      strFormat(str){
+        let formatStr = ''
+        let length = str.length
+        if(length>20){
+          formatStr = str.substr(0,10) + "******" + str.substr(length-10,10);
+        }
+        return formatStr
       },
       onCopy() {
         this.$Message.success("复制成功！");
@@ -449,11 +483,34 @@
       },
       // 添加功能取消
       cancel(){
-
+        this.addFunModal = false
       },
       // 添加功能确认
-      ok(){
-        console.log(this.selection)
+      addFun(){
+        if(!this.selection.length){
+          this.$Message.warning('请先选择要添加的功能')
+          return
+        }
+        let url = '/merchantChannel/batchSave'
+        let params = {
+          appId:this.appDetail.id,
+          ids:''
+        }
+        let ids = []
+        this.selection.forEach(ele=>{
+          ids.push(ele.id)
+        })
+        params.ids = ids.join(',')
+        this.apiPost(url,params).then(res=>{
+          if(res.success){
+            this.$Message.success('添加成功')
+            // 刷线页面
+            this.getDetail()
+          }else{
+            this.$Message.warning(res.message)
+          }
+        })
+        this.addFunModal = false
       },
       changeSelection (selection) {
         this.selection = selection
@@ -461,22 +518,77 @@
       // 打开编辑弹框
       openApplyEdit(){
         this.applyEditformShow = true
+        // 应用赋值
+        this.applyEditformItems.forEach(ele=>{
+          if(typeof this.appDetail[ele.name] != 'undefined'){
+            ele.value = this.appDetail[ele.name]
+          }
+        })
       },
       //  tab切换
       tabClick(index){
         this.$store.state.merchant.tabIndex=index;
+        if(index == 3){
+          // 获取应用开发配置信息
+          this.getDevelopConfig()
+
+        }
         // this.tabIndex = index
+      },
+      getDevelopConfig(){
+        let url = '/merchantApp/configDetail/'+this.appDetail.id
+        this.apiGet(url).then(res=>{
+          if(res.success){
+            this.configInfo = res.data
+            this.configInfo.mchPrivateKeyShort = this.strFormat(this.configInfo.mchPrivateKey)
+            this.configInfo.publicKeyShort = this.strFormat(this.configInfo.publicKey)
+          }else{
+            this.$Message.warning(res.message)
+          }
+        })
       },
       //  打开添加功能弹框
       openFucAdd(){
         this.addFunModal = true
+        this.chooseFunType(this.common.dic.funType[0])
+        this.getChannel()
       },
       // 选择功能分类
       chooseFunType(item){
-        this.funTypeValue = item.value
+        this.funSearchParams.type = item.value
+        this.funListData = []
+      },
+      // 获取支付渠道
+      getChannel(){
+        this.$store.dispatch("getChannel").then(res=>{
+          this.channelList = res
+        })
+      },
+      // 获取功能列表
+      getChannelProduct(){
+        if(!this.funSearchParams.channelCode){
+          this.$Message.warning('请先选择服务商')
+          return
+        }
+        let url = '/payProductChannel/channelProductGrid'
+        this.apiGet(url,this.funSearchParams).then(res=>{
+          if(res.success){
+            this.funListData = res.data.rows
+          }else{
+            this.funListData = []
+          }
+        })
       },
       beforeSave(formItem){
-        console.log(formItem)
+        formItem.id = this.appDetail.id
+        formItem.merchantNo = this.appDetail.merchantNo
+        formItem.appStatus = this.appDetail.appStatus
+      },
+      onSuccess(res){
+        this.getDetail()
+      },
+      onSuccessDeveloper(res){
+        this.getDevelopConfig()
       }
     }
   }

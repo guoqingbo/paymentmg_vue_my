@@ -274,7 +274,13 @@ const common = {
     })
   },
   async listDelete(obj, options) {
-    let res = await App.apiPost(options.url, options.params || {})
+    let res = {}
+    if(obj.method == "get"){
+      res = await App.apiGet(options.url, options.params || {})
+    }else{
+      res = await App.apiPost(options.url, options.params || {})
+    }
+
     options.callback(res)
   },
   async listDone(obj, options) {
