@@ -90,9 +90,11 @@
         this.apiGet("/merchantChannel/" + id).then(res => {
           if (res.success) {
             this.detail = res.data
-            if(res.data.configInfos && res.data.configInfos.length){
+            if(!this.detail.sameFlag){
               // 隐藏优先支付
               this.formList.splice(3, 1)
+            }
+            if(res.data.configInfos && res.data.configInfos.length){
               // 转换支付配置
               this.turnPayConfig(res.data.configInfos)
             }else{
@@ -210,6 +212,7 @@
             this.turnPayConfigAbc(abc)
           }
           // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
+          console.log(Object.keys(wechatOfficial).length)
           if (Object.keys(wechatOfficial).length) {
             this.turnPayConfigWechatOfficial(wechatOfficial)
           }
@@ -273,15 +276,10 @@
           //   channelProductCode:this.common.getArrItem(this.formList,'channelProductCode').value
           // }
 
-          let formItem = this.common.splitMerchant(this.$refs.formList.getFormItem())
-          let channelProductCode = this.common.getArrItem(this.formList, 'channelProductCode').value
-          if (!formItem.merchantCode) {
-            this.$Message.info("请先输入商户号")
-            return
-          }
-          let url = '/merchantChannel/payConfig/channelProduct/' + channelProductCode
+
+          let url = '/merchantChannel/payConfig/channelProduct/' + this.detail.channelProductCode
           let params = {
-            merchantCode: formItem.merchantCode,
+            merchantCode: this.detail.merchantCode,
             accessMode: e,
           }
           this.apiGet(url, params).then(res => {
@@ -309,6 +307,17 @@
               this.turnPayConfig(configInfos)
             }
           })
+        }
+
+        // 判断是否有优先支付选项
+        let accessModeIndexInit = 3
+        if( this.formList[3].name == 'priority'){
+          accessModeIndexInit = 4
+        }
+        //  商户模式放在配置的第一项
+        if (accessModeIndex !== accessModeIndexInit) {
+          this.formList.splice(accessModeIndex, 1)
+          this.formList.splice(accessModeIndexInit, 0, accessMode)
         }
       }
     }
