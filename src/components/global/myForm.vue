@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="my-form-item">
     <Form :model="formItem"
           ref="formRef">
       <template v-for="(item,index) in formItems">
         <slot :name="item.name+'Before'"></slot>
         <FormItem
+          :class="[item.class]"
           label-position="right"
           :key="item.name"
           :label-width="item.type!=='divider'?150:0"
@@ -305,6 +306,9 @@ export default {
   .my-autoComplete .ivu-select-dropdown {
   left: 0 !important;
 }
+  .my-form-item .backgroundColor .ivu-input{
+    background-color:#ffffe0
+  }
 </style>
 <style scoped>
   .detail-text{

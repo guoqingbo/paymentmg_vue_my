@@ -101,10 +101,16 @@
                 {
                   title: "明细",
                   action: () => {
-                    this.$router.push({
+                    // this.$router.push({
+                    //   path: "/order/orderQuery/refundOrderDetail",
+                    //   query: { id: params.row.id,routeType:"detail"}
+                    // });
+                    // 新窗口打开
+                    let href = this.$router.resolve({
                       path: "/order/orderQuery/refundOrderDetail",
                       query: { id: params.row.id,routeType:"detail"}
-                    });
+                    }).href;
+                    window.open(href, '_blank');
                   }
                 }
               ];

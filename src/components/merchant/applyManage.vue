@@ -57,14 +57,34 @@
             title: '应用状态',
             key: 'appStatus',
             render: (h, params) => {
-              return h('span', this.filter.turn("applyStatus",params.row.appStatus))
+              let array = []
+              let color=''
+              if(params.row.appStatus == 0){
+                color='#f90'
+              }else if(params.row.appStatus == 1){
+                color='#f00'
+              }else if(params.row.appStatus == 2){
+                color='#2b85e4'
+              }
+              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}}, this.filter.turn("applyStatus",params.row.appStatus)))
+              array.push(h('span', this.filter.turn("applyStatus",params.row.appStatus)))
+              return array
             }
           },
           {
             title: '功能状态',
             key: 'functionStatus',
             render: (h, params) => {
-              return h('span', this.filter.turn("functionStatus",params.row.functionStatus))
+              let array = []
+              let color=''
+             if(params.row.functionStatus == 0){
+               color='#f00'
+              }else if(params.row.functionStatus == 1){
+               color='#2b85e4'
+              }
+              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}}, this.filter.turn("applyStatus",params.row.appStatus)))
+              array.push(h('span', this.filter.turn("functionStatus",params.row.functionStatus)))
+              return array
             }
           },
           {
@@ -81,10 +101,17 @@
                 {
                   title: "管理",
                   action: () => {
-                    this.$router.push({
-                      path: "/merchant/applyManageDetail",
-                      query: {id: params.row.id}
-                    });
+                    // this.$router.push({
+                    //   path: "/merchant/applyManageDetail",
+                    //   query: {id: params.row.id}
+                    // });
+
+                    // 新窗口打开
+                    let href = this.$router.resolve({
+                        path: "/merchant/applyManageDetail",
+                        query: {id: params.row.id}
+                    }).href;
+                    window.open(href, '_blank');
                   }
                 },
                 {

@@ -244,6 +244,16 @@
             ],
             value: ''
           },
+          {
+            title: '应用状态',
+            name: 'appStatus',
+            type: 'select',
+            data: this.common.dic.applyStatus,
+            rules: [
+              {required: true,message: '请选择应用状态', trigger: 'change'}
+            ],
+            value: ''
+          },
       ],
         applyEditFormUrl:'/merchantApp/updateAppInfo',
         funColumns:[
@@ -286,7 +296,16 @@
             title: '状态',
             key: 'functionStatus',
             render: (h, params) => {
-              return h('span', this.filter.turn("functionStatus",params.row.functionStatus))
+              let array = []
+              let color=''
+              if(params.row.functionStatus == 0){
+                color='#f00'
+              }else if(params.row.functionStatus == 1){
+                color='#2b85e4'
+              }
+              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}}, this.filter.turn("applyStatus",params.row.appStatus)))
+              array.push(h('span', this.filter.turn("functionStatus",params.row.functionStatus)))
+              return array
             }
           },
           {
@@ -445,11 +464,11 @@
             // 应用状态
             this.appDetail.appStatusName = this.filter.turn("applyStatus",this.appDetail.appStatus)
             this.appDetail.appScene = this.appDetail.appScene+""
-
+            this.appDetail.appStatus = this.appDetail.appStatus+""
             // 设置选中项
             this.funSelected = []
             this.appDetail.merchantChannelList.forEach(ele=>{
-              this.funSelected.push(ele.channelProductCode)
+              this.funSelected.push(ele.channelProductCode+"_"+ele.payProductCode)
             })
             // 商户来源转换
             this.$store.dispatch("getMerchantSource").then(res2=>{
@@ -512,10 +531,14 @@
         let ids = []
         this.selection.forEach(ele=>{
           // 去除已经添加的功能
-          if(!this.funSelected.includes(ele.channelProductCode)){
+          if(!this.funSelected.includes(ele.channelProductCode+"_"+ele.payProductCode)){
             ids.push(ele.id)
           }
         })
+        if(!ids.length){
+          this.$Message.warning('未选择要添加的功能')
+          return
+        }
         params.ids = ids.join(',')
         this.apiPost(url,params).then(res=>{
           if(res.success){
@@ -592,7 +615,7 @@
             this.funListData = res.data.rows
 
             this.funListData.forEach(ele=>{
-              if(this.funSelected.includes(ele.channelProductCode)){
+              if(this.funSelected.includes(ele.channelProductCode+"_"+ele.payProductCode)){
                 ele._checked = true
                 ele._disabled = true
               }else{
@@ -608,7 +631,7 @@
       beforeSave(formItem){
         formItem.id = this.appDetail.id
         formItem.merchantNo = this.appDetail.merchantNo
-        formItem.appStatus = this.appDetail.appStatus
+        // formItem.appStatus = this.appDetail.appStatus
       },
       onSuccess(res){
         this.getDetail()
@@ -712,7 +735,7 @@
         .fun-name-tip{
           position: absolute;
           left: 0;
-          top: 13px;
+          top: 10px;
           transform: translateY(-50%);
           /*background-color: #f00;*/
           background: url("../../assets/images/tip.png") no-repeat;
@@ -734,8 +757,8 @@
 
   .fun-type-btn-box{
     margin-bottom: 20px;
-  }
-  .search-box{
-    padding: 20px 0;
+    .search-box{
+      padding: 20px 0;
+    }
   }
 </style>

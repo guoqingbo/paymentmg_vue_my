@@ -84,6 +84,10 @@
         formItem.merchantCode = this.detail.merchantCode
         formItem.payProductCode = this.detail.payProductCode
         formItem.channelProductCode = this.detail.channelProductCode
+        // 优先支付不存在时
+        if(!this.detail.sameFlag){
+          formItem.priority = 0
+        }
         delete formItem.channelProductName
         delete formItem.merchantFeeType
       },
@@ -115,12 +119,11 @@
       },
       //获取渠道产品支付配置
       getPayConfig() {
-        let channelProductCode = this.detail.channelProductCode
         let params = {
-          merchantCode: this.detail.merchantCode,
+          // merchantCode: this.detail.merchantCode,
           // accessMode:'',
         }
-        this.apiGet('/merchantChannel/payConfig/channelProduct/' + channelProductCode, params).then(res => {
+        this.apiGet('/merchantChannel/payConfig/' + this.detail.id, params).then(res => {
           if (res.success) {
             // 保留公共选项
             // 设置渠道计费方式
@@ -129,6 +132,8 @@
             })
             // 转换支付配置
             this.turnPayConfig(res.data.configs)
+          }else{
+            this.$Message.warning(res.message|| '请求出错')
           }
         })
       },
@@ -138,7 +143,7 @@
         // this.formList = this.formList.slice(0, 7)
         // 判断是否有优先支付选项
         let accessModeIndexInit = 3
-        if( this.formList[3]&&this.formList[3].name == 'priority'){
+        if(this.detail.sameFlag){
           accessModeIndexInit = 4
         }
         this.formList = this.formList.slice(0, accessModeIndexInit)
@@ -157,7 +162,8 @@
               rules: [
                 {required: ele.required == 'T' ? true : false, message: '请输入' + ele.configName, trigger: 'blur'}
               ],
-              type: 'input'
+              type: 'input',
+              class:ele.placeholder && !ele.configKey ? 'backgroundColor':''
             }
             if (ele.ifFile == 'file') {
               formListItem.type = 'uploadFile';
@@ -273,7 +279,7 @@
       turnPayConfigWechatOfficial(wechatOfficial) {
         // 判断是否有优先支付选项
         let accessModeIndexInit = 3
-        if( this.formList[3].name == 'priority'){
+        if(this.detail.sameFlag){
           accessModeIndexInit = 4
         }
 
@@ -296,9 +302,9 @@
           // }
 
 
-          let url = '/merchantChannel/payConfig/channelProduct/' + this.detail.channelProductCode
+          let url = '/merchantChannel/payConfig/' + this.detail.id
           let params = {
-            merchantCode: this.detail.merchantCode,
+            // merchantCode: this.detail.merchantCode,
             accessMode: e,
           }
           this.apiGet(url, params).then(res => {
@@ -324,7 +330,11 @@
                 // this.turnPayConfig(res.data)
               }
               this.turnPayConfig(configInfos)
+            }else{
+              this.$Message.warning(res.message|| '请求出错')
             }
+          }).catch(error=>{
+            this.$Message.warning(error.message|| '请求出错')
           })
         }
 
