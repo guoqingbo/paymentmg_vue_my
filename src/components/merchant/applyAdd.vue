@@ -53,7 +53,8 @@
             name: 'orderSource',
             type: 'select',
             data: '',
-            rules: [{ required: true, message: '请选择应用来源', trigger: 'change' }]
+            rules: [{ required: true, message: '请选择应用来源', trigger: 'change' }],
+            onChange: this.orderSourceOnChange,
           },
           {
             title: '支付标识（PayID）',
@@ -112,6 +113,37 @@
       beforeSave(formItem) {
         // 商户名，商户号拆分
         this.common.splitMerchant(formItem)
+      },
+      // 应用来源更改时
+      orderSourceOnChange(e) {
+        console.log(e)
+        let payId =  {
+            title: '支付标识（PayID）',
+            name: 'payId',
+            type: 'input',
+            rules: [
+              {required: true, message: '请输入支付标识（PayID）', trigger: 'blur'},
+            ],
+            tip:'平台与支付中心约定的平台的支付标识，小鲸商城的店铺ID、云pms的店铺编号等',
+            value: ""
+          }
+        let payIdIndex=''
+        // 查询payId的索引
+        this.formList.forEach((ele,index)=>{
+          if(ele.name == 'payId'){
+            payIdIndex = index
+          }
+        })
+        if (e==150) {
+          // 当应用来源选择“普通应用”时，支付标识payId隐藏
+          if(payIdIndex){
+            this.formList.splice(payIdIndex,1)
+          }
+        } else {
+          if(!payIdIndex){
+            this.formList.splice(4, 0,payId)
+          }
+        }
       }
     }
   }

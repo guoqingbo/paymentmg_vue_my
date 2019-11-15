@@ -17,7 +17,7 @@
     },
     data() {
       return {
-        formListUrl: "/merchantChannel/save",
+        formListUrl: "/merchantChannel/update",
         formList: [
           {
             title: '功能名称',
@@ -32,7 +32,7 @@
             data: this.common.dic.feeType,
             disabled: true,
             rules: [
-              {required: true, type: 'number', message: '请选择收费模式', trigger: 'change'}
+              {required: false, type: 'number', message: '请选择收费模式', trigger: 'change'}
             ],
             value:0
           },
@@ -84,6 +84,8 @@
         formItem.merchantCode = this.detail.merchantCode
         formItem.payProductCode = this.detail.payProductCode
         formItem.channelProductCode = this.detail.channelProductCode
+        delete formItem.channelProductName
+        delete formItem.merchantFeeType
       },
       // 获取功能详情
       getDetail(){
