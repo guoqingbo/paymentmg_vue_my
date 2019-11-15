@@ -66,7 +66,8 @@
               }else if(params.row.appStatus == 2){
                 color='#2b85e4'
               }
-              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}}, this.filter.turn("applyStatus",params.row.appStatus)))
+              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}},
+                this.filter.turn("applyStatus",params.row.appStatus)))
               array.push(h('span', this.filter.turn("applyStatus",params.row.appStatus)))
               return array
             }
@@ -82,7 +83,8 @@
               }else if(params.row.functionStatus == 1){
                color='#2b85e4'
               }
-              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}}, this.filter.turn("applyStatus",params.row.appStatus)))
+              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}},
+                this.filter.turn("applyStatus",params.row.appStatus)))
               array.push(h('span', this.filter.turn("functionStatus",params.row.functionStatus)))
               return array
             }

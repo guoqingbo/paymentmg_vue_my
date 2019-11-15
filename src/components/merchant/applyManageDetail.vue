@@ -303,7 +303,8 @@
               }else if(params.row.functionStatus == 1){
                 color='#2b85e4'
               }
-              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}}, this.filter.turn("applyStatus",params.row.appStatus)))
+              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}},
+                this.filter.turn("applyStatus",params.row.appStatus)))
               array.push(h('span', this.filter.turn("functionStatus",params.row.functionStatus)))
               return array
             }
@@ -311,11 +312,6 @@
           {
             title: '添加时间',
             key: 'createTime'
-          }
-        ],
-        funData:[
-          {
-            name:'gggg'
           }
         ],
         // tabIndex:1,
