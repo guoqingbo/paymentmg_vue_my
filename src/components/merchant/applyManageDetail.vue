@@ -268,7 +268,18 @@
                 array.push(h('span', {class: 'fun-name-tip'},'优先'))
                 payProductNameClass = 'fun-name-value'
               }
-              array.push(h('span', {class: payProductNameClass},params.row.payProductName))
+              array.push(h('router-link', {
+                  class: payProductNameClass,
+                  props: {
+                    to: {
+                      path: "/merchant/applyConfig",
+                      query: {
+                        id: params.row.id,
+                        routeType:'detail'
+                      }
+                    },
+                  }
+                },params.row.payProductName))
               return array
             }
           },

@@ -94,12 +94,19 @@
       // 获取功能详情
       getDetail(){
         let id = this.$route.query.id
+        this.routeType = this.$route.query.routeType
         this.apiGet("/merchantChannel/detail/" + id).then(res => {
           if (res.success) {
             this.detail = res.data
-            if(!this.detail.sameFlag){
-              // 隐藏优先支付
-              this.formList.splice(3, 1)
+            if(this.routeType == 'detail'){
+              // 更新位置占位符
+              this.$store.dispatch('setBreadcrumbListAction', ['应用管理', '配置详情'])
+
+            }else{
+              if(!this.detail.sameFlag){
+                // 隐藏优先支付
+                this.formList.splice(3, 1)
+              }
             }
             if(res.data.configInfos && res.data.configInfos.length){
               // 转换支付配置
@@ -110,6 +117,10 @@
             this.formList.forEach(ele => {
               if(typeof this.detail[ele.name]!='undefined'){
                 ele.value = this.detail[ele.name]
+              }
+              // 如果是详情页
+              if(this.routeType == 'detail'){
+                ele.type += "Text"
               }
             })
           }else{
