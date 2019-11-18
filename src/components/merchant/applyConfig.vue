@@ -157,13 +157,13 @@
             let formListItem = {
               title: ele.configName,
               name: ele.configKey,
-              placeholder: ele.tips ? ele.tips : '',
-              value: ele.configValue ? ele.configValue : '',
+              placeholder: ele.tips || '',
+              value: ele.configValue || ele.placeholder || '',
               rules: [
                 {required: ele.required == 'T' ? true : false, message: '请输入' + ele.configName, trigger: 'blur'}
               ],
               type: 'input',
-              class:ele.placeholder && !ele.configKey ? 'backgroundColor':''
+              class:ele.placeholder && !ele.configValue ? 'backgroundColor':''
             }
             if (ele.ifFile == 'file') {
               formListItem.type = 'uploadFile';

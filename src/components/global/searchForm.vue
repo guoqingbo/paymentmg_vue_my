@@ -222,7 +222,11 @@ export default {
      // 搜索前
       this.$emit('beforeSubmit',this.$store.state.list.params)
       this.$store.dispatch('getList').then(res=>{
-        this.$emit('afterSubmit',res)
+        if(res.success){
+          this.$emit('afterSubmit',res)
+        }else{
+          this.$Message.warning(res.message)
+        }
       })
     },
     formateDate(){

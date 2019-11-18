@@ -48,7 +48,7 @@
             title: '企业码',
             name: 'corpCode',
             type: 'input',
-            rules: [{required: true, message: '请输入企业码', trigger: 'blur'},
+            rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
               {max: 20, message: "企业码不超过20字符", trigger: 'blur'}]
           },
           {
@@ -128,6 +128,13 @@
               {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
             ],
             value: 100
+          },
+          {
+            title: '企业码',
+            name: 'corpCode',
+            type: 'input',
+            rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
+              {max: 20, message: "企业码不超过20字符", trigger: 'blur'}]
           },
           {
             title: '姓名',
