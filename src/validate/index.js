@@ -67,7 +67,7 @@ let validate = {
     }
   },
   phone: (rule, value, callback) => {
-    if (!rule.require && !value) {
+    if (!rule.required && !value) {
       // 非必填时
       callback()
       return
@@ -81,7 +81,7 @@ let validate = {
     }
   },
   email: (rule, value, callback) => {
-    if (!rule.require && !value) {
+    if (!rule.required && !value) {
       // 非必填时
       callback()
       return
@@ -120,7 +120,7 @@ let validate = {
     }
   },
   IdCodeValid: (rule, value, callback) => {
-    if (!rule.require && !value) {
+    if (!rule.required && !value) {
       // 非必填时
       callback()
       return
@@ -194,7 +194,7 @@ let validate = {
     }
   },
   passport: (rule, value, callback) => {
-    if (!rule.require && !value) {
+    if (!rule.required && !value) {
       // 非必填时
       callback()
       return
@@ -208,7 +208,7 @@ let validate = {
     }
   },
   passportHM : (rule, value, callback) => {
-    if (!rule.require && !value) {
+    if (!rule.required && !value) {
       // 非必填时
       callback()
       return
