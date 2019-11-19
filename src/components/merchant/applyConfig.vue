@@ -5,12 +5,49 @@
               :routeType="routeType"
               :url="formListUrl"
               @beforeSave="beforeSave">
+      <!--如果是分账配置-->
+      <div v-if="detail.type == 1" slot="channelProductNameAfter">
+        <div v-for="(item,index) in formList2" :key="index">
+          <FormItem
+            label-position="right"
+            :key="item.name"
+            :label-width="150"
+            :label="item.title+'：'"
+            :prop="item.name"
+            :rules="item.rules||{}"
+            v-if="item.type">
+            <label slot="label">
+              <Tooltip v-if="item.hoverTip"  placement="top">
+                <Icon type="md-help-circle" size="20" color="#999" />
+                <div slot="content" style="white-space: normal">
+                  {{item.hoverTip}}
+                </div>
+              </Tooltip>
+              <span>{{item.title+'：'}}</span>
+            </label>
+            <Input v-if="item.type=='input'"
+                   clearable
+                   :disabled="item.disabled"
+                   :on-change="item.onChange?item.onChange(item.value):''"
+                   v-model="item.value"
+                   :type="item.value && item.value.length>200?'textarea':'text'"
+                   :autosize="{minRows: 2,maxRows: 5}"
+                   :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
+          </FormItem>
+          <div v-if="index%2!==0" style="text-align: right;padding-bottom: 20px">
+            <Button type="primary"
+                    @click="addFormItem(index+1)">添加</Button>
+            <Button type="primary"
+                    @click="removeFormItem(index-1)">删除</Button>
+          </div>
+        </div>
+
+      </div>
     </formList>
   </div>
 </template>
 <script>
   import formList from "@/components/global/formList";
-
   export default {
     components: {
       formList
@@ -53,6 +90,37 @@
             rules: [{required: true, type: 'number', message: '请选择优先支付方式', trigger: 'change'}]
           }
         ],
+        formList1:[
+          {
+            title: '应用名称',
+            name: 'merchantName',
+            type: 'input',
+            disabled:true
+          },
+          {
+            title: '功能名称',
+            name: 'channelProductName',
+            type: 'input',
+            disabled:true
+          },
+        ],// 分账配置
+        formList2:[
+          {
+            title: '渠道商户号',
+            name: 'merchantName',
+            type: 'input',
+            hoverTip:'商户在银行、支付公司开通商户编号，该商户编号用于分账结算使用，如有疑问请联系产品经理',
+            rules: [
+              {required: true, message: '请输入渠道商户号', trigger: 'blur'}
+            ],
+          },
+          {
+            title: '业务商户号',
+            name: 'channelProductName',
+            type: 'input',
+
+          },
+        ],// 分账配置添加商户
         routeType: "",// 判断是新增，详情，编辑
         detail: {},//获取的详情
       }
@@ -62,6 +130,29 @@
       this.getDetail()
     },
     methods: {
+      addFormItem(index){
+        let formList = [
+            {
+              title: '渠道商户号',
+              name: 'merchantName'+index,
+              type: 'input',
+              hoverTip:'商户在银行、支付公司开通商户编号，该商户编号用于分账结算使用，如有疑问请联系产品经理',
+              rules: [
+                {required: true, message: '请输入渠道商户号', trigger: 'blur'}
+                ],
+            },
+            {
+              title: '业务商户号',
+              name: 'channelProductName'+index,
+              type: 'input',
+
+            },
+        ]
+        this.formList2.push(...formList)
+      },
+      removeFormItem(index){
+        this.formList2.splice(index,2)
+      },
       // 商户费率验证
       validateMerchantFeeRate(rule, value, callback) {
         if (rule.required && value === '') {
@@ -98,13 +189,17 @@
         this.apiGet("/merchantChannel/detail/" + id).then(res => {
           if (res.success) {
             this.detail = res.data
+            // 配置为分账时
+            if(this.detail.type == 1){
+              this.formList = this.formList1
+            }
             if(this.routeType == 'detail'){
               // 更新位置占位符
               this.$store.dispatch('setBreadcrumbListAction', ['应用管理', '配置详情'])
 
             }else{
-              if(!this.detail.sameFlag){
-                // 隐藏优先支付
+              if(!this.detail.sameFlag && this.detail.type!=1){
+                // 非分账，隐藏优先支付
                 this.formList.splice(3, 1)
               }
             }

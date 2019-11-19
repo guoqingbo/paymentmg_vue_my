@@ -622,12 +622,14 @@
             this.funListData = res.data.rows
 
             this.funListData.forEach(ele=>{
+              // 已经选中过的不可再选
               if(this.funSelected.includes(ele.channelProductCode+"_"+ele.payProductCode)){
                 ele._checked = true
                 ele._disabled = true
-              }else{
-                ele._checked = false
-                ele._disabled = false
+              }
+              // 功能支付为分类，但没有支付产品不可选
+              if(ele.type == 0 && !ele.payProductName){
+                ele._disabled = true
               }
             })
           }else{

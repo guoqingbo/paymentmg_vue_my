@@ -14,8 +14,11 @@
           :rules="item.rules||{}"
           v-if="item.type">
           <label slot="label" v-if="(item.type!=='divider'&&item.type!=='btn')">
-            <Tooltip v-if="item.hoverTip" :content="item.hoverTip" placement="top">
+            <Tooltip v-if="item.hoverTip" placement="top">
               <Icon type="md-help-circle" size="20" color="#999" />
+              <div slot="content" style="white-space: normal">
+                {{item.hoverTip}}
+              </div>
             </Tooltip>
             <span>{{item.title+'：'}}</span>
           </label>
@@ -49,7 +52,7 @@
                  :disabled="item.disabled"
                  :on-change="item.onChange?item.onChange(item.value):''"
                  v-model="item.value"
-                 :type="item.value.length>200?'textarea':'text'"
+                 :type="item.value && item.value.length>200?'textarea':'text'"
                  :autosize="{minRows: 2,maxRows: 5}"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
           <Input v-if="item.type=='textarea'"
