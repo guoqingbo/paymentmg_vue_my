@@ -228,7 +228,7 @@
             value:''
           },
           {
-            title: '应用简介',
+            title: '应用描述',
             name: 'description',
             type: 'textarea',
             value: '',

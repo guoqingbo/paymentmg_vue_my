@@ -53,6 +53,10 @@
       }
     },
     props: {
+      apiPrefix:{
+        type: String,
+        default: ''
+      },
       routeType:{
         // 区分是详情，新增，编辑
         type: String,
@@ -112,7 +116,7 @@
             if (this._events.beforeSave) {
               this.$emit("beforeSave", this.$refs.myForm.formItem)
             }
-            let res = await this[saveMethod](this.url, this.$refs.myForm.formItem)
+            let res = await this[saveMethod](this.url, this.$refs.myForm.formItem,this.apiPrefix)
             if (res.success || res.status === 200) {
               this.modal = false
               this.$Message.info(res.message || '操作成功！')

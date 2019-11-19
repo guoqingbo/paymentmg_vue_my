@@ -1,6 +1,13 @@
 <template>
   <div style="width: 80%;margin: 0 auto">
-    <h4 class="table-title">订单信息</h4>
+    <div class="table-title-box">
+      <h4 class="table-title">订单信息</h4>
+      <div style="float: right;padding-bottom: 10px">
+        <!--支付成功时-->
+        <Button @click='compensateNotice' type="primary" :disabled="orderInfo.payStatus!=10">补偿通知</Button>
+        <Button @click='abnormalRefund ' type="primary" :disabled="orderInfo.payStatus!=10">异常退款</Button>
+      </div>
+    </div>
     <myTable ref="myTable"
              :tableRows="tableRows"
              :url="tableUrl"
@@ -15,14 +22,24 @@
     <div class="bottom-btn-box">
       <Button @click='back' type="primary">返回</Button>
     </div>
+    <modalForm v-model="abnormalRefundForm"
+               :formItems="abnormalRefundFormItems"
+               @beforeSave='beforeSave'
+               @on-success="onSuccess"
+               :apiPrefix="apiPrefix"
+               :url="abnormalRefundUrl"
+               title="异常退款">
+    </modalForm>
   </div>
 </template>
 <script>
   import myTable from "@/components/global/myTable";
+  import modalForm from '@/components/global/modalForm'
   export default {
-    components: {myTable},
+    components: {myTable,modalForm},
     data () {
       return {
+        apiPrefix:this.common.config.apiPayPrefix,
         tableRows: [
           {
             cols:[
@@ -191,8 +208,27 @@
             key: 'payTime',
           }
         ],
-        orderInfo:{},
+        orderInfo:{
+
+        },
         loading:false,
+        abnormalRefundForm:false,
+        abnormalRefundUrl:'/abnormalRefund',
+        abnormalRefundFormItems: [
+        {
+          title: '退款原因',
+          name: 'desc',
+          type: 'textarea',
+          rules: [
+            {required: true, message: '请输入退款原因', trigger: 'blur'},
+            {max: 200, message: "退款原因不超过200字符", trigger: 'blur'}
+          ],
+          autosize: {
+            minRows: 4,maxRows: 7
+          },
+          value: ""
+        }
+      ],
       }
     },
     watch: {
@@ -208,6 +244,35 @@
       this.getMerchantSource()
     },
     methods:{
+      beforeSave(params){
+        params.payNo = this.orderInfo.payNo
+      },
+      onSuccess(res){
+        // if(res.success){
+        //   this.$Message.success(res.message)
+        // }else{
+        //   this.$Message.warning(res.message)
+        // }
+      },
+      // 补偿通知
+      compensateNotice(){
+        let apiPrefix = this.apiPrefix
+        let url = '/notify'
+        let params = {
+          payNo:this.orderInfo.payNo,
+        }
+        this.apiPost(url,params,apiPrefix).then(res=>{
+          if(res.success){
+            this.$Message.success(res.message)
+          }else{
+            this.$Message.warning(res.message)
+          }
+        })
+      },
+      // 异常退款
+      abnormalRefund(){
+        this.abnormalRefundForm = true
+      },
       // 获取订单明细后
       onGetAfter(orderInfo){
         this.refundOrderDetail = orderInfo.refundOrders
@@ -301,9 +366,13 @@
   }
 </script>
 <style scoped>
+  .table-title-box{
+    overflow: hidden;
+  }
   .table-title {
     padding: 5px 0;
     font-size: 14px;
+    display: inline-block;
   }
   .bottom-btn-box {
     margin-top: 20px;

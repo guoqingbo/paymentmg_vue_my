@@ -60,7 +60,7 @@
                  v-model="item.value"
                  type="textarea"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"
-                 :autosize="{minRows: 2,maxRows: 5}"></Input>
+                 :autosize="item.autosize || {minRows: 2,maxRows: 5}"></Input>
           <DatePicker v-if="item.type=='date'"
                       type="date"
                       :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"

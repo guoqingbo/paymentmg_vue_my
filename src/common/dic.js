@@ -60,7 +60,7 @@ let dic = {
   ],
   // 应用状态
   applyStatus: [
-    {label:"联调",value:"0"},
+    {label:"调试",value:"0"},
     {label:"下架",value:"1"},
     {label:"已上线",value:"2"},
   ],
