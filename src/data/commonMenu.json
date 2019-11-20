@@ -11,31 +11,30 @@
           "functionType": "column"
         },
         {
-          "name": "添加商户",
-          "code": "merchantAddEditDetail",
-          "functionType": "button"
-        },
-        {
-          "name": "应用管理",
-          "code": "applyManage",
+          "name": "商户渠道管理",
+          "code": "merchantChannel",
           "functionType": "column"
         },
         {
-          "name": "添加应用",
-          "code": "applyAdd",
+          "name": "商户场景管理",
+          "code": "merchantScene",
+          "functionType": "column"
+        },
+        {
+          "name": "关联商户管理",
+          "code": "merchantAssociate",
+          "functionType": "column"
+        },
+        {
+          "name": "添加渠道",
+          "code": "merchantChannelAddEditDetail",
           "functionType": "button"
         },
         {
-          "name": "应用管理详情",
-          "code": "applyManageDetail",
-          "functionType": "button"
-        },
-        {
-          "name": "应用配置",
-          "code": "applyConfig",
+          "name": "添加商户",
+          "code": "merchantAddEditDetail",
           "functionType": "button"
         }
-
       ]
     },
     {
