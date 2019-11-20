@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="my-form-item">
     <Form :model="formItem"
           ref="formRef">
       <template v-for="(item,index) in formItems">
         <slot :name="item.name+'Before'"></slot>
         <FormItem
+          :class="[item.class]"
           label-position="right"
           :key="item.name"
           :label-width="item.type!=='divider'?150:0"
@@ -12,6 +13,15 @@
           :prop="item.name"
           :rules="item.rules||{}"
           v-if="item.type">
+          <label slot="label" v-if="(item.type!=='divider'&&item.type!=='btn')">
+            <Tooltip v-if="item.hoverTip" placement="top">
+              <Icon type="md-help-circle" size="20" color="#999" />
+              <div slot="content" style="white-space: normal">
+                {{item.hoverTip}}
+              </div>
+            </Tooltip>
+            <span>{{item.title+'：'}}</span>
+          </label>
           <span class="detail-text"
                 :class="{'detail-textareaText':item.value.length>300}"
                 v-if="item.type=='text'||
@@ -42,7 +52,7 @@
                  :disabled="item.disabled"
                  :on-change="item.onChange?item.onChange(item.value):''"
                  v-model="item.value"
-                 :type="item.value.length>200?'textarea':'text'"
+                 :type="item.value && item.value.length>200?'textarea':'text'"
                  :autosize="{minRows: 2,maxRows: 5}"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
           <Input v-if="item.type=='textarea'"
@@ -50,7 +60,7 @@
                  v-model="item.value"
                  type="textarea"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"
-                 :autosize="{minRows: 2,maxRows: 5}"></Input>
+                 :autosize="item.autosize || {minRows: 2,maxRows: 5}"></Input>
           <DatePicker v-if="item.type=='date'"
                       type="date"
                       :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"
@@ -117,7 +127,6 @@
                         @beforeUpload="(params)=>{item.beforeUpload?item.beforeUpload(params):''}"
                         @on-remove="onRemove"
                         @on-success="uploadSuccess"></uploadFile>
-            <p>{{item.tip}}</p>
           </div>
           <div class="upload-img-box" v-if="item.type=='uploadFileText'">
             <!--如果是图片-->
@@ -127,6 +136,8 @@
             </template>
             <span v-else class="no-img">未上传</span>
           </div>
+
+          <p v-if="item.tip">{{item.tip}}</p>
         </FormItem>
         <slot :name="item.name+'After'"></slot>
       </template>
@@ -298,6 +309,9 @@ export default {
   .my-autoComplete .ivu-select-dropdown {
   left: 0 !important;
 }
+  .my-form-item .backgroundColor .ivu-input{
+    background-color:#ffffe0
+  }
 </style>
 <style scoped>
   .detail-text{
@@ -334,4 +348,8 @@ export default {
     max-height: 280px;
     overflow: auto;
   }
+  /*.hoverTip{*/
+    /*position: absolute;*/
+    /*left: 0;*/
+  /*}*/
 </style>

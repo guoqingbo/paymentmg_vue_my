@@ -13,6 +13,9 @@ import defined from './modules/userDefined'
 // 全局变量
 import global from './modules/global'
 
+// 应用管理
+import merchant from './modules/merchant'
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -67,7 +70,8 @@ const store = new Vuex.Store({
     menu,
     create,
     indexdefined,
-    defined
+    defined,
+    merchant
   }
 })
 
