@@ -684,6 +684,9 @@
         display: inline-block;
         vertical-align: middle;
         margin-left: 10px;
+        .apply-info-top{
+          font-size: 15px;
+        }
         .apply-info-name{
           font-weight: bold;
           font-size: 16px;
