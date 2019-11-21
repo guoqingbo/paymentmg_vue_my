@@ -49,10 +49,8 @@ export function apiGet (url, params = {},apiPrefix) {
   if(!url){
    return
   }
-  if(apiPrefix){
-    // 如果设置了前缀
-    axios.defaults.baseURL = apiPrefix
-  }
+  // 如果设置了前缀
+  axios.defaults.baseURL = apiPrefix || common.config.apiAdminPrefix;
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {
     axios.get(url, {params:{...params}})
@@ -72,10 +70,8 @@ export function apiGet (url, params = {},apiPrefix) {
  * @returns {Promise}
  */
 export function apiPost (url, params = {},apiPrefix) {
-  if(apiPrefix){
-    // 如果设置了前缀
-    axios.defaults.baseURL = apiPrefix
-  }
+  // 如果设置了前缀
+  axios.defaults.baseURL = apiPrefix || common.config.apiAdminPrefix;
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {
     params = qs.stringify(params)

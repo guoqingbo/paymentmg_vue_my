@@ -45,13 +45,6 @@
               {max: 50, message: "企业名称不超过50字符", trigger: 'blur'}]
           },
           {
-            title: '企业码',
-            name: 'corpCode',
-            type: 'input',
-            rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
-              {max: 20, message: "企业码不超过20字符", trigger: 'blur'}]
-          },
-          {
             title: '上级商户号',
             name: 'parentMerchantCode',
             type: 'autoComplete',
@@ -128,13 +121,6 @@
               {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
             ],
             value: 100
-          },
-          {
-            title: '企业码',
-            name: 'corpCode',
-            type: 'input',
-            rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
-              {max: 20, message: "企业码不超过20字符", trigger: 'blur'}]
           },
           {
             title: '姓名',
