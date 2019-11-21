@@ -35,6 +35,13 @@
             ]
           },
           {
+            title: '渠道所属类别',
+            name: 'type',
+            type: 'select',
+            data: this.common.dic.funType,
+            rules: [{ required: true,message: '请选择渠道所属类别', trigger: 'change' }]
+          },
+          {
             title: '渠道产品名称',
             name: 'channelProductName',
             type: 'input',
@@ -156,6 +163,9 @@
             if (res.status == 200 && res.data) {
               this.formList.forEach((ele)=>{
                 ele.value = res.data[ele.name]
+                if(ele.name == 'type'){
+                  ele.value = ele.value+""
+                }
                 if(this.routeType == 'detail'&&ele.type!='text'){
                   // 如果是详情页
                   ele.type += "Text"

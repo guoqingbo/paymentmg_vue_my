@@ -58,5 +58,29 @@ let dic = {
     {label:"普通分账",value:"0"},
     {label:"手续费分账",value:"1"},
   ],
+  // 应用状态
+  applyStatus: [
+    {label:"调试",value:"0"},
+    {label:"下架",value:"1"},
+    {label:"已上线",value:"2"},
+  ],
+  // 功能状态
+  functionStatus: [
+    {label:"未配置",value:"0"},
+    {label:"已配置",value:"1"},
+  ],
+  // 功能分类
+  funType: [
+    {label:"支付",value:"0"},
+    {label:"分账",value:"1"},
+    {label:"保险",value:"2"},
+    {label:"金融",value:"3"},
+  ],
+  // 适用场景
+  appScene: [
+    {label:"窗口售票",value:"0"},
+    {label:"自助机",value:"1"},
+    {label:"线上商城",value:"2"},
+  ],
 }
 export default dic
