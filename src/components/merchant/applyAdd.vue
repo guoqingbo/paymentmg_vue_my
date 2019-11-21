@@ -55,6 +55,7 @@
             data: '',
             rules: [{ required: true, message: '请选择应用来源', trigger: 'change' }],
             onChange: this.orderSourceOnChange,
+            value:'150'
           },
           {
             title: '支付标识（PayID）',
@@ -63,7 +64,7 @@
             rules: [
               {required: true, message: '请输入支付标识（PayID）', trigger: 'blur'},
             ],
-            tip:'平台与支付中心约定的平台的支付标识，小鲸商城的店铺ID、云pms的店铺编号等',
+            tip:'业务系统与支付中心约定的支付标识，如小鲸的m_ID、云票的务企业码等',
             value: ""
           },
           {
@@ -87,7 +88,7 @@
             title: '应用状态',
             name: 'appStatus',
             type: 'select',
-            data: this.common.dic.applyStatus,
+            data: this.common.dic.appStatus,
             rules: [
               {required: true,message: '请选择应用状态', trigger: 'change'}
             ],

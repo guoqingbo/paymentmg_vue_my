@@ -296,8 +296,10 @@ const common = {
         //   size: 'small'
         // },
         style: {
+          color:element.color||'#2d8cf0',
           margin: '5px',
-          marginLeft: 0
+          marginLeft: 0,
+          marginRight:element.marginRight||'5px'
         },
         on: {
           click: () => {
