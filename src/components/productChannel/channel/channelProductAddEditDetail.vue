@@ -156,6 +156,9 @@
             if (res.status == 200 && res.data) {
               this.formList.forEach((ele)=>{
                 ele.value = res.data[ele.name]
+                if(ele.name == 'type'){
+                  ele.value = ele.value+""
+                }
                 if(this.routeType == 'detail'&&ele.type!='text'){
                   // 如果是详情页
                   ele.type += "Text"

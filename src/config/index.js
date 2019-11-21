@@ -27,7 +27,7 @@ const config = {
   },
 }
 let env = 'production'
-if(location.hostname == 'testpaycenter.zhiyoubao.com'){
+if(location.hostname == 'testpaycenter.zhiyoubao.com'||location.hostname == 'test1paycenter.zhiyoubao.com'){
   // 测试环境
   env = 'test'
 }else if(location.hostname == 'prepaycenter.zhiyoubao.com'){

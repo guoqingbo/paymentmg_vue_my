@@ -1,6 +1,64 @@
 {
   "data": [
     {
+      "name": "商户管理",
+      "code": "merchant",
+      "functionType": "menu",
+      "menus": [
+        {
+          "name": "商户管理",
+          "code": "merchantManage",
+          "functionType": "column"
+        },
+        {
+          "name": "商户渠道管理",
+          "code": "merchantChannel",
+          "functionType": "column"
+        },
+        {
+          "name": "商户场景管理",
+          "code": "merchantScene",
+          "functionType": "column"
+        },
+        {
+          "name": "关联商户管理",
+          "code": "merchantAssociate",
+          "functionType": "column"
+        },
+        {
+          "name": "添加渠道",
+          "code": "merchantChannelAddEditDetail",
+          "functionType": "button"
+        },
+        {
+          "name": "添加商户",
+          "code": "merchantAddEditDetail",
+          "functionType": "button"
+        },
+        {
+          "name": "应用管理",
+          "code": "applyManage",
+          "functionType": "column"
+        },
+        {
+          "name": "添加应用",
+          "code": "applyAdd",
+          "functionType": "button"
+        },
+        {
+          "name": "应用管理详情",
+          "code": "applyManageDetail",
+          "functionType": "button"
+        },
+        {
+          "name": "应用配置",
+          "code": "applyConfig",
+          "functionType": "button"
+        }
+
+      ]
+    },
+    {
       "name": "结算中心(废弃)",
       "code": "settleCenter",
       "functionType": "menu",

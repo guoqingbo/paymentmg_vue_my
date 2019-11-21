@@ -31,9 +31,10 @@ export default {
   },
   props: ["mode", "content", "sucessMsg"],
   methods: {
-    confirm(url, param) {
+    confirm(url, param,method) {
       this.url = url;
       this.param = param;
+      this.method = method
       this.confirmModel = true;
     },
     cancel() {
