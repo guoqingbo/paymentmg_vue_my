@@ -227,6 +227,7 @@
             title: '应用图标',
             name: 'appLogo',
             type: 'uploadFile',
+            accept:'.jpg,.jpeg,.png',
             tip: '请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于2M',
             value:''
           },
@@ -277,7 +278,7 @@
                       }
                     },
                   }
-                },params.row.payProductName))
+                },params.row.channelProductName))
               if(params.row.priority){
                 array.push(h('span', {class: 'fun-name-tip'},'优先'))
               }
