@@ -262,7 +262,7 @@
         funColumns:[
           {
             title: '功能名称',
-            key: 'payProductName',
+            key: 'channelProductName',
             className:'fun-name',
             align:'center',
             render: (h, params) => {
@@ -291,7 +291,7 @@
           },
           {
             title: '支付产品',
-            key: 'channelProductName',
+            key: 'payProductName',
             align:'center',
           },
           {

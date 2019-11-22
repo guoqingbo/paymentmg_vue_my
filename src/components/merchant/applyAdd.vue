@@ -57,16 +57,16 @@
             onChange: this.orderSourceOnChange,
             value:'150'
           },
-          {
-            title: '支付标识（PayID）',
-            name: 'payId',
-            type: 'input',
-            rules: [
-              {required: true, message: '请输入支付标识（PayID）', trigger: 'blur'},
-            ],
-            tip:'业务系统与支付中心约定的支付标识，如小鲸的m_ID、云票的务企业码等',
-            value: ""
-          },
+          // {
+          //   title: '支付标识（PayID）',
+          //   name: 'payId',
+          //   type: 'input',
+          //   rules: [
+          //     {required: true, message: '请输入支付标识（PayID）', trigger: 'blur'},
+          //   ],
+          //   tip:'业务系统与支付中心约定的支付标识，如小鲸的m_ID、云票的务企业码等',
+          //   value: ""
+          // },
           {
             title: '应用描述',
             name: 'description',
