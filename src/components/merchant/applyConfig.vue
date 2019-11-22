@@ -313,6 +313,27 @@
             }
             else if (ele.ifFile == 'textarea') {
               formListItem.type = 'textarea';
+            }else if (ele.ifFile == 'SELECT') {
+              formListItem.type = 'select';
+              formListItem.data = [];
+              let url = ele.apiUrl
+              if(/^\/api\/admin\//.test(url)){
+                url = url.replace(/^\/api\/admin\//,'/')
+              }
+              this.apiGet(url).then(res=>{
+                if(res.success){
+                  let data = []
+                  Object.keys(res.data).forEach(key=>{
+                    data.push({
+                      label:res.data[key],
+                      value:key
+                    })
+                  })
+                  formListItem.data = data
+                }else{
+                  this.$Message.warning(res.message)
+                }
+              })
             }
             this.formList.push(formListItem)
 
