@@ -30,7 +30,7 @@
           {{item.value}}
         </span>
           <span class="detail-text"
-                v-if="item.type=='passwordText'">......
+                v-if="item.type=='passwordText'">******
         </span>
           <span class="detail-text detail-textareaText"
                 v-if="item.type=='textareaText'">
