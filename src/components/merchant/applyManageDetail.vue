@@ -7,12 +7,12 @@
         <div class="apply-info-box">
           <div class="apply-info-top">
             <span class="apply-info-name">{{appDetail.appName}}</span>
-            <Button type="primary" size="small" @click="openApplyEdit">编辑</Button>
-            <!--<span class="apply-edit-btn" @click="openApplyEdit">编辑</span>-->
+            <!--<Button type="primary" size="small" @click="openApplyEdit">编辑</Button>-->
+            <span class="default-btn" @click="openApplyEdit">编辑</span>
           </div>
           <div class="apply-info-bottom">
             <span class="apply-info-payId">PAYID</span>
-            <span>{{appDetail.payId}}</span>
+            <span class="apply-info-payId-value">{{appDetail.payId}}</span>
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@
           <span class="tab-item-name">应用概述</span>
         </div>
         <div class="tab-item" @click="tabClick(2)" :class="{active:tabIndex==2}">
-          <span class="tab-item-tag">{{appDetail.functionStatusName}}</span>
+          <!--<span class="tab-item-tag">{{appDetail.functionStatusName}}</span>-->
           <span class="tab-item-name">功能管理</span>
         </div>
         <div class="tab-item" @click="tabClick(3)" :class="{active:tabIndex==3}">
@@ -81,10 +81,10 @@
         <div class="fun-manage-box" v-if="tabIndex==2">
           <div class="add-fun-btn-box">
             <Button type="primary" @click="openFucAdd" icon="md-add">添加功能</Button>
-            <span class="add-fun-tip">
-            <Icon type="md-alert" size="16"/>
-            请先通过“添加功能”添加所需的功能，再通过“配置”功能服务配置参数
-          </span>
+            <!--<span class="add-fun-tip">-->
+              <!--<Icon type="md-alert" size="16"/>-->
+              <!--请先通过“添加功能”添加所需的功能，再通过“配置”功能服务配置参数-->
+            <!--</span>-->
           </div>
           <Table stripe
                  border
@@ -105,12 +105,14 @@
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">商户/平台私钥（RSA私钥）：</span>
               <span class="dev-config-info-value">{{configInfo.mchPrivateKeyShort}}</span>
-              <Button type="primary" size="small" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <span class="default-btn" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
+              <!--<Button type="primary" size="small" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>-->
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">支付中心公钥（RSA公钥）：</span>
               <span class="dev-config-info-value">{{configInfo.publicKeyShort}}</span>
-              <Button type="primary" size="small" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+              <span class="default-btn" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
+              <!--<Button type="primary" size="small" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>-->
             </div>
             <div class="dev-config-info-group">
               <span class="dev-config-info-label">正式环境地址：</span>
@@ -119,7 +121,8 @@
           </div>
           <div class="apply-section-title">
             <span>开发者信息</span>
-            <Button type="primary" size="small" @click="openDeveloperEdit">编辑</Button>
+            <span class="default-btn" @click="openDeveloperEdit">编辑</span>
+            <!--<Button type="primary" size="small" @click="openDeveloperEdit">编辑</Button>-->
           </div>
           <div class="developer-info-box">
             <div class="dev-config-info-group">
@@ -224,6 +227,7 @@
             title: '应用图标',
             name: 'appLogo',
             type: 'uploadFile',
+            accept:'.jpg,.jpeg,.png',
             tip: '请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于2M',
             value:''
           },
@@ -248,7 +252,7 @@
             title: '应用状态',
             name: 'appStatus',
             type: 'select',
-            data: this.common.dic.applyStatus,
+            data: this.common.dic.appStatus,
             rules: [
               {required: true,message: '请选择应用状态', trigger: 'change'}
             ],
@@ -259,17 +263,12 @@
         funColumns:[
           {
             title: '功能名称',
-            key: 'payProductName',
+            key: 'channelProductName',
             className:'fun-name',
+            align:'center',
             render: (h, params) => {
               let array = []
-              let payProductNameClass = ''
-              if(params.row.priority){
-                array.push(h('span', {class: 'fun-name-tip'},'优先'))
-                payProductNameClass = 'fun-name-value'
-              }
               array.push(h('router-link', {
-                  class: payProductNameClass,
                   props: {
                     to: {
                       path: "/merchant/applyConfig",
@@ -279,25 +278,32 @@
                       }
                     },
                   }
-                },params.row.payProductName))
+                },params.row.channelProductName))
+              if(params.row.priority){
+                array.push(h('span', {class: 'fun-name-tip'},'优先'))
+              }
               return array
             }
           },
           {
             title: '功能服务商',
-            key: 'channelName'
+            key: 'channelName',
+            align:'center',
           },
           {
             title: '支付产品',
-            key: 'channelProductName'
+            key: 'payProductName',
+            align:'center',
           },
           {
             title: '功能代码',
-            key: 'channelProductCode'
+            key: 'channelProductCode',
+            align:'center',
           },
           {
             title: '功能分类',
             key: 'type',
+            align:'center',
             render: (h, params) => {
               return h('span', this.filter.turn("funType",params.row.type))
             }
@@ -306,6 +312,7 @@
           {
             title: '状态',
             key: 'functionStatus',
+            align:'center',
             render: (h, params) => {
               let array = []
               let color=''
@@ -314,15 +321,24 @@
               }else if(params.row.functionStatus == 1){
                 color='#2b85e4'
               }
-              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}},
-                this.filter.turn("applyStatus",params.row.appStatus)))
+              let style = {
+                backgroundColor:color,
+                fontSize:'16px',
+                width:'10px',
+                height:'10px',
+                display:'inline-block',
+                borderRadius:'10px',
+                marginRight:'8px'
+              }
+              array.push(h('span', {style}))
               array.push(h('span', this.filter.turn("functionStatus",params.row.functionStatus)))
               return array
             }
           },
           {
             title: '添加时间',
-            key: 'createTime'
+            key: 'createTime',
+            align:'center',
           }
         ],
         // tabIndex:1,
@@ -330,11 +346,28 @@
           {
             title: '操作',
             key: 'action',
-            width:140,
+            width:200,
             align:'center',
             render: (h, params) => {
-              const actions = [
-                {
+              let actions = []
+              if(params.row.authUrl){
+                // 支付宝授权地址复制
+                actions.push({
+                  title: "复制授权地址",
+                  action: () => {
+                    this.$copyText(params.row.authUrl).then(
+                      res => {
+                        this.onCopy()
+                      },
+                      err => {
+                        this.error()
+                      }
+                    )
+                  }
+                })
+
+              }
+              actions.push({
                   title: "配置",
                   action: () => {
                     this.$router.push({
@@ -355,8 +388,7 @@
                       "/merchantChannel/delete/" + params.row.id
                     );
                   }
-                }
-              ];
+                });
               return this.common.columnsHandle(h, actions);
             }
           }
@@ -454,12 +486,12 @@
       sucessDone(){
         this.getDetail()
       },
-      // 获取应用来源
-      getMerchantSource(){
-        this.$store.dispatch("getMerchantSource").then(res=>{
-
-        })
-      },
+      // // 获取应用来源
+      // getMerchantSource(){
+      //   this.$store.dispatch("getMerchantSource").then(res=>{
+      //
+      //   })
+      // },
       // 获取应用详情
       getDetail(){
         let url = '/merchantApp/detail/'+this.$route.query.id
@@ -469,7 +501,7 @@
             // 功能状态
             this.appDetail.functionStatusName = this.filter.turn("functionStatus",this.appDetail.functionStatus)
             // 应用状态
-            this.appDetail.appStatusName = this.filter.turn("applyStatus",this.appDetail.appStatus)
+            this.appDetail.appStatusName = this.filter.turn("appStatus",this.appDetail.appStatus)
             this.appDetail.appScene = this.appDetail.appScene+""
             this.appDetail.appStatus = this.appDetail.appStatus+""
             // 设置选中项
@@ -653,11 +685,16 @@
 </script>
 <style lang="scss">
   .apply-manage-box{
+    .default-btn{
+      margin-left: 16px;
+      color: #2d8cf0;
+      cursor: pointer;
+    }
     .apply-manage-top{
       padding-bottom: 30px;
       .apply-icon{
-        width: 35px;
-        height: 35px;
+        width: 55px;
+        height: 55px;
         border-radius: 5px;
         vertical-align: middle;
       }
@@ -665,13 +702,15 @@
         display: inline-block;
         vertical-align: middle;
         margin-left: 10px;
-        .apply-edit-btn{
-          margin-left: 10px;
-          color: #3720d4;
+        .apply-info-top{
+          font-size: 15px;
         }
         .apply-info-name{
           font-weight: bold;
-          font-size: 14px;
+          font-size: 16px;
+        }
+        .apply-info-payId-value{
+          font-size: 15px;
         }
         .apply-info-payId{
           padding: 3px 5px;
@@ -691,6 +730,7 @@
         margin-right: 20px;
         font-size: 14px;
         position: relative;
+        cursor: pointer;
         .tab-item-tag{
           position: absolute;
           bottom:20px;
@@ -742,19 +782,13 @@
         overflow:visible;
         position: relative;
         .fun-name-tip{
-          position: absolute;
-          left: 0;
-          top: 10px;
-          transform: translateY(-50%);
-          /*background-color: #f00;*/
-          background: url("../../assets/images/tip.png") no-repeat;
-          background-size: 100% 100%;
-          /*width: 45px;*/
-          /*height: 20px;*/
-          /*line-height: 20px;*/
-          padding: 6px;
+          padding:2px 8px;
           text-align: center;
-          color: #fff;
+          color: #f00;
+          border: 1px solid #f00;
+          border-radius: 20px;
+          margin-left: 3px;
+          word-break: keep-all;
         }
         .fun-name-value{
           padding-left: 20px;

@@ -110,6 +110,30 @@
       ]
     },
     {
+      "name": "系统设置",
+      "code": "systemSetting",
+      "functionType": "menu",
+      "menus": [
+        {
+          "name": "秘钥管理",
+          "code": "rsaManage",
+          "functionType": "column",
+          "menus": [
+            {
+              "name": "平台秘钥",
+              "code": "platformRsa",
+              "functionType": "column"
+            },
+            {
+              "name": "商户秘钥",
+              "code": "merchantRsa",
+              "functionType": "column"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "模板示例",
       "code": "templateDemo",
       "functionType": "menu",

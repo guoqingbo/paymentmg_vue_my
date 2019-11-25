@@ -66,9 +66,17 @@
               }else if(params.row.appStatus == 2){
                 color='#2b85e4'
               }
-              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}},
-                this.filter.turn("applyStatus",params.row.appStatus)))
-              array.push(h('span', this.filter.turn("applyStatus",params.row.appStatus)))
+              let style = {
+                backgroundColor:color,
+                fontSize:'16px',
+                width:'10px',
+                height:'10px',
+                display:'inline-block',
+                borderRadius:'10px',
+                marginRight:'8px'
+              }
+              array.push(h('span', {style}))
+              array.push(h('span', this.filter.turn("appStatus",params.row.appStatus)))
               return array
             }
           },
@@ -83,8 +91,16 @@
               }else if(params.row.functionStatus == 1){
                color='#2b85e4'
               }
-              array.push(h('Icon', {props:{type:'md-bookmark',color:color,size:'16'}},
-                this.filter.turn("applyStatus",params.row.appStatus)))
+              let style = {
+                backgroundColor:color,
+                fontSize:'16px',
+                width:'10px',
+                height:'10px',
+                display:'inline-block',
+                borderRadius:'10px',
+                marginRight:'8px'
+              }
+              array.push(h('span', {style}))
               array.push(h('span', this.filter.turn("functionStatus",params.row.functionStatus)))
               return array
             }
@@ -102,6 +118,7 @@
               const actions = [
                 {
                   title: "管理",
+                  marginRight:'30px',
                   action: () => {
                     // this.$router.push({
                     //   path: "/merchant/applyManageDetail",
@@ -118,6 +135,7 @@
                 },
                 {
                   title: "删除",
+                  color:"#666",
                   action: () => {
                     this.mode = "delete";
                     this.sucessMsg = "删除成功！";
@@ -165,7 +183,7 @@
             label: '应用状态',
             type: 'select',
             name: 'appStatus',
-            data: this.common.dic.applyStatus
+            data: this.common.dic.appStatus
           },
         ],
         hannleItems: [
