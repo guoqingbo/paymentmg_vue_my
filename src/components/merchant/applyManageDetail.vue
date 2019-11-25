@@ -688,6 +688,7 @@
     .default-btn{
       margin-left: 16px;
       color: #2d8cf0;
+      cursor: pointer;
     }
     .apply-manage-top{
       padding-bottom: 30px;
@@ -729,6 +730,7 @@
         margin-right: 20px;
         font-size: 14px;
         position: relative;
+        cursor: pointer;
         .tab-item-tag{
           position: absolute;
           bottom:20px;
