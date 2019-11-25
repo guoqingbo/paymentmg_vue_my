@@ -258,6 +258,8 @@
         let abc = {}
         // 是否为微信官方
         let wechatOfficial = {}
+        // 添加建行支付渠道中操作员密码和证书密码显示为密文
+        let jianHang = {}
         if (configInfos) {
           configInfos.forEach((ele) => {
             let formListItem = {
@@ -316,10 +318,13 @@
             }else if (ele.ifFile == 'SELECT') {
               formListItem.type = 'select';
               let data = [];
-              ele.tips = JSON.parse(ele.tips)
-              Object.keys(ele.tips).forEach(key=>{
+              let tips =  ele.tips
+              if(typeof tips == 'string'){
+                tips = JSON.parse(tips)
+              }
+              Object.keys(tips).forEach(key=>{
                 data.push({
-                  label:ele.tips[key],
+                  label:tips[key],
                   value:key
                 })
               })
@@ -333,7 +338,6 @@
               wechatOfficial.accessMode = formListItem
               wechatOfficial.accessModeIndex = this.formList.length - 1
             }
-
             // 农行商时特殊处理
             if (ele.configKey == 'merchantCertFile') {
               abc.merchantCertFile = formListItem
@@ -341,6 +345,13 @@
               abc.merchantCertPassword = formListItem
             } else if (ele.configKey == 'abcMerchantId') {
               abc.abcMerchantId = formListItem
+            }
+
+            // 添加建行支付渠道中操作员密码和证书密码显示为密文
+            if (ele.configKey == 'certFilePwd') {
+              jianHang.certFilePwd = formListItem
+            } else if (ele.configKey == 'password') {
+              jianHang.password = formListItem
             }
           })
 
@@ -351,6 +362,10 @@
           // 支付渠道为微信官方时，增加商户模式，为服务商模式和普通模式，默认返回的为服务商模式
           if (Object.keys(wechatOfficial).length) {
             this.turnPayConfigWechatOfficial(wechatOfficial)
+          }
+          // 添加建行支付渠道中操作员密码和证书密码显示为密文
+          if (Object.keys(jianHang).length) {
+            this.turnPayConfigJianHang(jianHang)
           }
         }
       },
@@ -461,7 +476,18 @@
           this.formList.splice(accessModeIndex, 1)
           this.formList.splice(accessModeIndexInit, 0, accessMode)
         }
-      }
+      },
+      // 添加建行支付渠道中操作员密码和证书密码显示为密文
+      turnPayConfigJianHang(jianHang) {
+        let password = jianHang.password
+        let certFilePwd = jianHang.certFilePwd
+        if (password) {
+          password.type = 'password'
+        }
+        if (certFilePwd) {
+          certFilePwd.type = 'password'
+        }
+      },
     }
   }
 </script>

@@ -291,10 +291,6 @@ const common = {
     let array = []
     actions.forEach(element => {
       let obj = h('a', {
-        // props: {
-        //   type: 'primary',
-        //   size: 'small'
-        // },
         style: {
           color:element.color||'#2d8cf0',
           margin: '5px',
@@ -315,6 +311,9 @@ const common = {
     let array = []
     let obj = ''
     actions.forEach(element => {
+      if(typeof element.type == 'undefined'){
+        element.type = 'a'
+      }
       if(element.type =='Button'){
         obj = h('Button', {
           props: {
@@ -332,7 +331,8 @@ const common = {
             }
           }
         }, element.title)
-      }else if(element.type =='text'){
+      }
+      else if(element.type =='text'){
         obj = h('span', {
           style: {
             margin: '5px',
@@ -340,7 +340,8 @@ const common = {
           },
 
         },element.title)
-      }else if(element.type =='router'){
+      }
+      else if(element.type =='router'){
         obj = h('router-link', {
           props: {
             to: element.to,
@@ -350,7 +351,8 @@ const common = {
             marginLeft: 0
           },
         },element.title)
-      }else if(element.type =='a'){
+      }
+      else if(element.type =='a'){
         obj = h('a', {
           style: {
             margin: '5px',

@@ -346,11 +346,28 @@
           {
             title: '操作',
             key: 'action',
-            width:140,
+            width:200,
             align:'center',
             render: (h, params) => {
-              const actions = [
-                {
+              let actions = []
+              if(params.row.authUrl){
+                // 支付宝授权地址复制
+                actions.push({
+                  title: "复制授权地址",
+                  action: () => {
+                    this.$copyText(params.row.authUrl).then(
+                      res => {
+                        this.onCopy()
+                      },
+                      err => {
+                        this.error()
+                      }
+                    )
+                  }
+                })
+
+              }
+              actions.push({
                   title: "配置",
                   action: () => {
                     this.$router.push({
@@ -371,8 +388,7 @@
                       "/merchantChannel/delete/" + params.row.id
                     );
                   }
-                }
-              ];
+                });
               return this.common.columnsHandle(h, actions);
             }
           }

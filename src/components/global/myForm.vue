@@ -29,6 +29,9 @@
               item.type=='autoCompleteText'">
           {{item.value}}
         </span>
+          <span class="detail-text"
+                v-if="item.type=='passwordText'">......
+        </span>
           <span class="detail-text detail-textareaText"
                 v-if="item.type=='textareaText'">
           {{item.value}}
@@ -54,6 +57,13 @@
                  v-model="item.value"
                  :type="item.value && item.value.length>200?'textarea':'text'"
                  :autosize="{minRows: 2,maxRows: 5}"
+                 :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
+          <Input v-if="item.type=='password'"
+                 clearable
+                 :disabled="item.disabled"
+                 :on-change="item.onChange?item.onChange(item.value):''"
+                 v-model="item.value"
+                 type="password"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"></Input>
           <Input v-if="item.type=='textarea'"
                  :disabled="item.disabled"
