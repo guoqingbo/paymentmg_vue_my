@@ -222,7 +222,8 @@
           order_source:payOrder.orderSource,//订单来源
           merchant_no:payOrder.merchantNo,//商户标识
           // merchant_source_no:payOrder.merchantSourceNo,//来源商户标识
-          payId:payOrder.payId,//来源商户标识
+          merchant_source_no:payOrder.payId,
+          // payId:payOrder.payId,//来源商户标识
           user_source_no:payOrder.userSourceNo,//来源用户标识
           // pay_scene_no:payOrder.payScene,//支付场景编号
           // time_expire:'',//交易过期时间
