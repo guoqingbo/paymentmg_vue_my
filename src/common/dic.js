@@ -59,9 +59,9 @@ let dic = {
     {label:"手续费分账",value:"1"},
   ],
   // 应用状态
-  applyStatus: [
-    {label:"调试",value:"0"},
-    {label:"下架",value:"1"},
+  appStatus: [
+    {label:"开发调试",value:"0"},
+    {label:"应用下架",value:"1"},
     {label:"已上线",value:"2"},
   ],
   // 功能状态
@@ -78,9 +78,12 @@ let dic = {
   ],
   // 适用场景
   appScene: [
-    {label:"窗口售票",value:"0"},
-    {label:"自助机",value:"1"},
-    {label:"线上商城",value:"2"},
+    {label:"柜台售票",value:"0"},
+    {label:"自助购票",value:"1"},
+    {label:"电脑网站",value:"2"},
+    {label:"手机网站",value:"3"},
+    {label:"扫码购票",value:"4"},
+
   ],
 }
 export default dic
