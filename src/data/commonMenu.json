@@ -210,6 +210,11 @@
               "name": "平台秘钥",
               "code": "platformRsa",
               "functionType": "column"
+            },
+            {
+              "name": "商户秘钥",
+              "code": "merchantRsa",
+              "functionType": "column"
             }
           ]
         }
