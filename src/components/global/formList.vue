@@ -11,6 +11,7 @@
           <slot :name="item.name+'After'"></slot>
         </template>
       </template>
+      <slot></slot>
     </myForm>
     <slot name="bottom"></slot>
     <div class="bottom-btn-box">
@@ -122,6 +123,9 @@
       },
       getFormItem(){
         return this.$refs.myForm.formItem
+      },
+      setFormItem(name,value){
+        return this.$refs.myForm.setFormItem(name,value)
       }
     }
   }

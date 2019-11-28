@@ -27,27 +27,27 @@
             align:'center'
           },
           {
-            title: '商户号',
+            title: '操作员账号',
             key: 'merchantCode',
             sortable: true,
           },
           {
-            title: '商户名称',
+            title: '账号所有人',
             key: 'merchantName',
             sortable: true,
           },
           {
-            title: '商户类型',
+            title: '添加日期',
+            key: 'createTime',
+            sortable: 'custom',
+          },
+          {
+            title: '状态',
             key: 'merchantType',
             sortable: true,
             render: (h, params) => {
               return h('span', this.filter.turn("merchantType",params.row.merchantType))
             }
-          },
-          {
-            title: '创建时间',
-            key: 'createTime',
-            sortable: 'custom',
           },
           {
             title: '操作',
@@ -57,36 +57,78 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "详情",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
-                      query: { id: params.row.id,routeType:"detail"}
-                    });
-                  }
-                },
-                {
-                  title: "编辑",
-                  action: () => {
-                    this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
-                      query: {id: params.row.id}
-                    });
-                  }
-                },
-                {
-                  title: "删除",
-                  action: () => {
-                    this.mode = "delete";
-                    this.sucessMsg = "删除成功！";
-                    this.content = "确定删除？";
-                    this.$refs.confirmModel.confirm(
-                      "/merchant/delete/" + params.row.id
-                    );
+                  title:'操作',
+                  type:'select',
+                  data:[
+                    {
+                      label:'详情',
+                      value:'1',
+                    },
+                    {
+                      label:'编辑',
+                      value:'2'
+                    },
+                    {
+                      label:'删除',
+                      value:'3'
+                    }
+                  ],
+                  value:"",
+                  onChange:(value)=>{
+                    if(value == 1){
+                      // 详情
+                      this.$router.push({
+                        path: "/systemSetting/accountManage/memberAddEditDetail",
+                        query: { id: params.row.id,routeType:"detail"}
+                      });
+                    }else if(value == 2){
+                      // 编辑
+                      this.$router.push({
+                          path: "/systemSetting/accountManage/memberAddEditDetail",
+                          query: {id: params.row.id}
+                        });
+                    }else if(value == 3){
+                      // 删除
+                      this.mode = "delete";
+                      this.sucessMsg = "删除成功！";
+                      this.content = "确定删除？";
+                      this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
+                    }
                   }
                 }
-              ];
-              return this.common.columnsHandle(h, actions);
+              ]
+              // const actions = [
+              //   {
+              //     title: "详情",
+              //     action: () => {
+              //       this.$router.push({
+              //         path: "/merchant/merchantAddEditDetail",
+              //         query: { id: params.row.id,routeType:"detail"}
+              //       });
+              //     }
+              //   },
+              //   {
+              //     title: "编辑",
+              //     action: () => {
+              //       this.$router.push({
+              //         path: "/merchant/merchantAddEditDetail",
+              //         query: {id: params.row.id}
+              //       });
+              //     }
+              //   },
+              //   {
+              //     title: "删除",
+              //     action: () => {
+              //       this.mode = "delete";
+              //       this.sucessMsg = "删除成功！";
+              //       this.content = "确定删除？";
+              //       this.$refs.confirmModel.confirm(
+              //         "/merchant/delete/" + params.row.id
+              //       );
+              //     }
+              //   }
+              // ];
+              return this.common.columnsItemRender(h, actions);
             }
           }
         ],
@@ -96,39 +138,39 @@
         },
         url: '/merchant/grid',
         searchItems: [
-          {
-            label: '商户名称',
-            type: 'autoComplete',
-            name: 'merchantName',
-            data:[],
-            search: (value)=>{
-              let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
-              this.common.searchMerchantList(value,arrItem)
-            }
-          },
-          {
-            label: '开始日期',
-            type: 'date',
-            name: 'startDate',
-            format:'yyyy-MM-dd 00:00:00',
-            options:{},
-            value: ''
-          },
-          {
-            label: '结束日期',
-            type: 'date',
-            name: 'endDate',
-            format:'yyyy-MM-dd 23:59:59',
-            options:{},
-            value: ''
-          },
+          // {
+          //   label: '商户名称',
+          //   type: 'autoComplete',
+          //   name: 'merchantName',
+          //   data:[],
+          //   search: (value)=>{
+          //     let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
+          //     this.common.searchMerchantList(value,arrItem)
+          //   }
+          // },
+          // {
+          //   label: '开始日期',
+          //   type: 'date',
+          //   name: 'startDate',
+          //   format:'yyyy-MM-dd 00:00:00',
+          //   options:{},
+          //   value: ''
+          // },
+          // {
+          //   label: '结束日期',
+          //   type: 'date',
+          //   name: 'endDate',
+          //   format:'yyyy-MM-dd 23:59:59',
+          //   options:{},
+          //   value: ''
+          // },
         ],
         hannleItems: [
           {
-            title: '添加商户',
+            title: '添加',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchantAddEditDetail");
+              this.$router.push("/systemSetting/accountManage/memberAddEditDetail");
             }
           }
         ],

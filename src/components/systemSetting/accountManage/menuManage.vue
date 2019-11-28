@@ -27,29 +27,27 @@
             align:'center'
           },
           {
+            title: '商户号',
+            key: 'merchantCode',
+            sortable: true,
+          },
+          {
             title: '商户名称',
             key: 'merchantName',
+            sortable: true,
           },
           {
-            title: '管理员账号',
-            key: 'merchantName',
-          },
-          {
-            title: '账号所有人',
-            key: 'merchantName',
-          },
-          {
-            title: '添加日期',
-            key: 'createTime',
-            sortable: 'custom',
-          },
-          {
-            title: '状态',
+            title: '商户类型',
             key: 'merchantType',
             sortable: true,
             render: (h, params) => {
               return h('span', this.filter.turn("merchantType",params.row.merchantType))
             }
+          },
+          {
+            title: '创建时间',
+            key: 'createTime',
+            sortable: 'custom',
           },
           {
             title: '操作',
@@ -59,47 +57,36 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title:'操作',
-                  type:'select',
-                  data:[
-                    {
-                      label:'详情',
-                      value:'1',
-                    },
-                    {
-                      label:'编辑',
-                      value:'2'
-                    },
-                    {
-                      label:'删除',
-                      value:'3'
-                    }
-                  ],
-                  value:"",
-                  onChange:(value)=>{
-                    if(value == 1){
-                      // 详情
-                      this.$router.push({
-                        path: "/merchant/merchantMemberAddEditDetail",
-                        query: { id: params.row.id,routeType:"detail"}
-                      });
-                    }else if(value == 2){
-                      // 编辑
-                      this.$router.push({
-                        path: "/merchant/merchantMemberAddEditDetail",
-                        query: {id: params.row.id}
-                      });
-                    }else if(value == 3){
-                      // 删除
-                      this.mode = "delete";
-                      this.sucessMsg = "删除成功！";
-                      this.content = "确定删除？";
-                      this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
-                    }
+                  title: "详情",
+                  action: () => {
+                    this.$router.push({
+                      path: "/merchant/merchantAddEditDetail",
+                      query: { id: params.row.id,routeType:"detail"}
+                    });
+                  }
+                },
+                {
+                  title: "编辑",
+                  action: () => {
+                    this.$router.push({
+                      path: "/merchant/merchantAddEditDetail",
+                      query: {id: params.row.id}
+                    });
+                  }
+                },
+                {
+                  title: "删除",
+                  action: () => {
+                    this.mode = "delete";
+                    this.sucessMsg = "删除成功！";
+                    this.content = "确定删除？";
+                    this.$refs.confirmModel.confirm(
+                      "/merchant/delete/" + params.row.id
+                    );
                   }
                 }
-              ]
-              return this.common.columnsItemRender(h, actions);
+              ];
+              return this.common.columnsHandle(h, actions);
             }
           }
         ],
@@ -138,10 +125,10 @@
         ],
         hannleItems: [
           {
-            title: '添加',
+            title: '添加商户',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchantMemberAddEditDetail");
+              this.$router.push("/merchant/merchantAddEditDetail");
             }
           }
         ],

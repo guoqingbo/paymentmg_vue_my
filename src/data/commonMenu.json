@@ -16,6 +16,11 @@
           "functionType": "column"
         },
         {
+          "name": "添加商户管理员",
+          "code": "merchantMemberAddEditDetail",
+          "functionType": "button"
+        },
+        {
           "name": "商户渠道管理",
           "code": "merchantChannel",
           "functionType": "column"
@@ -234,8 +239,23 @@
               "functionType": "column"
             },
             {
+              "name": "添加员工",
+              "code": "memberAddEditDetail",
+              "functionType": "button"
+            },
+            {
               "name": "角色管理",
               "code": "roleManage",
+              "functionType": "column"
+            },
+            {
+              "name": "添加角色",
+              "code": "roleAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "name": "菜单管理",
+              "code": "menuManage",
               "functionType": "column"
             }
           ]

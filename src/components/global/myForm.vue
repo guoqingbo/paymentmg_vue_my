@@ -106,6 +106,13 @@
                    :label="sitem.value"
                    :key="sitem.value">{{ sitem.label }}</Radio>
           </RadioGroup>
+          <CheckboxGroup v-if="item.type=='checkbox'"
+                         :disabled="item.disabled"
+                         v-model="item.value">
+            <Checkbox v-for="sitem in item.data"
+                      :label="sitem.value"
+                      :key="sitem.value"></Checkbox>
+          </CheckboxGroup>
           <selectList v-if="item.type=='area'"
                       :disabled="item.disabled"
                       :fieldName="item.name"
@@ -151,6 +158,7 @@
         </FormItem>
         <slot :name="item.name+'After'"></slot>
       </template>
+      <slot></slot>
     </Form>
   </div>
 </template>
@@ -162,8 +170,9 @@ export default {
   data () {
     return {
       formItem: {
+
       },
-      autoSelected: false,
+      // autoSelected: false,
     }
   },
   props: {
@@ -281,6 +290,9 @@ export default {
         ele.value = '';
       });
       this.$refs.formRef.resetFields()
+    },
+    setFormItem(name,value){
+      this.$set(this.formItem, name, value)
     },
     // getAreaCode(){
     //   if(this.$refs.area){
