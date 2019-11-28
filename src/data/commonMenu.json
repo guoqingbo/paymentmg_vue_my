@@ -11,6 +11,11 @@
           "functionType": "column"
         },
         {
+          "name": "商户管理员",
+          "code": "merchantMember",
+          "functionType": "column"
+        },
+        {
           "name": "商户渠道管理",
           "code": "merchantChannel",
           "functionType": "column"
@@ -214,6 +219,23 @@
             {
               "name": "商户秘钥",
               "code": "merchantRsa",
+              "functionType": "column"
+            }
+          ]
+        },
+        {
+          "name": "账号管理",
+          "code": "accountManage",
+          "functionType": "column",
+          "menus": [
+            {
+              "name": "员工管理",
+              "code": "memberManage",
+              "functionType": "column"
+            },
+            {
+              "name": "角色管理",
+              "code": "roleManage",
               "functionType": "column"
             }
           ]
