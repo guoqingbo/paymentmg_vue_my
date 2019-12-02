@@ -51,13 +51,13 @@
           },
           {
             title: '业务商户编号',
-            key: 'subMerchantSourceNo',
+            key: 'subMerchantNo',
             // sortable: true,
             align:'center'
           },
           {
             title: '渠道商户编号',
-            key: 'subMerchantNo',
+            key: 'subMerchantSourceNo',
             // sortable: true,
             align:'center'
           },
