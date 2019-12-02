@@ -23,7 +23,7 @@ const config = {
   dev:{
     env:'dev',
     apiAdminPrefix:'/api/admin',// 支付中心接口前缀
-    apiPayPrefix:'/api/pay',// 支付收银台接口前缀
+    apiPayPrefix:'/api/pay ',// 支付收银台接口前缀
   },
 }
 let env = 'production'
