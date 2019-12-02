@@ -1,5 +1,5 @@
 // 不作为Main组件的子页面展示的页面单独写，如下
-import Main from '@/components/main'
+// import Main from '@/components/main'
 // import channelProduct from "./channelProduct"
 // import merchant from "./merchant"
 export const loginRouter = [
@@ -19,7 +19,8 @@ export const loginRouter = [
     path: '/login',
     name: 'login',
     meta: {
-      title: '登录'
+      title: '登录',
+      isLogin:false,
     },
     component: resolve => {
       require(['@/components/LoginForm.vue'], resolve)
@@ -29,7 +30,8 @@ export const loginRouter = [
     path: '/adminLogin',
     name: 'adminLogin',
     meta: {
-      title: '登录'
+      title: '登录',
+      isLogin:false,
     },
     component: resolve => {
       require(['@/components/LoginForm.vue'], resolve)
@@ -93,7 +95,9 @@ export const loginRouter = [
   {
     path: '/main',
     name: ' Main',
-    component: Main,
+    component: resolve => {
+      require(['@/components/main.vue'], resolve)
+    },
     children: [
       {
         path: '/addMenu',
