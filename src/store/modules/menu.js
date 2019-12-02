@@ -76,10 +76,14 @@ const actions = {
     // if(!context.state.menuList){
     //   let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
     // }
-    let menuList = require('../../data/commonMenu.json')
+    let menuList = {}
+    let commonMenu = require('../../data/commonMenu.json')
     if(config.env == 'dev'){
+      // 本地开发时，加载本地模板菜单，方便开发
       let devMenu = require('../../data/devMenu.json')
-      menuList.data = [...menuList.data,...devMenu.data]
+      menuList.data = [...commonMenu.data,...devMenu.data]
+    }else{
+      menuList = commonMenu
     }
     context.state.menuList = menuList
   },

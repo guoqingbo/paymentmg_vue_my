@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import App from './App'
+
+// 引入全局组件
+import globalComponents from './common/globalComponents'
+
 // import './validate'
 import router from './router'
 import store from './store'
-import iView from 'iview'
-
+// import iView from 'iview'
+// import 'iview/dist/styles/iview.css'
 // import axios from 'axios'
 import $ from 'jquery'
 import VueCookies from 'vue-cookies'
-import 'iview/dist/styles/iview.css'
+
 // import "./assets/styles/main.css";
 import * as filter from './filters'
 import common from './common'
@@ -18,8 +22,11 @@ import {
   apiPut,
   apiGet,
   apiPost,
-  apiPostJson
+  apiPostJson,
+  apiGetBlob
 } from '@/fetch/api'
+
+Vue.use(globalComponents);
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
@@ -65,7 +72,7 @@ router.beforeEach(async (to, from, next) => {
     }
 })
 window.$ = $
-Vue.use(iView)
+// Vue.use(iView)
 Vue.use(VueCookies)
 Vue.use(VueClipboard)
 
@@ -76,7 +83,7 @@ Vue.prototype.common = common
 Vue.prototype.apiGet = apiGet
 Vue.prototype.apiPost = apiPost
 Vue.prototype.apiPut = apiPut
-
+Vue.prototype.apiGetBlob = apiGetBlob
 // Object.keys(filter).forEach(key => {
 //   Vue.filter(key, filter[key])
 // })

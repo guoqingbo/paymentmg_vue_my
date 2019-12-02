@@ -140,7 +140,7 @@
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户渠道编辑'])
 
           }
-          this.apiGet("/merchantChannel/detail/" + id).then(res => {
+          this.apiGet("/merchantChannel/" + id).then(res => {
             if (res.status == 200 && res.data) {
               this.detail = res.data
               // 转换支付配置
