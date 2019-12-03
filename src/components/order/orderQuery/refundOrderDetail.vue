@@ -66,9 +66,10 @@
                         let href = this.$router.resolve({
                           path:'/order/orderQuery/tradeOrderDetail',
                           query:{
-                            orderNo:params.orderNo,
-                            orderSource:params.orderSource,
-                            merchantNo:this.orderInfo.merchantNo,
+                            id:this.orderInfo.payOrderId,
+                            // orderNo:params.orderNo,
+                            // orderSource:params.orderSource,
+                            // merchantNo:this.orderInfo.merchantNo,
                             // merchantSourceNo:params.merchantSourceNo
                           }
                         }).href;
@@ -154,7 +155,7 @@
     },
     created(){
       // 根据订单号和订单来源查询支付订单详情
-      this.getOrderByOrderNo()
+      // this.getOrderByOrderNo()
       // 获取退款状态
       this.getRefundStatus()
       // 获取订单来源
@@ -166,13 +167,13 @@
         this.orderInfo = orderInfo
       },
       // 根据订单号和订单来源查询支付订单详情
-      getOrderByOrderNo(){
-        let {refundOrderNo,orderNo,orderSource,merchantNo}= this.$route.query
-        if(refundOrderNo && orderSource && merchantNo){
-          this.tableUrl = '/refundorder/detail'
-          this.tableParams = this.$route.query
-        }
-      },
+      // getOrderByOrderNo(){
+      //   let {refundOrderNo,orderNo,orderSource,merchantNo}= this.$route.query
+      //   if(refundOrderNo && orderSource && merchantNo){
+      //     this.tableUrl = '/refundorder/detail'
+      //     this.tableParams = this.$route.query
+      //   }
+      // },
       // 获取退款状态
       getRefundStatus(){
         this.$store.dispatch("getRefundStatus").then(res=>{
