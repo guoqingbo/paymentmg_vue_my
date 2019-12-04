@@ -22,6 +22,7 @@
             name: 'merchantNo',
             data: [],
             type: 'autoComplete',
+            placeholder:'请输入商户名称关键字，支持模糊查询',
             value: '',
             disabled: false,
             search: (value) => {
@@ -36,6 +37,7 @@
             title: '应用名称',
             name: 'appName',
             type: 'input',
+            placeholder:'请输入32字以内应用名称，如小鲸扫码购票、云票务售票',
             rules: [
               {required: true, message: '请输入应用名称', trigger: 'blur'},
               {max: 32, message: "应用名称不超过32字符", trigger: 'blur'}

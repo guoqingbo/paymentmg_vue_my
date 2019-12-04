@@ -95,7 +95,7 @@
                         @on-search="item.search?item.search($event):''"
                         :clearable="true"
                         icon="ios-search"
-                        :placeholder="'请输入'+item.title">
+                        :placeholder="item.placeholder?item.placeholder:'请输入'+item.title">
             <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
           </AutoComplete>
           <RadioGroup v-if="item.type=='radio'"

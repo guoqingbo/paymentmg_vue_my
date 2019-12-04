@@ -8,10 +8,10 @@
           <div class="apply-info-top">
             <span class="apply-info-name">{{appDetail.appName}}</span>
             <!--<Button type="primary" size="small" @click="openApplyEdit">编辑</Button>-->
-            <span class="default-btn" @click="openApplyEdit">编辑</span>
+            <span class="default-btn eidt-btn" @click="openApplyEdit">编辑</span>
           </div>
           <div class="apply-info-bottom">
-            <span class="apply-info-payId">PAYID</span>
+            <span class="apply-info-payId">PayID</span>
             <span class="apply-info-payId-value">{{appDetail.payId}}</span>
           </div>
         </div>
@@ -95,7 +95,7 @@
         <div class="dev-config-box" v-if="tabIndex==3">
           <div class="dev-config-info-top">
             <div class="dev-config-info-group">
-              <span class="dev-config-info-label">商户号（merchantNo）：</span>
+              <span class="dev-config-info-label">支付中心商户号（MerchantNo）：</span>
               <span class="dev-config-info-value">{{configInfo.merchantNo}}</span>
             </div>
             <div class="dev-config-info-group">
@@ -103,13 +103,13 @@
               <span class="dev-config-info-value">{{configInfo.payId}}</span>
             </div>
             <div class="dev-config-info-group">
-              <span class="dev-config-info-label">商户/平台私钥（RSA私钥）：</span>
+              <span class="dev-config-info-label">商户/平台私钥：</span>
               <span class="dev-config-info-value">{{configInfo.mchPrivateKeyShort}}</span>
               <span class="default-btn" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
               <!--<Button type="primary" size="small" v-clipboard:copy="configInfo.mchPrivateKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>-->
             </div>
             <div class="dev-config-info-group">
-              <span class="dev-config-info-label">支付中心公钥（RSA公钥）：</span>
+              <span class="dev-config-info-label">支付中心公钥：</span>
               <span class="dev-config-info-value">{{configInfo.publicKeyShort}}</span>
               <span class="default-btn" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
               <!--<Button type="primary" size="small" v-clipboard:copy="configInfo.publicKey" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>-->
@@ -210,7 +210,7 @@
         appDetail:{},
         funSelected:[],
         configInfo:{},
-        headerImg:require("../../assets/images/touxiang.png"),
+        headerImg:require("../../assets/images/user-icon.png"),
         applyEditformShow:false,
         applyEditformItems: [
           {
@@ -709,8 +709,12 @@
           font-weight: bold;
           font-size: 16px;
         }
+        .eidt-btn{
+          font-size: 12px;
+        }
         .apply-info-payId-value{
           font-size: 15px;
+          color: #999;
         }
         .apply-info-payId{
           padding: 3px 5px;
@@ -723,7 +727,7 @@
       }
     }
     .tab-box{
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid #f3f3f3;
       padding-bottom: 13px;
       .tab-item{
         display: inline-block;
@@ -761,6 +765,9 @@
       }
       .apply-info-label{
         color: #999;
+      }
+      .apply-info-value{
+        color: #666;
       }
     }
     .apply-section-title{
