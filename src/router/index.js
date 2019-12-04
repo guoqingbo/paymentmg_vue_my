@@ -6,6 +6,14 @@ import {
   routers
 } from './router'
 
+// vue-router ≥3.0版本回调形式以及改成promise api的形式了，返回的是一个promise，如果路由地址跳转相同, 且没有捕获到错误，控制台始终会出现如图所示的警告 （注：3.0以下版本则不会出现以下警告！！！，因路由回调问题…）
+// 注：官方vue-router ≥3.0新版本路由默认回调返回的都是promise，原先就版本的路由回调将废弃！！！！
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+
 Vue.use(Router)
 
 const router = new Router({
