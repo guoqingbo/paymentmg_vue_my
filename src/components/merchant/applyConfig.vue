@@ -296,8 +296,8 @@
             else if (ele.ifFile == 'checkbox') {
               // 对象转为数组
               let data = []
-              if (ele.tips) {
-                let tipsObj = JSON.parse(ele.tips)
+              if (ele.data) {
+                let tipsObj = JSON.parse(ele.data)
                 Object.keys(tipsObj).forEach(sele => {
                   data.push({
                     value: sele,
@@ -318,7 +318,7 @@
             }else if (ele.ifFile == 'SELECT') {
               formListItem.type = 'select';
               let data = [];
-              let tips =  ele.tips
+              let tips =  ele.data
               if(typeof tips == 'string'){
                 tips = JSON.parse(tips)
               }

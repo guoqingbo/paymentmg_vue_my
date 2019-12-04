@@ -118,7 +118,8 @@
             cols:[
               {
                 title:'来源商户号',
-                name:'merchantSourceNo'
+                name:'payId'
+                // name:'merchantSourceNo'
               },{
                 title:'来源用户标识',
                 name:'userSourceNo'
@@ -178,10 +179,11 @@
                     let href = this.$router.resolve({
                       path:'/order/orderQuery/refundOrderDetail',
                       query:{
-                        refundOrderNo:params.row.refundOrderNo,
-                        orderNo:params.row.orderNo,
-                        orderSource:params.row.orderSource,
-                        merchantNo:this.orderInfo.merchantNo,
+                        id:params.row.id,
+                        // refundOrderNo:params.row.refundOrderNo,
+                        // orderNo:params.row.orderNo,
+                        // orderSource:params.row.orderSource,
+                        // merchantNo:this.orderInfo.merchantNo,
                         // merchantSourceNo:this.orderInfo.merchantSourceNo
                       }
                     }).href;
@@ -237,7 +239,7 @@
       // 获取清算类型
       this.getAuditType()
       // 根据订单号和订单来源查询支付订单详情
-      this.getOrderByOrderNo()
+      // this.getOrderByOrderNo()
       // 获取支付状态
       this.getPayStatus()
       // 获取订单来源
@@ -303,13 +305,13 @@
         })
       },
       // 根据订单号和订单来源查询支付订单详情
-      getOrderByOrderNo(){
-        let {orderNo,orderSource,merchantNo}= this.$route.query
-        if(orderNo && orderSource && merchantNo){
-            this.tableUrl = '/payorder/detail'
-            this.tableParams = this.$route.query
-        }
-      },
+      // getOrderByOrderNo(){
+      //   let {orderNo,orderSource,merchantNo}= this.$route.query
+      //   if(orderNo && orderSource && merchantNo){
+      //       this.tableUrl = '/payorder/detail'
+      //       this.tableParams = this.$route.query
+      //   }
+      // },
       // 获取支付状态
       getPayStatus(){
         this.$store.dispatch("getPayStatus").then(res=>{
