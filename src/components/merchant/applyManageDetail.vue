@@ -210,7 +210,7 @@
         appDetail:{},
         funSelected:[],
         configInfo:{},
-        headerImg:require("../../assets/images/touxiang.png"),
+        headerImg:require("../../assets/images/user-icon.png"),
         applyEditformShow:false,
         applyEditformItems: [
           {
