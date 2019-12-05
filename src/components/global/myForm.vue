@@ -207,6 +207,7 @@ export default {
             element.rules = ''
           }
 
+          // this.$set(element, 'value',element.value||'')
           if(typeof element.value == 'undefined'){
             // 作用是监听输入框value的变化，使表单验证起作用
             this.$set(element, 'value','')
