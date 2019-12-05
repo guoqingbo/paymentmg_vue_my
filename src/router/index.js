@@ -56,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
         path: '/main',
         name: 'main',
         component: resolve => {
-          require(['@/components/main.vue'], resolve)
+          require(['@/views/main.vue'], resolve)
         },
         children: [...store.state.menu.asyncRouter]
       }])

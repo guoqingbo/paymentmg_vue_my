@@ -45,7 +45,7 @@ const mutations = {
           let name = secondRouter
           roleRouter.push({
             path, name, meta,
-            component: resolve => {require([`@/components${path}`], resolve)},
+            component: resolve => {require([`@/views${path}`], resolve)},
           })
 
         }else if(it.menus && it.menus.length){
@@ -62,7 +62,7 @@ const mutations = {
             let name = thirdRouter
             roleRouter.push({
               path, name, meta,
-              component: resolve => {require([`@/components${path}`], resolve)},
+              component: resolve => {require([`@/views${path}`], resolve)},
             })
           })
         }
