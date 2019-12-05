@@ -95,7 +95,7 @@
                         @on-search="item.search?item.search($event):''"
                         :clearable="true"
                         icon="ios-search"
-                        :placeholder="'请输入'+item.title">
+                        :placeholder="item.placeholder?item.placeholder:'请输入'+item.title">
             <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
           </AutoComplete>
           <RadioGroup v-if="item.type=='radio'"
@@ -207,6 +207,7 @@ export default {
             element.rules = ''
           }
 
+          // this.$set(element, 'value',element.value||'')
           if(typeof element.value == 'undefined'){
             // 作用是监听输入框value的变化，使表单验证起作用
             this.$set(element, 'value','')

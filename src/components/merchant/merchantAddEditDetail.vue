@@ -35,14 +35,24 @@
             rules: [
               {required: true, message: '请输入商户简称', trigger: 'blur'},
               {max: 50, message: "商户简称不超过50字符", trigger: 'blur'}
-            ]
+            ],
+            value: ''
           },
           {
             title: '企业名称',
             name: 'corpName',
             type: 'input',
             rules: [{required: true, message: '请输入企业名称', trigger: 'blur'},
-              {max: 50, message: "企业名称不超过50字符", trigger: 'blur'}]
+              {max: 50, message: "企业名称不超过50字符", trigger: 'blur'}],
+            value: ''
+          },
+          {
+            title: '企业码',
+            name: 'corpCode',
+            type: 'input',
+            rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
+              {max: 20, message: "企业码不超过20字符", trigger: 'blur'}],
+            value: ''
           },
           {
             title: '上级商户号',
@@ -121,6 +131,14 @@
               {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
             ],
             value: 100
+          },
+          {
+            title: '企业码',
+            name: 'corpCode',
+            type: 'input',
+            rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
+              {required: false,max: 20, message: "企业码不超过20字符", trigger: 'blur'}],
+            value: ''
           },
           {
             title: '姓名',
@@ -216,8 +234,6 @@
     },
     watch: {},
     created() {
-      // 更改商户类型
-      this.merchantTypeChange(200)
       // 如果是编辑，详情
       this.getDetail()
     },
@@ -285,7 +301,8 @@
 
               this.common.setArrItem(this.formList,'merchantType',{disabled:true})
               this.formList.forEach((ele) => {
-                ele.value = res.data[ele.name]
+                // ele.value = res.data[ele.name]
+                this.$set(ele,'value',res.data[ele.name])
                 if (this.routeType == 'detail' && ele.type != 'text') {
                   // 如果是详情页
                   ele.type += "Text"
@@ -316,6 +333,9 @@
               })
             }
           });
+        }else {
+          // 更改商户类型
+          this.merchantTypeChange(200)
         }
       },
       // 更改商户类型

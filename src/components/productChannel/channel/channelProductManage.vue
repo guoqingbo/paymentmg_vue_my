@@ -54,6 +54,14 @@
             }
           },
           {
+            title: '渠道所属类别',
+            key: 'type',
+            sortable: true,
+            render: (h, params) => {
+              return h('span', this.filter.turn("funType",params.row.type))
+            }
+          },
+          {
             title: '创建时间',
             key: 'createTime',
             sortable: true,

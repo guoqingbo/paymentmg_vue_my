@@ -35,6 +35,13 @@
             ]
           },
           {
+            title: '渠道所属类别',
+            name: 'type',
+            type: 'select',
+            data: this.common.dic.funType,
+            rules: [{ required: true,message: '请选择渠道所属类别', trigger: 'change' }]
+          },
+          {
             title: '渠道产品名称',
             name: 'channelProductName',
             type: 'input',

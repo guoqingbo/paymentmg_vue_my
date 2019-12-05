@@ -207,7 +207,7 @@
           let xAxisData = []
           let seriesData = []
           let list = res.data.data
-          Object.keys(list).forEach((ele,index)=>{
+          Object.keys(list).sort().forEach((ele,index)=>{
             xAxisData.push(ele)
             seriesData.push(list[ele])
           })

@@ -1,5 +1,3 @@
-import common from "../common";
-
 const config = {
   // 测试环境
   test:{
