@@ -99,32 +99,6 @@ export const loginRouter = [
       require(['@/components/main.vue'], resolve)
     },
     children: [
-      {
-        path: '/addMenu',
-        name: 'addmenu',
-        meta: {
-          breadcrumbList: ['用户管理', '菜单管理'],
-          belongTab: 'system',
-          openName: 'account'
-        },
-        component: resolve => {
-          require(['@/components/system/account/addMenu'], resolve)
-        }
-      },
-      {
-        path: '/menu',
-        name: 'Menu',
-        meta: {
-          breadcrumbList: ['用户管理', '菜单管理'],
-          belongTab: 'system',
-          openName: 'account'
-        },
-        component: resolve => {
-          require(['@/components/system/account/menu'], resolve)
-        }
-      },
-      // ...channelProduct,
-      // ...merchant,
     ]
   },
   {

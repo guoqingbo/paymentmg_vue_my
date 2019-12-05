@@ -15,6 +15,11 @@ let dic = {
     {label:"启用",value:1},
     {label:"停用",value:0},
   ],
+  // 账号状态
+  memberStatus: [
+    {label:"启用",value:"1"},
+    {label:"冻结",value:"0"},
+  ],
   // channelType: [
   //   {label:"银行",value:0},
   //   {label:"支付公司",value:1},

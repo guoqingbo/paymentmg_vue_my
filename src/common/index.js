@@ -366,6 +366,31 @@ const common = {
           }
         },element.title)
       }
+      else if(element.type =='select'){
+        let options = element.data.map(item => {
+          return h("Option",{
+            props:{
+              value:item.value,
+              label: item.label,
+            }
+          })
+        })
+        obj = h('Select', {
+          style: {
+            margin: '5px',
+            marginLeft: 0
+          },
+          props:{
+            value:element.value || "",
+            placeholder:element.title
+          },
+          on: {
+            'on-change'(value){
+              element.onChange(value)
+            }
+          }
+        },options)
+      }
       array.push(obj)
     })
     return array

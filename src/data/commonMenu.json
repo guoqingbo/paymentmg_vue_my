@@ -11,6 +11,16 @@
           "functionType": "column"
         },
         {
+          "name": "商户管理员",
+          "code": "merchantMember",
+          "functionType": "column"
+        },
+        {
+          "name": "添加商户管理员",
+          "code": "merchantMemberAddEditDetail",
+          "functionType": "button"
+        },
+        {
           "name": "添加商户",
           "code": "merchantAddEditDetail",
           "functionType": "button"
@@ -210,6 +220,43 @@
             {
               "name": "平台秘钥",
               "code": "platformRsa",
+              "functionType": "column"
+            },
+            {
+              "name": "商户秘钥",
+              "code": "merchantRsa",
+              "functionType": "column"
+            }
+          ]
+        },
+        {
+          "name": "账号管理",
+          "code": "accountManage",
+          "functionType": "column",
+          "menus": [
+            {
+              "name": "员工管理",
+              "code": "memberManage",
+              "functionType": "column"
+            },
+            {
+              "name": "添加员工",
+              "code": "memberAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "name": "角色管理",
+              "code": "roleManage",
+              "functionType": "column"
+            },
+            {
+              "name": "添加角色",
+              "code": "roleAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "name": "菜单管理",
+              "code": "menuManage",
               "functionType": "column"
             }
           ]
