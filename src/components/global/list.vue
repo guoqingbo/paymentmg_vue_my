@@ -5,7 +5,9 @@
                 :exportItem="exportItem"
                 @beforeSubmit="$emit('beforeSubmit',$store.state.list.params)"
                 @afterSubmit="$emit('afterSubmit',$store.state.list.res)"
+                @searchSubmit="$emit('searchSubmit',$store.state.list.params)"
                 :url="url"
+                :apiPrefix="apiPrefix"
                 :params="params"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
       <Col span="2" v-for="item in hannleItems" :key="item.title">
@@ -63,6 +65,9 @@
       },
       hannleItems:{
         type: Array,
+      },
+      apiPrefix:{
+        type: String,
       },
       url:{
         type: String,

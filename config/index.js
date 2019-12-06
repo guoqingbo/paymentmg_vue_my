@@ -33,6 +33,14 @@ module.exports = {
             '^/api/pay': '/api/pay'
           }
         },
+        // 用户角色接口
+        '/api/user':{
+          target:'http://192.168.66.28:8080/',
+          changeOrigin:true,
+          pathRewrite: {
+            '^/api/user': '/api/user'
+          }
+        },
 
     },
 

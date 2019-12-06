@@ -235,58 +235,102 @@ const common = {
     }
     return fmt;
   },
-
-  changeLoading(obj) {
-    obj.loading = false
-    obj.$nextTick(() => {
-      obj.loading = true
-    })
-  },
-  // 此处'formItem'要改用变量传值，因为一个页面会有多个表单？？？modalName-form ref
-  formPost(obj, options) {
-    obj.$refs[options.modalName ? options.modalName : 'formItem'].validate(async (valid) => {
-      if (valid) {
-        let res = await App.apiPost(options.url, options.params)
-        // console.log(res)
-        if (res.success) {
-          switch (options.mold) {
-            case 'modal':
-              obj.$refs.gridTable.loadpage()
-              break;
-            case 'page':
-
-              break
-          }
-        } else if (res.status === 200) {
-          switch (options.mold) {
-            case 'modal':
-              break
-          }
-        } else {
-          obj.$Message.error(res.message)
-          return this.changeLoading(obj)
+  authList:[],
+  // 菜单列表转为树形结构
+  menuToTree(menuList){
+    // 最多三级结构
+    // memuObj过度层，目标结构为 {一级索引:{二级索引:[]}}
+    // 以id为key值
+    let memuObj = {}
+    // 一二级关联
+    let memuObj12 = {
+      // 1:[4,5,6]
+    }
+    // 二三级关联
+    let memuObj23 = {
+      // 1:[4,5,6]
+    }
+    // 一二三级关联
+    let memuObj123 = {}
+    let menuTree = []
+    menuList.forEach((ele,index)=>{
+      common.authList.push(ele.tag)
+      memuObj[ele.id] = ele
+      // 获取一二级关联
+      if(ele.deep == 2){
+        if(!memuObj12[ele.parentId]){
+          memuObj12[ele.parentId]=[ele.id]
+        }else{
+          memuObj12[ele.parentId].push(ele.id)
         }
-        options.callback(res)
-      } else {
-        if (options.mold === 'modal') {
-          return this.changeLoading(obj)
+      }
+      // 获取二三级关联
+      if(ele.deep == 3){
+        if(!memuObj23[ele.parentId]){
+          memuObj23[ele.parentId]=[ele.id]
+        }else{
+          memuObj23[ele.parentId].push(ele.id)
         }
       }
     })
+    // 123及关联
+    Object.keys(memuObj12)
+      .forEach(ele=>{
+        if(memuObj123[ele]){
+          memuObj12[ele]
+            .sort(common.menuSort(memuObj))
+            .forEach(sele=>{
+              memuObj123[ele][sele]= memuObj23[sele]
+            })
+        }else{
+          memuObj123[ele] = {}
+          memuObj12[ele]
+            .forEach(sele=>{
+                memuObj123[ele][sele]= memuObj23[sele]
+            })
+        }
+    })
+    // 生成树形结构
+    Object.keys(memuObj123)
+      .sort(common.menuSort(memuObj))
+      .forEach(ele=>{
+       let oneMenu = memuObj[ele]
+        oneMenu.list = []
+        Object.keys(memuObj123[ele])
+          .sort(common.menuSort(memuObj))
+          .forEach(sele=>{
+            let twoMenu = memuObj[sele]
+            twoMenu.list = []
+            memuObj123[ele][sele]
+              .sort(common.menuSort(memuObj))
+              .forEach(ssele=>{
+                let threeMenu = memuObj[ssele]
+                twoMenu.list.push(threeMenu)
+              })
+            oneMenu.list.push(twoMenu)
+          })
+        menuTree.push(oneMenu)
+      })
+    return {menuTree}
   },
-  async listDelete(obj, options) {
-    let res = {}
-    if(obj.method == "get"){
-      res = await App.apiGet(options.url, options.params || {})
-    }else{
-      res = await App.apiPost(options.url, options.params || {})
+  // 检查是否有权限
+  checkAuth(auth){
+    let isAuth = false
+    if(common.authList.include(auth)){
+      isAuth = true
     }
-
-    options.callback(res)
+    return isAuth
   },
-  async listDone(obj, options) {
-    let res = await App.apiPost(options.url, options.params || {})
-    options.callback(res)
+  menuSort(memuObj23){
+    return (a,b)=>{
+      if(memuObj23[a].sort > memuObj23[b].sort){
+        return 1
+      }else if(memuObj23[a].sort == memuObj23[b].sort){
+        return 0
+      }else {
+        return -1
+      }
+    }
   },
   columnsHandle(h, actions) {
     let array = []
@@ -394,6 +438,20 @@ const common = {
       array.push(obj)
     })
     return array
+  },
+  async listDelete(obj, options) {
+    let res = {}
+    if(obj.method == "get"){
+      res = await App.apiGet(options.url, options.params || {})
+    }else{
+      res = await App.apiPost(options.url, options.params || {})
+    }
+
+    options.callback(res)
+  },
+  async listDone(obj, options) {
+    let res = await App.apiPost(options.url, options.params || {})
+    options.callback(res)
   },
   validate,
   dic,

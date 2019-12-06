@@ -1,12 +1,26 @@
 <template>
   <div>
-    <list ref="gridTable"
-          :columns="columns"
-          :url="url"
-          :params="params"
-          @beforeSubmit="beforeSubmit"
-          :searchItems="searchItems"
-          :hannleItems="hannleItems"></list>
+    <!--菜单表格-->
+   <div>
+     <Row :gutter="16">
+       <Col span="2" v-for="item in hannleItems" :key="item.title">
+         <Button type="primary"
+                 :icon="item.icon"
+                 @click="item.callback"
+                 :loading="item.loading">{{ item.title }}</Button>
+       </Col>
+     </Row>
+     <div style="margin-top: 20px">
+       <Table
+         style="position:static;"
+         border
+         stripe
+         :columns="columns"
+         :data="menuList"></Table>
+       <!--<Tree :data="menuList" :render="renderContent"></Tree>-->
+       <Tree :data="data5" :render="renderContent"></Tree>
+     </div>
+   </div>
     <confirm ref="confirmModel"
              :content="content"
              :sucessMsg="sucessMsg"
@@ -14,7 +28,7 @@
     <modalForm v-model="formShow"
                :formItems="formItems"
                :routeType='routeType'
-               @input='closeModal'
+               :apiPrefix="apiPrefix"
                @beforeSave='beforeSave'
                :url="formUrl"
                :title="formTitle">
@@ -29,6 +43,84 @@
     components: {list,confirm,modalForm},
     data () {
       return {
+        data5: [
+          {
+            title: 'parent 1',
+            expand: true,
+            // render: (h, { root, node, data }) => {
+            //   return h('span', {
+            //     style: {
+            //       display: 'inline-block',
+            //       width: '100%'
+            //     }
+            //   }, [
+            //     h('span', [
+            //       h('Icon', {
+            //         props: {
+            //           type: 'ios-folder-outline'
+            //         },
+            //         style: {
+            //           marginRight: '8px'
+            //         }
+            //       }),
+            //       h('span', data.title)
+            //     ]),
+            //     h('span', {
+            //       style: {
+            //         display: 'inline-block',
+            //         float: 'right',
+            //         marginRight: '32px'
+            //       }
+            //     }, [
+            //       h('Button', {
+            //         props: Object.assign({}, this.buttonProps, {
+            //           icon: 'ios-add',
+            //           type: 'primary'
+            //         }),
+            //         style: {
+            //           width: '64px'
+            //         },
+            //         on: {
+            //           click: () => { this.append(data) }
+            //         }
+            //       })
+            //     ])
+            //   ]);
+            // },
+            children: [
+              {
+                title: 'child 1-1',
+                expand: true,
+                children: [
+                  {
+                    title: 'leaf 1-1-1',
+                    expand: true
+                  },
+                  {
+                    title: 'leaf 1-1-2',
+                    expand: true
+                  }
+                ]
+              },
+              {
+                title: 'child 1-2',
+                expand: true,
+                children: [
+                  {
+                    title: 'leaf 1-2-1',
+                    expand: true
+                  },
+                  {
+                    title: 'leaf 1-2-1',
+                    expand: true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        apiPrefix:this.common.config.apiUser,
+        menuList:[],
         columns: [
           {
             title: '序号',
@@ -38,43 +130,33 @@
           },
           {
             title: '名称',
-            key: 'merchantCode',
+            key: 'privilegeName',
             sortable: true,
           },
           {
             title: '唯一编码',
-            key: 'merchantName',
+            key: 'privilegeMark',
             sortable: true,
           },
           {
             title: '前端url',
-            key: 'merchantName',
+            key: 'privilegeUrl',
             sortable: true,
           },
           {
             title: '接口url',
-            key: 'merchantName',
-            sortable: true,
-          },
-          {
-            title: '是否加入自定义',
-            key: 'merchantName',
-            sortable: true,
-          },
-          {
-            title: '权限类型',
-            key: 'merchantName',
+            key: 'privilegeMethod',
             sortable: true,
           },
           {
             title: '层级深度',
-            key: 'merchantName',
+            key: 'privilegeLevel',
             sortable: true,
           },
           {
-            title: '添加时间',
-            key: 'createTime',
-            sortable: 'custom',
+            title: '排序',
+            key: 'privilegeOrde',
+            sortable: true,
           },
           {
             title: '操作',
@@ -103,8 +185,8 @@
                   value:"",
                   onChange:(value)=>{
                     if(value == 1){
-                      // 详情
-                      this.routeType = 'detail'
+                      // 添加
+                      this.routeType = 'add'
                       this.openPop(params.row)
                     }else if(value == 2){
                       // 编辑
@@ -128,35 +210,6 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchant/grid',
-        searchItems: [
-          // {
-          //   label: '商户名称',
-          //   type: 'autoComplete',
-          //   name: 'merchantName',
-          //   data:[],
-          //   search: (value)=>{
-          //     let arrItem = this.common.getArrItem(this.searchItems,'merchantName')
-          //     this.common.searchMerchantList(value,arrItem)
-          //   }
-          // },
-          // {
-          //   label: '开始日期',
-          //   type: 'date',
-          //   name: 'startDate',
-          //   format:'yyyy-MM-dd 00:00:00',
-          //   options:{},
-          //   value: ''
-          // },
-          // {
-          //   label: '结束日期',
-          //   type: 'date',
-          //   name: 'endDate',
-          //   format:'yyyy-MM-dd 23:59:59',
-          //   options:{},
-          //   value: ''
-          // },
-        ],
         hannleItems: [
           {
             title: '添加',
@@ -167,7 +220,7 @@
                 item.type=item.type.replace(/(Text)$/,'')
               });
               // 请求接口
-              this.formUrl = '/rsaKeyPlatform/save'
+              this.formUrl = '/privilege/add'
               this.routeType = 'add'
               this.formTitle = '添加'
             }
@@ -182,118 +235,227 @@
         formItems: [
           {
             title: '名称',
-            name: 'merchantName',
+            name: 'privilegeName',
             type: 'input',
-            disabled: false,
-            data: '',
-            // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
-          },
-          {
-            title: '名称',
-            name: 'merchantName',
-            type: 'input',
-            disabled: false,
-            data: '',
-            // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            rules: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }]
           },
           {
             title: '碓一编码',
-            name: 'merchantName',
+            name: 'privilegeMark',
             type: 'input',
-            disabled: false,
-            data: '',
-            // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            rules: [{ required: true, message: '请输入碓一编码', trigger: 'blur' }]
           },
           {
             title: '前端URL',
-            name: 'merchantName',
+            name: 'privilegeUrl',
             type: 'input',
-            disabled: false,
-            data: '',
             // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+          },
+          {
+            title: '权限类型',
+            name: 'privilegeType',
+            type: 'radio',
+            value: '2',
+            data:this.common.dic.privilegeType,
+            rules: [{ required: true, message: '请选择权限类型', trigger: 'change' }]
           },
           {
             title: '接口URL',
-            name: 'merchantName',
+            name: 'privilegeMethod',
             type: 'input',
-            disabled: false,
-            data: '',
             // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
           },
           {
-            title: '是否加入自定义',
-            name: 'priority',
+            title: '权限分组',
+            name: 'privilegeGroup',
             type: 'radio',
-            value: 999,
-            data:this.common.dic.priority,
-            rules: [{ required: true, type:'number', message: '请选择默认推荐支付方式', trigger: 'change' }]
+            value: '1',
+            data:this.common.dic.privilegeGroup,
+            rules: [{ required: true, message: '请选择权限分组', trigger: 'change' }],
           },
           {
             title: '排序',
-            name: 'merchantName',
+            name: 'privilegeOrder',
             type: 'input',
-            disabled: false,
-            data: '',
-            // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            rules: [{ required: true, message: '请输入排序', trigger: 'blur' }]
           },
           {
             title: '功能类别',
-            name: 'merchantType',
+            name: 'privilegeMenuType',
             type: 'select',
-            data: this.common.dic.merchantType,
-            onChange:this.merchantTypeChange,
+            data: this.common.dic.privilegeMenuType,
             rules: [
-              {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
+              {required: true, message: '请选择功能类别', trigger: 'change'}
             ],
-            value: 200,
+            value: '',
           },
           {
             title: '层级深度',
-            name: 'merchantType',
+            name: 'privilegeLevel',
             type: 'select',
-            data: this.common.dic.merchantType,
-            onChange:this.merchantTypeChange,
+            data: this.common.dic.privilegeLevel,
+            disabled:true,
             rules: [
-              {required: true, type: 'number', message: '请选择商户类型', trigger: 'change'}
+              {required: true, message: '请选择层级深度', trigger: 'change'}
             ],
-            value: 200,
+            value:'1'
           },
         ],
-        formUrl: '/rsaKeyMerchant/update'
+        routeType:'',
+        formUrl: '/privilege/update',
+        selectedMenu:'',
       }
     },
     mounted () {
 
     },
     created(){
-
+      // 获取菜单列表
+      this.getMemuList()
     },
     methods: {
+      renderContent (h, { root, node, data }) {
+        return h('span', {
+          style: {
+            display: 'inline-block',
+            width: '100%'
+          }
+        }, [
+          h('span', [
+            h('Icon', {
+              props: {
+                type: 'ios-paper-outline'
+              },
+              style: {
+                marginRight: '8px'
+              }
+            }),
+            h('span', data.title)
+          ]),
+          h('span', {
+            style: {
+              display: 'inline-block',
+              float: 'right',
+              marginRight: '32px'
+            }
+          }, [
+            h('Button', {
+              props: Object.assign({}, this.buttonProps, {
+                icon: 'ios-add'
+              }),
+              style: {
+                marginRight: '8px'
+              },
+              on: {
+                click: () => { this.append(data) }
+              }
+            }),
+            h('Button', {
+              props: Object.assign({}, this.buttonProps, {
+                icon: 'ios-remove'
+              }),
+              on: {
+                click: () => { this.remove(root, node, data) }
+              }
+            })
+          ])
+        ]);
+      },
+      append (data) {
+        const children = data.children || [];
+        children.push({
+          title: 'appended node',
+          expand: true
+        });
+        this.$set(data, 'children', children);
+      },
+      remove (root, node, data) {
+        const parentKey = root.find(el => el === node).parent;
+        const parent = root.find(el => el.nodeKey === parentKey).node;
+        const index = parent.children.indexOf(data);
+        parent.children.splice(index, 1);
+      },
+
+      beforeSave(params){
+        params.privilegeParent = 0
+        if(this.selectedMenu){
+          if(this.routeType == 'add'){
+            params.privilegeParent = this.selectedMenu.id
+          }
+          // else{
+          //   params.privilegeParent = this.selectedMenu.privilegeParent
+          // }
+        }
+
+      },
+      // 获取菜单列表
+      getMemuList(){
+        let url = '/privilege/grid'
+        this.apiGet(url,{},this.apiPrefix).then(res=>{
+          if(res.success){
+            // 格式化返回数据
+            this.formateMenuList(res.data)
+          }else{
+            this.$Message.warning(res.message)
+          }
+        })
+      },
+      // 格式化数据
+      formateMenuList(list){
+        // 转为一维数组
+        let menulist = []
+        list.forEach(ele=>{
+          let level1 = {...ele}
+          delete level1.items
+          menulist.push(level1)
+          if(ele.items && ele.items.length){
+            ele.items.forEach(sele=>{
+              let level2 = {...sele}
+              delete level2.items
+              menulist.push(level2)
+              if(sele.items&&sele.items.length){
+                sele.items.forEach(ssele=>{
+                  let level3 = {...ssele}
+                  delete level3.items
+                  menulist.push(level3)
+                })
+              }
+            })
+          }
+        })
+        this.menuList = menulist
+      },
       // 打开弹框
       openPop(item){
+        this.selectedMenu = item
         this.formShow = true
         this.formItems.forEach(item=>{
           item.value=''
         });
         if(this.routeType == 'edit'){
           this.formTitle = '修改'
-          this.setDetail(item.id)
+          this.setDetail(item)
         }else if(this.routeType == 'add'){
+          this.formItems.forEach(ele=>{
+            // 设置层级
+            if(ele.name == 'privilegeLevel'){
+              if(item){
+                ele.value = Number(item.privilegeLevel)+1
+              }else{
+                ele.value = 1
+              }
+              ele.value+=''
+            }
+            ele.value = item[ele.name]
+          });
           this.formTitle = '添加'
         }
       },
       // 设置详情页
-      setDetail(merchantCode){
-        this.apiGet('/rsaKeyMerchant/detail/'+merchantCode).then(res=>{
-          if(res.status == 200){
-            this.formItems.forEach(item=>{
-              item.value = res.data[item.name]
-            });
-            this.detail.merchantCode = res.data.merchantCode;
-          }else{
-            this.$Message.error(res.message)
-          }
-        })
+      setDetail(item){
+        this.formItems.forEach(ele=>{
+          ele.value = item[ele.name]
+        });
       }
     }
   }

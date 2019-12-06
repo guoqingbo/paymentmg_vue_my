@@ -56,7 +56,7 @@ export default {
       autoSelected: false,
     }
   },
-  props: ['searchItems','exportItem','url','params'],
+  props: ['searchItems','exportItem','url','params','apiPrefix'],
   watch: {
     searchItems: {
       handler(newValue, oldValue) {
@@ -221,7 +221,7 @@ export default {
       }
      // 搜索前
       this.$emit('beforeSubmit',this.$store.state.list.params)
-      this.$store.dispatch('getList').then(res=>{
+      this.$store.dispatch('getList',this.apiPrefix).then(res=>{
         if(res.success){
           this.$emit('afterSubmit',res)
         }else{

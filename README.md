@@ -1,5 +1,5 @@
 # 支付中心管理系统
-
+* 用户模块接口:http://192.168.66.28:8080/doc.html#/default/user-operator-controller/gridUsingGET_2
 ## 开发规范
 * global下为公用组件,组件中请不要带页面的具体业务逻辑，或字段，以防破环组件的公用性
    
@@ -25,7 +25,7 @@
 ## 测试环境
  * 后台接口 http://192.168.200.88:6071/
  * 域名 testpaycenter.zhiyoubao.com
- * 超级账号 superadmin/123456
+ * 超级账号 superadmin/123456  188888888/123456
     
 ## 预发环境
  * 域名 prepaycenter.zhiyoubao.com

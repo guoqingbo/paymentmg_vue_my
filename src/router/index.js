@@ -50,8 +50,8 @@ router.beforeEach(async (to, from, next) => {
     if (!store.state.userId) { // vuex中没有获取userId,说明是刷新,就需要去动态加载路由
       store.dispatch('setUserIdAction', userId)
       // 防止页面刷新路由失效
-      await store.dispatch('getMenu') // 获取权限
-      store.dispatch('formaterRouterHandle') // 根据权限获取路由
+      // await store.dispatch('getMenu') // 获取权限
+      await store.dispatch('formaterRouterHandle') // 根据权限获取路由
       router.addRoutes([{
         path: '/main',
         name: 'main',
@@ -69,22 +69,10 @@ router.beforeEach(async (to, from, next) => {
         next()
       } else {
         next('/404')
-        // next()
       }
-      // next()
     }
   } else { // 没登录过
     next({name: 'login'})
-    // console.log(to.matched.length)
-    // if (to.matched.length ===0) {  //如果未匹配到路由
-    //   return next('/404');
-    // }
-    // if (to.name === 'login' || to.name === 'adminLogin') {
-    //   next({name: 'login'})
-    // } else {
-    //   next({name: 'login'})
-    // }
-    // next()
   }
 })
 router.afterEach((to) => {
