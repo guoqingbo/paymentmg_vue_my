@@ -51,7 +51,8 @@ router.beforeEach(async (to, from, next) => {
       store.dispatch('setUserIdAction', userId)
       // 防止页面刷新路由失效
       // await store.dispatch('getMenu') // 获取权限
-      await store.dispatch('formaterRouterHandle') // 根据权限获取路由
+      // await store.dispatch('formaterRouterHandle') // 根据权限获取路由
+      store.commit("mainChildren"); // 根据权限获取路由
       router.addRoutes([{
         path: '/main',
         name: 'main',

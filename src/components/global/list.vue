@@ -5,7 +5,6 @@
                 :exportItem="exportItem"
                 @beforeSubmit="$emit('beforeSubmit',$store.state.list.params)"
                 @afterSubmit="$emit('afterSubmit',$store.state.list.res)"
-                @searchSubmit="$emit('searchSubmit',$store.state.list.params)"
                 :url="url"
                 :apiPrefix="apiPrefix"
                 :params="params"></searchForm>
@@ -103,6 +102,10 @@
       }
     },
     mounted() {
+      // 是否自定义搜索
+      if (this._events.searchSubmit) {
+        this.on("searchSubmit",this._events.searchSubmit)
+      }
       this.$refs.search.searchSubmit()
     },
     created(){

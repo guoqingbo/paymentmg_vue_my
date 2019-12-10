@@ -3,6 +3,7 @@
     <formList :formItems="formList"
               :routeType="routeType"
               :url="formListUrl"
+              :apiPrefix="apiPrefix"
               ref="formList"
               @beforeSave="beforeSave">
       <div>
@@ -10,14 +11,14 @@
           label-position="right"
           :label-width="150"
           label="选择权限："
-          prop="treeSelect"
+          prop="privilegeIds"
           :rules="{required: true, message: '请选择权限', trigger: 'change'}">
           <div style="border: 1px solid #dcdee2;padding:0 20px;border-radius: 5px">
-            <Tree :data="tree"
-                  show-checkbox
+            <Tree :data="menuTree"
+                  :show-checkbox="showCheckbox"
                   @on-check-change="onCheckChange"></Tree>
             <!--输入框单个验证-->
-            <Input v-model="treeSelect" style="display: none"></Input>
+            <Input v-model="privilegeIds" style="display: none"></Input>
           </div>
         </FormItem>
       </div>
@@ -32,12 +33,14 @@
     components: {formList},
     data() {
       return {
-        treeSelect:'',
-        formListUrl: "/merchant/save",
+        detail:{},
+        apiPrefix:this.common.config.apiUser,
+        privilegeIds:'',
+        formListUrl: "/role/add",
         formList: [
           {
             title: '角色名称',
-            name: 'merchantName',
+            name: 'roleName',
             type: 'input',
             rules: [
               {required: true, message: '请输入角色名称', trigger: 'blur'},
@@ -46,7 +49,7 @@
           },
           {
             title: '角色说明',
-            name: 'merchantName1',
+            name: 'remark',
             type: 'textarea',
             rules: [
               {max: 50, message: "请输入50字以内的说明", trigger: 'blur'}
@@ -54,7 +57,7 @@
           },
           // {
           //   title: '选择权限',
-          //   name: 'treeSelect',
+          //   name: 'privilegeIds',
           //   type: 'input',
           //   rules: [
           //     {required: true, message: '请输入角色名称', trigger: 'blur'},
@@ -63,44 +66,13 @@
           //   value:''
           // }
         ],
-        tree: [
-          {
-            title: 'parent 1',
-            // expand: true,
-            children: [
-              {
-                title: 'parent 1-1',
-                children: [
-                  {
-                    title: 'leaf 1-1-1'
-                  },
-                  {
-                    title: 'leaf 1-1-2'
-                  }
-                ]
-              },
-              {
-                title: 'parent 1-2',
-                // expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-2-1'
-                  },
-                  {
-                    title: 'leaf 1-2-1'
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        menuTree: [],
         routeType: "",// 判断是新增，详情，编辑
+        showCheckbox:true,
       }
     },
     watch: {},
     created() {
-      // 更改商户类型
-      // this.merchantTypeChange(200)
       // 如果是编辑，详情
       this.getDetail()
     },
@@ -108,120 +80,100 @@
 
     },
     methods: {
-      // 证件类型改变时
-      idTypeChange(e){
-        // 1身份证 2护照 3港澳通行证
-        let arrItem = this.common.getArrItem(this.formList1,'idCard')
-        if(e==1){
-          arrItem.rules[0].validator = this.common.validate.IdCodeValid
-        }else if(e==2){
-          arrItem.rules[0].validator = this.common.validate.passport
-        }else if(e==3){
-          arrItem.rules[0].validator = this.common.validate.passportHM
-        }
-      },
       // 确认保存之前
       beforeSave(formItem) {
-        if (formItem.areaObj) {
-          // 转换省市区
-          let area = formItem.areaObj
-          formItem.provinceCode = area[0].value;
-          formItem.province = area[0].label;
-          formItem.cityCode = area[1].value;
-          formItem.city = area[1].label;
-          formItem.districtCode = area[2].value;
-          formItem.district = area[2].label;
-          delete formItem.areaObj
-          delete formItem.area
-        }
-
-        // 商户名，商户号拆分
-        this.common.splitMerchant(formItem)
-
         if (this.$route.query.id) {
-          formItem.id = this.$route.query.id
+          formItem.roleId = this.$route.query.id
         }
       },
-      getDetail() {
+      getDetail(){
         if (this.$route.query.id) {
           let id = this.$route.query.id
           this.routeType = this.$route.query.routeType
-          if (this.routeType == 'detail') {
-            // 如果是详情页
-
-            // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户详情'])
-          } else {
-            // 如果是编辑
-            this.formListUrl = '/merchant/update'
-            // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
-          }
-          this.apiGet("/merchant/detail/" + id).then(res => {
-            if (res.status == 200 && res.data) {
-              // 更改账户类型
-              this.merchantTypeChange(res.data.merchantType)
-              if (this.routeType == 'detail') {
-                // 如果是详情页
-              } else {
-                // 如果是编辑
-                // 更改证件类型验证
-                this.idTypeChange(res.data.idType)
-              }
-
-              this.common.setArrItem(this.formList,'merchantType',{disabled:true})
-              this.formList.forEach((ele) => {
-                ele.value = res.data[ele.name]
-                if (this.routeType == 'detail' && ele.type != 'text') {
+          let url = '/role/detail'
+          this.apiGet(url,{id},this.apiPrefix).then(res=>{
+            if(res.success){
+              // 格式化返回数据
+              this.detail = res.data
+              // 设置权限
+              // if(){
+              //   this.
+              // }
+              this.formList.forEach(ele=>{
+                ele.value = this.detail[ele.name]
+                if (this.routeType == 'detail') {
                   // 如果是详情页
-                  ele.type += "Text"
-                  if (ele.name == 'area') {
-                    // 初始化区域
-                    let addrCodeName = [res.data.province, res.data.city, res.data.district].filter(ele=>{
-                      if(ele){
-                        return true
-                      }
-                    })
-                    ele.areaText = addrCodeName.join("-")
-                  }
-                }
-                if (this.routeType !== 'detail' && ele.name == 'area') {
-                  // 如果是编辑页
-                  if (ele.name == 'area') {
-                    let addrCode = [res.data.provinceCode, res.data.cityCode, res.data.districtCode]
-                    // ele.addrCode = addrCode.join("-")
-                    ele.value = addrCode.join("-")
-                    // if (addrCode[0] && addrCode[1] && addrCode[2]) {
-                    //   ele.addrCode = addrCode.join("-")
-                    // }
-                  }
-                }
-                if(ele.name == 'parentMerchantCode' && res.data.parentMerchantCode){
-                  ele.value=res.data.parentMerchantName+"("+res.data.parentMerchantCode+")"
+                  ele.type+='Text'
+                  // 更新位置占位符
+                  this.$store.dispatch('setBreadcrumbListAction', ['账号管理', '角色详情'])
+                } else {
+                  // 如果是编辑
+                  this.formListUrl = '/role/update'
+                  // 更新位置占位符
+                  this.$store.dispatch('setBreadcrumbListAction', ['账号管理', '编辑角色'])
                 }
               })
+              // 如果是详情页
+              if(this.routeType == 'detail'){
+                this.showCheckbox = false
+                this.menuTree = this.formateMenuTree(this.detail.privilegeInfos)
+              }else{
+                this.getMenuList()
+              }
+            }else{
+              this.$Message.warning(res.message)
             }
-          });
+          })
+        }else{
+          this.getMenuList()
         }
       },
-      // 更改商户类型
-      merchantTypeChange(type){
-        // 100 个人商户 200企业商户
-        if(type == 100){
-          this.common.setArrItem(this.formList1,'merchantType',{value:100})
-          this.formList = this.formList1
-        }else{
-          this.common.setArrItem(this.formList0,'merchantType',{value:200})
-          this.formList = this.formList0
+      // 获取菜单列表
+      getMenuList(){
+        let url = '/privilege/grid'
+        this.apiGet(url,{},this.apiPrefix).then(res=>{
+          if(res.success){
+            // 格式化返回数据
+            this.menuTree = this.formateMenuTree(res.data)
+            // this.formateMenuList(res.data)
+          }else{
+            this.$Message.warning(res.message)
+          }
+        })
+      },
+      // 格式化数据
+      formateMenuTree(list,menuTree=[]){
+        if(list.length){
+          list.forEach(ele=>{
+            let tree = {
+              title:ele.privilegeName,
+              expand: ele.privilegeLevel<=1,
+              children:[],
+              row:ele,
+            }
+            if(this.detail.privilegeIds && this.detail.privilegeIds.includes(ele.id)){
+              tree.checked = true
+            }
+            if(ele.items && ele.items.length){
+              this.formateMenuTree(ele.items,tree.children)
+            }
+            menuTree.push(tree)
+          })
         }
+        return menuTree
       },
       onCheckChange(select){
+        console.log(select)
+        let privilegeIds = []
         if(select.length){
-          this.treeSelect = '123'
+          select.forEach(ele=>{
+            privilegeIds.push(ele.row.id)
+          })
+          this.privilegeIds = privilegeIds.join(',')
         }else{
-          this.treeSelect = ''
+          this.privilegeIds = ''
         }
-        this.$refs.formList.setFormItem('treeSelect',this.treeSelect)
+        this.$refs.formList.setFormItem('privilegeIds',this.privilegeIds)
       },
     }
   }

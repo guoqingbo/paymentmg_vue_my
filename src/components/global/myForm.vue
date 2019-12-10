@@ -50,6 +50,10 @@
               item.type=='radioText'">
           {{item.value|selectFilter(item.data)}}
         </span>
+          <span class="detail-text"
+                v-if="item.type=='checkboxText'">
+          {{item.value|checkboxFilter(item.data)}}
+        </span>
           <Input v-if="item.type=='input'"
                  clearable
                  :disabled="item.disabled"
@@ -108,10 +112,11 @@
           </RadioGroup>
           <CheckboxGroup v-if="item.type=='checkbox'"
                          :disabled="item.disabled"
-                         v-model="item.value">
+                         v-model="item.value"
+                         @on-change="onChange(item)">
             <Checkbox v-for="sitem in item.data"
                       :label="sitem.value"
-                      :key="sitem.value"></Checkbox>
+                      :key="sitem.value">{{sitem.label}}</Checkbox>
           </CheckboxGroup>
           <selectList v-if="item.type=='area'"
                       :disabled="item.disabled"
@@ -170,7 +175,7 @@ export default {
   data () {
     return {
       formItem: {
-
+        // roleIds:[]
       },
       // autoSelected: false,
     }
@@ -186,6 +191,18 @@ export default {
     },
   },
   filters:{
+    checkboxFilter(value,data){
+      let label = ''
+      console.log(value)
+      if(data instanceof Array){
+        data.forEach(function (ele) {
+          if(value.includes(ele.value)){
+            label += ele.label+"、"
+          }
+        })
+      }
+      return label.replace(/、$/,'')
+    },
     selectFilter(value,data){
       let label = ''
       if(data instanceof Array){
@@ -213,8 +230,9 @@ export default {
             this.$set(element, 'value','')
           }
           if(element.name){
-            // if(element.type == 'autoComplete'){
-            //   return
+            // if(element.name == 'roleIds'){
+            //   console.log(element.value)
+            //   // this.$set(this.formItem, element.name, '123')
             // }
             // this.formItem[element.name] = element.value
             let val = element.value
@@ -222,6 +240,10 @@ export default {
               val = val.replace(/(^\s*)|(\s*$)/g, "")
             }
             this.$set(this.formItem, element.name, val)
+            // 解决复选框change验证时，value值未及时更新的问题
+            // if(element.type == 'checkbox'&&element.rules && element.rules.length){
+            //
+            // }
           }
         })
       },　　　　
@@ -230,6 +252,15 @@ export default {
     }
   },
   methods: {
+    // 解决复选框change验证时，value值未及时更新的问题
+    onChange(item){
+      this.$nextTick(()=>{
+        this.$refs.formRef.validateField(item.name)
+      })
+      if(item.onChange){
+        item.onChange(item.value)
+      }
+    },
     // autoChange(val,item) {
     //   if(this.autoSelected){ // 判断是否是自动填充
     //     this.autoSelected = false;
@@ -285,6 +316,11 @@ export default {
     // },
     validate(cb){
       this.$refs.formRef.validate(cb)
+    },
+    validateField(name){
+      this.$refs.formRef.validateField(name,(res)=>{
+        // console.log(res)
+      })
     },
     resetFields(){
       this.formItems.forEach(ele=>{

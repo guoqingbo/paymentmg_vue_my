@@ -11,17 +11,11 @@
        </Col>
      </Row>
      <div style="margin-top: 20px">
-       <Table
-         style="position:static;"
-         border
-         stripe
-         :columns="columns"
-         :data="menuList"></Table>
-       <!--<Tree :data="menuList" :render="renderContent"></Tree>-->
-       <Tree :data="data5" :render="renderContent"></Tree>
+       <Tree :data="menuTree" :render="meneuTreerender"></Tree>
      </div>
    </div>
     <confirm ref="confirmModel"
+             :apiPrefix="apiPrefix"
              :content="content"
              :sucessMsg="sucessMsg"
              :mode="mode"></confirm>
@@ -29,9 +23,13 @@
                :formItems="formItems"
                :routeType='routeType'
                :apiPrefix="apiPrefix"
+               @on-success="onSuccess"
                @beforeSave='beforeSave'
                :url="formUrl"
                :title="formTitle">
+      <!--<div slot="header">-->
+
+      <!--</div>-->
     </modalForm>
   </div>
 </template>
@@ -43,169 +41,94 @@
     components: {list,confirm,modalForm},
     data () {
       return {
-        data5: [
-          {
-            title: 'parent 1',
-            expand: true,
-            // render: (h, { root, node, data }) => {
-            //   return h('span', {
-            //     style: {
-            //       display: 'inline-block',
-            //       width: '100%'
-            //     }
-            //   }, [
-            //     h('span', [
-            //       h('Icon', {
-            //         props: {
-            //           type: 'ios-folder-outline'
-            //         },
-            //         style: {
-            //           marginRight: '8px'
-            //         }
-            //       }),
-            //       h('span', data.title)
-            //     ]),
-            //     h('span', {
-            //       style: {
-            //         display: 'inline-block',
-            //         float: 'right',
-            //         marginRight: '32px'
-            //       }
-            //     }, [
-            //       h('Button', {
-            //         props: Object.assign({}, this.buttonProps, {
-            //           icon: 'ios-add',
-            //           type: 'primary'
-            //         }),
-            //         style: {
-            //           width: '64px'
-            //         },
-            //         on: {
-            //           click: () => { this.append(data) }
-            //         }
-            //       })
-            //     ])
-            //   ]);
-            // },
-            children: [
-              {
-                title: 'child 1-1',
-                expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-1-1',
-                    expand: true
-                  },
-                  {
-                    title: 'leaf 1-1-2',
-                    expand: true
-                  }
-                ]
-              },
-              {
-                title: 'child 1-2',
-                expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-2-1',
-                    expand: true
-                  },
-                  {
-                    title: 'leaf 1-2-1',
-                    expand: true
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        menuTree: [],
         apiPrefix:this.common.config.apiUser,
-        menuList:[],
-        columns: [
-          {
-            title: '序号',
-            type:'index',
-            width:70,
-            align:'center'
-          },
-          {
-            title: '名称',
-            key: 'privilegeName',
-            sortable: true,
-          },
-          {
-            title: '唯一编码',
-            key: 'privilegeMark',
-            sortable: true,
-          },
-          {
-            title: '前端url',
-            key: 'privilegeUrl',
-            sortable: true,
-          },
-          {
-            title: '接口url',
-            key: 'privilegeMethod',
-            sortable: true,
-          },
-          {
-            title: '层级深度',
-            key: 'privilegeLevel',
-            sortable: true,
-          },
-          {
-            title: '排序',
-            key: 'privilegeOrde',
-            sortable: true,
-          },
-          {
-            title: '操作',
-            key: 'action',
-            width:140,
-            align:'center',
-            render: (h, params) => {
-              const actions = [
-                {
-                  title:'操作',
-                  type:'select',
-                  data:[
-                    {
-                      label:'添加',
-                      value:'1',
-                    },
-                    {
-                      label:'编辑',
-                      value:'2'
-                    },
-                    {
-                      label:'删除',
-                      value:'3'
-                    }
-                  ],
-                  value:"",
-                  onChange:(value)=>{
-                    if(value == 1){
-                      // 添加
-                      this.routeType = 'add'
-                      this.openPop(params.row)
-                    }else if(value == 2){
-                      // 编辑
-                      this.routeType = 'edit'
-                      this.openPop(params.row)
-                    }else if(value == 3){
-                      // 删除
-                      this.mode = "delete";
-                      this.sucessMsg = "删除成功！";
-                      this.content = "确定删除？";
-                      this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
-                    }
-                  }
-                }
-              ]
-              return this.common.columnsItemRender(h, actions);
-            }
-          }
-        ],
+        // menuList:[],
+        // columns: [
+        //   {
+        //     title: '序号',
+        //     type:'index',
+        //     width:70,
+        //     align:'center'
+        //   },
+        //   {
+        //     title: '名称',
+        //     key: 'privilegeName',
+        //     sortable: true,
+        //   },
+        //   {
+        //     title: '唯一编码',
+        //     key: 'privilegeMark',
+        //     sortable: true,
+        //   },
+        //   {
+        //     title: '前端url',
+        //     key: 'privilegeUrl',
+        //     sortable: true,
+        //   },
+        //   {
+        //     title: '接口url',
+        //     key: 'privilegeMethod',
+        //     sortable: true,
+        //   },
+        //   {
+        //     title: '层级深度',
+        //     key: 'privilegeLevel',
+        //     sortable: true,
+        //   },
+        //   {
+        //     title: '排序',
+        //     key: 'privilegeOrde',
+        //     sortable: true,
+        //   },
+        //   {
+        //     title: '操作',
+        //     key: 'action',
+        //     width:140,
+        //     align:'center',
+        //     render: (h, params) => {
+        //       const actions = [
+        //         {
+        //           title:'操作',
+        //           type:'select',
+        //           data:[
+        //             {
+        //               label:'添加',
+        //               value:'1',
+        //             },
+        //             {
+        //               label:'编辑',
+        //               value:'2'
+        //             },
+        //             {
+        //               label:'删除',
+        //               value:'3'
+        //             }
+        //           ],
+        //           value:"",
+        //           onChange:(value)=>{
+        //             if(value == 1){
+        //               // 添加
+        //               this.routeType = 'add'
+        //               this.openPop(params.row)
+        //             }else if(value == 2){
+        //               // 编辑
+        //               this.routeType = 'edit'
+        //               this.openPop(params.row)
+        //             }else if(value == 3){
+        //               // 删除
+        //               this.mode = "delete";
+        //               this.sucessMsg = "删除成功！";
+        //               this.content = "确定删除？";
+        //               this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
+        //             }
+        //           }
+        //         }
+        //       ]
+        //       return this.common.columnsItemRender(h, actions);
+        //     }
+        //   }
+        // ],
         params: {
           sort:'modifyTime',
           order:'desc'
@@ -215,14 +138,7 @@
             title: '添加',
             icon: 'md-add',
             callback: () => {
-              this.formShow = true
-              this.formItems.forEach(item=>{
-                item.type=item.type.replace(/(Text)$/,'')
-              });
-              // 请求接口
-              this.formUrl = '/privilege/add'
-              this.routeType = 'add'
-              this.formTitle = '添加'
+              this.openPop({},'add')
             }
           }
         ],
@@ -294,7 +210,7 @@
             name: 'privilegeLevel',
             type: 'select',
             data: this.common.dic.privilegeLevel,
-            disabled:true,
+            // disabled:true,
             rules: [
               {required: true, message: '请选择层级深度', trigger: 'change'}
             ],
@@ -311,14 +227,18 @@
     },
     created(){
       // 获取菜单列表
-      this.getMemuList()
+      this.getMenuList()
     },
     methods: {
-      renderContent (h, { root, node, data }) {
-        return h('span', {
+      meneuTreerender (h, { root, node, data }) {
+        return h('div', {
           style: {
             display: 'inline-block',
-            width: '100%'
+            width: '100%',
+            backgroundColor:"#cccccc14",
+            // borderBottom:'1px solid #ccc',
+            padding:'3px 10px',
+            borderRadius:'5px'
           }
         }, [
           h('span', [
@@ -332,130 +252,152 @@
             }),
             h('span', data.title)
           ]),
-          h('span', {
+          h('div', {
             style: {
               display: 'inline-block',
               float: 'right',
-              marginRight: '32px'
+              // marginRight: '32px'
             }
           }, [
             h('Button', {
               props: Object.assign({}, this.buttonProps, {
-                icon: 'ios-add'
+                icon: 'md-add',
+                size:'small'
               }),
               style: {
                 marginRight: '8px'
               },
               on: {
-                click: () => { this.append(data) }
-              }
-            }),
+                click: () => {
+                  this.openPop(data,'add')
+                }
+              },
+            }, '添加'),
             h('Button', {
               props: Object.assign({}, this.buttonProps, {
-                icon: 'ios-remove'
+                size:'small'
+              }),
+              style: {
+                marginRight: '8px'
+              },
+              on: {
+                click: () => {
+                  this.openPop(data,'edit')
+                }
+              },
+            }, '编辑'),
+            h('Button', {
+              props: Object.assign({}, this.buttonProps, {
+                icon: 'md-remove',
+                size:'small'
               }),
               on: {
-                click: () => { this.remove(root, node, data) }
+                click: () => {
+                  this.$Modal.confirm({
+                    content:'确定删除？',
+                    onOk:()=>{
+                      let url = '/privilege/delete'
+                      this.apiGet(url,{id:data.row.id},this.apiPrefix).then(res=>{
+                        if(res.success){
+                         this.getMenuList()
+                          // this.formateMenuList(res.data)
+                        }else{
+                          this.$Message.warning(res.message)
+                        }
+                      })
+                    }
+                  })
+                }
               }
-            })
+            },'删除')
           ])
         ]);
       },
-      append (data) {
-        const children = data.children || [];
-        children.push({
-          title: 'appended node',
-          expand: true
-        });
-        this.$set(data, 'children', children);
+      onSuccess(data){
+        this.getMenuList()
       },
-      remove (root, node, data) {
-        const parentKey = root.find(el => el === node).parent;
-        const parent = root.find(el => el.nodeKey === parentKey).node;
-        const index = parent.children.indexOf(data);
-        parent.children.splice(index, 1);
-      },
-
       beforeSave(params){
         params.privilegeParent = 0
-        if(this.selectedMenu){
+        if(this.selectedMenu &&  this.selectedMenu.id){
           if(this.routeType == 'add'){
+            delete params.privilegeId
             params.privilegeParent = this.selectedMenu.id
+          } else if(this.routeType == 'edit'){
+            params.privilegeId = this.selectedMenu.id
+            params.privilegeParent = this.selectedMenu.privilegeParent
           }
           // else{
           //   params.privilegeParent = this.selectedMenu.privilegeParent
           // }
         }
-
       },
       // 获取菜单列表
-      getMemuList(){
+      getMenuList(){
         let url = '/privilege/grid'
         this.apiGet(url,{},this.apiPrefix).then(res=>{
           if(res.success){
             // 格式化返回数据
-            this.formateMenuList(res.data)
+            this.menuTree = this.formateMenuTree(res.data)
+            // this.formateMenuList(res.data)
           }else{
             this.$Message.warning(res.message)
           }
         })
       },
       // 格式化数据
-      formateMenuList(list){
-        // 转为一维数组
-        let menulist = []
-        list.forEach(ele=>{
-          let level1 = {...ele}
-          delete level1.items
-          menulist.push(level1)
-          if(ele.items && ele.items.length){
-            ele.items.forEach(sele=>{
-              let level2 = {...sele}
-              delete level2.items
-              menulist.push(level2)
-              if(sele.items&&sele.items.length){
-                sele.items.forEach(ssele=>{
-                  let level3 = {...ssele}
-                  delete level3.items
-                  menulist.push(level3)
-                })
-              }
-            })
-          }
-        })
-        this.menuList = menulist
+      formateMenuTree(list,menuTree=[]){
+        if(list.length){
+          list.forEach(ele=>{
+            let tree = {
+              title:ele.privilegeName,
+              expand: ele.privilegeLevel<=1,
+              children:[],
+              row:ele,
+            }
+            if(ele.items && ele.items.length){
+              this.formateMenuTree(ele.items,tree.children)
+            }
+            menuTree.push(tree)
+          })
+        }
+        return menuTree
       },
       // 打开弹框
-      openPop(item){
-        this.selectedMenu = item
+      openPop(item,type){
+        console.log(item)
+        this.routeType = type
+        this.selectedMenu = item.row || {}
         this.formShow = true
-        this.formItems.forEach(item=>{
-          item.value=''
-        });
+        this.initFormItems()
         if(this.routeType == 'edit'){
-          this.formTitle = '修改'
-          this.setDetail(item)
+          this.formTitle = this.selectedMenu.privilegeName+ '-修改'
+          // 请求接口
+          this.formUrl = '/privilege/update'
         }else if(this.routeType == 'add'){
-          this.formItems.forEach(ele=>{
-            // 设置层级
-            if(ele.name == 'privilegeLevel'){
-              if(item){
-                ele.value = Number(item.privilegeLevel)+1
-              }else{
-                ele.value = 1
-              }
-              ele.value+=''
-            }
-            ele.value = item[ele.name]
-          });
-          this.formTitle = '添加'
+          this.formTitle = this.selectedMenu.privilegeName+ '-添加'
+          // 请求接口
+          this.formUrl = '/privilege/add'
         }
       },
-      // 设置详情页
-      setDetail(item){
-        this.formItems.forEach(ele=>{
-          ele.value = item[ele.name]
-        });
+      initFormItems(){
+        if(this.routeType == 'edit'){
+          this.formItems.forEach(ele=>{
+            ele.value =  (this.selectedMenu[ele.name] || '')+""
+          })
+        }else if(this.routeType == 'add'){
+          this.formItems.forEach(ele=>{
+            if(ele.name=='privilegeType'){
+              ele.value = '2'
+            }else if(ele.name=='privilegeGroup'){
+              ele.value = '1'
+            }
+            // 设置层级
+            let privilegeLevel = this.selectedMenu.privilegeLevel || '0'
+            if(ele.name == 'privilegeLevel'){
+                ele.value = (Number(privilegeLevel)+1)+""
+            }
+          });
+        }
       }
     }
   }

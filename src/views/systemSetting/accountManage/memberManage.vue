@@ -3,12 +3,14 @@
     <list ref="gridTable"
           :columns="columns"
           :url="url"
+          :apiPrefix="apiPrefix"
           :params="params"
           @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
              :content="content"
+             :apiPrefix="apiPrefix"
              :sucessMsg="sucessMsg"
              :mode="mode"></confirm>
   </div>
@@ -19,6 +21,7 @@
   export default {
     data () {
       return {
+        apiPrefix:this.common.config.apiUser,
         columns: [
           {
             title: '序号',
@@ -28,25 +31,21 @@
           },
           {
             title: '操作员账号',
-            key: 'merchantCode',
-            sortable: true,
+            key: 'phone'
           },
           {
             title: '账号所有人',
-            key: 'merchantName',
-            sortable: true,
+            key: 'accName'
           },
           {
             title: '添加日期',
-            key: 'createTime',
-            sortable: 'custom',
+            key: 'createTime'
           },
           {
             title: '状态',
-            key: 'merchantType',
-            sortable: true,
+            key: 'accStatus',
             render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
+              return h('span', this.filter.turn("accStatus",params.row.accStatus))
             }
           },
           {
@@ -78,13 +77,13 @@
                     if(value == 1){
                       // 详情
                       this.$router.push({
-                        path: "/systemSetting/accountManage/memberAddEditDetail",
+                        path: "/systemSetting/accountManage/memberAddEditDetail/detail",
                         query: { id: params.row.id,routeType:"detail"}
                       });
                     }else if(value == 2){
                       // 编辑
                       this.$router.push({
-                          path: "/systemSetting/accountManage/memberAddEditDetail",
+                          path: "/systemSetting/accountManage/memberAddEditDetail/edit",
                           query: {id: params.row.id}
                         });
                     }else if(value == 3){
@@ -92,7 +91,7 @@
                       this.mode = "delete";
                       this.sucessMsg = "删除成功！";
                       this.content = "确定删除？";
-                      this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
+                      this.$refs.confirmModel.confirm("/staff/delete/",{id:params.row.id},'get');
                     }
                   }
                 }
@@ -136,7 +135,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchant/grid',
+        url: '/staff/grid',
         searchItems: [
           // {
           //   label: '商户名称',
@@ -170,7 +169,7 @@
             title: '添加',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/systemSetting/accountManage/memberAddEditDetail");
+              this.$router.push("/systemSetting/accountManage/memberAddEditDetail/add");
             }
           }
         ],

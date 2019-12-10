@@ -15,6 +15,9 @@
  * jekins地址 http://192.168.200.24:9002 guoqingbo/Gqb123456
  * admin-swagger  http://192.168.200.88:10806/swagger-ui.html
  * pay-swagger  http://192.168.200.88:6073/swagger-ui.html
+ * 用户管理api文档 
+     http://192.168.66.28:8080/doc.html#/default/user-operator-controller/detailUsingGET_3
+     http://192.168.200.88:8080/doc.html
   
  * 收银台 paycenter.zhiyoubao.com/cashier/cashierManage/choosePayWay
  * 微信支付唤起 paycenter.zhiyoubao.com/cashier/cashierManage/callWxPay
@@ -23,9 +26,8 @@
  * 支付失败 paycenter.zhiyoubao.com/cashier/cashierManage/payError
     
 ## 测试环境
- * 后台接口 http://192.168.200.88:6071/
  * 域名 testpaycenter.zhiyoubao.com
- * 超级账号 superadmin/123456  188888888/123456
+ * 超级账号 superadmin/123456  18888888888/123456
     
 ## 预发环境
  * 域名 prepaycenter.zhiyoubao.com

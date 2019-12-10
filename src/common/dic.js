@@ -106,11 +106,18 @@ let dic = {
     {label:"一级",value:"1"},
     {label:"二级",value:"2"},
     {label:"三级",value:"3"},
+    {label:"四级",value:"4"},
   ],
   // 权限分组
   privilegeGroup: [
     {label:"默认组",value:"1"},
     {label:"个性化分组",value:"2"},
+  ],
+  // 权限分组
+  accStatus: [
+    {label:"已停用",value:"0"},
+    {label:"已启用",value:"1"},
+    {label:"已锁定",value:"2"},
   ]
 }
 export default dic

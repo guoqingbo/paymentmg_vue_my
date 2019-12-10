@@ -80,13 +80,13 @@
                     if(value == 1){
                       // 详情
                       this.$router.push({
-                        path: "/merchant/merchantMemberAddEditDetail",
+                        path: "/merchant/merchantMemberAddEditDetail/detail",
                         query: { id: params.row.id,routeType:"detail"}
                       });
                     }else if(value == 2){
                       // 编辑
                       this.$router.push({
-                        path: "/merchant/merchantMemberAddEditDetail",
+                        path: "/merchant/merchantMemberAddEditDetail/edit",
                         query: {id: params.row.id}
                       });
                     }else if(value == 3){
@@ -141,7 +141,7 @@
             title: '添加',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchantMemberAddEditDetail");
+              this.$router.push("/merchant/merchantMemberAddEditDetail/add");
             }
           }
         ],

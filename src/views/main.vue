@@ -32,8 +32,8 @@
             </Dropdown>
           </div>
           <div class="layout-nav">
-            <MenuItem v-for="item in menuList.data" :key="item.id" :name="item.code">
-              {{item.name}}
+            <MenuItem v-for="item in menuList" :key="item.id" :name="item.privilegeMark">
+              {{item.privilegeName}}
             </MenuItem>
           </div>
         </Menu>
@@ -84,25 +84,25 @@
                 :accordion="true"
                 :open-names="vexOpenNames?[vexOpenNames]:openNames"
                 @on-select="changeMenu">
-            <template v-for="item in subMenuList.menus">
+            <template v-for="item in subMenuList.items">
               <!--如果存在3级菜单-->
-              <Submenu :name="item.code"
-                       v-if="item.menus && item.menus.length">
+              <Submenu :name="item.privilegeMark"
+                       v-if="item.items && item.items.length">
                 <template slot="title">
                   <!-- <Icon type="ios-navigate"></Icon> -->
-                  {{item.name}}
+                  {{item.privilegeName}}
                 </template>
-                <MenuItem v-for="sitem in item.menus"
-                          :name="'/'+firstRouter+'/'+item.code+'/'+sitem.code"
+                <MenuItem v-for="sitem in item.items"
+                          :name="'/'+firstRouter+'/'+item.privilegeMark+'/'+sitem.privilegeMark"
                           :key="sitem.id"
-                          v-if="sitem.functionType=='column'">
-                  <span>{{sitem.name}}</span>
+                          v-if="sitem.privilegeMenuType=='1'">
+                  <span>{{sitem.privilegeName}}</span>
                 </MenuItem>
               </Submenu>
               <!--如果存在2级菜单-->
-              <MenuItem :name="'/'+firstRouter+'/'+item.code"
-                        v-if="(!item.menus || item.menus.length== 0) && item.functionType == 'column'">
-                <span>{{item.name}}</span>
+              <MenuItem :name="'/'+firstRouter+'/'+item.privilegeMark"
+                        v-if="(!item.items || item.items.length== 0) && item.privilegeMenuType == '1'">
+                <span>{{item.privilegeName}}</span>
               </MenuItem>
             </template>
           </Menu>
@@ -213,7 +213,7 @@
     store,
     computed: {
       userName() {
-        return this.$store.state.user.userName;
+        return this.$store.state.user.userName||this.$store.state.userId;
       },
       vexOpenNames() {
         return this.$store.state.menu.openName;
@@ -247,7 +247,7 @@
       },
       firstRouter(newValue, oldValue) {
         // this.$store.state.menu.menuList.data.forEach(element => {
-        //   if (element.code === newValue) {
+        //   if (element.privilegeMark === newValue) {
         //     this.subMenuList = element;
         //   }
         // });
@@ -329,36 +329,45 @@
       },
       changeMenu(active) {
         // this.$emit("on-change", active);
+        console.log(active)
         this.$router.push(active);
-          // this.subMenuList.menus.forEach(element => {
+          // this.subMenuList.items.forEach(element => {
           //   // 如果存在3级菜单
-          //   if(element.menus){
-          //     element.menus.forEach(item => {
-          //       if (item.code === active) {
-          //         this.$cookies.set("openName", element.code);
+          //   if(element.items){
+          //     element.items.forEach(item => {
+          //       if (item.privilegeMark === active) {
+          //         this.$cookies.set("openName", element.privilegeMark);
           //       }
           //     });
           //   }else{
           //     // 如果存在2级菜单
-          //     if(element.code == active){
-          //       this.$cookies.set("openName", element.code);
+          //     if(element.privilegeMark == active){
+          //       this.$cookies.set("openName", element.privilegeMark);
           //     }
           //   }
           // });
       },
       changeTab(active) {
+        console.log(active)
         this.menuPosite(active);
         // this.$cookies.set("activeName", active);
-
-        if(this.subMenuList.menus[0].menus){
+        let path = ''
+        let params = ''
+        if(this.subMenuList.items[0].items && this.subMenuList.items[0].items.length){
           // 如果存在3级菜单
-          this.openNames = [this.subMenuList.menus[0].code];
-          this.$router.push("/" +active+'/'+this.subMenuList.menus[0].code+'/'+this.subMenuList.menus[0].menus[0].code);
+          let urlArr = this.subMenuList.items[0].items[0].privilegeUrl.split("/:")
+          path = urlArr[0]
+          params = urlArr[1]? '/'+urlArr[1]:''
+          this.openNames = [this.subMenuList.items[0].privilegeMark];
         }else{
           // 如果存在2级菜单
-          this.openNames = [this.subMenuList.menus[0].code];
-          this.$router.push("/" +active+'/'+this.subMenuList.menus[0].code);
+          this.openNames = [this.subMenuList.items[0].privilegeMark];
+          let urlArr = this.subMenuList.items[0].privilegeUrl.split("/:")
+          path = urlArr[0]
+          params = urlArr[1]? '/'+urlArr[1]:''
         }
+        this.$router.push(path+params);
+
         this.$nextTick(() => {
           this.$refs.contactMenu.updateOpened();
           this.$refs.contactMenu.updateActiveName();
@@ -374,8 +383,8 @@
         });
       },
       menuPosite(active) {
-        this.$store.state.menu.menuList.data.forEach(element => {
-          if (element.code === active) {
+        this.$store.state.menu.menuList.forEach(element => {
+          if (element.privilegeMark === active) {
             this.subMenuList = element;
           }
         });

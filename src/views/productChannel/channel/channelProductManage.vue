@@ -77,7 +77,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/channel/channelProductAddEditDetail",
+                      path: "/productChannel/channel/channelProductAddEditDetail/detail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
                   }
@@ -86,7 +86,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/channel/channelProductAddEditDetail",
+                      path: "/productChannel/channel/channelProductAddEditDetail/edit",
                       query: { id: params.row.id,channelId: params.row.channelId}
                     });
                   }

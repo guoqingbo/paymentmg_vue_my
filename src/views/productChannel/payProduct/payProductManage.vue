@@ -56,7 +56,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/payProduct/payProductAddEditDetail",
+                      path: "/productChannel/payProduct/payProductAddEditDetail/detail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
                   }
@@ -65,7 +65,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/payProduct/payProductAddEditDetail",
+                      path: "/productChannel/payProduct/payProductAddEditDetail/edit",
                       query: { id: params.row.id }
                     });
                   }
@@ -107,7 +107,7 @@
             title: '新增支付产品',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/productChannel/payProduct/payProductAddEditDetail");
+              this.$router.push("/productChannel/payProduct/payProductAddEditDetail/add");
             }
           }
         ],

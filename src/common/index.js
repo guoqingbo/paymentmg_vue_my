@@ -431,6 +431,7 @@ const common = {
           on: {
             'on-change'(value){
               element.onChange(value)
+              element.value = ''
             }
           }
         },options)
@@ -442,9 +443,9 @@ const common = {
   async listDelete(obj, options) {
     let res = {}
     if(obj.method == "get"){
-      res = await App.apiGet(options.url, options.params || {})
+      res = await App.apiGet(options.url, options.params || {},options.apiPrefix)
     }else{
-      res = await App.apiPost(options.url, options.params || {})
+      res = await App.apiPost(options.url, options.params || {},options.apiPrefix)
     }
 
     options.callback(res)

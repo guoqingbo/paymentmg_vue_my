@@ -55,6 +55,9 @@
         type: String,
         default: 'post'
       },
+      apiPrefix:{
+        type: String,
+      }
     },
     watch: {
       // formItems: {
@@ -96,7 +99,7 @@
             if (this._events.beforeSave) {
               this.$emit("beforeSave", this.$refs.myForm.formItem)
             }
-            let res = await this[saveMethod](this.url, this.$refs.myForm.formItem)
+            let res = await this[saveMethod](this.url, this.$refs.myForm.formItem,this.apiPrefix)
             if (res.status == 200 && res.success) {
               this.$Message.success('保存成功!')
               if (this._events.afterSave) {
@@ -120,6 +123,9 @@
             // }, 500)
           }
         })
+      },
+      validateField(name){
+        this.$refs.myForm.validateField(name)
       },
       getFormItem(){
         return this.$refs.myForm.formItem

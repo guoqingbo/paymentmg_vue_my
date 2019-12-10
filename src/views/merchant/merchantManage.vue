@@ -60,7 +60,7 @@
                   title: "详情",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
+                      path: "/merchant/merchantAddEditDetail/detail",
                       query: { id: params.row.id,routeType:"detail"}
                     });
                   }
@@ -69,7 +69,7 @@
                   title: "编辑",
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchantAddEditDetail",
+                      path: "/merchant/merchantAddEditDetail/detail",
                       query: {id: params.row.id}
                     });
                   }
@@ -128,7 +128,7 @@
             title: '添加商户',
             icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchantAddEditDetail");
+              this.$router.push("/merchant/merchantAddEditDetail/add");
             }
           }
         ],

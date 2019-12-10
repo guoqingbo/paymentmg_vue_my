@@ -12,10 +12,10 @@
           <Icon type="ios-lock-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
-      <FormItem prop="checkCode">
+      <FormItem prop="verifyCode">
         <Row>
           <Col span="9">
-            <Input type="text" v-model="formInline.checkCode" placeholder="验证码"></Input>
+            <Input type="text" v-model="formInline.verifyCode" placeholder="验证码"></Input>
           </Col>
           <Col span="9">
             <img :src=codeImg @click="getCode" class="code-img">
@@ -52,8 +52,8 @@
           appId:'payCenterAdmin',
           phone: "",
           accPwd: "",
-          checkCode: "",
-          key:"",
+          verifyCode: "",
+          verifyCodeKey:"",
           // accStatus:""
         },
         codeImg: "",
@@ -70,7 +70,7 @@
               trigger: "blur"
             }
           ],
-          checkCode: [
+          verifyCode: [
             {required: true, message: "请填写验证码", trigger: "blur"}
           ],
         },
@@ -101,9 +101,9 @@
       //   'setUserIdAction'
       // ]),
       getCode() {
-        this.formInline.key = new Date().getTime()
-        this.codeImg = this.common.config.apiAdminPrefix+"/checkCode?key=" + this.formInline.key;
-        //   this.codeImg = "/checkCode";
+        this.formInline.verifyCodeKey = new Date().getTime()
+        this.codeImg = this.apiPrefix+"/verifyCode?verifyCodeKey=" + this.formInline.verifyCodeKey;
+        //   this.codeImg = "/verifyCode";
       },
       handleSubmit() {
         this.$refs.formInline.validate(async valid => {
@@ -116,13 +116,15 @@
             // 更新验证码
             this.getCode();
             if (res.success) {
-              //sesstionstorage缓存登录用户token，vuex中缓存userId，用户后续路由beforeEach中判断也是是刷新还是只是路由变化
               // 缓存权限
-              sessionStorage.setItem('privilegeList',res.data.privilegeList)
+              sessionStorage.setItem('privilegeList',JSON.stringify(res.data.privilegeList||[]))
+              //sesstionstorage缓存登录用户token，vuex中缓存userId，用户后续路由beforeEach中判断也是是刷新还是只是路由变化
               this.$cookies.set("token", res.data.token);
               this.$cookies.set("userId", res.data.phone);
               this.$store.dispatch("setUserIdAction", res.data.phone);
-              await this.$store.dispatch("formaterRouterHandle"); // 根据权限获取路由
+
+              // await this.$store.dispatch("formaterRouterHandle") //根据权限获取路由
+              this.$store.commit("mainChildren"); // 根据权限获取路由
               this.$router.addRoutes([
                 {
                   path: "/main",

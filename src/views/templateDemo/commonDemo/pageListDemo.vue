@@ -147,7 +147,7 @@
             title: '跳转',
             // icon: 'md-add',
             callback: () => {
-              this.$router.push("/merchant/merchantAddEditDetail");
+              this.$router.push("/merchant/merchantAddEditDetail/add");
             }
           }
         ],
