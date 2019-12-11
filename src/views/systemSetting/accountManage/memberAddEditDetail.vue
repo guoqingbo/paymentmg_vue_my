@@ -155,6 +155,13 @@
                 if (this.routeType == 'detail') {
                   // 如果是详情页
                   ele.type += "Text"
+                }else {
+                  if(ele.name == 'accPass'){
+                    ele.rules = [
+                      {required: false, message: '请输入操作员密码', trigger: 'blur'},
+                      {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'}
+                    ]
+                  }
                 }
               })
             }
