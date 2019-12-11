@@ -4,7 +4,8 @@ const state = {
   activeName: '',
   openName: '',
   asyncRouter: '',
-  breadcrumbList: []
+  breadcrumbList: [],
+  authList:[]
 }
 const getters = {}
 
@@ -70,9 +71,11 @@ const mutations = {
   mainChildren(state){
     // 格式化数据
     function formateMenuTree(list,node=[]){
-      // node为对应的节点，node[0] 一级 node[1] 二级 node[2] 三级 等等。。。
+      // node为对应父级的节点，node[0] 一级 node[1] 二级 node[2] 三级 等等。。。
+      let nowNode = []
       if(list.length){
         list.forEach(ele=>{
+          authList.push(ele.privilegeMark)
           let url = ele.privilegeUrl
           if(url){
             let urlArr = url.split("/:")
@@ -81,10 +84,13 @@ const mutations = {
 
             let breadcrumbList = []
             node.forEach((sele,sindex)=>{
+              // breadcrumbList.push(sele.privilegeName)
               if(sindex>0){
                 breadcrumbList.push(sele.privilegeName)
               }
             })
+            // 当前
+            breadcrumbList.push(ele.privilegeName)
             let meta = {
               breadcrumbList,
               belongTab: node[0].privilegeMark,
@@ -99,8 +105,9 @@ const mutations = {
 
           }
           if(ele.items && ele.items.length){
-            node[ele.privilegeLevel-1] = ele
-            formateMenuTree(ele.items,node)
+            let newNode = [...node]
+            newNode[ele.privilegeLevel-1] = ele
+            formateMenuTree(ele.items,newNode)
           }
         })
       }
@@ -122,13 +129,14 @@ const mutations = {
       }
       return menuList
     }
-    let roleRouter = []
+    let authList = [] // 所有的权限
+    let roleRouter = [] // 所有的动态路由
     let menuTree = JSON.parse(sessionStorage.getItem('privilegeList')||"[]")
 
     roleRouter = formateMenuTree(menuTree,[])
-    state.asyncRouter = roleRouter
     state.menuList = filterMenuBtn(menuTree)
-    console.log(state.menuList)
+    sessionStorage.setItem('authList',JSON.stringify(authList))
+    state.asyncRouter = roleRouter
   }
 }
 const actions = {

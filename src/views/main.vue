@@ -329,7 +329,6 @@
       },
       changeMenu(active) {
         // this.$emit("on-change", active);
-        console.log(active)
         this.$router.push(active);
           // this.subMenuList.items.forEach(element => {
           //   // 如果存在3级菜单
@@ -348,7 +347,6 @@
           // });
       },
       changeTab(active) {
-        console.log(active)
         this.menuPosite(active);
         // this.$cookies.set("activeName", active);
         let path = ''

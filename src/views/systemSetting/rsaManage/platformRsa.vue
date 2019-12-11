@@ -88,6 +88,7 @@
               const actions = [
                 {
                   title: "编辑",
+                  auth:"platformRsaEdit",
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach((item,index)=>{
@@ -116,6 +117,7 @@
                 },
                 {
                   title: "查看",
+                  auth:"platformRsaDetail",
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{

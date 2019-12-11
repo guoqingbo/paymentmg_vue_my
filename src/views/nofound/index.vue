@@ -2,6 +2,7 @@
     <div class="nofound">
         <p>404</p>
         <p>哎呀! 找不到页面了!</p>
+        <!--<p>您可能没有访问权限!</p>-->
     </div>
 </template>
 <script>

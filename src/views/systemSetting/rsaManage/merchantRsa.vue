@@ -80,6 +80,7 @@
               const actions = [
                 {
                   title: "编辑",
+                  // auth:"merchantRsaEdit",
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{
@@ -103,6 +104,7 @@
                 },
                 {
                   title: "查看",
+                  // auth:"merchantRsaDetail",
                   action: () => {
                     this.formShow = true
                     this.formItems.forEach(item=>{

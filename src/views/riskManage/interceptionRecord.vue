@@ -77,6 +77,7 @@
               const actions = [
                 {
                   title: "加入白名单",
+                  auth:'whiteListAdd',
                   action: () => {
                     this.mode = "done";
                     this.sucessMsg = "加入白名单成功！";

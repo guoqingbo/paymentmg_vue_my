@@ -119,6 +119,7 @@
                 {
                   title: "管理",
                   marginRight:'30px',
+                  auth:'applyManageDetail',
                   action: () => {
                     // this.$router.push({
                     //   path: "/merchant/applyManageDetail",
@@ -136,6 +137,7 @@
                 {
                   title: "删除",
                   color:"#666",
+                  auth:'applyDelete',
                   action: () => {
                     this.mode = "delete";
                     this.sucessMsg = "删除成功！";
@@ -189,6 +191,7 @@
         hannleItems: [
           {
             title: '添加应用',
+            auth:'applyAdd',auth:'applyAdd',
             icon: 'md-add',
             callback: () => {
               this.$router.push("/merchant/applyAdd");

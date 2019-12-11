@@ -78,6 +78,7 @@
               const actions = [
                   {
                   title: "修改",
+                  auth:'paymentLimitEdit',
                   action: () => {
                     this.formTitle = '修改'
                     this.formShow = true
@@ -90,6 +91,7 @@
                 },
                 {
                   title: "删除",
+                  auth:'paymentLimitDelete',
                   action: () => {
                     this.mode = "delete";
                     this.sucessMsg = "删除成功！";
@@ -116,6 +118,7 @@
           {
             title: '添加',
             icon: 'md-add',
+            auth:'paymentLimitAdd',
             callback: () => {
               this.formShow = true
               // 清空详情

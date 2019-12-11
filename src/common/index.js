@@ -8,6 +8,7 @@ import config from '@/config'
 import validate from "@/validate";
 // app实例
 import App from '@/main'
+import store from '../store'
 const common = {
   // 数字格式化
   formatNumber(number, decimals, dec_point, thousands_sep) {
@@ -106,14 +107,14 @@ const common = {
   searchMerchantList(keyword,autoComplete){
 
     // 清空旧的搜索商户赋值
-    if(App.$store.state.list.params.merchantNo){
-      delete App.$store.state.list.params.merchantNo
+    if(store.state.list.params.merchantNo){
+      delete store.state.list.params.merchantNo
     }
-    if(App.$store.state.list.params.merchantCode){
-      delete App.$store.state.list.params.merchantCode
+    if(store.state.list.params.merchantCode){
+      delete store.state.list.params.merchantCode
     }
-    if(App.$store.state.list.params.merchantName){
-      delete App.$store.state.list.params.merchantName
+    if(store.state.list.params.merchantName){
+      delete store.state.list.params.merchantName
     }
 
     if(keyword){
@@ -138,9 +139,19 @@ const common = {
             data = [{label:'暂无数据',value:''}]
           }
           autoComplete.data = data
-          App.$store.state.global.searchMerchantList = searchMerchantList
+          store.state.global.searchMerchantList = searchMerchantList
         }
       })
+    }
+  },
+  // 判断是否有权限
+  auth(authName){
+    // authName 如果为布尔值，直接判断权限
+    if(typeof authName == 'string'){
+      let authList = JSON.parse(sessionStorage.getItem('authList'))
+      return authList.includes(authName)
+    }else{
+      return authName || true
     }
   },
   // 商户名，商户号拆分
@@ -161,7 +172,7 @@ const common = {
       merchantNameField = 'merchantName'
     }
     if(params[merchantCodeField] || params[merchantNameField]){
-      let searchMerchantList = App.$store.state.global.searchMerchantList
+      let searchMerchantList = store.state.global.searchMerchantList
       let merchant = searchMerchantList[params[merchantCodeField]] ||
         searchMerchantList[params[merchantNameField]] ||
         searchMerchantList[params[merchantNameField]+"("+params[merchantCodeField]+")"]
@@ -169,7 +180,12 @@ const common = {
         params[merchantNameField] = merchant.merchantName
         params[merchantCodeField] = merchant.merchantCode
       }else{
-        let newValueArr = params[merchantNameField].split("(") || params[merchantCodeField].split("(");
+        let newValueArr = []
+        if(params[merchantNameField]){
+          newValueArr = params[merchantNameField].split("(")
+        }else if(params[merchantCodeField]){
+          newValueArr = params[merchantCodeField].split("(");
+        }
         params[merchantNameField] = newValueArr[0]
         if(newValueArr[1]){
           let merchantCode = newValueArr[1].replace(/\)/g,'');
@@ -335,20 +351,22 @@ const common = {
   columnsHandle(h, actions) {
     let array = []
     actions.forEach(element => {
-      let obj = h('a', {
-        style: {
-          color:element.color||'#2d8cf0',
-          margin: '5px',
-          marginLeft: 0,
-          marginRight:element.marginRight||'5px'
-        },
-        on: {
-          click: () => {
-            element.action()
+      if(common.auth(element.auth)){
+        let obj = h('a', {
+          style: {
+            color:element.color||'#2d8cf0',
+            margin: '5px',
+            marginLeft: 0,
+            marginRight:element.marginRight||'5px'
+          },
+          on: {
+            click: () => {
+              element.action()
+            }
           }
-        }
-      }, element.title)
-      array.push(obj)
+        }, element.title)
+        array.push(obj)
+      }
     })
     return array
   },
@@ -411,13 +429,16 @@ const common = {
         },element.title)
       }
       else if(element.type =='select'){
-        let options = element.data.map(item => {
-          return h("Option",{
-            props:{
-              value:item.value,
-              label: item.label,
-            }
-          })
+        let options = []
+        element.data.forEach(item => {
+          if(common.auth(item.auth)){
+            options.push(h("Option",{
+              props:{
+                value:item.value,
+                label: item.label,
+              }
+            }))
+          }
         })
         obj = h('Select', {
           style: {
@@ -425,14 +446,17 @@ const common = {
             marginLeft: 0
           },
           props:{
+            clearable:true,
             value:element.value || "",
             placeholder:element.title
           },
           on: {
-            'on-change'(value){
+            'on-change':(value)=>{
               element.onChange(value)
-              element.value = ''
-            }
+            },
+            // 'on-open-change':()=>{
+            //   element.value = ''
+            // }
           }
         },options)
       }

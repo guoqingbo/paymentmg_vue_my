@@ -4,11 +4,13 @@
           :columns="columns"
           :url="url"
           :params="params"
+          :apiPrefix="apiPrefix"
           @beforeSubmit="beforeSubmit"
           :searchItems="searchItems"
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
              :content="content"
+             :apiPrefix="apiPrefix"
              :sucessMsg="sucessMsg"
              :mode="mode"></confirm>
   </div>
@@ -19,6 +21,7 @@
   export default {
     data () {
       return {
+        apiPrefix:this.common.config.apiUser,
         columns: [
           {
             title: '序号',
@@ -32,11 +35,11 @@
           },
           {
             title: '管理员账号',
-            key: 'merchantName',
+            key: 'phone',
           },
           {
             title: '账号所有人',
-            key: 'merchantName',
+            key: 'accName',
           },
           {
             title: '添加日期',
@@ -45,10 +48,10 @@
           },
           {
             title: '状态',
-            key: 'merchantType',
+            key: 'accStatus',
             sortable: true,
             render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
+              return h('span', this.filter.turn("accStatus",params.row.accStatus))
             }
           },
           {
@@ -65,14 +68,17 @@
                     {
                       label:'详情',
                       value:'1',
+                      auth:'merchantMemberDetail'
                     },
                     {
                       label:'编辑',
-                      value:'2'
+                      value:'2',
+                      auth:'merchantMemberEdit'
                     },
                     {
                       label:'删除',
-                      value:'3'
+                      value:'3',
+                      auth:'merchantMemberDelete'
                     }
                   ],
                   value:"",
@@ -94,7 +100,7 @@
                       this.mode = "delete";
                       this.sucessMsg = "删除成功！";
                       this.content = "确定删除？";
-                      this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
+                      this.$refs.confirmModel.confirm("/admin/delete",{id:params.row.id},'get');
                     }
                   }
                 }
@@ -107,7 +113,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/merchant/grid',
+        url: '/admin/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -122,7 +128,7 @@
           {
             label: '开始日期',
             type: 'date',
-            name: 'startDate',
+            name: 'beginDate',
             format:'yyyy-MM-dd 00:00:00',
             options:{},
             value: ''
@@ -140,6 +146,7 @@
           {
             title: '添加',
             icon: 'md-add',
+            auth:'merchantMemberAdd',
             callback: () => {
               this.$router.push("/merchant/merchantMemberAddEditDetail/add");
             }

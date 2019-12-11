@@ -9,12 +9,14 @@
                 :apiPrefix="apiPrefix"
                 :params="params"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
-      <Col span="2" v-for="item in hannleItems" :key="item.title">
-        <Button type="primary"
-                :icon="item.icon"
-                @click="item.callback"
-                :loading="item.loading">{{ item.title }}</Button>
-      </Col>
+      <template v-for="item in hannleItems" >
+        <Col span="2" v-if="common.auth(item.auth)">
+          <Button type="primary"
+                  :icon="item.icon"
+                  @click="item.callback"
+                  :loading="item.loading">{{ item.title }}</Button>
+        </Col>
+      </template>
     </Row>
     <div class="grids">
       <Table

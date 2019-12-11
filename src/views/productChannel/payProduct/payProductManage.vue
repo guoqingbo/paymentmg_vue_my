@@ -85,7 +85,7 @@
                   title: "添加渠道产品",
                   action: () => {
                     this.$router.push({
-                      path: "/productChannel/payProduct/payProductChannelAddDetail",
+                      path: "/productChannel/payProduct/payProductChannelAddDetail/add",
                       query: { payProductId: params.row.id,payProductName:params.row.payProductName }
                     });
                   }

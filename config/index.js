@@ -11,12 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+        // 默认后台
         '/api/admin':{
             // target:'http://192.168.200.88:10806/',
             // target:'http://192.168.66.246:6071/',
             // target:'http://192.168.66.230:10806/',
             // target:'http://192.168.200.88:10804',
-            target:'http://test1paycenter.zhiyoubao.com/',
+            target:'http://testpaycenter.zhiyoubao.com/',
             // target:'http://192.168.201.122:10806/',
             changeOrigin:true,
             pathRewrite: {
@@ -36,7 +37,7 @@ module.exports = {
         // 用户角色接口
         '/api/user':{
           // target:'http://192.168.66.28:8080/',
-          target:'http://192.168.200.88:8080/',// 测试环境
+          target:'http://192.168.200.88:10910/',// 测试环境
           changeOrigin:true,
           pathRewrite: {
             '^/api/user': '/api/user'

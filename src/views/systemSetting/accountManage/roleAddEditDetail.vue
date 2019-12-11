@@ -15,6 +15,7 @@
           :rules="{required: true, message: '请选择权限', trigger: 'change'}">
           <div style="border: 1px solid #dcdee2;padding:0 20px;border-radius: 5px">
             <Tree :data="menuTree"
+                  ref="tree"
                   :show-checkbox="showCheckbox"
                   @on-check-change="onCheckChange"></Tree>
             <!--输入框单个验证-->
@@ -82,6 +83,14 @@
     methods: {
       // 确认保存之前
       beforeSave(formItem) {
+        // 获取选中及半选节点
+        let nodes = this.$refs.tree.getCheckedAndIndeterminateNodes()
+        let privilegeIds = []
+        nodes.forEach(ele=>{
+          privilegeIds.push(ele.row.id)
+        })
+        formItem.privilegeIds = this.privilegeIds = privilegeIds.join(',')
+
         if (this.$route.query.id) {
           formItem.roleId = this.$route.query.id
         }
@@ -118,6 +127,10 @@
                 this.showCheckbox = false
                 this.menuTree = this.formateMenuTree(this.detail.privilegeInfos)
               }else{
+                this.$nextTick(()=>{
+                  this.privilegeIds = this.detail.privilegeIds.join(",")
+                  this.$refs.formList.setFormItem('privilegeIds',this.privilegeIds)
+                })
                 this.getMenuList()
               }
             }else{
@@ -151,8 +164,11 @@
               children:[],
               row:ele,
             }
-            if(this.detail.privilegeIds && this.detail.privilegeIds.includes(ele.id)){
-              tree.checked = true
+            if(!ele.items || ele.items.length==0){
+              // 父级设置勾选会被全选的，如果有子集，则父级不被勾选
+              if(this.detail.privilegeIds && this.detail.privilegeIds.includes(ele.id)){
+                tree.checked = true
+              }
             }
             if(ele.items && ele.items.length){
               this.formateMenuTree(ele.items,tree.children)
@@ -163,7 +179,6 @@
         return menuTree
       },
       onCheckChange(select){
-        console.log(select)
         let privilegeIds = []
         if(select.length){
           select.forEach(ele=>{
@@ -173,6 +188,7 @@
         }else{
           this.privilegeIds = ''
         }
+        console.log(select)
         this.$refs.formList.setFormItem('privilegeIds',this.privilegeIds)
       },
     }

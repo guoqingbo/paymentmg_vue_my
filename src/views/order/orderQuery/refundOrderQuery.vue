@@ -100,6 +100,7 @@
               const actions = [
                 {
                   title: "明细",
+                  auth:'refundOrderDetail',
                   action: () => {
                     // this.$router.push({
                     //   path: "/order/orderQuery/refundOrderDetail",

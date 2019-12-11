@@ -61,6 +61,7 @@
               const actions = [
                 {
                   title: "取消白名单",
+                  auth:'whiteListCancel',
                   action: () => {
                     this.mode = "done";
                     this.sucessMsg = "取消白名单成功！";

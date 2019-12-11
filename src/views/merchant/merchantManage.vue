@@ -58,6 +58,7 @@
               const actions = [
                 {
                   title: "详情",
+                  auth:'merchantDetail',// 权限校验
                   action: () => {
                     this.$router.push({
                       path: "/merchant/merchantAddEditDetail/detail",
@@ -67,15 +68,17 @@
                 },
                 {
                   title: "编辑",
+                  auth:'merchantEdit',// 权限校验
                   action: () => {
                     this.$router.push({
-                      path: "/merchant/merchantAddEditDetail/detail",
+                      path: "/merchant/merchantAddEditDetail/edit",
                       query: {id: params.row.id}
                     });
                   }
                 },
                 {
                   title: "删除",
+                  auth:'merchantDelete',// 权限校验
                   action: () => {
                     this.mode = "delete";
                     this.sucessMsg = "删除成功！";
@@ -126,6 +129,7 @@
         hannleItems: [
           {
             title: '添加商户',
+            auth:'merchantAdd',// 权限校验
             icon: 'md-add',
             callback: () => {
               this.$router.push("/merchant/merchantAddEditDetail/add");

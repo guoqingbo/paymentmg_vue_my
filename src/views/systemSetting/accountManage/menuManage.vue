@@ -43,92 +43,6 @@
       return {
         menuTree: [],
         apiPrefix:this.common.config.apiUser,
-        // menuList:[],
-        // columns: [
-        //   {
-        //     title: '序号',
-        //     type:'index',
-        //     width:70,
-        //     align:'center'
-        //   },
-        //   {
-        //     title: '名称',
-        //     key: 'privilegeName',
-        //     sortable: true,
-        //   },
-        //   {
-        //     title: '唯一编码',
-        //     key: 'privilegeMark',
-        //     sortable: true,
-        //   },
-        //   {
-        //     title: '前端url',
-        //     key: 'privilegeUrl',
-        //     sortable: true,
-        //   },
-        //   {
-        //     title: '接口url',
-        //     key: 'privilegeMethod',
-        //     sortable: true,
-        //   },
-        //   {
-        //     title: '层级深度',
-        //     key: 'privilegeLevel',
-        //     sortable: true,
-        //   },
-        //   {
-        //     title: '排序',
-        //     key: 'privilegeOrde',
-        //     sortable: true,
-        //   },
-        //   {
-        //     title: '操作',
-        //     key: 'action',
-        //     width:140,
-        //     align:'center',
-        //     render: (h, params) => {
-        //       const actions = [
-        //         {
-        //           title:'操作',
-        //           type:'select',
-        //           data:[
-        //             {
-        //               label:'添加',
-        //               value:'1',
-        //             },
-        //             {
-        //               label:'编辑',
-        //               value:'2'
-        //             },
-        //             {
-        //               label:'删除',
-        //               value:'3'
-        //             }
-        //           ],
-        //           value:"",
-        //           onChange:(value)=>{
-        //             if(value == 1){
-        //               // 添加
-        //               this.routeType = 'add'
-        //               this.openPop(params.row)
-        //             }else if(value == 2){
-        //               // 编辑
-        //               this.routeType = 'edit'
-        //               this.openPop(params.row)
-        //             }else if(value == 3){
-        //               // 删除
-        //               this.mode = "delete";
-        //               this.sucessMsg = "删除成功！";
-        //               this.content = "确定删除？";
-        //               this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
-        //             }
-        //           }
-        //         }
-        //       ]
-        //       return this.common.columnsItemRender(h, actions);
-        //     }
-        //   }
-        // ],
         params: {
           sort:'modifyTime',
           order:'desc'
@@ -370,11 +284,11 @@
         this.formShow = true
         this.initFormItems()
         if(this.routeType == 'edit'){
-          this.formTitle = this.selectedMenu.privilegeName+ '-修改'
+          this.formTitle = this.selectedMenu.privilegeName+ '-编辑'
           // 请求接口
           this.formUrl = '/privilege/update'
         }else if(this.routeType == 'add'){
-          this.formTitle = this.selectedMenu.privilegeName+ '-添加'
+          this.formTitle = (this.selectedMenu.privilegeName||'一级菜单')+ '-添加'
           // 请求接口
           this.formUrl = '/privilege/add'
         }

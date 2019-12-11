@@ -89,6 +89,7 @@
               const actions = [
                 {
                   title: "明细",
+                  auth:'tradeOrderDetail',
                   action: () => {
                     // this.$router.push({
                     //   path: "/order/orderQuery/tradeOrderDetail",
