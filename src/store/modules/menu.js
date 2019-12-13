@@ -93,7 +93,7 @@ const mutations = {
             breadcrumbList.push(ele.privilegeName)
             let meta = {
               breadcrumbList,
-              belongTab: node[0].privilegeMark,
+              belongTab: node[0]?node[0].privilegeMark:ele.privilegeMark,
               openName: node[1]?node[1].privilegeMark:ele.privilegeMark
             }
             roleRouter.push({
