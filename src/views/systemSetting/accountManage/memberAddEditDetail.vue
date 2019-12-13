@@ -101,8 +101,6 @@
     },
     watch: {},
     created() {
-      // 获取角色
-      this.getRoleList()
       // 如果是编辑，详情
       this.getDetail()
     },
@@ -121,22 +119,30 @@
         }
       },
       // 获取角色
-      getRoleList(){
-        let url = '/role/list'
-        this.apiGet(url,{},this.apiPrefix).then(res=>{
+      async getRoleList(role){
+        let roleIds = []
+        let roleList = []
+        if(!role){
+          let url = '/role/list'
+          let res = await this.apiGet(url,{},this.apiPrefix)
           if(res.success){
-            let roleList = []
-            res.data.forEach(ele=>{
-              roleList.push({
-                label:ele.roleName,
-                value:ele.id,
-              })
-            })
-            this.common.setArrItem(this.formList,'roleIds',{data:roleList})
+            role =  res.data
           }else{
             this.$Message.warning(res.message)
+            return
+          }
+        }
+        role.forEach(ele=> {
+          roleList.push({
+            label: ele.roleName,
+            value: ele.id,
+          })
+          if(ele.selected){
+            roleIds.push(ele.id)
           }
         })
+        this.detail.roleIds = roleIds
+        this.common.setArrItem(this.formList,'roleIds',{data:roleList})
       },
       // 确认保存之前
       beforeSave(formItem) {
@@ -163,10 +169,9 @@
           this.apiGet("/staff/detail/",{id},this.apiPrefix).then(res => {
             if (res.status == 200 && res.data) {
               this.detail = res.data
-              this.detail.roleIds = []
-              this.detail.roles.forEach(ele=>{
-                this.detail.roleIds.push(ele.id)
-              })
+
+              this.getRoleList(this.detail.roles)
+
               if (this.routeType == 'detail') {
                 // 如果是详情页
               } else {
@@ -195,6 +200,9 @@
               })
             }
           });
+        }else{
+          // 获取角色
+          this.getRoleList()
         }
       }
     }
