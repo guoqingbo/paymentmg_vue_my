@@ -10,6 +10,7 @@
           :hannleItems="hannleItems"></list>
     <confirm ref="confirmModel"
              :content="content"
+             :apiPrefix="apiPrefix"
              :sucessMsg="sucessMsg"
              :mode="mode"></confirm>
   </div>
@@ -84,7 +85,7 @@
                       this.mode = "delete";
                       this.sucessMsg = "删除成功！";
                       this.content = "确定删除？";
-                      this.$refs.confirmModel.confirm("/merchant/delete/" + params.row.id);
+                      this.$refs.confirmModel.confirm("/role/delete", {id:params.row.id},'get');
                     }
                   }
                 }

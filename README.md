@@ -16,8 +16,8 @@
  * admin-swagger  http://192.168.200.88:10806/swagger-ui.html
  * pay-swagger  http://192.168.200.88:6073/swagger-ui.html
  * 用户管理api文档 
-     http://192.168.66.28:8080/doc.html#/default/user-operator-controller/detailUsingGET_3
-     http://192.168.200.88:8080/doc.html
+   
+     http://192.168.200.88:10910/doc.html
   
  * 收银台 paycenter.zhiyoubao.com/cashier/cashierManage/choosePayWay
  * 微信支付唤起 paycenter.zhiyoubao.com/cashier/cashierManage/callWxPay
