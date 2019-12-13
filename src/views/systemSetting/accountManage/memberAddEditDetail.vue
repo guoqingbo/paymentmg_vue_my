@@ -178,23 +178,26 @@
                 // 如果是编辑
 
               }
-              this.formList.forEach((ele) => {
+              this.formList.forEach((ele,index) => {
                 ele.value = res.data[ele.name]
                 if (this.routeType == 'detail') {
                   // 如果是详情页
                   ele.type += "Text"
                 }else {
                   if(ele.name == 'accPass'){
-                    ele.rules = [
-                      {required: false, message: '请输入操作员密码', trigger: 'blur'},
-                      {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
-                      {required: false,validator: this.common.validate.space, trigger: "blur"}
-                    ]
+                    let accPassIndex = index
+                    this.formList.splice(accPassIndex,2)
+                    // ele.rules = [
+                    //   {required: false, message: '请输入操作员密码', trigger: 'blur'},
+                    //   {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
+                    //   {required: false,validator: this.common.validate.space, trigger: "blur"}
+                    // ]
                   }else if(ele.name == 'accPassConfirm'){
-                    ele.rules = [
-                      {required: false, message: '请确认操作员密码', trigger: 'blur'},
-                      {required: false, validator: this.accPassConfirm, trigger: "blur"}
-                    ]
+                    // this.formList.splice(index,1)
+                    // ele.rules = [
+                    //   {required: false, message: '请确认操作员密码', trigger: 'blur'},
+                    //   {required: false, validator: this.accPassConfirm, trigger: "blur"}
+                    // ]
                   }
                 }
               })
