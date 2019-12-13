@@ -21,7 +21,8 @@
           {
             title: '商户名称',
             name: 'merchantCode',
-            // rules: [{max: 50, message: "上级商户号不超过50字符", trigger: 'blur'}],
+            rules: [{required: true, message: '选择商户名称', trigger: 'change'},
+              {max: 50, message: "商户名不超过50字符", trigger: 'change'}],
             type: 'autoComplete',
             value: '',
             data:[],
@@ -36,7 +37,7 @@
             type: 'input',
             rules: [{
               validator: this.common.validate.phone,
-              required: false,
+              required: true,
               trigger: "blur"
             }],
             value:'',
@@ -125,10 +126,15 @@
                   ele.type += "Text"
                 }else {
                   if(ele.name == 'accPass'){
+                    ele.disabled = true
                     ele.rules = [
                       {required: false, message: '请输入操作员密码', trigger: 'blur'},
                       {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'}
                     ]
+                  }else if(ele.name == 'merchantCode'){
+                    ele.disabled = true
+                  }else if(ele.name == 'phone'){
+                    ele.disabled = true
                   }
                 }
                 if(ele.name == 'merchantCode' && res.data.merchantName){

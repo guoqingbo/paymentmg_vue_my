@@ -81,7 +81,7 @@
               // },0)
             },
             rules: [
-              { required: true, type: 'array', min: 1, message: '请选择选择角色', trigger: 'blur' }
+              { required: true, type: 'array', min: 1, message: '请选择角色', trigger: 'blur' }
             ],
             value: []
           },
@@ -103,7 +103,7 @@
         this.apiGet(url,{},this.apiPrefix).then(res=>{
           if(res.success){
             let roleList = []
-            res.data.rows.forEach(ele=>{
+            res.data.forEach(ele=>{
               roleList.push({
                 label:ele.roleName,
                 value:ele.id,
@@ -130,12 +130,12 @@
             // 如果是详情页
 
             // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户详情'])
+            // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户详情'])
           } else {
             // 如果是编辑
             this.formListUrl = '/staff/update'
             // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
+            // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
           this.apiGet("/staff/detail/",{id},this.apiPrefix).then(res => {
             if (res.status == 200 && res.data) {

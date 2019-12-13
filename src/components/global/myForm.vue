@@ -97,7 +97,7 @@
                         v-if="item.type=='autoComplete'"
                         v-model="item.value"
                         @on-search="item.search?item.search($event):''"
-                        :clearable="true"
+                        :clearable="!item.disabled"
                         icon="ios-search"
                         :placeholder="item.placeholder?item.placeholder:'请输入'+item.title">
             <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>

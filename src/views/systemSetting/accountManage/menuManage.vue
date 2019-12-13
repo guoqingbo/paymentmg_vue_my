@@ -67,19 +67,25 @@
             title: '名称',
             name: 'privilegeName',
             type: 'input',
-            rules: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }]
+            rules: [
+              { required: true, message: '请输入菜单名称', trigger: 'blur' },
+              {max: 10, message: "单名称不超过10字符", trigger: 'blur'}
+              ]
           },
           {
-            title: '碓一编码',
+            title: '唯一编码',
             name: 'privilegeMark',
             type: 'input',
-            rules: [{ required: true, message: '请输入碓一编码', trigger: 'blur' }]
+            rules: [{ required: true, message: '请输入唯一编码', trigger: 'blur' },
+              {max: 20, message: "唯一编码不超过20字符", trigger: 'blur'}
+            ]
           },
           {
             title: '前端URL',
             name: 'privilegeUrl',
             type: 'input',
-            // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            tip:'如果是页面跳转，请填写跳转的地址，公共路由组件使用 /{path}/:{param}，path为公用组件地址',
+            rules: [{ required: false,max: 100, message: "前端URL不超过100字符", trigger: 'blur'}]
           },
           {
             title: '权限类型',
@@ -93,7 +99,8 @@
             title: '接口URL',
             name: 'privilegeMethod',
             type: 'input',
-            // rules: [{ required: true, message: '请选择商户来源', trigger: 'change' }]
+            tip:'如果接口需要做权限校验，填入对应曹接口地址',
+            rules: [{ required: false,max: 100, message: "前端URL不超过100字符", trigger: 'blur'}]
           },
           {
             title: '权限分组',
@@ -107,7 +114,10 @@
             title: '排序',
             name: 'privilegeOrder',
             type: 'input',
-            rules: [{ required: true, message: '请输入排序', trigger: 'blur' }]
+            rules: [
+              { required: true, message: '请输入排序', trigger: 'blur' },
+              {required: true, validator: this.common.validate.positiveInteger, trigger: 'blur'}
+              ]
           },
           {
             title: '功能类别',
@@ -124,7 +134,7 @@
             name: 'privilegeLevel',
             type: 'select',
             data: this.common.dic.privilegeLevel,
-            // disabled:true,
+            disabled:true,
             rules: [
               {required: true, message: '请选择层级深度', trigger: 'change'}
             ],
@@ -148,7 +158,7 @@
         return h('div', {
           style: {
             display: 'inline-block',
-            width: '100%',
+            width: '500px',
             backgroundColor:"#cccccc14",
             // borderBottom:'1px solid #ccc',
             padding:'3px 10px',
@@ -205,10 +215,14 @@
                 icon: 'md-remove',
                 size:'small'
               }),
+              style: {
+                marginRight: '8px'
+              },
               on: {
                 click: () => {
                   this.$Modal.confirm({
-                    content:'确定删除？',
+                    title:data.row.privilegeName,
+                    content:'确定删除'+data.row.privilegeName+'？',
                     onOk:()=>{
                       let url = '/privilege/delete'
                       this.apiGet(url,{id:data.row.id},this.apiPrefix).then(res=>{
@@ -223,7 +237,20 @@
                   })
                 }
               }
-            },'删除')
+            },'删除'),
+            h('Button', {
+              props: Object.assign({}, this.buttonProps, {
+                size:'small'
+              }),
+              style: {
+                marginRight: '8px'
+              },
+              on: {
+                click: () => {
+                  this.openPop(data,'detail')
+                }
+              },
+            }, '详情'),
           ])
         ]);
       },
@@ -278,7 +305,6 @@
       },
       // 打开弹框
       openPop(item,type){
-        console.log(item)
         this.routeType = type
         this.selectedMenu = item.row || {}
         this.formShow = true
@@ -291,12 +317,15 @@
           this.formTitle = (this.selectedMenu.privilegeName||'一级菜单')+ '-添加'
           // 请求接口
           this.formUrl = '/privilege/add'
+        }else  if(this.routeType == 'detail'){
+          this.formTitle = this.selectedMenu.privilegeName+ '-详情'
         }
       },
       initFormItems(){
         if(this.routeType == 'edit'){
           this.formItems.forEach(ele=>{
             ele.value =  (this.selectedMenu[ele.name] || '')+""
+            ele.type=ele.type.replace(/(Text)$/,'')
           })
         }else if(this.routeType == 'add'){
           this.formItems.forEach(ele=>{
@@ -310,7 +339,16 @@
             if(ele.name == 'privilegeLevel'){
                 ele.value = (Number(privilegeLevel)+1)+""
             }
+            ele.type=item.type.replace(/(Text)$/,'')
           });
+        }else if(this.routeType == 'detail'){
+          this.formItems.forEach(ele=>{
+            ele.value =  (this.selectedMenu[ele.name] || '')+""
+            // 如果没有Text后缀则添加Text后缀
+            if(!/(Text)$/.test(ele.type)){
+              ele.type+='Text'
+            }
+          })
         }
       }
     }

@@ -174,7 +174,7 @@
       // 日期限制
       checkDate(){
         // 开始时间结束时间限制
-        let startDateItem = this.common.getArrItem(this.searchItems,'startDate')
+        let startDateItem = this.common.getArrItem(this.searchItems,'beginDate')
         let endDateItem = this.common.getArrItem(this.searchItems,'endDate')
         if(startDateItem && endDateItem){
           startDateItem.onChange=(date1)=>{
