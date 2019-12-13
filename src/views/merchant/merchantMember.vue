@@ -63,7 +63,7 @@
               const actions = [
                 {
                   title:'操作',
-                  type:'select',
+                  type:'dropdown',
                   data:[
                     {
                       label:'详情',
@@ -82,7 +82,7 @@
                     }
                   ],
                   value:"",
-                  onChange:(value)=>{
+                  onClick:(value)=>{
                     if(value == 1){
                       // 详情
                       this.$router.push({

@@ -68,7 +68,7 @@
           // }
         ],
         menuTree: [],
-        routeType: "",// 判断是新增，详情，编辑
+        routeType: "add",// 判断是新增，详情，编辑
         showCheckbox:true,
       }
     },
@@ -160,7 +160,7 @@
           list.forEach(ele=>{
             let tree = {
               title:ele.privilegeName,
-              expand: ele.privilegeLevel<=1,
+              expand: this.routeType !='add'&&ele.privilegeLevel<=1,
               children:[],
               row:ele,
             }

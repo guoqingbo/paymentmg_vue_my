@@ -99,7 +99,7 @@
     methods: {
       // 获取角色
       getRoleList(){
-        let url = '/role/grid'
+        let url = '/role/list'
         this.apiGet(url,{},this.apiPrefix).then(res=>{
           if(res.success){
             let roleList = []

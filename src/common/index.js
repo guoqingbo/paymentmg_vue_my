@@ -428,37 +428,30 @@ const common = {
           }
         },element.title)
       }
-      else if(element.type =='select'){
-        let options = []
+      else if(element.type =='dropdown'){
+        let DropdownItem = []
         element.data.forEach(item => {
           if(common.auth(item.auth)){
-            options.push(h("Option",{
+            DropdownItem.push(h("DropdownItem",{
               props:{
-                value:item.value,
-                label: item.label,
+                name:item.value
               }
-            }))
+            },item.label))
           }
         })
-        obj = h('Select', {
-          style: {
-            margin: '5px',
-            marginLeft: 0
-          },
+        let title =  h("a",{
           props:{
-            clearable:true,
-            value:element.value || "",
-            placeholder:element.title
-          },
-          on: {
-            'on-change':(value)=>{
-              element.onChange(value)
-            },
-            // 'on-open-change':()=>{
-            //   element.value = ''
-            // }
+            href:"javascript:void(0)"
           }
-        },options)
+        },[element.title,h('Icon',{props:{type:"ios-arrow-down"}})])
+        let DropdownMenu = h("DropdownMenu",{slot:"list"},DropdownItem)
+        obj = h('Dropdown', {
+          on: {
+            'on-click':(value)=>{
+              element.onClick(value)
+            }
+          }
+        },[title,DropdownMenu])
       }
       array.push(obj)
     })
