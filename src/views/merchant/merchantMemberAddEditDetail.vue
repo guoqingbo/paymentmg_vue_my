@@ -48,7 +48,17 @@
             type: 'password',
             rules: [
               {required: true, message: '请输入操作员密码', trigger: 'blur'},
-              {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'}
+              {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
+              {required: false,validator: this.common.validate.space, trigger: "blur"}
+            ]
+          },
+          {
+            title: '确认管理员密码',
+            name: 'accPassConfirm',
+            type: 'password',
+            rules: [
+              {required: true, message: '请确认管理员密码', trigger: 'blur'},
+              {required: true, validator: this.accPassConfirm, trigger: "blur"}
             ]
           },
           {
@@ -88,6 +98,19 @@
       this.getDetail()
     },
     methods: {
+      accPassConfirm(rule, value, callback){
+        if (!rule.required && !value) {
+          // 非必填时
+          callback()
+          return
+        }
+        let accPass = this.common.getArrItem(this.formList,'accPass')
+        if (value !==accPass.value) {
+          callback(new Error('密码不一致！'))
+        } else {
+          callback()
+        }
+      },
       // 确认保存之前
       beforeSave(formItem) {
         // 商户名，商户号拆分
@@ -128,8 +151,15 @@
                   if(ele.name == 'accPass'){
                     ele.disabled = true
                     ele.rules = [
-                      {required: false, message: '请输入操作员密码', trigger: 'blur'},
-                      {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'}
+                      {required: false, message: '请输入管理员密码', trigger: 'blur'},
+                      {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
+                      {required: false,validator: this.common.validate.space, trigger: "blur"}
+                    ]
+                  }else if(ele.name == 'accPassConfirm'){
+                    ele.disabled = true
+                    ele.rules = [
+                      {required: false, message: '请确认管理员密码', trigger: 'blur'},
+                      {required: false, validator: this.accPassConfirm, trigger: "blur"}
                     ]
                   }else if(ele.name == 'merchantCode'){
                     ele.disabled = true
