@@ -167,7 +167,7 @@
             // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
           this.apiGet("/staff/detail/",{id},this.apiPrefix).then(res => {
-            if (res.status == 200 && res.data) {
+            if (res.success) {
               this.detail = res.data
 
               this.getRoleList(this.detail.roles)
@@ -198,6 +198,8 @@
                   }
                 }
               })
+            }else{
+              this.$Message.warning(res.message)
             }
           });
         }else{
