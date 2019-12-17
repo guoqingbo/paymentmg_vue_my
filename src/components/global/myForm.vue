@@ -193,7 +193,6 @@ export default {
   filters:{
     checkboxFilter(value,data){
       let label = ''
-      console.log(value)
       if(data instanceof Array){
         data.forEach(function (ele) {
           if(value.includes(ele.value)){

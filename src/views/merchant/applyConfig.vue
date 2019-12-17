@@ -210,7 +210,7 @@
               this.getPayConfig()
             }
             this.formList.forEach(ele => {
-              if(typeof this.detail[ele.name]!='undefined'){
+              if(this.detail[ele.name]){
                 ele.value = this.detail[ele.name]
               }
               // 如果是详情页
