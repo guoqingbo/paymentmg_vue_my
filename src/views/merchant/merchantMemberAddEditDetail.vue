@@ -66,7 +66,8 @@
             name: 'accName',
             type: 'input',
             rules: [{required: false, message: '请输入账号所有人', trigger: 'blur'},
-              {max: 50, message: "账号所有人不超过50字符", trigger: 'blur'}]
+              {max: 50, message: "账号所有人不超过50字符", trigger: 'blur'}],
+            value:''
           },
           {
             title: '电子邮箱',
@@ -74,7 +75,8 @@
             type: 'input',
             rules: [
               // {required: false, type:'email',trigger: "blur"},
-              {validator: this.common.validate.email, required: false, trigger: "blur"}
+              {validator: this.common.validate.email, required: false, trigger: "blur"},
+              {max: 64, message: "邮箱地址不超过64字符", trigger: 'blur'}
             ],
             value:''
           },
@@ -135,32 +137,36 @@
             // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
           this.apiGet("/admin/detail",{id},this.apiPrefix).then(res => {
-            if (res.status == 200 && res.data) {
+            if (res.success) {
               if (this.routeType == 'detail') {
                 // 如果是详情页
               } else {
                 // 如果是编辑
 
               }
-              this.formList.forEach((ele) => {
+              let accPassIndex = ''
+              this.formList.forEach((ele,index) => {
                 ele.value = res.data[ele.name]
+                if(ele.name == 'accPass') {
+                  accPassIndex = index
+                }
                 if (this.routeType == 'detail') {
                   // 如果是详情页
                   ele.type += "Text"
                 }else {
                   if(ele.name == 'accPass'){
-                    ele.disabled = true
-                    ele.rules = [
-                      {required: false, message: '请输入管理员密码', trigger: 'blur'},
-                      {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
-                      {required: false,validator: this.common.validate.space, trigger: "blur"}
-                    ]
+                    // ele.disabled = true
+                    // ele.rules = [
+                    //   {required: false, message: '请输入管理员密码', trigger: 'blur'},
+                    //   {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
+                    //   {required: false,validator: this.common.validate.space, trigger: "blur"}
+                    // ]
                   }else if(ele.name == 'accPassConfirm'){
-                    ele.disabled = true
-                    ele.rules = [
-                      {required: false, message: '请确认管理员密码', trigger: 'blur'},
-                      {required: false, validator: this.accPassConfirm, trigger: "blur"}
-                    ]
+                    // ele.disabled = true
+                    // ele.rules = [
+                    //   {required: false, message: '请确认管理员密码', trigger: 'blur'},
+                    //   {required: false, validator: this.accPassConfirm, trigger: "blur"}
+                    // ]
                   }else if(ele.name == 'merchantCode'){
                     ele.disabled = true
                   }else if(ele.name == 'phone'){
@@ -171,6 +177,9 @@
                   ele.value=res.data.merchantName+"("+res.data.merchantCode+")"
                 }
               })
+              this.formList.splice(accPassIndex, 2)
+            }else{
+              this.$Message(res.message)
             }
           });
         }

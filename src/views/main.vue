@@ -155,7 +155,8 @@
             {
               validator: this.common.validate.email,
               message: "号码格式不正确"
-            }
+            },
+            {max: 64, message: "邮箱地址不超过64字符", trigger: 'blur'}
           ],
           logo: [{required: true, message: "请选择图片", trigger: "blur"}],
           address: [{required: true, message: "请填写地址", trigger: "blur"}]

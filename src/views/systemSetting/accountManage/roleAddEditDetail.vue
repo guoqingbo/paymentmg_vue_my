@@ -114,12 +114,12 @@
                   // 如果是详情页
                   ele.type+='Text'
                   // 更新位置占位符
-                  this.$store.dispatch('setBreadcrumbListAction', ['账号管理', '角色详情'])
+                  // this.$store.dispatch('setBreadcrumbListAction', ['账号管理', '角色详情'])
                 } else {
                   // 如果是编辑
                   this.formListUrl = '/role/update'
                   // 更新位置占位符
-                  this.$store.dispatch('setBreadcrumbListAction', ['账号管理', '编辑角色'])
+                  // this.$store.dispatch('setBreadcrumbListAction', ['账号管理', '编辑角色'])
                 }
               })
               // 如果是详情页
@@ -160,7 +160,7 @@
           list.forEach(ele=>{
             let tree = {
               title:ele.privilegeName,
-              expand: this.routeType !='add'&&ele.privilegeLevel<=1,
+              expand: this.routeType !='add'&&ele.privilegeLevel<=1 && this.detail.privilegeIds.includes(ele.id),
               children:[],
               row:ele,
             }
@@ -188,7 +188,6 @@
         }else{
           this.privilegeIds = ''
         }
-        console.log(select)
         this.$refs.formList.setFormItem('privilegeIds',this.privilegeIds)
       },
     }

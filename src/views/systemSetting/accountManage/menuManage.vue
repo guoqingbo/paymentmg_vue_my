@@ -60,7 +60,7 @@
         content: "",
         sucessMsg: "",
 
-        formTitle:"添加权限",
+        formTitle:"新增菜单",
         formShow: false,
         formItems: [
           {
@@ -69,7 +69,7 @@
             type: 'input',
             rules: [
               { required: true, message: '请输入菜单名称', trigger: 'blur' },
-              {max: 10, message: "单名称不超过10字符", trigger: 'blur'}
+              {max: 10, message: "菜单名称不超过10字符", trigger: 'blur'}
               ]
           },
           {
@@ -77,7 +77,7 @@
             name: 'privilegeMark',
             type: 'input',
             rules: [{ required: true, message: '请输入唯一编码', trigger: 'blur' },
-              {max: 20, message: "唯一编码不超过20字符", trigger: 'blur'}
+              {max: 64, message: "唯一编码不超过64字符", trigger: 'blur'}
             ]
           },
           {
@@ -99,8 +99,8 @@
             title: '接口URL',
             name: 'privilegeMethod',
             type: 'input',
-            tip:'如果接口需要做权限校验，填入对应曹接口地址',
-            rules: [{ required: false,max: 100, message: "前端URL不超过100字符", trigger: 'blur'}]
+            tip:'如果接口需要做权限校验，填入对应的接口地址',
+            rules: [{ required: false,max: 100, message: "接口URL不超过100字符", trigger: 'blur'}]
           },
           {
             title: '权限分组',
@@ -322,6 +322,11 @@
         }
       },
       initFormItems(){
+        if(this.selectedMenu.id){
+          // 去除菜单选项
+          let privilegeMenuType = this.common.dic.privilegeMenuType.slice(1)
+          this.common.setArrItem(this.formItems,'privilegeMenuType',{data:privilegeMenuType})
+        }
         if(this.routeType == 'edit'){
           this.formItems.forEach(ele=>{
             ele.value =  (this.selectedMenu[ele.name] || '')+""
@@ -339,7 +344,7 @@
             if(ele.name == 'privilegeLevel'){
                 ele.value = (Number(privilegeLevel)+1)+""
             }
-            ele.type=item.type.replace(/(Text)$/,'')
+            ele.type=ele.type.replace(/(Text)$/,'')
           });
         }else if(this.routeType == 'detail'){
           this.formItems.forEach(ele=>{

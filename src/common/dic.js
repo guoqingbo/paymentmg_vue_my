@@ -117,7 +117,7 @@ let dic = {
   accStatus: [
     {label:"已停用",value:"0"},
     {label:"已启用",value:"1"},
-    {label:"已锁定",value:"2"},
+    // {label:"已锁定",value:"2"},
   ]
 }
 export default dic

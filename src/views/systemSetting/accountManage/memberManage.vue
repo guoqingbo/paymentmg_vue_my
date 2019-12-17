@@ -91,7 +91,7 @@
                       this.mode = "delete";
                       this.sucessMsg = "删除成功！";
                       this.content = "确定删除？";
-                      this.$refs.confirmModel.confirm("/staff/delete/",{id:params.row.id},'get');
+                      this.$refs.confirmModel.confirm("/staff/delete",{id:params.row.id},'get');
                     }
                   }
                 }

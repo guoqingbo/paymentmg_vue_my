@@ -73,7 +73,8 @@
             type: 'input',
             rules: [
               // {required: false, type:'email',trigger: "blur"},
-              {validator: this.common.validate.email, required: false, trigger: "blur"}
+              {validator: this.common.validate.email, required: false, trigger: "blur"},
+              {max: 64, message: "邮箱地址不超过64字符", trigger: 'blur'}
             ]
           },
           {

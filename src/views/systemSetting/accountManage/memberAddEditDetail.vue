@@ -55,7 +55,8 @@
             name: 'accName',
             type: 'input',
             rules: [{required: false, message: '请输入账号所有人', trigger: 'blur'},
-              {max: 50, message: "账号所有人不超过50字符", trigger: 'blur'}]
+              {max: 50, message: "账号所有人不超过50字符", trigger: 'blur'}],
+            value:''
           },
           {
             title: '电子邮箱',
@@ -63,7 +64,8 @@
             type: 'input',
             rules: [
               // {required: false, type:'email',trigger: "blur"},
-              {validator: this.common.validate.email, required: false, trigger: "blur"}
+              {validator: this.common.validate.email, required: false, trigger: "blur"},
+              {max: 64, message: "邮箱地址不超过64字符", trigger: 'blur'}
             ],
             value:''
           },
@@ -157,16 +159,11 @@
           this.routeType = this.$route.query.routeType
           if (this.routeType == 'detail') {
             // 如果是详情页
-
-            // 更新位置占位符
-            // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户详情'])
           } else {
             // 如果是编辑
             this.formListUrl = '/staff/update'
-            // 更新位置占位符
-            // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
-          this.apiGet("/staff/detail/",{id},this.apiPrefix).then(res => {
+          this.apiGet("/staff/detail",{id},this.apiPrefix).then(res => {
             if (res.success) {
               this.detail = res.data
 
@@ -178,15 +175,23 @@
                 // 如果是编辑
 
               }
+              let accPassIndex
               this.formList.forEach((ele,index) => {
+                if(ele.name == 'accPass') {
+                  accPassIndex = index
+                }
+                if(ele.name == 'accName'){
+                  console.log(res.data[ele.name])
+                }
                 ele.value = res.data[ele.name]
+
                 if (this.routeType == 'detail') {
                   // 如果是详情页
                   ele.type += "Text"
                 }else {
                   if(ele.name == 'accPass'){
-                    let accPassIndex = index
-                    this.formList.splice(accPassIndex,2)
+                    // let accPassIndex = index
+                    // this.formList.splice(accPassIndex,2)
                     // ele.rules = [
                     //   {required: false, message: '请输入操作员密码', trigger: 'blur'},
                     //   {min:6,max: 12, message: "密码仅支持6-12位", trigger: 'blur'},
@@ -201,6 +206,7 @@
                   }
                 }
               })
+              this.formList.splice(accPassIndex, 2)
             }else{
               this.$Message.warning(res.message)
             }
