@@ -85,7 +85,7 @@
             name: 'privilegeUrl',
             type: 'input',
             tip:'如果是页面跳转，请填写跳转的地址，公共路由组件使用 /{path}/:{param}，path为公用组件地址',
-            rules: [{ required: false,max: 100, message: "前端URL不超过100字符", trigger: 'blur'}]
+            rules: [{ required: false,max: 500, message: "前端URL不超过500字符", trigger: 'blur'}]
           },
           {
             title: '权限类型',
@@ -100,7 +100,7 @@
             name: 'privilegeMethod',
             type: 'input',
             tip:'如果接口需要做权限校验，填入对应的接口地址',
-            rules: [{ required: false,max: 100, message: "接口URL不超过100字符", trigger: 'blur'}]
+            rules: [{ required: false,max: 500, message: "接口URL不超过500字符", trigger: 'blur'}]
           },
           {
             title: '权限分组',

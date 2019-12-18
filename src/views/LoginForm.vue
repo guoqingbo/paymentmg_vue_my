@@ -111,6 +111,8 @@
             // this.$Message.success('提交成功!')
             let url = "/login";
             let params = this.formInline;
+            params.phone = params.phone.replace(/(^\s*)|(\s*$)/g, "")
+            params.accPwd = params.accPwd.replace(/(^\s*)|(\s*$)/g, "")
             let apiPrefix = this.apiPrefix
             let res = await this.$store.dispatch("login", {url, params,apiPrefix});
             // 更新验证码
