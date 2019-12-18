@@ -288,7 +288,7 @@
             this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
           this.apiGet("/merchant/detail/" + id).then(res => {
-            if (res.status == 200 && res.data) {
+            if (res.success) {
               // 更改账户类型
               this.merchantTypeChange(res.data.merchantType)
               if (this.routeType == 'detail') {
@@ -331,6 +331,8 @@
                   ele.value=res.data.parentMerchantName+"("+res.data.parentMerchantCode+")"
                 }
               })
+            }else{
+              this.$Message(res.message)
             }
           });
         }else {

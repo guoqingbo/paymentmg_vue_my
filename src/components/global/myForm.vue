@@ -23,7 +23,7 @@
             <span>{{item.title+'：'}}</span>
           </label>
           <span class="detail-text"
-                :class="{'detail-textareaText':item.value.length>300}"
+                :class="{'detail-textareaText':item.value && item.value.length>300}"
                 v-if="item.type=='text'||
               item.type=='inputText'||
               item.type=='autoCompleteText'">
