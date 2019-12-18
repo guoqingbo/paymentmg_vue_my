@@ -45,7 +45,9 @@ const globalConfig = {
     async getCityData(context){
       if(!context.state.cityData){
         let res = await apiGet("/area/list")
-        context.state.cityData = res
+        if(res && res.success){
+          context.state.cityData = res
+        }
       }
       return context.state.cityData
     },

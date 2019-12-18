@@ -116,7 +116,8 @@
             type: 'input',
             rules: [
               { required: true, message: '请输入排序', trigger: 'blur' },
-              {required: true, validator: this.common.validate.positiveInteger, trigger: 'blur'}
+              {required: true, validator: this.common.validate.positiveInteger, trigger: 'blur'},
+              { required: true,max: 10, message: "排序不超过10字符", trigger: 'blur'}
               ]
           },
           {
@@ -229,6 +230,7 @@
                         if(res.success){
                          this.getMenuList()
                           // this.formateMenuList(res.data)
+                          this.$Message.warning(res.message|| '删除成功')
                         }else{
                           this.$Message.warning(res.message)
                         }

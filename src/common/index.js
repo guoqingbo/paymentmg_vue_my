@@ -3,7 +3,7 @@
 import dic from '@/common/dic'
 // 配置文件
 import config from '@/config'
-// import {Message} from 'iview'
+import {Message} from 'iview'
 // 表单验证扩展
 import validate from "@/validate";
 // app实例
@@ -125,7 +125,7 @@ const common = {
       }
       let url = '/merchant/queryMerchantListByVagueMerchantMark'
       App.apiPost(url,params).then(res=>{
-        if(res.status == 200){
+        if(res.success){
           let data = []
           // 用于匹配获取商户名商户号
           let searchMerchantList = {}
@@ -140,6 +140,8 @@ const common = {
           }
           autoComplete.data = data
           store.state.global.searchMerchantList = searchMerchantList
+        }else{
+          Message.error(res.message||'无响应')
         }
       })
     }
@@ -214,7 +216,7 @@ const common = {
         $(a).remove()
         callback()
       }else {
-        App.Message.error('报表没有记录')
+        Message.error('报表没有记录')
       }
     })
   },

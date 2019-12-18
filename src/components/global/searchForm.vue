@@ -225,7 +225,7 @@ export default {
         if(res.success){
           this.$emit('afterSubmit',res)
         }else{
-          this.$Message.warning(res.message)
+          this.$Message.warning(res.message||'无响应')
         }
       })
     },
