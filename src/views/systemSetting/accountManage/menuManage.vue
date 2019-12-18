@@ -117,7 +117,7 @@
             rules: [
               { required: true, message: '请输入排序', trigger: 'blur' },
               {required: true, validator: this.common.validate.positiveInteger, trigger: 'blur'},
-              { required: true,max: 10, message: "排序不超过10字符", trigger: 'blur'}
+              { required: true,max: 6, message: "排序不超过6个字符", trigger: 'blur'}
               ]
           },
           {
