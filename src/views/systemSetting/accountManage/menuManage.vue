@@ -324,17 +324,22 @@
         }
       },
       initFormItems(){
-        if(this.selectedMenu.id){
-          // 去除菜单选项
-          let privilegeMenuType = this.common.dic.privilegeMenuType.slice(1)
-          this.common.setArrItem(this.formItems,'privilegeMenuType',{data:privilegeMenuType})
-        }
         if(this.routeType == 'edit'){
+          if(this.selectedMenu.privilegeLevel>1){
+            // 去除菜单选项
+            let privilegeMenuType = this.common.dic.privilegeMenuType.slice(1)
+            this.common.setArrItem(this.formItems,'privilegeMenuType',{data:privilegeMenuType})
+          }
           this.formItems.forEach(ele=>{
             ele.value =  (this.selectedMenu[ele.name] || '')+""
             ele.type=ele.type.replace(/(Text)$/,'')
           })
         }else if(this.routeType == 'add'){
+          if(this.selectedMenu.privilegeLevel>=1){
+            // 去除菜单选项
+            let privilegeMenuType = this.common.dic.privilegeMenuType.slice(1)
+            this.common.setArrItem(this.formItems,'privilegeMenuType',{data:privilegeMenuType})
+          }
           this.formItems.forEach(ele=>{
             if(ele.name=='privilegeType'){
               ele.value = '2'
