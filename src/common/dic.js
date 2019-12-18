@@ -111,7 +111,7 @@ let dic = {
   // 权限分组
   privilegeGroup: [
     {label:"默认组",value:"1"},
-    {label:"个性化分组",value:"2"},
+    // {label:"个性化分组",value:"2"},
   ],
   // 权限分组
   accStatus: [
