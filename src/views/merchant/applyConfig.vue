@@ -273,6 +273,9 @@
               type: 'input',
               class:ele.placeholder && !ele.configValue ? 'backgroundColor':''
             }
+            if(this.routeType == 'detail'){
+              formListItem.value = ele.configValue
+            }
             if (ele.ifFile == 'file') {
               formListItem.type = 'uploadFile';
               // 限制文件类型
