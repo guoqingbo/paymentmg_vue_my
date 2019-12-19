@@ -156,6 +156,80 @@
     },
     methods: {
       meneuTreerender (h, { root, node, data }) {
+        let operate = [
+          h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+              size:'small'
+            }),
+            style: {
+              marginRight: '8px'
+            },
+            on: {
+              click: () => {
+                this.openPop(data,'edit')
+              }
+            },
+          }, '编辑'),
+          h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+              icon: 'md-remove',
+              size:'small'
+            }),
+            style: {
+              marginRight: '8px'
+            },
+            on: {
+              click: () => {
+                this.$Modal.confirm({
+                  title:data.row.privilegeName,
+                  content:'确定删除'+data.row.privilegeName+'？',
+                  onOk:()=>{
+                    let url = '/privilege/delete'
+                    this.apiGet(url,{id:data.row.id},this.apiPrefix).then(res=>{
+                      if(res.success){
+                        this.getMenuList()
+                        // this.formateMenuList(res.data)
+                        this.$Message.warning(res.message|| '删除成功')
+                      }else{
+                        this.$Message.warning(res.message)
+                      }
+                    })
+                  }
+                })
+              }
+            }
+          },'删除'),
+          h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+              size:'small'
+            }),
+            style: {
+              marginRight: '8px'
+            },
+            on: {
+              click: () => {
+                this.openPop(data,'detail')
+              }
+            },
+          }, '详情'),
+        ]
+        if(data.row.privilegeLevel<4){
+          operate.unshift(h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+              icon: 'md-add',
+              size:'small'
+            }),
+            style: {
+              marginRight: '8px'
+            },
+            on: {
+              click: () => {
+                this.openPop(data,'add')
+              }
+            },
+          }, '添加'),)
+        }
+
         return h('div', {
           style: {
             display: 'inline-block',
@@ -183,77 +257,7 @@
               float: 'right',
               // marginRight: '32px'
             }
-          }, [
-            h('Button', {
-              props: Object.assign({}, this.buttonProps, {
-                icon: 'md-add',
-                size:'small'
-              }),
-              style: {
-                marginRight: '8px'
-              },
-              on: {
-                click: () => {
-                  this.openPop(data,'add')
-                }
-              },
-            }, '添加'),
-            h('Button', {
-              props: Object.assign({}, this.buttonProps, {
-                size:'small'
-              }),
-              style: {
-                marginRight: '8px'
-              },
-              on: {
-                click: () => {
-                  this.openPop(data,'edit')
-                }
-              },
-            }, '编辑'),
-            h('Button', {
-              props: Object.assign({}, this.buttonProps, {
-                icon: 'md-remove',
-                size:'small'
-              }),
-              style: {
-                marginRight: '8px'
-              },
-              on: {
-                click: () => {
-                  this.$Modal.confirm({
-                    title:data.row.privilegeName,
-                    content:'确定删除'+data.row.privilegeName+'？',
-                    onOk:()=>{
-                      let url = '/privilege/delete'
-                      this.apiGet(url,{id:data.row.id},this.apiPrefix).then(res=>{
-                        if(res.success){
-                         this.getMenuList()
-                          // this.formateMenuList(res.data)
-                          this.$Message.warning(res.message|| '删除成功')
-                        }else{
-                          this.$Message.warning(res.message)
-                        }
-                      })
-                    }
-                  })
-                }
-              }
-            },'删除'),
-            h('Button', {
-              props: Object.assign({}, this.buttonProps, {
-                size:'small'
-              }),
-              style: {
-                marginRight: '8px'
-              },
-              on: {
-                click: () => {
-                  this.openPop(data,'detail')
-                }
-              },
-            }, '详情'),
-          ])
+          },operate)
         ]);
       },
       onSuccess(data){
