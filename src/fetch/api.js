@@ -1,13 +1,21 @@
 import axios from 'axios'
 import qs from 'qs'
-import common from '@/common/index'
+import config from '@/config/index'
+import VueCookies from 'vue-cookies'
+
 axios.defaults.timeout = 5000
-axios.defaults.baseURL = common.config.apiAdminPrefix;
+axios.defaults.baseURL = config.apiAdminPrefix;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 // request 拦截器
 axios.interceptors.request.use(
   config => {
+    config.withCredentials = true // 允许携带token ,这个是解决跨域产生的相关问题
+    config.timeout = 6000
+    let token = VueCookies.get('token')
+    if (token) {
+      config.headers.token=token
+    }
     return config
   },
   error => {
@@ -21,22 +29,22 @@ axios.interceptors.response.use(
     return response
   },
   error => {
-    if(error.response.data.status==401){
-      setCookies('userId','',-1)
-      setCookies('token','',-1)
-      // return  window.location.href='http://pms.sendinfo.com.cn/login'
-    }
+    // if(error.response.data.status==401){
+    //   setCookies('userId','',-1)
+    //   setCookies('token','',-1)
+    //   // return  window.location.href='http://pms.sendinfo.com.cn/login'
+    // }
     return Promise.reject(error)
   }
 )
 
-function setCookies(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  var expires = "expires=" + d.toUTCString();
-  console.info(cname + "=" + cvalue + "; " + expires);
-  document.cookie = cname + "=" + cvalue + "; " + expires;
-}
+// function setCookies(cname, cvalue, exdays) {
+//   var d = new Date();
+//   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+//   var expires = "expires=" + d.toUTCString();
+//   console.info(cname + "=" + cvalue + "; " + expires);
+//   document.cookie = cname + "=" + cvalue + "; " + expires;
+// }
 
 /**
  * 封装get方法
@@ -50,8 +58,8 @@ export function apiGet (url, params = {},apiPrefix) {
    return
   }
   // 如果设置了前缀
-  axios.defaults.baseURL = apiPrefix || common.config.apiAdminPrefix;
-  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+  axios.defaults.baseURL = apiPrefix || config.apiAdminPrefix;
+
   return new Promise((resolve, reject) => {
     axios.get(url, {params:{...params}})
       .then(response => {
@@ -71,7 +79,7 @@ export function apiGet (url, params = {},apiPrefix) {
  */
 export function apiPost (url, params = {},apiPrefix) {
   // 如果设置了前缀
-  axios.defaults.baseURL = apiPrefix || common.config.apiAdminPrefix;
+  axios.defaults.baseURL = apiPrefix || config.apiAdminPrefix;
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
   return new Promise((resolve, reject) => {
     params = qs.stringify(params)

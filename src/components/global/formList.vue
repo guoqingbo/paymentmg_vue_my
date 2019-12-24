@@ -11,6 +11,7 @@
           <slot :name="item.name+'After'"></slot>
         </template>
       </template>
+      <slot></slot>
     </myForm>
     <slot name="bottom"></slot>
     <div class="bottom-btn-box">
@@ -54,6 +55,9 @@
         type: String,
         default: 'post'
       },
+      apiPrefix:{
+        type: String,
+      }
     },
     watch: {
       // formItems: {
@@ -95,7 +99,7 @@
             if (this._events.beforeSave) {
               this.$emit("beforeSave", this.$refs.myForm.formItem)
             }
-            let res = await this[saveMethod](this.url, this.$refs.myForm.formItem)
+            let res = await this[saveMethod](this.url, this.$refs.myForm.formItem,this.apiPrefix)
             if (res.status == 200 && res.success) {
               this.$Message.success('保存成功!')
               if (this._events.afterSave) {
@@ -120,8 +124,14 @@
           }
         })
       },
+      validateField(name){
+        this.$refs.myForm.validateField(name)
+      },
       getFormItem(){
         return this.$refs.myForm.formItem
+      },
+      setFormItem(name,value){
+        return this.$refs.myForm.setFormItem(name,value)
       }
     }
   }

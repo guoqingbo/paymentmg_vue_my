@@ -1,50 +1,3 @@
-// import Vue from 'vue'
-// import VeeValidate, {Validator} from 'vee-validate'
-// import zh from 'vee-validate/dist/locale/zh_CN'
-// import VueI18n from 'vue-i18n'
-//
-// Vue.use(VueI18n)
-//
-// const i18n = new VueI18n({
-//   locale: 'zh_CN'
-// })
-//
-// const config = {
-//   i18n,
-//   i18nRootKey: 'validation',
-//   dictionary: {
-//     zh
-//   },
-//   fieldsBagName: 'veefields'
-// }
-//
-// Vue.use(VeeValidate, config)
-//
-// const dictionary = {
-//   zh_CN: {
-//     messages: {
-//       email: () => '请输入正确的邮箱格式',
-//       required: (field) => '请输入' + field
-//     },
-//     attributes: {
-//       email: '邮箱',
-//       password: '密码',
-//       name: '账号',
-//       phone: '手机'
-//     }
-//   }
-// }
-//
-// Validator.localize(dictionary)
-//
-// Validator.extend('phone', {
-//   messages: {
-//     zh_CN: field => field + '必须是11位手机号码'
-//   },
-//   validate: value => {
-//     return value.length === 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
-//   }
-// })
 let validate = {
   telPhone: (rule, value, callback) => {
     let regexp = /^(0?1[358]\d{9})|^((0(10|2[1-3]|[3-9]\d{2}))?[1-9]\d{6,7})$/
@@ -86,7 +39,7 @@ let validate = {
       callback()
       return
     }
-    let regexp = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    let regexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
     if (value === '') {
       callback(new Error('请输入邮箱！'))
     } else if (!(regexp.test(value))) {
@@ -207,7 +160,7 @@ let validate = {
       callback()
     }
   },
-  passportHM : (rule, value, callback) => {
+  passportHM: (rule, value, callback) => {
     if (!rule.required && !value) {
       // 非必填时
       callback()
@@ -217,6 +170,18 @@ let validate = {
       callback(new Error('请输入港澳通行证！'))
     } else if (!/^[a-zA-Z0-9]{5,21}$/.test(value)) {
       callback(new Error('港澳通行证格式错误！'))
+    } else {
+      callback()
+    }
+  },
+  space: (rule, value, callback) => {
+    if (!rule.required && !value) {
+      // 非必填时
+      callback()
+      return
+    }
+    if (!/^[^\s]*$/.test(value)) {
+      callback(new Error('中间不能包含空格！'))
     } else {
       callback()
     }

@@ -29,7 +29,7 @@ export default {
       param: ""
     };
   },
-  props: ["mode", "content", "sucessMsg"],
+  props: ["mode", "content", "sucessMsg",'apiPrefix'],
   methods: {
     confirm(url, param,method) {
       this.url = url;
@@ -48,9 +48,10 @@ export default {
           _this.common.listDelete(_this, {
             url: _this.url,
             params: _this.param,
+            apiPrefix:this.apiPrefix,
             callback: res => {
               if (res.success) {
-                this.$store.dispatch("getList");
+                this.$store.dispatch("getList",this.apiPrefix);
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {
@@ -63,9 +64,10 @@ export default {
           _this.common.listDone(_this, {
             url: _this.url,
             params: _this.param,
+            apiPrefix:this.apiPrefix,
             callback: res => {
               if (res.success) {
-                this.$store.dispatch("getList");
+                this.$store.dispatch("getList",this.apiPrefix);
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {

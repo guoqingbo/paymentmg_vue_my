@@ -1,108 +1,107 @@
-{
-  "data": [
+[
     {
-      "name": "商户管理",
-      "code": "merchant",
+      "privilegeName": "商户管理",
+      "privilegeMark": "merchant",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "商户管理",
-          "code": "merchantManage",
+          "privilegeName": "商户管理",
+          "privilegeMark": "merchantManage",
           "functionType": "column"
         },
         {
-          "name": "商户渠道管理",
-          "code": "merchantChannel",
+          "privilegeName": "商户渠道管理",
+          "privilegeMark": "merchantChannel",
           "functionType": "column"
         },
         {
-          "name": "商户场景管理",
-          "code": "merchantScene",
+          "privilegeName": "商户场景管理",
+          "privilegeMark": "merchantScene",
           "functionType": "column"
         },
         {
-          "name": "关联商户管理",
-          "code": "merchantAssociate",
+          "privilegeName": "关联商户管理",
+          "privilegeMark": "merchantAssociate",
           "functionType": "column"
         },
         {
-          "name": "添加渠道",
-          "code": "merchantChannelAddEditDetail",
+          "privilegeName": "添加渠道",
+          "privilegeMark": "merchantChannelAddEditDetail",
           "functionType": "button"
         },
         {
-          "name": "添加商户",
-          "code": "merchantAddEditDetail",
+          "privilegeName": "添加商户",
+          "privilegeMark": "merchantAddEditDetail",
           "functionType": "button"
         },
         {
-          "name": "应用管理",
-          "code": "applyManage",
+          "privilegeName": "应用管理",
+          "privilegeMark": "applyManage",
           "functionType": "column"
         },
         {
-          "name": "添加应用",
-          "code": "applyAdd",
+          "privilegeName": "添加应用",
+          "privilegeMark": "applyAdd",
           "functionType": "button"
         },
         {
-          "name": "应用管理详情",
-          "code": "applyManageDetail",
+          "privilegeName": "应用管理详情",
+          "privilegeMark": "applyManageDetail",
           "functionType": "button"
         },
         {
-          "name": "应用配置",
-          "code": "applyConfig",
+          "privilegeName": "应用配置",
+          "privilegeMark": "applyConfig",
           "functionType": "button"
         }
 
       ]
     },
     {
-      "name": "结算中心(废弃)",
-      "code": "settleCenter",
+      "privilegeName": "结算中心(废弃)",
+      "privilegeMark": "settleCenter",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "商户结算管理",
-          "code": "merchantSettleManage",
+          "privilegeName": "商户结算管理",
+          "privilegeMark": "merchantSettleManage",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "商户待结算查询",
-              "code": "merchantWaitSettleQuery",
+              "privilegeName": "商户待结算查询",
+              "privilegeMark": "merchantWaitSettleQuery",
               "functionType": "column"
             },
             {
-              "name": "历史结算查询",
-              "code": "merchantHistorySettleQuery",
+              "privilegeName": "历史结算查询",
+              "privilegeMark": "merchantHistorySettleQuery",
               "functionType": "column"
             },
             {
-              "name": "查询明细",
-              "code": "merchantHistorySettleDetail",
+              "privilegeName": "查询明细",
+              "privilegeMark": "merchantHistorySettleDetail",
               "functionType": "button"
             }
           ]
         },
         {
-          "name": "个人结算管理",
-          "code": "personSettleManage",
+          "privilegeName": "个人结算管理",
+          "privilegeMark": "personSettleManage",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "个人待结算查询",
-              "code": "personWaitSettleQuery",
+              "privilegeName": "个人待结算查询",
+              "privilegeMark": "personWaitSettleQuery",
               "functionType": "column"
             },
             {
-              "name": "历史结算查询",
-              "code": "personHistorySettleQuery",
+              "privilegeName": "历史结算查询",
+              "privilegeMark": "personHistorySettleQuery",
               "functionType": "column"
             },
             {
-              "name": "查询明细",
-              "code": "personHistorySettleDetail",
+              "privilegeName": "查询明细",
+              "privilegeMark": "personHistorySettleDetail",
               "functionType": "button"
             }
           ]
@@ -110,23 +109,23 @@
       ]
     },
     {
-      "name": "系统设置",
-      "code": "systemSetting",
+      "privilegeName": "系统设置",
+      "privilegeMark": "systemSetting",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "秘钥管理",
-          "code": "rsaManage",
+          "privilegeName": "秘钥管理",
+          "privilegeMark": "rsaManage",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "平台秘钥",
-              "code": "platformRsa",
+              "privilegeName": "平台秘钥",
+              "privilegeMark": "platformRsa",
               "functionType": "column"
             },
             {
-              "name": "商户秘钥",
-              "code": "merchantRsa",
+              "privilegeName": "商户秘钥",
+              "privilegeMark": "merchantRsa",
               "functionType": "column"
             }
           ]
@@ -134,18 +133,18 @@
       ]
     },
     {
-      "name": "模板示例",
-      "code": "templateDemo",
+      "privilegeName": "模板示例",
+      "privilegeMark": "templateDemo",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "常用模板",
-          "code": "commonDemo",
+          "privilegeName": "常用模板",
+          "privilegeMark": "commonDemo",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "常规列表",
-              "code": "pageListDemo",
+              "privilegeName": "常规列表",
+              "privilegeMark": "pageListDemo",
               "functionType": "column"
             }
           ]
@@ -153,4 +152,4 @@
       ]
     }
   ]
-}
+

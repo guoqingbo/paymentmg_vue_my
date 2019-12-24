@@ -19,6 +19,9 @@
           </template>
         </template>
       </myForm>
+      <template slot="header" v-if="$slots.header">
+        <slot name="header"></slot>
+      </template>
       <div slot="footer">
         <div v-if='routeType!="detail"'>
           <Button

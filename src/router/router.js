@@ -1,5 +1,5 @@
 // 不作为Main组件的子页面展示的页面单独写，如下
-// import Main from '@/components/main'
+// import Main from '@/views/main'
 // import channelProduct from "./channelProduct"
 // import merchant from "./merchant"
 export const loginRouter = [
@@ -23,7 +23,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/LoginForm.vue'], resolve)
+      require(['@/views/LoginForm.vue'], resolve)
     }
   },
   {
@@ -34,7 +34,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/LoginForm.vue'], resolve)
+      require(['@/views/LoginForm.vue'], resolve)
     }
   },
   {
@@ -45,7 +45,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/cashier/cashierManage/choosePayWay.vue'], resolve)
+      require(['@/views/cashier/cashierManage/choosePayWay.vue'], resolve)
     }
   },
   {
@@ -56,7 +56,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/cashier/cashierManage/callWxPay.vue'], resolve)
+      require(['@/views/cashier/cashierManage/callWxPay.vue'], resolve)
     }
   },
   {
@@ -67,7 +67,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/cashier/cashierManage/payWay.vue'], resolve)
+      require(['@/views/cashier/cashierManage/payWay.vue'], resolve)
     }
   },
   {
@@ -78,7 +78,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/cashier/cashierManage/paySuccess.vue'], resolve)
+      require(['@/views/cashier/cashierManage/paySuccess.vue'], resolve)
     }
   },
   {
@@ -89,42 +89,16 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/cashier/cashierManage/payError.vue'], resolve)
+      require(['@/views/cashier/cashierManage/payError.vue'], resolve)
     }
   },
   {
     path: '/main',
     name: ' Main',
     component: resolve => {
-      require(['@/components/main.vue'], resolve)
+      require(['@/views/main.vue'], resolve)
     },
     children: [
-      {
-        path: '/addMenu',
-        name: 'addmenu',
-        meta: {
-          breadcrumbList: ['用户管理', '菜单管理'],
-          belongTab: 'system',
-          openName: 'account'
-        },
-        component: resolve => {
-          require(['@/components/system/account/addMenu'], resolve)
-        }
-      },
-      {
-        path: '/menu',
-        name: 'Menu',
-        meta: {
-          breadcrumbList: ['用户管理', '菜单管理'],
-          belongTab: 'system',
-          openName: 'account'
-        },
-        component: resolve => {
-          require(['@/components/system/account/menu'], resolve)
-        }
-      },
-      // ...channelProduct,
-      // ...merchant,
     ]
   },
   {
@@ -135,7 +109,7 @@ export const loginRouter = [
       isLogin:false,
     },
     component: resolve => {
-      require(['@/components/nofound'], resolve)
+      require(['@/views/nofound'], resolve)
     }
   },
   // {

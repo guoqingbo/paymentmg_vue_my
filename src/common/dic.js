@@ -15,6 +15,11 @@ let dic = {
     {label:"启用",value:1},
     {label:"停用",value:0},
   ],
+  // 账号状态
+  memberStatus: [
+    {label:"启用",value:"1"},
+    {label:"冻结",value:"0"},
+  ],
   // channelType: [
   //   {label:"银行",value:0},
   //   {label:"支付公司",value:1},
@@ -85,5 +90,34 @@ let dic = {
     {label:"扫码购票",value:"4"},
 
   ],
+  // 权限类别
+  privilegeType: [
+    {label:"接口类型",value:"1"},
+    {label:"页面类型",value:"2"},
+  ],
+  // 菜单类别
+  privilegeMenuType: [
+    {label:"菜单",value:"0"},
+    {label:"栏目",value:"1"},
+    {label:"按钮",value:"2"},
+  ],
+  // 层级深度
+  privilegeLevel: [
+    {label:"一级",value:"1"},
+    {label:"二级",value:"2"},
+    {label:"三级",value:"3"},
+    {label:"四级",value:"4"},
+  ],
+  // 权限分组
+  privilegeGroup: [
+    {label:"默认组",value:"1"},
+    // {label:"个性化分组",value:"2"},
+  ],
+  // 权限分组
+  accStatus: [
+    {label:"已停用",value:"0"},
+    {label:"已启用",value:"1"},
+    // {label:"已锁定",value:"2"},
+  ]
 }
 export default dic
