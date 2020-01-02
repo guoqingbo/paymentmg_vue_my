@@ -138,7 +138,9 @@ const common = {
           }else{
             data = [{label:'暂无数据',value:''}]
           }
-          autoComplete.data = data
+          if(autoComplete){
+            autoComplete.data = data
+          }
           store.state.global.searchMerchantList = searchMerchantList
         }else{
           Message.error(res.message||'无响应')
