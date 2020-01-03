@@ -684,7 +684,7 @@
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .apply-manage-box{
     .default-btn{
       margin-left: 16px;
