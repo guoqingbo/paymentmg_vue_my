@@ -16,39 +16,6 @@
                :routeType='routeType'
                @input='closeModal'
                :title="formTitle">
-      <!--新增-->
-      <template v-if="routeType=='add'">
-        <div style="padding-left: 150px" slot="publicKeyAfter">
-          <Button type="primary" @click="rsaCreate">生成密钥</Button>
-        </div>
-      </template>
-      <!--编辑-->
-      <template v-if="routeType=='edit'">
-        <div style="padding-left: 150px" slot="publicKeyAfter">
-          <Button type="primary" @click="rsaCreate">重新生成密钥</Button>
-          <Icon style="font-size: 20px;color: red;" type="ios-alert" />
-          <span style="color: red;vertical-align: middle;">重新生成秘钥可能导致支付错误，请谨慎操作！</span>
-        </div>
-      </template>
-      <!--查看-->
-      <template v-if="routeType=='detail'">
-        <div style="text-align: right;margin: -20px 0 10px" slot="privateKeyAfter">
-          <Button type="primary"
-                  v-clipboard:copy="formItems[1].value"
-                  v-clipboard:success="onCopySuccess"
-                  v-clipboard:error="onCopyError">
-            复制私钥
-          </Button>
-        </div>
-        <div style="text-align: right;margin: -20px 0 10px" slot="publicKeyAfter">
-          <Button type="primary"
-                  v-clipboard:copy="formItems[2].value"
-                  v-clipboard:success="onCopySuccess"
-                  v-clipboard:error="onCopyError">
-            复制公钥
-          </Button>
-        </div>
-      </template>
     </modalForm>
   </div>
 </template>
@@ -62,19 +29,19 @@
         routeType: 'add',
         columns: [
           {
-            title: '序号',
-            type:'index',
-            width:70,
-            align:'center'
-          },
-          {
-            title: '平台名称',
+            title: '参数名称',
             key: 'orderSourceName',
             // sortable: true,
             align:'center'
           },
           {
-            title: '平台代码',
+            title: '数据编码',
+            key: 'orderSource',
+            // sortable: true,
+            align:'center'
+          },
+          {
+            title: '数据值',
             key: 'orderSource',
             // sortable: true,
             align:'center'
@@ -87,67 +54,29 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "编辑",
-                  auth:"platformRsaEdit",
-                  action: () => {
-                    this.formShow = true
-                    this.formItems.forEach((item,index)=>{
-                      item.disabled = true;
-                      item.type = item.type.replace(/(Text)$/g,'')
-                      // if(!index){
-                      //   item.disabled = true;
-                      // }
-                      // item.clipboard=false
-                      // if(item.type=='inputText'){
-                      //   item.type='input'
-                      // }else if(item.type=='textareaText'){
-                      //   item.type='textarea'
-                      // }else if(item.type=='btn'){
-                      //   item.disabled=false
-                      //   item.value='重新生成秘钥'
-                      //   item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
-                      // }
-                    });
-                    this.formUrl = '/rsaKeyPlatform/update'
-                    this.routeType = 'edit'
-                    this.formTitle = '修改秘钥'
-                    this.detail = params.row
-                    this.setDetail(params.row.orderSource)
+                  title:'操作',
+                  type:'dropdown',
+                  data:[
+                    {
+                      label:'删除',
+                      value:'1',
+                      auth:'merchantFunDelete',// 权限校验
+                    }
+                  ],
+                  value:"",
+                  onClick:(value)=>{
+                    if(value == 1){
+                      this.mode = "delete";
+                      this.sucessMsg = "删除成功！";
+                      this.content = "确定删除？";
+                      this.$refs.confirmModel.confirm(
+                        "/merchant/delete/" + params.row.id
+                      );
+                    }
                   }
-                },
-                {
-                  title: "查看",
-                  auth:"platformRsaDetail",
-                  action: () => {
-                    this.formShow = true
-                    this.formItems.forEach(item=>{
-                      // item.type = item.type.replace(/(Text)$/g,'')
-                      if(!/(Text)$/g.test( item.type)){
-                        item.type += 'Text'
-                      }
-                      // item.type += 'Text'
-                      // if(item.type=='input'){
-                      //   item.type='inputText'
-                      // }else if(item.type=='textarea'){
-                      //   item.clipboard=true
-                      //   item.type='textareaText'
-                      // }else if(item.type=='btn'){
-                      //   item.disabled=true
-                      //   item.value='null'
-                      //   item.desc=''
-                      // }
-                    });
-                    this.routeType = 'detail'
-                    this.formTitle = '查看秘钥'
-                    this.detail = params.row
-                    // this.formItems.forEach(item=>{
-                    //   item.value = null
-                    // })
-                    this.setDetail(params.row.orderSource)
-                  }
-                },
-              ];
-              return this.common.columnsHandle(h, actions);
+                }
+              ]
+              return this.common.columnsItemRender(h, actions);
             }
           }
         ],
@@ -159,32 +88,17 @@
         searchItems: [],
         hannleItems: [
           {
-            title: '添加平台秘钥',
+            title: '添加',
             icon: 'md-add',
             callback: () => {
               this.formShow = true
               this.formItems[0].disabled = false
               this.formItems.forEach((item,index)=>{
                 item.type = item.type.replace(/(Text)$/g,'')
-                // if(!index){
-                //   item.disabled = false;
-                // }else{
-                //   item.disabled = true;
-                // }
-                // item.clipboard=false
-                // if(item.type=='inputText'){
-                //   item.type='input'
-                // }else if(item.type=='textareaText'){
-                //   item.type='textarea'
-                // }else if(item.type=='btn'){
-                //   item.disabled=false
-                //   item.value='生成秘钥'
-                //   item.desc=''
-                // }
               });
               this.formUrl = '/rsaKeyPlatform/save'
               this.routeType = 'add'
-              this.formTitle = '添加秘钥'
+              this.formTitle = '添加'
             }
           }
         ],
@@ -197,48 +111,41 @@
         formShow: false,
         formItems: [
           {
-            title: '平台名称',
+            title: '参数类别',
             name: 'orderSource',
-            type: 'select',
-            data: [],
+            type: 'input',
             rules: [
-              {required: true, message: '请选择平台名称', trigger: 'change'}
+              {required: true, message: '请选输入参数类别', trigger: 'change'}
             ],
             value: null,
           },
           {
-            title: '私钥',
-            placeholder: '请生成秘钥',
-            name: 'privateKey',
-            type: 'textarea',
-            // clipboard: true,
-            // clipboardText: '复制私钥',
-            disabled: true,
-            value: '',
-            rules: [{ required: true, message: '请生成秘钥', trigger: 'blur' },
-            ]
+            title: '数据编码',
+            name: 'orderSource',
+            type: 'input',
+            rules: [
+              {required: true, message: '请选输入参数类别', trigger: 'change'}
+            ],
+            value: null,
           },
           {
-            title: '公钥',
-            placeholder: '请生成秘钥',
-            name: 'publicKey',
-            type: 'textarea',
-            // clipboard: true,
-            // clipboardText: '复制公钥',
-            disabled: true,
-            value: '',
-            rules: [{ required: true, message: '请生成秘钥', trigger: 'blur' },
-            ]
+            title: '数据值',
+            name: 'orderSource',
+            type: 'input',
+            rules: [
+              {required: true, message: '请选输入参数类别', trigger: 'change'}
+            ],
+            value: null,
           },
-          // {
-          //   title: '',
-          //   name: '',
-          //   type: 'btn',
-          //   disabled: false,
-          //   value: '生成秘钥',
-          //   desc: '',
-          //   cb: this.rsaCreate
-          // },
+          {
+            title: '备注',
+            name: 'orderSource',
+            type: 'textarea',
+            rules: [
+              {required: true, message: '请选输入参数类别', trigger: 'change'}
+            ],
+            value: null,
+          },
         ],
         formUrl: '/rsaKeyPlatform/save'
       }
