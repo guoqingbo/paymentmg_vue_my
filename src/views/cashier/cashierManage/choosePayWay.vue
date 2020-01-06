@@ -127,7 +127,7 @@
         //
         // }
         this.apiGet(url,params,apiPrefix).then(res=>{
-          if(res.status == 200){
+          if(res.success){
             this.initCrashier = res.data
             // 是否有上次支付方式
             this.latestPayInfo()
@@ -135,6 +135,8 @@
             this.availablePayProducts()
             // 初始化表单参数
             this.setParams()
+          }else{
+            this.$Message.warning(res.message)
           }
         })
 
