@@ -213,9 +213,11 @@ const common = {
         let a = document.createElement('a')
         a.href = url
         a.download = text?text + '.xlsx':'下载.xlsx'
-        $('body').append(a) // 修复firefox中无法触发click
+        document.body.appendChild(a)
+        // $('body').append(a) // 修复firefox中无法触发click
         a.click()
-        $(a).remove()
+        // $(a).remove()
+        a.parentNode.removeChild(a);
         callback()
       }else {
         Message.error('报表没有记录')

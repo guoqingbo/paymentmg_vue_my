@@ -123,6 +123,8 @@
   </div>
 </template>
 <script>
+  // 引入全局组件
+  import '@/common/globalComponents'
   import store from "@/store";
   import myImg from "@/components/global/uploadFile";
 

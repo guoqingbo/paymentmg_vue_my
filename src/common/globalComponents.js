@@ -1,10 +1,12 @@
+import Vue from 'vue'
+
+// import $ from 'jquery'
+// window.$ = $
 // UI组件
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 
 import VueClipboard from 'vue-clipboard2'
-import VueCookies from 'vue-cookies'
-
 // 全局自定义组件
 
 function plugin(Vue) {
@@ -13,7 +15,7 @@ function plugin(Vue) {
   }
   Vue.use(iView);
   Vue.use(VueClipboard);
-  Vue.use(VueCookies);
 }
+Vue.use(plugin)
 
 export default plugin

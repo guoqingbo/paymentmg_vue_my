@@ -41,6 +41,8 @@
   </div>
 </template>
 <script>
+  // 引入全局组件
+  import '@/common/globalComponents'
   import {getters, actions} from "vuex";
   import store from "@/store";
 

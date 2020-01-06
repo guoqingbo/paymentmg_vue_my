@@ -57,6 +57,8 @@
   </div>
 </template>
 <script>
+  // 引入全局组件
+  import '@/common/globalComponents'
   import qrcode from "@xkeshi/vue-qrcode";
   // import json2xml from 'json2xml';
   import convert from 'xml-js';

@@ -10,25 +10,8 @@ export const loginRouter = [
     }
   },
   {
-    path: '/base',
-    redirect: {
-      name: 'publishPark'
-    }
-  },
-  {
     path: '/login',
     name: 'login',
-    meta: {
-      title: '登录',
-      isLogin:false,
-    },
-    component: resolve => {
-      require(['@/views/LoginForm.vue'], resolve)
-    }
-  },
-  {
-    path: '/adminLogin',
-    name: 'adminLogin',
     meta: {
       title: '登录',
       isLogin:false,

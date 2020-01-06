@@ -4,11 +4,7 @@ import Vuex from 'vuex'
 import user from './modules/user'
 import list from './modules/list'
 import menu from './modules/menu'
-import create from './modules/create'
-import indexdefined from './modules/indexdefined'
 
-//自定义页面
-import defined from './modules/userDefined'
 
 // 全局变量
 import global from './modules/global'
@@ -68,9 +64,6 @@ const store = new Vuex.Store({
     user,
     list,
     menu,
-    create,
-    indexdefined,
-    defined,
     merchant
   }
 })
