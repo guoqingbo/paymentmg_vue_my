@@ -189,7 +189,7 @@
     //   // next()
     // },
     created() {
-      console.log( navigator.userAgent.toLowerCase())
+      // console.log( navigator.userAgent.toLowerCase())
       //firefox
       // var agent = navigator.userAgent.toLowerCase();
       // if (agent.indexOf("firefox") > 0 || agent.indexOf("ie")>0) {
