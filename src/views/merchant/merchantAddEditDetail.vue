@@ -247,6 +247,7 @@
             rules: [
               {required: true,message: '请选择是否开户', trigger: 'change'}
             ],
+            disabled:false,
             onChange:this.openAccountChange,
             value: ''
           },
@@ -262,11 +263,11 @@
     methods: {
       // 是否开户改变时
       openAccountChange(value){
-        let arrItem = this.common.getArrItem(this.formList1,'corpCode')
+        let arrItem = this.common.getArrItem(this.formList,'corpCode')
         if(value == 'Y'){
           arrItem.disabled = true
-          if(this.routeType == 'edit'){
-            let openAccountItem = this.common.getArrItem(this.formList1,'openAccount')
+          if(this.$route.query.id && this.routeType !== 'edit'){
+            let openAccountItem = this.common.getArrItem(this.formList,'openAccount')
             openAccountItem.disabled = true
           }
         }else{
