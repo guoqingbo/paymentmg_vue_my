@@ -75,7 +75,7 @@
         </Form>
         <div slot="footer"></div>
       </Modal>
-      <Layout>
+      <Layout :style="{'height':contentheight}">
         <Sider hide-trigger class="page-left">
           <Menu ref="contactMenu"
                 :active-name="$route.path"
@@ -174,6 +174,7 @@
         activeName: "",
         padding: "",
         bgheight: "",
+        contentheight:''
         // firstRouter:this.$store.state.menu.activeName
         // breadcrumbList:this.$store.state.menu.breadcrumbList
       };
@@ -186,23 +187,12 @@
     //   // next()
     // },
     created() {
-      // let domain = this.domainURI(document.location.href);
-      // apiGet(
-      //   "/manage/admin/admin/service/userLoginConfig/getLogo?domain=" + domain
-      // ).then(res => {
-      //   if (res.message) {
-      //     this.imgUrl = res.message;
-      //   }
-      //   this.show = true;
-      // });
-      // this.$store.dispatch("getCurrentUser", {
-      //   url: "/manage/admin/getCurrentUser"
-      // });
+      console.log( navigator.userAgent.toLowerCase())
       //firefox
-      var agent = navigator.userAgent.toLowerCase();
-      if (agent.indexOf("firefox") > 0) {
-        this.padding = "80px";
-      }
+      // var agent = navigator.userAgent.toLowerCase();
+      // if (agent.indexOf("firefox") > 0 || agent.indexOf("ie")>0) {
+      //   this.padding = "80px";
+      // }
       // 获取环境名
       this.getEnvName()
     },
@@ -256,6 +246,7 @@
     },
     mounted() {
       this.loadpage();
+      this.contentheight = (window.innerHeight - 80)+ "px"
       // this.bgheight = window.innerHeight + "px";
     },
     methods: {

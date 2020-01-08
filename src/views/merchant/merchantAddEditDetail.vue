@@ -119,6 +119,17 @@
             type: 'uploadFile',
             tip: '建议上传小于2M的png、jpg、jpeg格式的图片'
           },
+          {
+            title: '是否开户',
+            name: 'openAccount',
+            type: 'select',
+            data: this.common.dic.openAccount,
+            rules: [
+              {required: true,message: '请选择是否开户', trigger: 'change'}
+            ],
+            onChange:this.openAccountChange,
+            value: ''
+          },
         ],// 商户类型为企业时
         formList1: [
           {
@@ -156,7 +167,7 @@
             type: 'select',
             data: this.common.dic.idType,
             rules: [
-              {required: false, type:'number',message: '请选择证件类型', trigger: 'change'}
+              // {required: false, type:'number',message: '请选择证件类型', trigger: 'change'}
             ],
             onChange:this.idTypeChange,
             value: 1
@@ -228,6 +239,17 @@
             rules: [{max: 100, message: "详细地址不得超过100字符", trigger: 'blur'}],
             value: ""
           },
+          {
+            title: '是否开户',
+            name: 'openAccount',
+            type: 'select',
+            data: this.common.dic.openAccount,
+            rules: [
+              {required: true,message: '请选择是否开户', trigger: 'change'}
+            ],
+            onChange:this.openAccountChange,
+            value: ''
+          },
         ],// 商户类型为个人时
         routeType: "",// 判断是新增，详情，编辑
       }
@@ -238,6 +260,19 @@
       this.getDetail()
     },
     methods: {
+      // 是否开户改变时
+      openAccountChange(value){
+        let arrItem = this.common.getArrItem(this.formList1,'corpCode')
+        if(value == 'Y'){
+          arrItem.disabled = true
+          if(this.routeType == 'edit'){
+            let openAccountItem = this.common.getArrItem(this.formList1,'openAccount')
+            openAccountItem.disabled = true
+          }
+        }else{
+          arrItem.disabled = false
+        }
+      },
       // 证件类型改变时
       idTypeChange(e){
         // 1身份证 2护照 3港澳通行证
@@ -279,13 +314,13 @@
           if (this.routeType == 'detail') {
             // 如果是详情页
 
-            // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户详情'])
+            // // 更新位置占位符
+            // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '商户详情'])
           } else {
             // 如果是编辑
             this.formListUrl = '/merchant/update'
-            // 更新位置占位符
-            this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
+            // // 更新位置占位符
+            // this.$store.dispatch('setBreadcrumbListAction', ['商户管理', '编辑商户'])
           }
           this.apiGet("/merchant/detail/" + id).then(res => {
             if (res.success) {
@@ -295,6 +330,9 @@
                 // 如果是详情页
               } else {
                 // 如果是编辑
+
+                // 是否开户改变时
+                this.openAccountChange(res.data.openAccount)
                 // 更改证件类型验证
                 this.idTypeChange(res.data.idType)
               }
