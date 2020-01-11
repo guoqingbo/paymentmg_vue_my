@@ -163,7 +163,7 @@
                   @click="chooseFunType(item)">{{item.label}}</Button>
           <div class="search-box">
             <Select clearable v-model="funSearchParams.channelCode" style="width:200px" placeholder="请选择服务商">
-              <Option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <Option v-for="(item,index) in channelList" :value="item.value" :key="index">{{ item.label }}</Option>
             </Select>
             <Button type="primary"
                     @click="getChannelProduct()">查询</Button>
@@ -556,6 +556,7 @@
       // 添加功能取消
       cancel(){
         this.addFunModal = false
+        this.selection = []
       },
       // 添加功能确认
       addFun(){
@@ -629,6 +630,7 @@
       //  打开添加功能弹框
       openFucAdd(){
         this.addFunModal = true
+        this.selection = []
         this.chooseFunType(this.common.dic.funType[0])
         this.getChannel()
       },
