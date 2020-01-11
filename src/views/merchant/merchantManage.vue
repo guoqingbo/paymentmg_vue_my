@@ -45,7 +45,7 @@
             }
           },
           {
-            title: '企业吗',
+            title: '企业码',
             key: 'corpCode',
           },
           {

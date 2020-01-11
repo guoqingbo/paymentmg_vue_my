@@ -566,7 +566,8 @@
         let url = '/merchantChannel/batchSave'
         let params = {
           appId:this.appDetail.id,
-          ids:''
+          ids:'',
+          type:this.funSearchParams.type
         }
         let ids = []
         this.selection.forEach(ele=>{

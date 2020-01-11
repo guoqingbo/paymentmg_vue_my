@@ -148,7 +148,7 @@
             name: 'corpCode',
             type: 'input',
             rules: [{required: false, message: '请输入企业码', trigger: 'blur'},
-              {required: false,max: 20, message: "企业码不超过20字符", trigger: 'blur'}],
+              {required: false,max: 50, message: "企业码不超过50字符", trigger: 'blur'}],
             value: ''
           },
           {
@@ -263,15 +263,19 @@
     methods: {
       // 是否开户改变时
       openAccountChange(value){
+        console.log(value)
         let arrItem = this.common.getArrItem(this.formList,'corpCode')
+        let openAccountItem = this.common.getArrItem(this.formList,'openAccount')
         if(value == 'Y'){
-          arrItem.disabled = true
-          if(this.$route.query.id && this.routeType !== 'edit'){
-            let openAccountItem = this.common.getArrItem(this.formList,'openAccount')
+          if(this.$route.query.id){
             openAccountItem.disabled = true
           }
+          // 新增时
+          arrItem.rules=[{required: true, message: '请输入企业码', trigger: 'blur'},
+            {required: true,max: 50, message: "企业码不超过50字符", trigger: 'blur'}]
         }else{
-          arrItem.disabled = false
+          arrItem.rules=[{required: false, message: '请输入企业码', trigger: 'blur'},
+            {required: false,max: 50, message: "企业码不超过50字符", trigger: 'blur'}]
         }
       },
       // 证件类型改变时

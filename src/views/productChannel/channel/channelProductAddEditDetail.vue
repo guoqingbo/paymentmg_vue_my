@@ -109,10 +109,15 @@
       funTypeOnChange(value){
         if(value==1 || value == 4){
           // 当前所属类别为备用金充值，分账 渠道计费方式，渠道费率，退款是否手续费隐藏
-          if(this.formList[4].name == 'feeType'){
-            this.formList.splice(4,3)
-          }
+          this.formList = this.formList.filter(ele=>{
+            if(ele.name == 'feeType'||ele.name == 'feeRate'||ele.name == 'returnFee'){
+              return false
+            }else{
+              return true
+            }
+          })
         }else{
+          // 当前所属类别为备用金充值，分账。 渠道计费方式，渠道费率，退款是否手续费已经隐藏了则添加
           if(this.formList[4].name !== 'feeType'){
             this.formList.splice(4,0,...this.funTypeItems)
           }
@@ -188,6 +193,7 @@
                   ele.type += "Text"
                 }
               })
+              console.log(this.formList)
             }
           });
         }

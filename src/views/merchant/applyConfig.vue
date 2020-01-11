@@ -179,6 +179,7 @@
         if(!this.detail.sameFlag){
           formItem.priority = 0
         }
+        formItem.type = this.detail.type||''
         delete formItem.channelProductName
         delete formItem.merchantFeeType
       },
@@ -200,36 +201,33 @@
             //
             //
             // }
+            this.formList = this.formList.filter(ele=>{
+              // 非分账，隐藏优先支付
+              let priority = ele.name == 'priority' && !this.detail.sameFlag && this.detail.type!=1
+              // 用金充值功能，隐藏商户费率
+              let merchantFeeRate =  ele.name == 'merchantFeeRate' && this.detail.channelProductCode == '20001'
+              if(priority || merchantFeeRate){
+                return false
+              }else{
+                return true
+              }
+            })
             if(res.data.configInfos && res.data.configInfos.length){
               // 转换支付配置
               this.turnPayConfig(res.data.configInfos)
             }else{
               this.getPayConfig()
             }
-            let priorityIndex = ''
-            let merchantFeeRateIndex = ''
+
             this.formList.forEach((ele,index) => {
               if(typeof this.detail[ele.name]!=='undefined'){
                 ele.value = this.detail[ele.name]
-              }
-              if(ele.name =='priority'){
-                priorityIndex = index
-              }else if(ele.name =='merchantFeeRate'){
-                merchantFeeRateIndex = index
               }
               // 如果是详情页
               if(this.routeType == 'detail'){
                 ele.type += "Text"
               }
             })
-            if(!this.detail.sameFlag && this.detail.type!=1){
-              // 非分账，隐藏优先支付
-              this.formList.splice(priorityIndex, 1)
-            }
-            if(this.detail.channelProductCode == '20001'){
-              // 用金充值功能，隐藏商户费率
-              this.formList.splice(merchantFeeRateIndex, 1)
-            }
           }else{
             this.$Message.warning(res.message)
           }
@@ -259,11 +257,18 @@
       turnPayConfig(configInfos) {
         // 清空配置
         // this.formList = this.formList.slice(0, 7)
-        // 判断是否有优先支付选项
-        let accessModeIndexInit = 3
-        if(this.detail.sameFlag){
-          accessModeIndexInit = 4
+        let accessModeIndexInit = 2
+        // 判断公共字段里是否有商户费率
+        // 用金充值功能，隐藏商户费率
+        let merchantFeeRate = this.detail.channelProductCode == '20001'
+        if(!merchantFeeRate){
+          accessModeIndexInit ++
         }
+        // 判断公共字段里是否有优先支付选项
+        if(this.detail.sameFlag){
+          accessModeIndexInit ++
+        }
+        // 截取公共字段
         this.formList = this.formList.slice(0, accessModeIndexInit)
 
         // 是否为农行商

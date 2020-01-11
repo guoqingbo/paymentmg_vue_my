@@ -122,7 +122,7 @@ let dic = {
   ],
   openAccount:[
     {label:"开户",value:"Y"},
-    {label:"无须开户",value:"N"},
+    {label:"无需开户",value:"N"},
   ]
 }
 export default dic
