@@ -229,7 +229,11 @@
             if (this.routeType == 'detail') {
               element.rules = ''
             }
-
+            // 格式化日期
+            if(element.value instanceof Date){
+              element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
+              console.log(element.value)
+            }
             // this.$set(element, 'value',element.value||'')
             if (typeof element.value == 'undefined') {
               // 作用是监听输入框value的变化，使表单验证起作用
