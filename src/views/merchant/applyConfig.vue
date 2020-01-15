@@ -355,9 +355,7 @@
             else if (ele.ifFile == 'datetime') {
               formListItem.type = 'datetime';
               formListItem.format = 'yyyy-MM-dd HH:mm:ss';
-
               formListItem.rules = [{
-
                 required: ele.required == 'T' ? true : false,
                 validator: (rule, value, callback)=>{
                   if (rule.required && value === '') {
@@ -368,7 +366,12 @@
                   }
                 },
                 trigger: 'change'
-              }]
+              }];
+              formListItem.onChange=(date)=>{
+                console.log(date)
+                formListItem.value = date
+                // formListItem.value = this.common.formatDate(endSearchItem.value,"yyyy-MM-dd")
+              }
             }
             this.formList.push(formListItem)
 
