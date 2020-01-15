@@ -43,6 +43,7 @@
             type="drag"
             :data="params"
             :action="common.config.apiAdminPrefix+url"
+            :headers="headers"
             style="display: inline-block;width:58px;"
             :class="{uploadDisabled:disabled,uploadabled:!disabled}"
             v-if="uploadList.length !== limitNum">
@@ -63,7 +64,10 @@ export default {
   data () {
     return {
       uploadList: [],
-      isImg: true
+      isImg: true,
+      headers:{
+        token:this.$cookies.get('token')
+      }
     }
   },
   props: {

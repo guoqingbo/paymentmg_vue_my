@@ -26,7 +26,7 @@ const user = {
       })
     },
     login (context, params) {
-      return apiPost(params.url, params.params)
+      return apiPost(params.url, params.params,params.apiPrefix)
     }
   }
 }

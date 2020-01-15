@@ -1,108 +1,107 @@
-{
-  "data": [
+[
     {
-      "name": "商户管理",
-      "code": "merchant",
+      "privilegeName": "商户管理",
+      "privilegeMark": "merchant",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "商户管理",
-          "code": "merchantManage",
+          "privilegeName": "商户管理",
+          "privilegeMark": "merchantManage",
           "functionType": "column"
         },
         {
-          "name": "商户管理员",
-          "code": "merchantMember",
+          "privilegeName": "商户管理员",
+          "privilegeMark": "merchantMember",
           "functionType": "column"
         },
         {
-          "name": "添加商户管理员",
-          "code": "merchantMemberAddEditDetail",
+          "privilegeName": "添加商户管理员",
+          "privilegeMark": "merchantMemberAddEditDetail",
           "functionType": "button"
         },
         {
-          "name": "添加商户",
-          "code": "merchantAddEditDetail",
+          "privilegeName": "添加商户",
+          "privilegeMark": "merchantAddEditDetail",
           "functionType": "button"
         },
         {
-          "name": "应用管理",
-          "code": "applyManage",
+          "privilegeName": "应用管理",
+          "privilegeMark": "applyManage",
           "functionType": "column"
         },
         {
-          "name": "添加应用",
-          "code": "applyAdd",
+          "privilegeName": "添加应用",
+          "privilegeMark": "applyAdd",
           "functionType": "button"
         },
         {
-          "name": "应用管理详情",
-          "code": "applyManageDetail",
+          "privilegeName": "应用管理详情",
+          "privilegeMark": "applyManageDetail",
           "functionType": "button"
         },
         {
-          "name": "应用配置",
-          "code": "applyConfig",
+          "privilegeName": "应用配置",
+          "privilegeMark": "applyConfig",
           "functionType": "button"
         }
 
       ]
     },
     {
-      "name": "产品渠道管理",
-      "code": "productChannel",
+      "privilegeName": "产品渠道管理",
+      "privilegeMark": "productChannel",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "渠道管理",
-          "code": "channel",
+          "privilegeName": "渠道管理",
+          "privilegeMark": "channel",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "渠道管理",
-              "code": "channelManage",
+              "privilegeName": "渠道管理",
+              "privilegeMark": "channelManage",
               "functionType": "column"
             },
             {
-              "name": "渠道产品管理",
-              "code": "channelProductManage",
+              "privilegeName": "渠道产品管理",
+              "privilegeMark": "channelProductManage",
               "functionType": "column"
             },
             {
-              "name": "添加渠道",
-              "code": "channelAddEditDetail",
+              "privilegeName": "添加渠道",
+              "privilegeMark": "channelAddEditDetail",
               "functionType": "button"
             },
             {
-              "name": "添加渠道产品",
-              "code": "channelProductAddEditDetail",
+              "privilegeName": "添加渠道产品",
+              "privilegeMark": "channelProductAddEditDetail",
               "functionType": "button"
             }
           ]
         },
         {
-          "name": "支付产品管理",
-          "code": "payProduct",
+          "privilegeName": "支付产品管理",
+          "privilegeMark": "payProduct",
           "functionType": "menu",
-          "menus": [
+          "items": [
             {
-              "name": "支付产品管理",
-              "code": "payProductManage",
+              "privilegeName": "支付产品管理",
+              "privilegeMark": "payProductManage",
               "functionType": "column"
             },
             {
-              "name": "渠道产品管理",
-              "code": "payChannelManage",
+              "privilegeName": "渠道产品管理",
+              "privilegeMark": "payChannelManage",
               "functionType": "column"
             },
             {
-              "name": "添加支付产品",
-              "code": "payProductAddEditDetail",
+              "privilegeName": "添加支付产品",
+              "privilegeMark": "payProductAddEditDetail",
               "functionType": "button"
             },
             {
-              "name": "添加支付产品渠道",
-              "code": "payProductChannelAddDetail",
+              "privilegeName": "添加支付产品渠道",
+              "privilegeMark": "payProductChannelAddDetail",
               "functionType": "button"
             }
           ]
@@ -110,33 +109,33 @@
       ]
     },
     {
-      "name": "订单查询",
-      "code": "order",
+      "privilegeName": "订单查询",
+      "privilegeMark": "order",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "订单查询",
-          "code": "orderQuery",
+          "privilegeName": "订单查询",
+          "privilegeMark": "orderQuery",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "交易订单查询",
-              "code": "tradeOrderQuery",
+              "privilegeName": "交易订单查询",
+              "privilegeMark": "tradeOrderQuery",
               "functionType": "column"
             },
             {
-              "name": "退款订单查询",
-              "code": "refundOrderQuery",
+              "privilegeName": "退款订单查询",
+              "privilegeMark": "refundOrderQuery",
               "functionType": "column"
             },
             {
-              "name": "交易订单明细",
-              "code": "tradeOrderDetail",
+              "privilegeName": "交易订单明细",
+              "privilegeMark": "tradeOrderDetail",
               "functionType": "button"
             },
             {
-              "name": "退款订单明细",
-              "code": "refundOrderDetail",
+              "privilegeName": "退款订单明细",
+              "privilegeMark": "refundOrderDetail",
               "functionType": "button"
             }
           ]
@@ -144,119 +143,114 @@
       ]
     },
     {
-      "name": "数据中心",
-      "code": "dataCenter",
+      "privilegeName": "数据中心",
+      "privilegeMark": "dataCenter",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "平台交易统计图表",
-          "code": "platformTradeData",
+          "privilegeName": "平台交易统计图表",
+          "privilegeMark": "platformTradeData",
           "functionType": "column"
         },
         {
-          "name": "商户交易统计图表",
-          "code": "merchantTradeData",
+          "privilegeName": "商户交易统计图表",
+          "privilegeMark": "merchantTradeData",
           "functionType": "column"
         },
         {
-          "name": "按支付渠道统计",
-          "code": "payChannelData",
+          "privilegeName": "按支付渠道统计",
+          "privilegeMark": "payChannelData",
           "functionType": "column"
         },
         {
-          "name": "按订单来源统计",
-          "code": "orderSourceData",
+          "privilegeName": "按订单来源统计",
+          "privilegeMark": "orderSourceData",
           "functionType": "column"
         },
         {
-          "name": "渠道佣金统计",
-          "code": "channelCommissionData",
+          "privilegeName": "渠道佣金统计",
+          "privilegeMark": "channelCommissionData",
           "functionType": "column"
         },
         {
-          "name": "按支付场景统计",
-          "code": "paySceneData",
+          "privilegeName": "按支付场景统计",
+          "privilegeMark": "paySceneData",
           "functionType": "column"
         },
         {
-          "name": "担保交易图表",
-          "code": "warrantTradeData",
+          "privilegeName": "担保交易图表",
+          "privilegeMark": "warrantTradeData",
           "functionType": "column"
         }
       ]
     },
     {
-      "name": "风控管理",
-      "code": "riskManage",
+      "privilegeName": "风控管理",
+      "privilegeMark": "riskManage",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "支付限额管理",
-          "code": "paymentLimit",
+          "privilegeName": "支付限额管理",
+          "privilegeMark": "paymentLimit",
           "functionType": "column"
         },
         {
-          "name": "拦截记录",
-          "code": "interceptionRecord",
+          "privilegeName": "拦截记录",
+          "privilegeMark": "interceptionRecord",
           "functionType": "column"
         },
         {
-          "name": "白名单",
-          "code": "whiteList",
+          "privilegeName": "白名单",
+          "privilegeMark": "whiteList",
           "functionType": "column"
         }
       ]
     },
     {
-      "name": "系统设置",
-      "code": "systemSetting",
+      "privilegeName": "系统设置",
+      "privilegeMark": "systemSetting",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "秘钥管理",
-          "code": "rsaManage",
+          "privilegeName": "秘钥管理",
+          "privilegeMark": "rsaManage",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "平台秘钥",
-              "code": "platformRsa",
-              "functionType": "column"
-            },
-            {
-              "name": "商户秘钥",
-              "code": "merchantRsa",
+              "privilegeName": "平台秘钥",
+              "privilegeMark": "platformRsa",
               "functionType": "column"
             }
           ]
         },
         {
-          "name": "账号管理",
-          "code": "accountManage",
+          "privilegeName": "账号管理",
+          "privilegeMark": "accountManage",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "员工管理",
-              "code": "memberManage",
+              "privilegeName": "员工管理",
+              "privilegeMark": "memberManage",
               "functionType": "column"
             },
             {
-              "name": "添加员工",
-              "code": "memberAddEditDetail",
+              "privilegeName": "添加员工",
+              "privilegeMark": "memberAddEditDetail",
               "functionType": "button"
             },
             {
-              "name": "角色管理",
-              "code": "roleManage",
+              "privilegeName": "角色管理",
+              "privilegeMark": "roleManage",
               "functionType": "column"
             },
             {
-              "name": "添加角色",
-              "code": "roleAddEditDetail",
+              "privilegeName": "添加角色",
+              "privilegeMark": "roleAddEditDetail",
               "functionType": "button"
             },
             {
-              "name": "菜单管理",
-              "code": "menuManage",
+              "privilegeName": "菜单管理",
+              "privilegeMark": "menuManage",
               "functionType": "column"
             }
           ]
@@ -264,36 +258,35 @@
       ]
     },
     {
-      "name": "结算中心",
-      "code": "settleCenter",
+      "privilegeName": "结算中心",
+      "privilegeMark": "settleCenter",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "业务分账查询",
-          "code": "busiPayQuery",
+          "privilegeName": "业务分账查询",
+          "privilegeMark": "busiPayQuery",
           "functionType": "column"
         },
         {
-          "name": "业务分账查看",
-          "code": "busiPayLook",
+          "privilegeName": "业务分账查看",
+          "privilegeMark": "busiPayLook",
           "functionType": "button"
         },
         {
-          "name": "渠道分账查询",
-          "code": "channelPayQuery",
+          "privilegeName": "渠道分账查询",
+          "privilegeMark": "channelPayQuery",
           "functionType": "column"
         },
         {
-          "name": "渠道分账查看",
-          "code": "channelPayLook",
+          "privilegeName": "渠道分账查看",
+          "privilegeMark": "channelPayLook",
           "functionType": "button"
         },
         {
-          "name": "分账汇总查询",
-          "code": "paySummaryQuery",
+          "privilegeName": "分账汇总查询",
+          "privilegeMark": "paySummaryQuery",
           "functionType": "column"
         }
       ]
     }
   ]
-}

@@ -1,18 +1,17 @@
-{
-  "data": [
+[
     {
-      "name": "模板示例",
-      "code": "templateDemo",
+      "privilegeName": "模板示例",
+      "privilegeMark": "templateDemo",
       "functionType": "menu",
-      "menus": [
+      "items": [
         {
-          "name": "常用模板",
-          "code": "commonDemo",
+          "privilegeName": "常用模板",
+          "privilegeMark": "commonDemo",
           "functionType": "column",
-          "menus": [
+          "items": [
             {
-              "name": "常规列表",
-              "code": "pageListDemo",
+              "privilegeName": "常规列表",
+              "privilegeMark": "pageListDemo",
               "functionType": "column"
             }
           ]
@@ -20,4 +19,3 @@
       ]
     }
   ]
-}

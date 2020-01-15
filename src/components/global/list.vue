@@ -6,14 +6,17 @@
                 @beforeSubmit="$emit('beforeSubmit',$store.state.list.params)"
                 @afterSubmit="$emit('afterSubmit',$store.state.list.res)"
                 :url="url"
+                :apiPrefix="apiPrefix"
                 :params="params"></searchForm>
     <Row :gutter="16" class="btn-groups" v-if="hannleItems">
-      <Col span="2" v-for="item in hannleItems" :key="item.title">
-        <Button type="primary"
-                :icon="item.icon"
-                @click="item.callback"
-                :loading="item.loading">{{ item.title }}</Button>
-      </Col>
+      <template v-for="item in hannleItems" >
+        <Col span="2" v-if="common.auth(item.auth)">
+          <Button type="primary"
+                  :icon="item.icon"
+                  @click="item.callback"
+                  :loading="item.loading">{{ item.title }}</Button>
+        </Col>
+      </template>
     </Row>
     <div class="grids">
       <Table
@@ -64,6 +67,9 @@
       hannleItems:{
         type: Array,
       },
+      apiPrefix:{
+        type: String,
+      },
       url:{
         type: String,
       },
@@ -98,6 +104,10 @@
       }
     },
     mounted() {
+      // 是否自定义搜索
+      if (this._events.searchSubmit) {
+        this.on("searchSubmit",this._events.searchSubmit)
+      }
       this.$refs.search.searchSubmit()
     },
     created(){

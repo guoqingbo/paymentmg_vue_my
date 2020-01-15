@@ -26,8 +26,8 @@ const mutations = {
 }
 
 const actions = {
-  async getList (context) {
-    let res = await apiGet(context.state.url, context.state.params)
+  async getList (context,apiPrefix) {
+    let res = await apiGet(context.state.url, context.state.params,apiPrefix)
     // let res = require('../../data/list.json')
     context.state.res = res
     return res

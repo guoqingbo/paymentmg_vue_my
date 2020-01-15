@@ -3,11 +3,12 @@
 import dic from '@/common/dic'
 // 配置文件
 import config from '@/config'
-// import {Message} from 'iview'
+import {Message} from 'iview'
 // 表单验证扩展
 import validate from "@/validate";
 // app实例
 import App from '@/main'
+import store from '../store'
 const common = {
   // 数字格式化
   formatNumber(number, decimals, dec_point, thousands_sep) {
@@ -106,14 +107,14 @@ const common = {
   searchMerchantList(keyword,autoComplete){
 
     // 清空旧的搜索商户赋值
-    if(App.$store.state.list.params.merchantNo){
-      delete App.$store.state.list.params.merchantNo
+    if(store.state.list.params.merchantNo){
+      delete store.state.list.params.merchantNo
     }
-    if(App.$store.state.list.params.merchantCode){
-      delete App.$store.state.list.params.merchantCode
+    if(store.state.list.params.merchantCode){
+      delete store.state.list.params.merchantCode
     }
-    if(App.$store.state.list.params.merchantName){
-      delete App.$store.state.list.params.merchantName
+    if(store.state.list.params.merchantName){
+      delete store.state.list.params.merchantName
     }
 
     if(keyword){
@@ -124,7 +125,7 @@ const common = {
       }
       let url = '/merchant/queryMerchantListByVagueMerchantMark'
       App.apiPost(url,params).then(res=>{
-        if(res.status == 200){
+        if(res.success){
           let data = []
           // 用于匹配获取商户名商户号
           let searchMerchantList = {}
@@ -138,9 +139,21 @@ const common = {
             data = [{label:'暂无数据',value:''}]
           }
           autoComplete.data = data
-          App.$store.state.global.searchMerchantList = searchMerchantList
+          store.state.global.searchMerchantList = searchMerchantList
+        }else{
+          Message.error(res.message||'无响应')
         }
       })
+    }
+  },
+  // 判断是否有权限
+  auth(authName){
+    // authName 如果为布尔值，直接判断权限
+    if(typeof authName == 'string'){
+      let authList = JSON.parse(sessionStorage.getItem('authList'))
+      return authList.includes(authName)
+    }else{
+      return authName || true
     }
   },
   // 商户名，商户号拆分
@@ -161,7 +174,7 @@ const common = {
       merchantNameField = 'merchantName'
     }
     if(params[merchantCodeField] || params[merchantNameField]){
-      let searchMerchantList = App.$store.state.global.searchMerchantList
+      let searchMerchantList = store.state.global.searchMerchantList
       let merchant = searchMerchantList[params[merchantCodeField]] ||
         searchMerchantList[params[merchantNameField]] ||
         searchMerchantList[params[merchantNameField]+"("+params[merchantCodeField]+")"]
@@ -169,7 +182,12 @@ const common = {
         params[merchantNameField] = merchant.merchantName
         params[merchantCodeField] = merchant.merchantCode
       }else{
-        let newValueArr = params[merchantNameField].split("(") || params[merchantCodeField].split("(");
+        let newValueArr = []
+        if(params[merchantNameField]){
+          newValueArr = params[merchantNameField].split("(")
+        }else if(params[merchantCodeField]){
+          newValueArr = params[merchantCodeField].split("(");
+        }
         params[merchantNameField] = newValueArr[0]
         if(newValueArr[1]){
           let merchantCode = newValueArr[1].replace(/\)/g,'');
@@ -198,7 +216,7 @@ const common = {
         $(a).remove()
         callback()
       }else {
-        App.Message.error('报表没有记录')
+        Message.error('报表没有记录')
       }
     })
   },
@@ -235,76 +253,122 @@ const common = {
     }
     return fmt;
   },
-
-  changeLoading(obj) {
-    obj.loading = false
-    obj.$nextTick(() => {
-      obj.loading = true
-    })
-  },
-  // 此处'formItem'要改用变量传值，因为一个页面会有多个表单？？？modalName-form ref
-  formPost(obj, options) {
-    obj.$refs[options.modalName ? options.modalName : 'formItem'].validate(async (valid) => {
-      if (valid) {
-        let res = await App.apiPost(options.url, options.params)
-        // console.log(res)
-        if (res.success) {
-          switch (options.mold) {
-            case 'modal':
-              obj.$refs.gridTable.loadpage()
-              break;
-            case 'page':
-
-              break
-          }
-        } else if (res.status === 200) {
-          switch (options.mold) {
-            case 'modal':
-              break
-          }
-        } else {
-          obj.$Message.error(res.message)
-          return this.changeLoading(obj)
+  authList:[],
+  // 菜单列表转为树形结构
+  menuToTree(menuList){
+    // 最多三级结构
+    // memuObj过度层，目标结构为 {一级索引:{二级索引:[]}}
+    // 以id为key值
+    let memuObj = {}
+    // 一二级关联
+    let memuObj12 = {
+      // 1:[4,5,6]
+    }
+    // 二三级关联
+    let memuObj23 = {
+      // 1:[4,5,6]
+    }
+    // 一二三级关联
+    let memuObj123 = {}
+    let menuTree = []
+    menuList.forEach((ele,index)=>{
+      common.authList.push(ele.tag)
+      memuObj[ele.id] = ele
+      // 获取一二级关联
+      if(ele.deep == 2){
+        if(!memuObj12[ele.parentId]){
+          memuObj12[ele.parentId]=[ele.id]
+        }else{
+          memuObj12[ele.parentId].push(ele.id)
         }
-        options.callback(res)
-      } else {
-        if (options.mold === 'modal') {
-          return this.changeLoading(obj)
+      }
+      // 获取二三级关联
+      if(ele.deep == 3){
+        if(!memuObj23[ele.parentId]){
+          memuObj23[ele.parentId]=[ele.id]
+        }else{
+          memuObj23[ele.parentId].push(ele.id)
         }
       }
     })
+    // 123及关联
+    Object.keys(memuObj12)
+      .forEach(ele=>{
+        if(memuObj123[ele]){
+          memuObj12[ele]
+            .sort(common.menuSort(memuObj))
+            .forEach(sele=>{
+              memuObj123[ele][sele]= memuObj23[sele]
+            })
+        }else{
+          memuObj123[ele] = {}
+          memuObj12[ele]
+            .forEach(sele=>{
+                memuObj123[ele][sele]= memuObj23[sele]
+            })
+        }
+    })
+    // 生成树形结构
+    Object.keys(memuObj123)
+      .sort(common.menuSort(memuObj))
+      .forEach(ele=>{
+       let oneMenu = memuObj[ele]
+        oneMenu.list = []
+        Object.keys(memuObj123[ele])
+          .sort(common.menuSort(memuObj))
+          .forEach(sele=>{
+            let twoMenu = memuObj[sele]
+            twoMenu.list = []
+            memuObj123[ele][sele]
+              .sort(common.menuSort(memuObj))
+              .forEach(ssele=>{
+                let threeMenu = memuObj[ssele]
+                twoMenu.list.push(threeMenu)
+              })
+            oneMenu.list.push(twoMenu)
+          })
+        menuTree.push(oneMenu)
+      })
+    return {menuTree}
   },
-  async listDelete(obj, options) {
-    let res = {}
-    if(obj.method == "get"){
-      res = await App.apiGet(options.url, options.params || {})
-    }else{
-      res = await App.apiPost(options.url, options.params || {})
+  // 检查是否有权限
+  checkAuth(auth){
+    let isAuth = false
+    if(common.authList.include(auth)){
+      isAuth = true
     }
-
-    options.callback(res)
+    return isAuth
   },
-  async listDone(obj, options) {
-    let res = await App.apiPost(options.url, options.params || {})
-    options.callback(res)
+  menuSort(memuObj23){
+    return (a,b)=>{
+      if(memuObj23[a].sort > memuObj23[b].sort){
+        return 1
+      }else if(memuObj23[a].sort == memuObj23[b].sort){
+        return 0
+      }else {
+        return -1
+      }
+    }
   },
   columnsHandle(h, actions) {
     let array = []
     actions.forEach(element => {
-      let obj = h('a', {
-        style: {
-          color:element.color||'#2d8cf0',
-          margin: '5px',
-          marginLeft: 0,
-          marginRight:element.marginRight||'5px'
-        },
-        on: {
-          click: () => {
-            element.action()
+      if(common.auth(element.auth)){
+        let obj = h('a', {
+          style: {
+            color:element.color||'#2d8cf0',
+            margin: '5px',
+            marginLeft: 0,
+            marginRight:element.marginRight||'5px'
+          },
+          on: {
+            click: () => {
+              element.action()
+            }
           }
-        }
-      }, element.title)
-      array.push(obj)
+        }, element.title)
+        array.push(obj)
+      }
     })
     return array
   },
@@ -366,34 +430,48 @@ const common = {
           }
         },element.title)
       }
-      else if(element.type =='select'){
-        let options = element.data.map(item => {
-          return h("Option",{
-            props:{
-              value:item.value,
-              label: item.label,
-            }
-          })
+      else if(element.type =='dropdown'){
+        let DropdownItem = []
+        element.data.forEach(item => {
+          if(common.auth(item.auth)){
+            DropdownItem.push(h("DropdownItem",{
+              props:{
+                name:item.value
+              }
+            },item.label))
+          }
         })
-        obj = h('Select', {
-          style: {
-            margin: '5px',
-            marginLeft: 0
-          },
+        let title =  h("a",{
           props:{
-            value:element.value || "",
-            placeholder:element.title
-          },
+            href:"javascript:void(0)"
+          }
+        },[element.title,h('Icon',{props:{type:"ios-arrow-down"}})])
+        let DropdownMenu = h("DropdownMenu",{slot:"list"},DropdownItem)
+        obj = h('Dropdown', {
           on: {
-            'on-change'(value){
-              element.onChange(value)
+            'on-click':(value)=>{
+              element.onClick(value)
             }
           }
-        },options)
+        },[title,DropdownMenu])
       }
       array.push(obj)
     })
     return array
+  },
+  async listDelete(obj, options) {
+    let res = {}
+    if(obj.method == "get"){
+      res = await App.apiGet(options.url, options.params || {},options.apiPrefix)
+    }else{
+      res = await App.apiPost(options.url, options.params || {},options.apiPrefix)
+    }
+
+    options.callback(res)
+  },
+  async listDone(obj, options) {
+    let res = await App.apiPost(options.url, options.params || {})
+    options.callback(res)
   },
   validate,
   dic,
