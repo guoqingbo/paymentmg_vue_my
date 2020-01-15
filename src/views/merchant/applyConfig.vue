@@ -385,7 +385,12 @@
                   }
                 },
                 trigger: 'change'
-              }]
+              }];
+              formListItem.onChange=(date)=>{
+                console.log(date)
+                formListItem.value = date
+                // formListItem.value = this.common.formatDate(endSearchItem.value,"yyyy-MM-dd")
+              }
             }
             this.formList.push(formListItem)
 

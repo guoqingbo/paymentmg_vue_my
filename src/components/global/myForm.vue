@@ -25,8 +25,10 @@
           <span class="detail-text"
                 :class="{'detail-textareaText':item.value && item.value.length>300}"
                 v-if="item.type=='text'||
-              item.type=='inputText'||
-              item.type=='autoCompleteText'">
+                      item.type=='inputText'||
+                      item.type=='autoCompleteText'||
+                      item.type=='datetimeText'||
+                      item.type=='dateText'">
           {{item.value}}
         </span>
           <span class="detail-text"
@@ -79,6 +81,7 @@
                       :type="item.type"
                       :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"
                       v-model="item.value"
+                      @on-change="item.onChange?item.onChange($event):''"
                       :format="item.format||'yyyy-MM-dd'"></DatePicker>
           <Select v-if="item.type=='select'"
                   :disabled="item.disabled"
