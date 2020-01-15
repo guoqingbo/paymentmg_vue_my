@@ -230,8 +230,8 @@
               element.rules = ''
             }
             // 格式化日期
-            if(element.value instanceof Date){
-              element.value = this.common.formatDate(element.value, element.format||"yyyy-MM-dd")
+            if (element.value instanceof Date) {
+              element.value = this.common.formatDate(element.value, element.format || "yyyy-MM-dd")
               console.log(element.value)
             }
             // this.$set(element, 'value',element.value||'')
