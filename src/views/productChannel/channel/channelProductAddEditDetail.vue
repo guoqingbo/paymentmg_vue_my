@@ -182,18 +182,19 @@
           }
           this.apiGet("/channelProduct/"+id).then(res => {
             if (res.status == 200 && res.data) {
+              // 当前所属类别为备用金充值，分账 渠道计费方式，渠道费率，退款是否手续费隐藏
+              this.funTypeOnChange(res.data.type)
+
               this.formList.forEach((ele)=>{
                 ele.value = res.data[ele.name]
                 if(ele.name == 'type'){
                   ele.value = ele.value+""
-                  this.funTypeOnChange(ele.value)
                 }
                 if(this.routeType == 'detail'&&ele.type!='text'){
                   // 如果是详情页
                   ele.type += "Text"
                 }
               })
-              console.log(this.formList)
             }
           });
         }

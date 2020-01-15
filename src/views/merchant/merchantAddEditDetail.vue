@@ -267,8 +267,10 @@
         let arrItem = this.common.getArrItem(this.formList,'corpCode')
         let openAccountItem = this.common.getArrItem(this.formList,'openAccount')
         if(value == 'Y'){
-          if(this.$route.query.id){
+          // 编辑是，如果是已经开户的，企业吗和是否开户不可编辑
+          if(this.$route.query.id && this.detail.openAccount=="Y"){
             openAccountItem.disabled = true
+            arrItem.disabled = true
           }
           // 新增时
           arrItem.rules=[{required: true, message: '请输入企业码', trigger: 'blur'},
@@ -329,29 +331,30 @@
           }
           this.apiGet("/merchant/detail/" + id).then(res => {
             if (res.success) {
+              this.detail = res.data
               // 更改账户类型
-              this.merchantTypeChange(res.data.merchantType)
+              this.merchantTypeChange(this.detail.merchantType)
               if (this.routeType == 'detail') {
                 // 如果是详情页
               } else {
                 // 如果是编辑
 
                 // 是否开户改变时
-                this.openAccountChange(res.data.openAccount)
+                this.openAccountChange(this.detail.openAccount)
                 // 更改证件类型验证
-                this.idTypeChange(res.data.idType)
+                this.idTypeChange(this.detail.idType)
               }
 
               this.common.setArrItem(this.formList,'merchantType',{disabled:true})
               this.formList.forEach((ele) => {
-                // ele.value = res.data[ele.name]
-                this.$set(ele,'value',res.data[ele.name])
+                // ele.value = this.detail[ele.name]
+                this.$set(ele,'value',this.detail[ele.name])
                 if (this.routeType == 'detail' && ele.type != 'text') {
                   // 如果是详情页
                   ele.type += "Text"
                   if (ele.name == 'area') {
                     // 初始化区域
-                    let addrCodeName = [res.data.province, res.data.city, res.data.district].filter(ele=>{
+                    let addrCodeName = [this.detail.province, this.detail.city, this.detail.district].filter(ele=>{
                       if(ele){
                         return true
                       }
@@ -362,7 +365,7 @@
                 if (this.routeType !== 'detail' && ele.name == 'area') {
                   // 如果是编辑页
                   if (ele.name == 'area') {
-                    let addrCode = [res.data.provinceCode, res.data.cityCode, res.data.districtCode]
+                    let addrCode = [this.detail.provinceCode, this.detail.cityCode, this.detail.districtCode]
                     // ele.addrCode = addrCode.join("-")
                     ele.value = addrCode.join("-")
                     // if (addrCode[0] && addrCode[1] && addrCode[2]) {
@@ -370,8 +373,8 @@
                     // }
                   }
                 }
-                if(ele.name == 'parentMerchantCode' && res.data.parentMerchantCode){
-                  ele.value=res.data.parentMerchantName+"("+res.data.parentMerchantCode+")"
+                if(ele.name == 'parentMerchantCode' && this.detail.parentMerchantCode){
+                  ele.value=this.detail.parentMerchantName+"("+this.detail.parentMerchantCode+")"
                 }
               })
             }else{

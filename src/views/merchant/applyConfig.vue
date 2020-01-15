@@ -204,9 +204,9 @@
             this.formList = this.formList.filter(ele=>{
               // 非分账，隐藏优先支付
               let priority = ele.name == 'priority' && !this.detail.sameFlag && this.detail.type!=1
-              // 用金充值功能，隐藏商户费率
-              let merchantFeeRate =  ele.name == 'merchantFeeRate' && this.detail.channelProductCode == '20001'
-              if(priority || merchantFeeRate){
+              // 用金充值功能，隐藏商户费率，收费模式
+              let merchantFeeRateOrMerchantFeeType =  (ele.name == 'merchantFeeRate'||ele.name == 'merchantFeeType') && this.detail.channelProductCode == '20001'
+              if(priority || merchantFeeRateOrMerchantFeeType){
                 return false
               }else{
                 return true
@@ -328,15 +328,34 @@
               formListItem.type = 'radio'
               formListItem.data = data
               formListItem.rules = [{
-                required: ele.required == 'T' ? true : false,
-                message: '请选择' + ele.configName,
+                validator: (rule, value, callback)=>{
+                  if (rule.required && value === '') {
+                    callback(new Error('请选择' + ele.configName))
+                    return
+                  }else{
+                    callback()
+                  }
+                },
                 trigger: 'change'
               }]
             }
             else if (ele.ifFile == 'textarea') {
               formListItem.type = 'textarea';
-            }else if (ele.ifFile == 'SELECT') {
+            }
+            else if (ele.ifFile == 'SELECT') {
               formListItem.type = 'select';
+              formListItem.rules = [{
+                required: ele.required == 'T' ? true : false,
+                validator: (rule, value, callback)=>{
+                  if (rule.required && value === '') {
+                    callback(new Error('请选择' + ele.configName))
+                    return
+                  }else{
+                    callback()
+                  }
+                },
+                trigger: 'change'
+              }]
               let data = [];
               let tips =  ele.data
               if(typeof tips == 'string'){
@@ -349,6 +368,24 @@
                 })
               })
               formListItem.data = data
+            }
+            else if (ele.ifFile == 'datetime') {
+              formListItem.type = 'datetime';
+              formListItem.format = 'yyyy-MM-dd HH:mm:ss';
+
+              formListItem.rules = [{
+
+                required: ele.required == 'T' ? true : false,
+                validator: (rule, value, callback)=>{
+                  if (rule.required && value === '') {
+                    callback(new Error('请选择' + ele.configName))
+                    return
+                  }else{
+                    callback()
+                  }
+                },
+                trigger: 'change'
+              }]
             }
             this.formList.push(formListItem)
 

@@ -75,11 +75,11 @@
                  type="textarea"
                  :placeholder="item.placeholder?item.placeholder:'请输入'+item.title"
                  :autosize="item.autosize || {minRows: 2,maxRows: 5}"></Input>
-          <DatePicker v-if="item.type=='date'"
-                      type="date"
+          <DatePicker v-if="item.type=='date'||item.type=='datetime'"
+                      :type="item.type"
                       :placeholder="item.placeholder?item.placeholder:'请选择'+item.title"
                       v-model="item.value"
-                      format="yyyy-MM-dd"></DatePicker>
+                      :format="item.format||'yyyy-MM-dd'"></DatePicker>
           <Select v-if="item.type=='select'"
                   :disabled="item.disabled"
                   v-model="item.value"
