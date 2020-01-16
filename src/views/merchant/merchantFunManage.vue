@@ -104,10 +104,10 @@
           }
         ],
         params: {
-          sort:'modifyTime',
-          order:'desc'
+          // sort:'modifyTime',
+          // order:'desc'
         },
-        url: '/merchant/grid',
+        url: '/configMerchantChannel/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -148,6 +148,9 @@
         content: "",
         sucessMsg: "",
       }
+    },
+    computed:{
+
     },
     mounted () {
 
