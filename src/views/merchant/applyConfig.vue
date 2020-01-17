@@ -323,15 +323,34 @@
               formListItem.type = 'radio'
               formListItem.data = data
               formListItem.rules = [{
-                required: ele.required == 'T' ? true : false,
-                message: '请选择' + ele.configName,
+                validator: (rule, value, callback)=>{
+                  if (rule.required && value === '') {
+                    callback(new Error('请选择' + ele.configName))
+                    return
+                  }else{
+                    callback()
+                  }
+                },
                 trigger: 'change'
               }]
             }
             else if (ele.ifFile == 'textarea') {
               formListItem.type = 'textarea';
-            }else if (ele.ifFile == 'SELECT') {
+            }
+            else if (ele.ifFile == 'SELECT') {
               formListItem.type = 'select';
+              formListItem.rules = [{
+                required: ele.required == 'T' ? true : false,
+                validator: (rule, value, callback)=>{
+                  if (rule.required && value === '') {
+                    callback(new Error('请选择' + ele.configName))
+                    return
+                  }else{
+                    callback()
+                  }
+                },
+                trigger: 'change'
+              }]
               let data = [];
               let tips =  ele.data
               if(typeof tips == 'string'){
@@ -344,6 +363,27 @@
                 })
               })
               formListItem.data = data
+            }
+            else if (ele.ifFile == 'datetime') {
+              formListItem.type = 'datetime';
+              formListItem.format = 'yyyy-MM-dd HH:mm:ss';
+              formListItem.rules = [{
+                required: ele.required == 'T' ? true : false,
+                validator: (rule, value, callback)=>{
+                  if (rule.required && value === '') {
+                    callback(new Error('请选择' + ele.configName))
+                    return
+                  }else{
+                    callback()
+                  }
+                },
+                trigger: 'change'
+              }];
+              // formListItem.onChange=(date)=>{
+              //   console.log(date)
+              //   formListItem.value = date
+              //   // formListItem.value = this.common.formatDate(endSearchItem.value,"yyyy-MM-dd")
+              // }
             }
             this.formList.push(formListItem)
 
