@@ -27,24 +27,40 @@
             align:'center'
           },
           {
-            title: '应用来源',
-            key: 'orderSource',
-          },
-          {
-            title: '来源商户标识',
-            key: 'merchantCode',
-          },
-          {
             title: '商户名称',
             key: 'merchantName',
             sortable: true,
+          },
+          {
+            title: '支付中心商户号',
+            key: 'merchantNo',
           },
           {
             title: '功能',
             key: 'merchantType',
             sortable: true,
             render: (h, params) => {
-              return h('span', this.filter.turn("merchantType",params.row.merchantType))
+              let arr = []
+              let typeMap = params.row.typeMap
+              if(typeMap){
+                Object.keys(typeMap).forEach(ele=>{
+                  arr.push(h('span', {
+                    style: {
+                      display:'inline-block',
+                      borderRadius:'20px',
+                      border:'1px solid #ccc',
+                      padding:'0 10px',
+                      marginRight:'5px'
+                    },
+                    on: {
+                      // click: () => {
+                      //
+                      // }
+                    }
+                  },this.filter.turn("funType",ele)+'('+typeMap[ele]+')'))
+                })
+              }
+              return arr
             }
           },
           {
@@ -80,13 +96,13 @@
                       // 详情
                       this.$router.push({
                         path: "/merchant/merchantFunAddEditDetail/detail",
-                        query: { id: params.row.id,routeType:"detail"}
+                        query: { id: params.row.merchantNo,routeType:"detail"}
                       });
                     }else if(value == 2){
                       // 编辑
                       this.$router.push({
                         path: "/merchant/merchantFunAddEditDetail/edit",
-                        query: {id: params.row.id}
+                        query: {id: params.row.merchantNo,routeType:"edit"}
                       });
                     }else if(value == 3){
                       this.mode = "delete";
@@ -156,29 +172,10 @@
 
     },
     created(){
-      // 获取应用来源
-     this.getMerchantSource()
+
     },
     components: {list,confirm},
     methods: {
-      // 获取应用来源
-      getMerchantSource(){
-        this.$store.dispatch("getMerchantSource").then(res=>{
-          let merchantSource = res
-          this.common.setArrItem(this.searchItems,'orderSource',{data:res,})
-
-          // 表格商户来源转换
-          let source={}
-          merchantSource.forEach(ele=>{
-            source[ele.value] = ele.label
-          })
-          this.common.setArrItem(this.columns,'key=orderSource',{
-            render:(h, params) => {
-              return h('span', source[params.row.orderSource])
-            }
-          })
-        })
-      },
       // 搜索之前
       beforeSubmit(params){
         // 商户名，商户号拆分

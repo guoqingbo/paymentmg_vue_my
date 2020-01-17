@@ -6,7 +6,7 @@
       <FormItem
         label="商户名称:"
         prop="merchantNo"
-        :rules="[{required: true, type: 'number', message: '请选择商户名称', trigger: 'change'}]">
+        :rules="[{required: true, message: '请选择商户名称', trigger: 'change'}]">
         <AutoComplete class="my-autoComplete"
                       v-model="params.merchantNo"
                       @on-search="searchMerchantList"
@@ -16,24 +16,26 @@
           <Option v-for="(sitem,sindex) in autoComplete.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
         </AutoComplete>
       </FormItem>
-      <FormItem label="功能列表:">
+      <div style="display: flex;flex: 0">
+        <div style="width: 150px;flex-shrink:0;text-align: right;padding-right: 12px">功能列表:</div>
         <div class="fun-type-box">
           <Button class="add-fun-btn" type="primary" @click="openFucAdd">+添加功能</Button>
           <div class="fun-type-btn-box">
             <Button v-for="(item,index) in common.dic.funType"
                     :key="index"
                     style="margin-right: 20px"
-                    :type="item.value==params.type?'primary':'default'"
+                    :type="item.value==funSearchParams.type?'primary':'default'"
                     @click="chooseFunType(item)">{{item.label}}</Button>
           </div>
-          <Table stripe
+          <Table
+                 stripe
                  border
-                 :columns="[...funListColumns,...addFunColumns]"
+                 :columns="[...funListColumns,...addOrderSourceColumns,...addFunColumns]"
                  @on-selection-change="changeSelection"
-                 :data="funList"></Table>
+                 :data="funList|funListFilter(funSearchParams.type)"></Table>
         </div>
-      </FormItem>
-      <div class="footer">
+      </div>
+      <div class="footer" style="padding-top: 20px">
         <Button @click="$router.go(-1)" style="margin-right: 30px">返回
         </Button>
         <Button type="primary" @click="addFun">确定</Button>
@@ -52,7 +54,7 @@
                   @click="chooseFunType(item)">{{item.label}}</Button>
           <div class="search-box">
             <Select clearable v-model="funSearchParams.channelCode" style="width:200px" placeholder="请选择服务商">
-              <Option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <Option v-for="(item,index) in channelList" :value="item.value" :key="index">{{ item.label }}</Option>
             </Select>
             <Button type="primary"
                     @click="getChannelProduct()">查询</Button>
@@ -70,17 +72,49 @@
         <Button type="primary" @click="addFunPop">确定</Button>
       </div>
     </Modal>
+    <!--配置应用-->
+    <Modal v-model="funConfigModal"
+           title="配置应用"
+           @on-ok="addFunConfig"
+           width="750">
+      <Form :model="funConfigParam"
+            ref="formRef">
+        <FormItem prop="orderSource"
+                  :rules="[{required: true, message: '请选择应用来源', trigger: 'change'}]">
+          <Select v-model="funConfigParam.orderSource"
+                  placeholder="请选择应用配置">
+            <Option v-for="sitem in orderSourceList"
+                    :value="sitem.value"
+                    :key="sitem.value">{{ sitem.label }}
+            </Option>
+          </Select>
+          <div style="color: #f00">请选择应用来源，不同的应用来源配置不同的功能</div>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
 <script>
 
-
+  import modalForm from '@/components/global/modalForm'
   export default {
-    components: {},
+    components: {modalForm},
     name: "merchantFunAddEditDetail",
+    filters:{
+      funListFilter(value,type){
+        return value.filter(ele=>{
+          if(ele.type==type){
+            return true
+          }else{
+            return false
+          }
+        })
+      }
+    },
     data(){
       return {
+        detail:{},
         autoComplete:{
           data:[]
         },
@@ -111,14 +145,25 @@
           {
             title: '功能代码',
             key: 'channelProductCode'
-          }
+          },
+        ],
+        addOrderSourceColumns:[
+          {
+            title: '应用来源',
+            key: 'orderSource',
+            width:'150',
+            align:'center',
+            render: (h, params) => {
+
+            }
+          },
         ],
         // tabIndex:1,
         addFunColumns:[
           {
             title: '操作',
             key: 'action',
-            width:200,
+            width:100,
             align:'center',
             render: (h, params) => {
               const actions = [
@@ -129,18 +174,27 @@
                     {
                       label:'删除',
                       value:'1',
+                    },
+                    {
+                      label:'配置应用',
+                      value:'2',
                     }
                   ],
                   value:"",
                   onClick:(value)=>{
                     if(value == 1){
+                      // 删除
                       this.funList.forEach((ele,index)=>{
-                        // 已经选中过的不可再选
                         let {channelProductCode,payProductCode} = params.row
                         if(channelProductCode == ele.channelProductCode && payProductCode ==ele.payProductCode){
                           this.funList.splice(index,1)
                         }
                       })
+                    }else if(value == 2){
+                      // 配置应用
+                      this.funConfigModal = true
+                      this.funItem = this.funList[params.index]
+                      this.getOrderSource()
                     }
                   }
                 }
@@ -166,9 +220,97 @@
         params:{
           merchantNo:''
         },
+        // 应用配置参数
+        funItem:{},
+        funConfigModal:false,
+        funConfigParam:{
+          orderSource:''
+        },
+        orderSourceList:[],
+        routeType:this.$route.query.routeType
+      }
+    },
+    created(){
+      // 设置应用来源render
+      this.orderSourceRender()
+
+      if(this.$route.query.id){
+        this.getDetail()
       }
     },
     methods:{
+      // 设置应用来源render
+      orderSourceRender(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          let orderSourceObj =  {}
+          res.forEach(ele=>{
+            orderSourceObj[ele.value] = ele.label
+          })
+          this.addOrderSourceColumns[0].render=(h, params)=>{
+            console.log(params)
+            let arr = []
+            if(params.row.orderSource){
+              let orderSource = params.row.orderSource.toString().split(",")
+              orderSource.forEach(ele=>{
+                arr.push(h('span', {
+                  style: {
+                    // display:'inline-block',
+                    borderRadius:'20px',
+                    border:'1px solid #ccc',
+                    padding:'0 10px',
+                    marginRight:'5px'
+                  },
+                  on: {
+                    // click: () => {
+                    //
+                    // }
+                  }
+                }, orderSourceObj[ele]))
+              })
+              return arr
+            }
+          }
+        })
+
+      },
+      // 获取详情
+      getDetail(){
+        let url = '/configMerchantChannel/detail'
+        let params = {
+          merchantNo:this.$route.query.id
+        }
+        this.apiGet(url,params).then(res=>{
+          if(res.success){
+            this.detail = res.data
+            // 设置字段值
+            this.params.merchantNo = this.detail.merchantName+"("+this.detail.merchantNo+")"
+            this.funList = this.detail.list
+          }else{
+            this.$Message.warning(res.message)
+          }
+        })
+      },
+
+      // 添加应用来源
+      addFunConfig(){
+        let orderSource = []
+        console.log(this.funItem)
+        if(this.funItem.orderSource){
+          orderSource =  this.funItem.orderSource.toString().split(",")
+        }
+        if(!orderSource.includes(this.funConfigParam.orderSource)){
+         orderSource.push(this.funConfigParam.orderSource)
+        }
+        this.$set(this.funItem,'orderSource',orderSource.join(","))
+        this.funItem.channelName = 123456
+        console.log(this.funItem)
+      },
+      // 获取应用来源
+      getOrderSource(){
+        this.$store.dispatch("getMerchantSource").then(res=>{
+          this.orderSourceList = res
+        })
+      },
       searchMerchantList(value){
         this.common.searchMerchantList(value,this.autoComplete)
       },
@@ -183,8 +325,21 @@
       //  打开添加功能弹框
       openFucAdd(){
         this.addFunModal = true
-        this.chooseFunType(this.common.dic.funType[0])
+        // 默认先择第一个功能分类
+        this.funListData = []
+        // 获取已经选择的功能
+        this.getFunSelected()
+        // 获取渠道
         this.getChannel()
+      },
+      // 获取已经选择的功能
+      getFunSelected(){
+        let funSelected = []
+        this.funList.forEach(ele=>{
+          funSelected.push(ele.channelProductCode+"_"+ele.payProductCode)
+        })
+        this.funSelected = funSelected
+        return funSelected
       },
       // 获取支付渠道
       getChannel(){
@@ -226,11 +381,8 @@
       },
       addFunPop(){
         this.addFunModal = false
-        let funSelected = []
-        this.funList.forEach(ele=>{
-          funSelected.push(ele.channelProductCode+"_"+ele.payProductCode)
-        })
-        this.funSelected = funSelected
+        // 获取已经选择的功能
+        this.getFunSelected()
 
         this.selection.forEach(ele=>{
           // 去除已经添加的功能
@@ -241,32 +393,33 @@
       },
       // 添加功能确认
       addFun(){
-        if(!this.selection.length){
+        if(!this.funList.length){
           this.$Message.warning('请先选择要添加的功能')
           return
         }
-        let url = '/merchantChannel/batchSave'
-        let params = {
-          appId:this.appDetail.id,
-          ids:''
-        }
-        let ids = []
-        this.selection.forEach(ele=>{
-          // 去除已经添加的功能
-          if(!this.funSelected.includes(ele.channelProductCode+"_"+ele.payProductCode)){
-            ids.push(ele.id)
-          }
+        let url = '/configMerchantChannel/edit'
+        let {merchantNo,merchantName} = this.common.splitMerchant({...this.params})
+        // 获取
+        let configRelated = []
+        this.funList.forEach(ele=>{
+          configRelated.push({
+            id:ele.id,
+            orderSource:ele.orderSource
+          })
         })
-        if(!ids.length){
-          this.$Message.warning('未选择要添加的功能')
-          return
+        let params = {
+          merchantNo,
+          merchantName,
+          configRelatedJson:JSON.stringify(configRelated)
         }
-        params.ids = ids.join(',')
+        if(this.routeType== 'edit'){
+          params.id = this.detail.id
+        }
         this.apiPost(url,params).then(res=>{
           if(res.success){
-            this.$Message.success('添加成功')
+            this.$Message.success(res.message)
             // 刷线页面
-            this.getDetail()
+            this.$router.go(-1)
           }else{
             this.$Message.warning(res.message)
           }
@@ -292,5 +445,11 @@
   }
   .footer{
     text-align: center;
+  }
+  .fun-type-box{
+    width: 100%;
+  }
+  .fun-list-box{
+
   }
 </style>

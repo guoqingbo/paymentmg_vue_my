@@ -12,9 +12,9 @@
              :mode="mode"></confirm>
     <modalForm v-model="formShow"
                :formItems="formItems"
+               @beforeSave="beforeSave"
                :url="formUrl"
                :routeType='routeType'
-               @input='closeModal'
                :title="formTitle">
     </modalForm>
   </div>
@@ -26,23 +26,23 @@
   export default {
     data () {
       return {
+        detail:{},
         routeType: 'add',
         columns: [
           {
-            title: '参数名称',
-            key: 'orderSourceName',
+            title: '字典名称',
+            key: 'configValue',
+            align:'center'
+          },
+          {
+            title: '字典编码',
+            key: 'configKey',
             // sortable: true,
             align:'center'
           },
           {
-            title: '数据编码',
-            key: 'orderSource',
-            // sortable: true,
-            align:'center'
-          },
-          {
-            title: '数据值',
-            key: 'orderSource',
+            title: '字典分类',
+            key: 'configType',
             // sortable: true,
             align:'center'
           },
@@ -61,6 +61,11 @@
                       label:'删除',
                       value:'1',
                       auth:'merchantFunDelete',// 权限校验
+                    },
+                    {
+                      label:'修改',
+                      value:'2',
+                      auth:'merchantFunEdit',// 权限校验
                     }
                   ],
                   value:"",
@@ -70,8 +75,18 @@
                       this.sucessMsg = "删除成功！";
                       this.content = "确定删除？";
                       this.$refs.confirmModel.confirm(
-                        "/merchant/delete/" + params.row.id
+                        "/configDictionary/delete/" + params.row.id,{},'get'
                       );
+                    }else if(value==2){
+                      this.formShow = true
+                      this.formItems.forEach((item,index)=>{
+                        item.type = item.type.replace(/(Text)$/g,'')
+                      });
+                      this.formUrl = '/configDictionary/update'
+                      this.routeType = 'edit'
+                      this.formTitle = '修改'
+                      this.detail = params.row
+                      this.setDetail()
                     }
                   }
                 }
@@ -81,10 +96,9 @@
           }
         ],
         params: {
-          sort:'modifyTime',
-          order:'desc'
+
         },
-        url: '/rsaKeyPlatform/grid',
+        url: '/configDictionary/grid',
         searchItems: [],
         hannleItems: [
           {
@@ -92,11 +106,10 @@
             icon: 'md-add',
             callback: () => {
               this.formShow = true
-              this.formItems[0].disabled = false
               this.formItems.forEach((item,index)=>{
                 item.type = item.type.replace(/(Text)$/g,'')
               });
-              this.formUrl = '/rsaKeyPlatform/save'
+              this.formUrl = '/configDictionary/save'
               this.routeType = 'add'
               this.formTitle = '添加'
             }
@@ -111,113 +124,61 @@
         formShow: false,
         formItems: [
           {
-            title: '参数类别',
-            name: 'orderSource',
+            title: '字典分类',
+            name: 'configType',
             type: 'input',
             rules: [
-              {required: true, message: '请选输入参数类别', trigger: 'change'}
+              {required: true, message: '请输入字典分类', trigger: 'blur'}
             ],
-            value: null,
+            value: '',
           },
           {
-            title: '数据编码',
-            name: 'orderSource',
+            title: '字典编码',
+            name: 'configKey',
             type: 'input',
             rules: [
-              {required: true, message: '请选输入参数类别', trigger: 'change'}
+              {required: true, message: '请输入字典编码', trigger: 'blur'}
             ],
-            value: null,
           },
           {
-            title: '数据值',
-            name: 'orderSource',
+            title: '字典名称',
+            name: 'configValue',
             type: 'input',
             rules: [
-              {required: true, message: '请选输入参数类别', trigger: 'change'}
+              {required: true, message: '请输入字典名称', trigger: 'blur'}
             ],
-            value: null,
           },
           {
             title: '备注',
-            name: 'orderSource',
+            name: 'remark',
             type: 'textarea',
-            rules: [
-              {required: true, message: '请选输入参数类别', trigger: 'change'}
-            ],
-            value: null,
           },
         ],
-        formUrl: '/rsaKeyPlatform/save'
+        formUrl: '/configDictionary/save'
       }
     },
     created(){
-      this.getMerchantSource()
+
     },
     mounted () {
 
     },
     components: {list,confirm,modalForm},
     methods: {
-      onCopySuccess(){
-        this.$Message.success("复制成功")
-      },
-      onCopyError(){
-        this.$Message.error("复制失败")
-      },
-      closeModal() {
-        this.formShow = false;
-      },
-      // 生成秘钥
-      rsaCreate() {
-        let params = {
-          // vagueMerchantMark: '',
-          // columnType: 2,
-        }
-        let url = '/constant/rsaKey/create'
-        this.apiGet(url,params).then(res=>{
-          if(res.status == 200){
-            this.formItems.forEach(item=>{
-              if(item.name=='privateKey'){
-                item.value = res.data.privateKey
-              }
-              if(item.name=='publicKey'){
-                item.value = res.data.publicKey
-              }
-            });
-          }else{
-            this.$Message.error(res.message)
-          }
-        })
-      },
-      // 获取商户来源
-      getMerchantSource(){
-        this.$store.dispatch("getMerchantSource").then(res=>{
-          let merchantSource = this.$store.state.global.merchantSource
-          this.formItems[0].data = merchantSource
-        })
-      },
       // 设置详情页
-      setDetail(orderSource){
-        this.apiGet('/rsaKeyPlatform/detail/'+orderSource).then(res=>{
-          if(res.status == 200){
-            this.formItems.forEach(item=>{
-              item.value = res.data[item.name]
-              // if(item.name=='orderSource'){
-              //   item.value = res.data.orderSource
-              // }
-              // if(item.name=='privateKey'){
-              //   item.value = res.data.privateKey
-              // }
-              // if(item.name=='publicKey'){
-              //   item.value = res.data.publicKey
-              // }
-            });
-            console.log(this.formItems)
-          }else{
-            this.$Message.error(res.message)
-          }
+      setDetail(){
+
+        this.formItems.forEach(ele=>{
+          ele.value = this.detail[ele.name]
         })
       },
+      beforeSave(params){
+        if(this.routeType=='edit'){
+          params.id = this.detail.id
+        }else{
+          delete params.id
+        }
+      }
     }
   }
 </script>

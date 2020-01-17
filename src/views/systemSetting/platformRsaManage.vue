@@ -87,67 +87,49 @@
             render: (h, params) => {
               const actions = [
                 {
-                  title: "编辑",
-                  auth:"platformRsaEdit",
-                  action: () => {
-                    this.formShow = true
-                    this.formItems.forEach((item,index)=>{
-                      item.disabled = true;
-                      item.type = item.type.replace(/(Text)$/g,'')
-                      // if(!index){
-                      //   item.disabled = true;
-                      // }
-                      // item.clipboard=false
-                      // if(item.type=='inputText'){
-                      //   item.type='input'
-                      // }else if(item.type=='textareaText'){
-                      //   item.type='textarea'
-                      // }else if(item.type=='btn'){
-                      //   item.disabled=false
-                      //   item.value='重新生成秘钥'
-                      //   item.desc='重新生成秘钥可能导致支付错误，请谨慎操作！'
-                      // }
-                    });
-                    this.formUrl = '/rsaKeyPlatform/update'
-                    this.routeType = 'edit'
-                    this.formTitle = '修改秘钥'
-                    this.detail = params.row
-                    this.setDetail(params.row.orderSource)
+                  title:'操作',
+                  type:'dropdown',
+                  data:[
+                    {
+                      label:'编辑',
+                      value:'1',
+                      auth:'platformRsaEdit',// 权限校验
+                    },
+                    {
+                      label:'查看',
+                      value:'2',
+                      auth:'platformRsaDetail',// 权限校验
+                    }
+                  ],
+                  value:"",
+                  onClick:(value)=>{
+                    if(value == 1){
+                      this.formShow = true
+                      this.formItems.forEach((item,index)=>{
+                        item.disabled = true;
+                        item.type = item.type.replace(/(Text)$/g,'')
+                      });
+                      this.formUrl = '/rsaKeyPlatform/update'
+                      this.routeType = 'edit'
+                      this.formTitle = '修改秘钥'
+                      this.detail = params.row
+                      this.setDetail(params.row.orderSource)
+                    }else if(value==2){
+                      this.formShow = true
+                      this.formItems.forEach(item=>{
+                        if(!/(Text)$/g.test( item.type)){
+                          item.type += 'Text'
+                        }
+                      });
+                      this.routeType = 'detail'
+                      this.formTitle = '查看秘钥'
+                      this.detail = params.row
+                      this.setDetail(params.row.orderSource)
+                    }
                   }
-                },
-                {
-                  title: "查看",
-                  auth:"platformRsaDetail",
-                  action: () => {
-                    this.formShow = true
-                    this.formItems.forEach(item=>{
-                      // item.type = item.type.replace(/(Text)$/g,'')
-                      if(!/(Text)$/g.test( item.type)){
-                        item.type += 'Text'
-                      }
-                      // item.type += 'Text'
-                      // if(item.type=='input'){
-                      //   item.type='inputText'
-                      // }else if(item.type=='textarea'){
-                      //   item.clipboard=true
-                      //   item.type='textareaText'
-                      // }else if(item.type=='btn'){
-                      //   item.disabled=true
-                      //   item.value='null'
-                      //   item.desc=''
-                      // }
-                    });
-                    this.routeType = 'detail'
-                    this.formTitle = '查看秘钥'
-                    this.detail = params.row
-                    // this.formItems.forEach(item=>{
-                    //   item.value = null
-                    // })
-                    this.setDetail(params.row.orderSource)
-                  }
-                },
-              ];
-              return this.common.columnsHandle(h, actions);
+                }
+              ]
+              return this.common.columnsItemRender(h, actions);
             }
           }
         ],
@@ -166,21 +148,6 @@
               this.formItems[0].disabled = false
               this.formItems.forEach((item,index)=>{
                 item.type = item.type.replace(/(Text)$/g,'')
-                // if(!index){
-                //   item.disabled = false;
-                // }else{
-                //   item.disabled = true;
-                // }
-                // item.clipboard=false
-                // if(item.type=='inputText'){
-                //   item.type='input'
-                // }else if(item.type=='textareaText'){
-                //   item.type='textarea'
-                // }else if(item.type=='btn'){
-                //   item.disabled=false
-                //   item.value='生成秘钥'
-                //   item.desc=''
-                // }
               });
               this.formUrl = '/rsaKeyPlatform/save'
               this.routeType = 'add'
@@ -263,8 +230,6 @@
       // 生成秘钥
       rsaCreate() {
         let params = {
-          // vagueMerchantMark: '',
-          // columnType: 2,
         }
         let url = '/constant/rsaKey/create'
         this.apiGet(url,params).then(res=>{
@@ -295,17 +260,7 @@
           if(res.status == 200){
             this.formItems.forEach(item=>{
               item.value = res.data[item.name]
-              // if(item.name=='orderSource'){
-              //   item.value = res.data.orderSource
-              // }
-              // if(item.name=='privateKey'){
-              //   item.value = res.data.privateKey
-              // }
-              // if(item.name=='publicKey'){
-              //   item.value = res.data.publicKey
-              // }
             });
-            console.log(this.formItems)
           }else{
             this.$Message.error(res.message)
           }
