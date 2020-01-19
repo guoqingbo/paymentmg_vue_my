@@ -6,8 +6,11 @@
       <FormItem
         label="商户名称:"
         prop="merchantNo"
-        :rules="[{required: true, message: '请选择商户名称', trigger: 'change'}]">
+        :rules="routeType=='detail'?[{required: true, message: '请选择商户名称', trigger: 'change'}]:{}">
+        <!--如果是详情页        -->
+        <span v-if="routeType=='detail'">{{params.merchantNo}}</span>
         <AutoComplete class="my-autoComplete"
+                      v-else
                       v-model="params.merchantNo"
                       @on-search="searchMerchantList"
                       :clearable="true"
@@ -19,7 +22,10 @@
       <div style="display: flex;flex: 0">
         <div style="width: 150px;flex-shrink:0;text-align: right;padding-right: 12px">功能列表:</div>
         <div class="fun-type-box">
-          <Button class="add-fun-btn" type="primary" @click="openFucAdd">+添加功能</Button>
+          <Button class="add-fun-btn"
+                  v-if="routeType!=='detail'"
+                  type="primary"
+                  @click="openFucAdd">+添加功能</Button>
           <div class="fun-type-btn-box">
             <Button v-for="(item,index) in common.dic.funType"
                     :key="index"
@@ -30,7 +36,7 @@
           <Table
                  stripe
                  border
-                 :columns="[...funListColumns,...addOrderSourceColumns,...addFunColumns]"
+                 :columns="routeType=='detail'?[...funListColumns,...addOrderSourceColumns]:[...funListColumns,...addOrderSourceColumns,...addFunColumns]"
                  @on-selection-change="changeSelection"
                  :data="funList|funListFilter(funSearchParams.type)"></Table>
         </div>
@@ -38,7 +44,7 @@
       <div class="footer" style="padding-top: 20px">
         <Button @click="$router.go(-1)" style="margin-right: 30px">返回
         </Button>
-        <Button type="primary" @click="addFun">确定</Button>
+        <Button type="primary" v-if="routeType!=='detail'"  @click="addFun">确定</Button>
       </div>
     </Form>
     <!--添加功能-->
@@ -404,7 +410,8 @@
         this.funList.forEach(ele=>{
           configRelated.push({
             id:ele.id,
-            orderSource:ele.orderSource
+            orderSource:ele.orderSource,
+            channelProductCode:ele.channelProductCode
           })
         })
         let params = {
