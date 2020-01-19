@@ -6,7 +6,7 @@
       <FormItem
         label="商户名称:"
         prop="merchantNo"
-        :rules="routeType=='detail'?[{required: true, message: '请选择商户名称', trigger: 'change'}]:{}">
+        :rules="routeType!=='detail'?[{required: true, message: '请选择商户名称', trigger: 'change'}]:{}">
         <!--如果是详情页        -->
         <span v-if="routeType=='detail'">{{params.merchantNo}}</span>
         <AutoComplete class="my-autoComplete"
@@ -421,7 +421,7 @@
         }
         this.apiPost(url,params).then(res=>{
           if(res.success){
-            this.$Message.success(res.message)
+            this.$Message.success(res.message||'操作成功')
             // 刷线页面
             this.$router.go(-1)
           }else{
