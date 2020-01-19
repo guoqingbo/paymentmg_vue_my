@@ -308,8 +308,6 @@
          orderSource.push(this.funConfigParam.orderSource)
         }
         this.$set(this.funItem,'orderSource',orderSource.join(","))
-        this.funItem.channelName = 123456
-        console.log(this.funItem)
       },
       // 获取应用来源
       getOrderSource(){
@@ -411,7 +409,6 @@
           configRelated.push({
             id:ele.id,
             orderSource:ele.orderSource,
-            channelProductCode:ele.channelProductCode
           })
         })
         let params = {
