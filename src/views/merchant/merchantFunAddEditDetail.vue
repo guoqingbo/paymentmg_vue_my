@@ -258,6 +258,12 @@
             if(params.row.orderSource){
               let orderSource = params.row.orderSource.toString().split(",")
               orderSource.forEach(ele=>{
+                let deleteBtn = h('Icon',{
+                  props:{
+                    type:'close-circled',
+                    size:'16'
+                  }
+                })
                 arr.push(h('span', {
                   style: {
                     // display:'inline-block',
@@ -271,7 +277,7 @@
                     //
                     // }
                   }
-                }, orderSourceObj[ele]))
+                },[orderSourceObj[ele],deleteBtn]))
               })
               return arr
             }
