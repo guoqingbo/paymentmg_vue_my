@@ -407,8 +407,8 @@
         let configRelated = []
         this.funList.forEach(ele=>{
           configRelated.push({
-            id:ele.id,
-            orderSource:ele.orderSource,
+            payProductCode :ele.payProductCode,
+            channelProductCode:ele.channelProductCode,
           })
         })
         let params = {
