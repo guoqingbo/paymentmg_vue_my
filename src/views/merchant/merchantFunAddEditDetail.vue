@@ -253,24 +253,36 @@
             orderSourceObj[ele.value] = ele.label
           })
           this.addOrderSourceColumns[0].render=(h, params)=>{
-            console.log(params)
             let arr = []
             if(params.row.orderSource){
               let orderSource = params.row.orderSource.toString().split(",")
-              orderSource.forEach(ele=>{
+              orderSource.forEach((ele,index)=>{
                 let deleteBtn = h('Icon',{
                   props:{
-                    type:'close-circled',
-                    size:'16'
+                    type:'md-close-circle',
+                    size:'15'
+                  },
+                  style:{
+                    position:"absolute",
+                    right:'-5px',
+                    // top:'-2px'
+                  },
+                  on:{
+                    click:()=>{
+                      orderSource.splice(index,1)
+                      this.funList[params.row._index].orderSource = orderSource.join(',')
+                    }
                   }
                 })
                 arr.push(h('span', {
                   style: {
+                    position:'relative',
                     // display:'inline-block',
                     borderRadius:'20px',
                     border:'1px solid #ccc',
                     padding:'0 10px',
-                    marginRight:'5px'
+                    marginRight:'5px',
+                    whiteSpace: "nowrap"
                   },
                   on: {
                     // click: () => {
@@ -306,7 +318,6 @@
       // 添加应用来源
       addFunConfig(){
         let orderSource = []
-        console.log(this.funItem)
         if(this.funItem.orderSource){
           orderSource =  this.funItem.orderSource.toString().split(",")
         }
@@ -415,6 +426,7 @@
           configRelated.push({
             payProductCode :ele.payProductCode,
             channelProductCode:ele.channelProductCode,
+            orderSource:ele.orderSource,
           })
         })
         let params = {
