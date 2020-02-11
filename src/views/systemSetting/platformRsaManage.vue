@@ -93,12 +93,12 @@
                     {
                       label:'编辑',
                       value:'1',
-                      auth:'platformRsaEdit',// 权限校验
+                      auth:'platformRsaManageEdit',// 权限校验
                     },
                     {
                       label:'查看',
                       value:'2',
-                      auth:'platformRsaDetail',// 权限校验
+                      auth:'platformRsaManageDetail',// 权限校验
                     }
                   ],
                   value:"",
@@ -143,6 +143,7 @@
           {
             title: '添加平台秘钥',
             icon: 'md-add',
+            auth:'platformRsaManageAdd',
             callback: () => {
               this.formShow = true
               this.formItems[0].disabled = false

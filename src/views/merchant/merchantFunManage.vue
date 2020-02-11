@@ -29,7 +29,7 @@
           {
             title: '商户名称',
             key: 'merchantName',
-            sortable: true,
+            // sortable: true,
           },
           {
             title: '支付中心商户号',
@@ -38,7 +38,7 @@
           {
             title: '功能',
             key: 'merchantType',
-            sortable: true,
+            // sortable: true,
             render: (h, params) => {
               let arr = []
               let typeMap = params.row.typeMap
@@ -109,7 +109,7 @@
                       this.sucessMsg = "删除成功！";
                       this.content = "确定删除？";
                       this.$refs.confirmModel.confirm(
-                        "/merchant/delete/" + params.row.id
+                        "/configMerchantChannel/delete/",{merchantNo:params.row.merchantNo},'get'
                       );
                     }
                   }
@@ -172,7 +172,8 @@
 
     },
     created(){
-
+        // 获取应用来源
+        this.getMerchantSource()
     },
     components: {list,confirm},
     methods: {
@@ -180,6 +181,24 @@
       beforeSubmit(params){
         // 商户名，商户号拆分
         this.common.splitMerchant(params)
+      },
+      // 获取应用来源
+      getMerchantSource(){
+          this.$store.dispatch("getMerchantSource").then(res=>{
+              let merchantSource = res
+              this.common.setArrItem(this.searchItems,'orderSource',{data:res,})
+
+              // // 表格商户来源转换
+              // let source={}
+              // merchantSource.forEach(ele=>{
+              //     source[ele.value] = ele.label
+              // })
+              // this.common.setArrItem(this.columns,'key=orderSource',{
+              //     render:(h, params) => {
+              //         return h('span', source[params.row.orderSource])
+              //     }
+              // })
+          })
       },
     }
   }

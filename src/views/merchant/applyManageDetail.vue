@@ -395,36 +395,7 @@
         ],
         addFunModal:false,
         channelList:[],
-        funListColumns:[
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: '服务商',
-            key: 'channelName'
-          },
-          {
-            title: '支付产品',
-            key: 'payProductName'
-          },
-          {
-            title: '功能名称',
-            key: 'channelProductName'
-          },
-          {
-            title: '功能分类',
-            key: 'type',
-            render: (h, params) => {
-              return h('span', this.filter.turn("funType",params.row.type))
-            }
-          },
-          {
-            title: '功能代码',
-            key: 'channelProductCode'
-          }
-        ],
+        funListColumns:[],
         funListData:[],
         selection:[],
         funSearchParams:{
@@ -475,6 +446,52 @@
         return this.$store.state.merchant.tabIndex;
       },
     },
+    watch:{
+          'funSearchParams.type':{
+              handler(newName, oldName) {
+                  let funListColumns = [
+                          {
+                              type: 'selection',
+                              width: 60,
+                              align: 'center'
+                          },
+                          {
+                              title: '服务商',
+                              key: 'channelName'
+                          },
+                          {
+                              title: '支付产品',
+                              key: 'payProductName'
+                          },
+                          {
+                              title: '功能名称',
+                              key: 'channelProductName'
+                          },
+                          {
+                              title: '功能分类',
+                              key: 'type',
+                              render: (h, params) => {
+                                  return h('span', this.filter.turn("funType",params.row.type))
+                              }
+                          },
+                          {
+                              title: '功能代码',
+                              key: 'channelProductCode'
+                          }
+                      ]
+                  this.funListColumns = funListColumns.filter(ele=>{
+                      if(newName != 0 && ele.key =='payProductName'){
+                          // 类型为支付时，才有支付产品列
+                          return false
+                      }else{
+                          return true
+                      }
+                  })
+              },
+              deep: true,
+              immediate: true
+          }
+      },
     mounted () {
 
     },

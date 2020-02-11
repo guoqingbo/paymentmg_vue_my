@@ -3,10 +3,12 @@
     <div class="fun-type-box">
       <Row>
         <Col span="12">
-          <p>商户</p>
-          <p>所有商户默认的功能选项</p>
+          <p style="font-size: 14px">商户</p>
+          <p style="font-size: 12px;color: #2d8cf0">所有商户默认的功能选项</p>
         </Col>
-        <Col span="12" style="text-align: right">
+        <Col span="12"
+             v-if="common.authList.includes('merchantSettingAdd')"
+             style="text-align: right">
           <Button class="add-fun-btn"
                   type="primary"
                   @click="openFucAdd">添加
@@ -26,18 +28,18 @@
                   @click="chooseFunType(item)">{{item.label+"("+(res.typeMap[item.value]||0)+")"}}
           </Button>
         </Col>
-        <Col span="4">
+        <Col span="4" style="text-align: right">
           <Select clearable
                   @on-change="platformChange"
                   v-model="params.orderSource"
-                  style="width:100px" placeholder="请选择平台">
+                  style="width:100px;text-align: left" placeholder="请选择平台">
             <Option v-for="(item,index) in common.dic.platform" :value="item.value" :key="index">{{ item.label }}
             </Option>
           </Select>
         </Col>
-
       </Row>
       <Table
+        style="overflow: visible"
         stripe
         border
         :columns="funListColumns"
@@ -60,7 +62,7 @@
       <div>
         <p style="margin-bottom: 10px">选择平台</p>
         <Select clearable v-model="addFunParams.orderSource" style="width:100%" placeholder="请选择平台">
-          <Option v-for="(item,index) in common.dic.platform" :value="item.value" :key="index">{{ item.label }}
+          <Option v-for="(item,index) in orderSource" :value="item.value" :key="index">{{ item.label }}
           </Option>
         </Select>
       </div>
@@ -69,11 +71,11 @@
           <Button v-for="(item,index) in common.dic.funType"
                   :key="index"
                   style="margin-right: 20px"
-                  :type="item.value==addFunParams.type?'primary':'default'"
+                  :type="item.value==funSearchParams.type?'primary':'default'"
                   @click="chooseAddFunType(item)">{{item.label}}
           </Button>
           <div class="search-box">
-            <Select clearable v-model="addFunParams.channelCode" style="width:200px" placeholder="请选择服务商">
+            <Select clearable v-model="funSearchParams.channelCode" style="width:200px" placeholder="请选择服务商">
               <Option v-for="(item,index) in channelList" :value="item.value" :key="index">{{ item.label }}</Option>
             </Select>
             <Button type="primary"
@@ -85,16 +87,7 @@
                  border
                  :columns="selectFunColumns"
                  @on-selection-change="changeSelection"
-                 :data="funListRes.defaultDataGrid.rows"></Table>
-          <Page :total="funListRes.defaultDataGrid.total"
-                class-name="pages"
-                @on-change="changepage"
-                @on-page-size-change="pageSizeShange"
-                show-total
-                show-sizer
-                show-elevator
-                :current="addFunParams.page"
-                :page-size="addFunParams.limit"></Page>
+                 :data="funListData"></Table>
         </div>
       </div>
       <div slot="footer">
@@ -114,6 +107,7 @@
         components: {modalForm},
         data() {
             return {
+                orderSource:[],
                 params: {
                     type: '',
                     orderSource: '',
@@ -127,12 +121,7 @@
                     },
                     typeMap:{},
                 },
-                funListRes: {
-                    defaultDataGrid:{
-                        total:0,
-                        rows:[]
-                    },
-                },
+                funListData:[],
                 funSelected: [],
                 addFunModal: false,
                 channelList: [],
@@ -147,9 +136,9 @@
                     },
                     {
                         title: '所属平台',
-                        key: 'platform',
+                        key: 'orderSource',
                         render: (h, params) => {
-                            return h('span', this.filter.turn("platform", params.row.platform))
+                            // return h('span', this.filter.turn("platform", params.row.orderSource))
                         }
                     },
                     {
@@ -166,6 +155,7 @@
                                 {
                                     title: '操作',
                                     type: 'dropdown',
+                                    auth:'merchantSettingDelete',
                                     data: [
                                         {
                                             label: '删除',
@@ -182,8 +172,8 @@
                                                 onOk: () => {
                                                     let url = '/configDefaultChannel/delete/'+params.row.id
                                                     this.apiGet(url).then(res=>{
-                                                        this.$Message.warning(res.message)
                                                         if(res.success){
+                                                            this.$Message.info(res.message||'删除成功')
                                                             this.getList()
                                                         }else{
                                                             this.$Message.warning(res.message)
@@ -228,19 +218,45 @@
                 selection: [],
                 funSelected: [],
                 addFunParams: {
-                    type: '0',
-                    channelCode:'',
-                    orderSource: '',
-                    page:1,
-                    limit:6,
+                    orderSource:'',
+                },
+                funSearchParams:{
+                    type:'0',
+                    channelCode:''
                 },
                 routeType: this.$route.query.routeType
             }
         },
+        // computed:{
+        //     addAuth(){
+        //         this.common.auth()
+        //     }
+        // },
         created(){
+            // 获取应用来源
+            this.getMerchantSource()
             this.getList()
         },
         methods: {
+            // 获取应用来源
+            getMerchantSource(){
+                this.$store.dispatch("getMerchantSource").then(res=>{
+                    // let merchantSource = res
+                    // this.common.setArrItem(this.searchItems,'orderSource',{data:res,})
+
+                    // 表格商户来源转换
+                    this.orderSource = res
+                    let source={}
+                    res.forEach(ele=>{
+                        source[ele.value] = ele.label
+                    })
+                    this.common.setArrItem(this.funListColumns,'key=orderSource',{
+                        render:(h, params) => {
+                            return h('span', source[params.row.orderSource])
+                        }
+                    })
+                })
+            },
             platformChange(value){
                 this.params.orderSource = value
                 this.getList()
@@ -258,7 +274,7 @@
                 let url = '/configDefaultChannel/grid'
                 this.apiGet(url, this.params).then(res => {
                     if (res.success) {
-                        this.res = res.data.data
+                        this.res = res.data
                     } else {
                         this.$Message.warning(res.message)
                     }
@@ -291,7 +307,7 @@
             // 选择功能分类
             chooseAddFunType(item) {
                 if(item){
-                    this.addFunParams.type = item.value
+                    this.funSearchParams.type = item.value
                 }else{
                     this.params.type = ''
                 }
@@ -299,12 +315,7 @@
             //  打开添加功能弹框
             openFucAdd() {
                 this.addFunModal = true
-                this.funListRes = {
-                    defaultDataGrid:{
-                        total:0,
-                            rows:[]
-                    },
-                }
+                this.funListData = []
                 // 获取已经选择的功能
                 this.getFunSelected()
                 // 获取渠道
@@ -327,22 +338,18 @@
             },
             // 获取功能列表
             getChannelProduct() {
-                if (!this.addFunParams.orderSource) {
-                    this.$Message.warning('请先选择平台')
-                    return
-                }else if (!this.addFunParams.type) {
-                    this.$Message.warning('请先选择支付类型')
-                    return
-                }else if (!this.addFunParams.channelCode) {
+                if(!this.funSearchParams.channelCode){
                     this.$Message.warning('请先选择服务商')
                     return
                 }
-                let url = '/configDefaultChannel/grid'
-                this.apiGet(url, this.addFunParams).then(res => {
+                let url = '/payProductChannel/channelProductGrid'
+                this.apiGet(url, this.funSearchParams).then(res => {
                     if (res.success) {
-                        this.funListRes= res.data.data
+                        this.funListData = res.data.rows
 
-                        this.funListRes.defaultDataGrid.rows.forEach(ele => {
+                        this.funListData
+
+                        this.funListData.forEach(ele => {
                             // 已经选中过的不可再选
                             if (this.funSelected.includes(ele.channelProductCode + "_" + ele.payProductCode)) {
                                 ele._checked = true
@@ -354,12 +361,7 @@
                             }
                         })
                     } else {
-                        this.funListRes = {
-                            defaultDataGrid:{
-                                total:0,
-                                rows:[]
-                            },
-                        }
+                        this.funListData = []
                     }
                 })
             },
@@ -370,7 +372,10 @@
             },
             // 添加功能确认
             addFun(){
-                if(!this.selection.length){
+                if(!this.addFunParams.orderSource){
+                    this.$Message.warning('请先选择平台')
+                    return
+                } else if(!this.selection.length){
                     this.$Message.warning('请先选择要添加的功能')
                     return
                 }
@@ -394,6 +399,12 @@
                 this.apiPost(url,params).then(res=>{
                     if(res.success){
                         this.$Message.success('添加成功')
+                        this.params = {
+                            type: '',
+                            orderSource: '',
+                            page:1,
+                            limit:10,
+                        },
                         // 刷线页面
                         this.getList()
                     }else{

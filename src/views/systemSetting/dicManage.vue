@@ -60,12 +60,12 @@
                     {
                       label:'删除',
                       value:'1',
-                      auth:'merchantFunDelete',// 权限校验
+                      auth:'dicManageDelete',// 权限校验
                     },
                     {
                       label:'修改',
                       value:'2',
-                      auth:'merchantFunEdit',// 权限校验
+                      auth:'dicManageEdit',// 权限校验
                     }
                   ],
                   value:"",
@@ -104,6 +104,7 @@
           {
             title: '添加',
             icon: 'md-add',
+            auth:'dicManageAdd',
             callback: () => {
               this.formShow = true
               this.formItems.forEach((item,index)=>{
@@ -128,7 +129,8 @@
             name: 'configType',
             type: 'input',
             rules: [
-              {required: true, message: '请输入字典分类', trigger: 'blur'}
+              {required: true, message: '请输入字典分类', trigger: 'blur'},
+              {required: true, max:64,message: '字典分类不得超过64个字符', trigger: 'blur'}
             ],
             value: '',
           },
@@ -137,7 +139,8 @@
             name: 'configKey',
             type: 'input',
             rules: [
-              {required: true, message: '请输入字典编码', trigger: 'blur'}
+              {required: true, message: '请输入字典编码', trigger: 'blur'},
+              {required: true, max:64,message: '字典编码不得超过64个字符', trigger: 'blur'}
             ],
           },
           {
@@ -145,13 +148,17 @@
             name: 'configValue',
             type: 'input',
             rules: [
-              {required: true, message: '请输入字典名称', trigger: 'blur'}
+              {required: true, message: '请输入字典名称', trigger: 'blur'},
+              {required: true, max:64,message: '字典名称不得超过64个字符', trigger: 'blur'}
             ],
           },
           {
             title: '备注',
             name: 'remark',
             type: 'textarea',
+            rules: [
+                {required: false, max:128,message: '备注不得超过64个字符', trigger: 'blur'}
+            ],
           },
         ],
         formUrl: '/configDictionary/save'

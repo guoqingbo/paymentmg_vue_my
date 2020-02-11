@@ -13,7 +13,9 @@
                       v-else
                       v-model="params.merchantNo"
                       @on-search="searchMerchantList"
-                      :clearable="true"
+                      @on-select="onSelectMerchant"
+                      :clearable="routeType!='edit'"
+                      :disabled="routeType=='edit'"
                       icon="ios-search"
                       placeholder="请输入商户名称">
           <Option v-for="(sitem,sindex) in autoComplete.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
@@ -26,14 +28,15 @@
                   v-if="routeType!=='detail'"
                   type="primary"
                   @click="openFucAdd">+添加功能</Button>
+          <span>已有{{totalFunNum}}个功能</span>
           <div class="fun-type-btn-box">
             <Button v-for="(item,index) in common.dic.funType"
                     :key="index"
                     style="margin-right: 20px"
                     :type="item.value==funSearchParams.type?'primary':'default'"
-                    @click="chooseFunType(item)">{{item.label}}</Button>
+                    @click="chooseFunType(item)">{{item.label+"("+(typeMap[item.value]||0)+")"}}</Button>
           </div>
-          <Table
+          <Table style="overflow: visible"
                  stripe
                  border
                  :columns="routeType=='detail'?[...funListColumns,...addOrderSourceColumns]:[...funListColumns,...addOrderSourceColumns,...addFunColumns]"
@@ -103,25 +106,15 @@
 </template>
 
 <script>
-
   import modalForm from '@/components/global/modalForm'
   export default {
     components: {modalForm},
     name: "merchantFunAddEditDetail",
-    filters:{
-      funListFilter(value,type){
-        return value.filter(ele=>{
-          if(ele.type==type){
-            return true
-          }else{
-            return false
-          }
-        })
-      }
-    },
     data(){
       return {
-        detail:{},
+        detail:{
+        },
+        typeMap:{},
         autoComplete:{
           data:[]
         },
@@ -129,31 +122,7 @@
         funSelected:[],
         addFunModal:false,
         channelList:[],
-        funListColumns:[
-          {
-            title: '服务商',
-            key: 'channelName'
-          },
-          {
-            title: '支付产品',
-            key: 'payProductName'
-          },
-          {
-            title: '功能名称',
-            key: 'channelProductName'
-          },
-          {
-            title: '功能分类',
-            key: 'type',
-            render: (h, params) => {
-              return h('span', this.filter.turn("funType",params.row.type))
-            }
-          },
-          {
-            title: '功能代码',
-            key: 'channelProductCode'
-          },
-        ],
+        funListColumns:[],
         addOrderSourceColumns:[
           {
             title: '应用来源',
@@ -234,15 +203,77 @@
           orderSource:''
         },
         orderSourceList:[],
-        routeType:this.$route.query.routeType
+        routeType:this.$route.query.routeType||''
       }
     },
+    computed:{
+        totalFunNum(){
+            let totalFunNum = 0
+            Object.keys(this.typeMap).forEach(ele=>{
+                totalFunNum+=this.typeMap[ele]
+            })
+            return totalFunNum
+        }
+    },
+    watch:{
+      'funSearchParams.type':{
+          handler(newName, oldName) {
+              let funListColumns = [
+                      {
+                          title: '服务商',
+                          key: 'channelName'
+                      },
+                      {
+                          title: '支付产品',
+                          key: 'payProductName'
+                      },
+                      {
+                          title: '功能名称',
+                          key: 'channelProductName'
+                      },
+                      // {
+                      //   title: '功能分类',
+                      //   key: 'type',
+                      //   render: (h, params) => {
+                      //     return h('span', this.filter.turn("funType",params.row.type))
+                      //   }
+                      // },
+                      {
+                          title: '功能代码',
+                          key: 'channelProductCode'
+                      },
+                  ]
+              this.funListColumns = funListColumns.filter(ele=>{
+                  if(newName != 0 && ele.key =='payProductName'){
+                      // 类型为支付时，才有支付产品列
+                      return false
+
+                  }else{
+                      return true
+                  }
+              })
+          },
+          deep: true,
+          immediate: true
+      }
+    },
+    filters:{
+          funListFilter(value,type){
+              return value.filter(ele=>{
+                  if(ele.type==type){
+                      return true
+                  }else{
+                      return false
+                  }
+              })
+          }
+      },
     created(){
       // 设置应用来源render
       this.orderSourceRender()
 
       if(this.$route.query.id){
-        this.getDetail()
+        this.getDetail(this.$route.query.id)
       }
     },
     methods:{
@@ -265,8 +296,8 @@
                   },
                   style:{
                     position:"absolute",
-                    right:'-5px',
-                    // top:'-2px'
+                    // right:'0',
+                    top:'0px'
                   },
                   on:{
                     click:()=>{
@@ -275,8 +306,8 @@
                     }
                   }
                 })
-                arr.push(h('span', {
-                  style: {
+                let spanIner = [orderSourceObj[ele]]
+                let spanStyle = {
                     position:'relative',
                     // display:'inline-block',
                     borderRadius:'20px',
@@ -284,13 +315,19 @@
                     padding:'0 10px',
                     marginRight:'5px',
                     whiteSpace: "nowrap"
-                  },
+                }
+                  if(this.routeType=='edit'){
+                      spanIner.push(deleteBtn)
+                      spanStyle.padding = '0 15px 0 10px'
+                  }
+                arr.push(h('span', {
+                  style: spanStyle,
                   on: {
                     // click: () => {
                     //
                     // }
                   }
-                },[orderSourceObj[ele],deleteBtn]))
+                },spanIner))
               })
               return arr
             }
@@ -299,17 +336,19 @@
 
       },
       // 获取详情
-      getDetail(){
+      getDetail(merchantNo){
         let url = '/configMerchantChannel/detail'
-        let params = {
-          merchantNo:this.$route.query.id
-        }
-        this.apiGet(url,params).then(res=>{
+        // let params = {
+        //   merchantNo:this.$route.query.id
+        // }
+
+        this.apiGet(url,{merchantNo}).then(res=>{
           if(res.success){
             this.detail = res.data
             // 设置字段值
             this.params.merchantNo = this.detail.merchantName+"("+this.detail.merchantNo+")"
             this.funList = this.detail.list
+              this.typeMap = this.detail.typeMap ||{}
           }else{
             this.$Message.warning(res.message)
           }
@@ -335,6 +374,12 @@
       },
       searchMerchantList(value){
         this.common.searchMerchantList(value,this.autoComplete)
+      },
+      onSelectMerchant(value){
+          if(value && value!=this.params.merchantNo){
+              let merchantNo = value.split("(")[1].replace(")",'')
+              this.getDetail(merchantNo)
+          }
       },
       changeSelection (selection) {
         this.selection = selection
@@ -402,6 +447,10 @@
         this.selection = []
       },
       addFunPop(){
+          if(!this.selection.length){
+              this.$Message.warning('请先选择功能')
+              return
+          }
         this.addFunModal = false
         // 获取已经选择的功能
         this.getFunSelected()
