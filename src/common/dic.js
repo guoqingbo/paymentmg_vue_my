@@ -123,6 +123,13 @@ let dic = {
   openAccount:[
     {label:"开户",value:"Y"},
     {label:"无须开户",value:"N"},
+  ],
+  platform:[
+    {label:"智游宝",value:"100"},
+    {label:"小鲸商城",value:"101"},
+    {label:"云票务",value:"102"},
+    {label:"云餐饮",value:"103"},
+    {label:"普通商户",value:"150"},
   ]
 }
 export default dic

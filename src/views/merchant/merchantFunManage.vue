@@ -147,7 +147,7 @@
           {
             label: 'PAYID',
             type: 'input',
-            name: 'PAYID'
+            name: 'payId'
           },
         ],
         hannleItems: [

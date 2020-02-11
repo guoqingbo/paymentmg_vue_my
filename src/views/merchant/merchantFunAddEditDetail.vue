@@ -66,6 +66,7 @@
                     @click="getChannelProduct()">查询</Button>
           </div>
           <Table stripe
+                 style="overflow: visible"
                  border
                  :columns="[...selectFunColumns,...funListColumns]"
                  @on-selection-change="changeSelection"
