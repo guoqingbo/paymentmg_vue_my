@@ -1,52 +1,54 @@
 <template>
   <Form ref="formInline"
-        :model="searchForm"
-        inline
-        v-if="searchItems && searchItems.length">
-    <FormItem v-for="item in searchItems" :key="item.label">
-      <Input v-if="item.type=='input'"
-             clearable
-             v-model="item.value"
-             :placeholder="'请输入'+item.label"
-             :style="item.style"></Input>
-      <AutoComplete class="my-autoComplete"
-                    :disabled="item.disabled"
-                    v-if="item.type=='autoComplete'"
-                    v-model="item.value"
-                    @on-search="item.search?item.search($event):''"
-                    icon="ios-search"
-                    clearable
-                    :placeholder="'请输入'+item.label">
-        <Option v-for="(sitem,sindex) in item.data" :value="sitem.value" :key="sindex">{{ sitem.label }}</Option>
-      </AutoComplete>
-      <DatePicker v-if="item.type=='date' || item.type=='month'"
-                  @on-change="item.onChange?item.onChange($event):''"
-                  :type='item.type'
-                  :placeholder="'请输入'+item.label"
+               :model="searchForm"
+               inline
+               v-if="searchItems && searchItems.length">
+  <FormItem v-for="(item,index) in searchItems" :key="index">
+    <Input v-if="item.type=='input'"
+           clearable
+           v-model="item.value"
+           :placeholder="'请输入'+item.label"
+           :style="item.style"></Input>
+    <AutoComplete class="my-autoComplete"
+                  :disabled="item.disabled"
+                  v-if="item.type=='autoComplete'"
                   v-model="item.value"
-                  :options="item.options"
-                  :format="item.format||'yyyy-MM-dd'"
-                  :style="item.style"></DatePicker>
-      <Select v-if="item.type=='select'"
-              clearable
-              v-model="item.value"
-              :placeholder="'请选择'+item.label"
-              :style="item.style">
-        <Option v-for="sitem in item.data"
-                :value="sitem.value"
-                :key="sitem.value">{{ sitem.label }}</Option>
-      </Select>
-    </FormItem>
-    <FormItem>
-      <Button type="primary" icon="ios-search" @click="searchSubmit(1)">搜索</Button>
-    </FormItem>
-    <FormItem v-if="exportItem">
-      <Button type="primary"
-              :icon="exportItem.icon"
-              @click="exportItem.callback"
-              :loading="exportItem.loading">{{ exportItem.title }}</Button>
-    </FormItem>
-  </Form>
+                  @on-search="item.search?item.search($event):''"
+                  icon="ios-search"
+                  clearable
+                  :placeholder="'请输入'+item.label">
+      <Option v-for="(sitem,sindex) in item.data"
+              :value="sitem.value"
+              :key="sindex">{{ sitem.label }}</Option>
+    </AutoComplete>
+    <DatePicker v-if="item.type=='date' || item.type=='month'"
+                @on-change="item.onChange?item.onChange($event):''"
+                :type='item.type'
+                :placeholder="'请输入'+item.label"
+                v-model="item.value"
+                :options="item.options"
+                :format="item.format||'yyyy-MM-dd'"
+                :style="item.style"></DatePicker>
+    <Select v-if="item.type=='select'"
+            clearable
+            v-model="item.value"
+            :placeholder="'请选择'+item.label"
+            :style="item.style">
+      <Option v-for="(sitem,sindex) in item.data"
+              :value="sitem.value"
+              :key="sindex">{{ sitem.label }}</Option>
+    </Select>
+  </FormItem>
+  <FormItem>
+    <Button type="primary" icon="ios-search" @click="searchSubmit(1)">搜索</Button>
+  </FormItem>
+  <FormItem v-if="exportItem">
+    <Button type="primary"
+            :icon="exportItem.icon"
+            @click="exportItem.callback"
+            :loading="exportItem.loading">{{ exportItem.title }}</Button>
+  </FormItem>
+</Form>
 </template>
 <script>
 export default {
