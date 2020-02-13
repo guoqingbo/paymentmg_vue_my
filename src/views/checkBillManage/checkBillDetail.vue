@@ -99,6 +99,14 @@
                     {
                         title: '账不平原因',
                         key: 'channelName',
+                        render:(h,params)=>{
+                            let span = h('span',{
+                                style:{
+                                    color:'#f00'
+                                }
+                            },params.row.channelName)
+                            return span
+                        }
                     }
                 ],
                 params: {

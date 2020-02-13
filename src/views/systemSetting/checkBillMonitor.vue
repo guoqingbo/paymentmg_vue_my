@@ -4,7 +4,7 @@
       <p style="margin: 5px 0">监控渠道对账</p>
       <Table border
              :columns="columns"
-             :data="list"></Table>
+             :data="todayList"></Table>
 <!--      历史记录弹框-->
       <Modal v-model="showModal">
         <h5>渠道对账监控</h5>
@@ -66,11 +66,6 @@
                             }
                             let span = h('span',{
                                 style,
-                                on:{
-                                    click:()=>{
-                                        this.showHistory()
-                                    }
-                                }
                             },params.row.name)
                             return span
                         }
@@ -91,17 +86,12 @@
                             }
                             let span = h('span',{
                                 style,
-                                on:{
-                                    click:()=>{
-                                        this.showHistory()
-                                    }
-                                }
                             },params.row.name)
                             return span
                         }
                     },
                 ],
-                list: [
+                todayList: [
                     {
                         name: 'John Brown',
                         age: 18,
@@ -203,10 +193,28 @@
                 }
             }
         },
+        created(){
+            // 获取今日对账列表
+            this.getTodayList()
+        },
         methods:{
+            // 历史对账明细
+            getHistoryList(){
+                let url = '/splitStatistics/total'
+                this.apiGet(url,this.params).then(res=>{
+
+                })
+            },
+            // 今日对账明细
+            getTodayList(){
+                let url = '/splitStatistics/detail'
+                this.apiGet(url).then(res=>{
+
+                })
+            },
             pageSizeShange(limit){
-                this.$store.state.list.params.limit = this.limit = limit
-                this.$refs.search.searchSubmit()
+                this.params.limit = limit
+                this.getHistoryList()
             },
             changepage2(num) {
                 this.$store.state.list.params.page = num

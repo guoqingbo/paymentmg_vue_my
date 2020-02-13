@@ -129,8 +129,8 @@
       // 日期限制
       checkDate(){
         // 开始时间结束时间限制
-        let startDateItem = this.searchItems[2]
-        let endDateItem = this.searchItems[3]
+        let startDateItem = this.searchItems[0]
+        let endDateItem = this.searchItems[1]
         if(startDateItem && endDateItem){
           startDateItem.onChange=(date1)=>{
             endDateItem.options.disabledDate=date2=>{

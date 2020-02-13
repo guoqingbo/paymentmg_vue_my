@@ -113,7 +113,7 @@
             },
             getDate(){
                 this.days = []
-                let now = this.searchForm.date;
+                let now = this.searchForm.date || new Date();
                 this.year = now.getFullYear();
                 this.month = now.getMonth()+1;
                 this.pushDays();
