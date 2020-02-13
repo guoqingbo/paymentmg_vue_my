@@ -141,20 +141,20 @@ const mutations = {
 }
 const actions = {
   async getMenu(context) {
-    if(!context.state.menuList){
-      // let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
-      let menuList = {}
-      let commonMenu = require('../../data/commonMenu.json')
-      if(config.env == 'dev'){
-        // 本地开发时，加载本地模板菜单，方便开发
-        let devMenu = require('../../data/devMenu.json')
-        menuList = [...commonMenu.data,...devMenu.data]
-      }else{
-        menuList = commonMenu
-      }
-      context.state.menuList = menuList
-    }
-   return context.state.menuList
+   //  if(!context.state.menuList){
+   //    // let menuList = await apiGet('/manage/admin/admin/menu/getMenu',userInfoId?{userInfoId:userInfoId}:{})
+   //    let menuList = {}
+   //    let commonMenu = require('../../data/commonMenu.json')
+   //    if(config.env == 'dev'){
+   //      // 本地开发时，加载本地模板菜单，方便开发
+   //      let devMenu = require('../../data/devMenu.json')
+   //      menuList = [...commonMenu.data,...devMenu.data]
+   //    }else{
+   //      menuList = commonMenu
+   //    }
+   //    context.state.menuList = menuList
+   //  }
+   // return context.state.menuList
   },
   setActiveNameAction({commit}, name) {
     commit('setActiveName', name)

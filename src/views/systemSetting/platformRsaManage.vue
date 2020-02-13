@@ -93,12 +93,12 @@
                     {
                       label:'编辑',
                       value:'1',
-                      auth:'platformRsaEdit',// 权限校验
+                      auth:'platformRsaManageEdit',// 权限校验
                     },
                     {
                       label:'查看',
                       value:'2',
-                      auth:'platformRsaDetail',// 权限校验
+                      auth:'platformRsaManageDetail',// 权限校验
                     }
                   ],
                   value:"",
@@ -143,26 +143,12 @@
           {
             title: '添加平台秘钥',
             icon: 'md-add',
+            auth:'platformRsaManageAdd',
             callback: () => {
               this.formShow = true
               this.formItems[0].disabled = false
               this.formItems.forEach((item,index)=>{
                 item.type = item.type.replace(/(Text)$/g,'')
-                // if(!index){
-                //   item.disabled = false;
-                // }else{
-                //   item.disabled = true;
-                // }
-                // item.clipboard=false
-                // if(item.type=='inputText'){
-                //   item.type='input'
-                // }else if(item.type=='textareaText'){
-                //   item.type='textarea'
-                // }else if(item.type=='btn'){
-                //   item.disabled=false
-                //   item.value='生成秘钥'
-                //   item.desc=''
-                // }
               });
               this.formUrl = '/rsaKeyPlatform/save'
               this.routeType = 'add'
@@ -245,8 +231,6 @@
       // 生成秘钥
       rsaCreate() {
         let params = {
-          // vagueMerchantMark: '',
-          // columnType: 2,
         }
         let url = '/constant/rsaKey/create'
         this.apiGet(url,params).then(res=>{
@@ -277,17 +261,7 @@
           if(res.status == 200){
             this.formItems.forEach(item=>{
               item.value = res.data[item.name]
-              // if(item.name=='orderSource'){
-              //   item.value = res.data.orderSource
-              // }
-              // if(item.name=='privateKey'){
-              //   item.value = res.data.privateKey
-              // }
-              // if(item.name=='publicKey'){
-              //   item.value = res.data.publicKey
-              // }
             });
-            console.log(this.formItems)
           }else{
             this.$Message.error(res.message)
           }

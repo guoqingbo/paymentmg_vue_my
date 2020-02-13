@@ -163,7 +163,7 @@
                   @click="chooseFunType(item)">{{item.label}}</Button>
           <div class="search-box">
             <Select clearable v-model="funSearchParams.channelCode" style="width:200px" placeholder="请选择服务商">
-              <Option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <Option v-for="(item,index) in channelList" :value="item.value" :key="index">{{ item.label }}</Option>
             </Select>
             <Button type="primary"
                     @click="getChannelProduct()">查询</Button>
@@ -395,36 +395,7 @@
         ],
         addFunModal:false,
         channelList:[],
-        funListColumns:[
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: '服务商',
-            key: 'channelName'
-          },
-          {
-            title: '支付产品',
-            key: 'payProductName'
-          },
-          {
-            title: '功能名称',
-            key: 'channelProductName'
-          },
-          {
-            title: '功能分类',
-            key: 'type',
-            render: (h, params) => {
-              return h('span', this.filter.turn("funType",params.row.type))
-            }
-          },
-          {
-            title: '功能代码',
-            key: 'channelProductCode'
-          }
-        ],
+        funListColumns:[],
         funListData:[],
         selection:[],
         funSearchParams:{
@@ -475,6 +446,52 @@
         return this.$store.state.merchant.tabIndex;
       },
     },
+    watch:{
+          'funSearchParams.type':{
+              handler(newName, oldName) {
+                  let funListColumns = [
+                          {
+                              type: 'selection',
+                              width: 60,
+                              align: 'center'
+                          },
+                          {
+                              title: '服务商',
+                              key: 'channelName'
+                          },
+                          {
+                              title: '支付产品',
+                              key: 'payProductName'
+                          },
+                          {
+                              title: '功能名称',
+                              key: 'channelProductName'
+                          },
+                          {
+                              title: '功能分类',
+                              key: 'type',
+                              render: (h, params) => {
+                                  return h('span', this.filter.turn("funType",params.row.type))
+                              }
+                          },
+                          {
+                              title: '功能代码',
+                              key: 'channelProductCode'
+                          }
+                      ]
+                  this.funListColumns = funListColumns.filter(ele=>{
+                      if(newName != 0 && ele.key =='payProductName'){
+                          // 类型为支付时，才有支付产品列
+                          return false
+                      }else{
+                          return true
+                      }
+                  })
+              },
+              deep: true,
+              immediate: true
+          }
+      },
     mounted () {
 
     },
@@ -556,6 +573,7 @@
       // 添加功能取消
       cancel(){
         this.addFunModal = false
+        this.selection = []
       },
       // 添加功能确认
       addFun(){
@@ -629,6 +647,7 @@
       //  打开添加功能弹框
       openFucAdd(){
         this.addFunModal = true
+        this.selection = []
         this.chooseFunType(this.common.dic.funType[0])
         this.getChannel()
       },
@@ -684,7 +703,7 @@
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .apply-manage-box{
     .default-btn{
       margin-left: 16px;

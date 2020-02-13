@@ -123,6 +123,8 @@
   </div>
 </template>
 <script>
+  // 引入全局组件
+  import '@/common/globalComponents'
   import store from "@/store";
   import myImg from "@/components/global/uploadFile";
 
@@ -187,7 +189,7 @@
     //   // next()
     // },
     created() {
-      console.log( navigator.userAgent.toLowerCase())
+      // console.log( navigator.userAgent.toLowerCase())
       //firefox
       // var agent = navigator.userAgent.toLowerCase();
       // if (agent.indexOf("firefox") > 0 || agent.indexOf("ie")>0) {

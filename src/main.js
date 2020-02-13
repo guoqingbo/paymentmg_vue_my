@@ -1,16 +1,19 @@
 import Vue from 'vue'
 import App from './App'
 
-import $ from 'jquery'
-// 引入全局组件
-import globalComponents from './common/globalComponents'
+// import $ from 'jquery'
+// window.$ = $
+// // 引入全局组件
+// import './common/globalComponents'
+// Vue.use(globalComponents);
 
 import router from './router'
 import store from './store'
 
 import * as filter from './filters'
 import common from './common'
-
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies);
 import {
   apiPut,
   apiGet,
@@ -18,9 +21,6 @@ import {
   apiPostJson,
   apiGetBlob
 } from '@/fetch/api'
-
-Vue.use(globalComponents);
-window.$ = $
 
 Vue.prototype.filter = filter
 Vue.prototype.common = common

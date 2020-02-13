@@ -11,7 +11,7 @@
           :label-width="item.type!=='divider'?150:0"
           :label="(item.type!=='divider'&&item.type!=='btn')?item.title+'：':''"
           :prop="item.name"
-          :rules="item.rules||{}"
+          :rules="routeType == 'detail'?{}:item.rules||{}"
           v-if="item.type">
           <label slot="label" v-if="(item.type!=='divider'&&item.type!=='btn')">
             <Tooltip v-if="item.hoverTip" placement="top">
@@ -226,9 +226,9 @@
         handler(newValue, oldValue) {
           newValue.forEach((element, index) => {
             // 如果是详情
-            if (this.routeType == 'detail') {
-              element.rules = ''
-            }
+            // if (this.routeType == 'detail') {
+            //   element.rules = ''
+            // }
             // 格式化日期
             if (element.value instanceof Date) {
               element.value = this.common.formatDate(element.value, element.format || "yyyy-MM-dd")

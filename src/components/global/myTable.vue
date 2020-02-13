@@ -85,7 +85,7 @@
       getDetail(){
         if(this.url){
           this.apiGet(this.url,this.params).then(res=>{
-            if(res.status == 200){
+            if(res.success){
               this.detailData = res.data
               this.$emit('onGetAfter',res.data)
               this.tableRows.forEach(item=>{

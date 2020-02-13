@@ -38,7 +38,8 @@
             if (this.payType == "wechat") {
               location.href = res.data;
             } else {
-              $("body").html(res.data.formBody)
+              document.body.appendChild(res.data.formBody)
+              // $("body").html(res.data.formBody)
             }
           }else{
             // 跳转错误页面
