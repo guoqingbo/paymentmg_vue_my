@@ -382,7 +382,8 @@
                 let url = '/configDefaultChannel/batchSave'
                 let params = {
                     orderSource:this.addFunParams.orderSource,
-                    ids:''
+                    ids:'',
+                    type:this.funSearchParams.type,
                 }
                 let ids = []
                 this.selection.forEach(ele=>{

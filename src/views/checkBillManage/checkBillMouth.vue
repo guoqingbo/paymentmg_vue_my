@@ -33,12 +33,15 @@
         <ul class="day">
           <li v-for="(item,index) in 12"
               :key=index
-              :class="{now:month == item}">
+              :class="{now:month == item,flag:Object.keys(dayListObj).length && !dayListObj[item]}">
             <p style="text-align: right;padding: 5px 10px">
               {{item+'月'}}
             </p>
-            <div style="padding: 0 10px">
-              <Icon type="md-arrow-down" />
+            <div style="padding: 0 10px" v-if="Object.keys(dayListObj).length">
+              <Icon type="md-arrow-down"
+                    v-if="dayListObj[item]"
+                    @click="downLoad(item)"/>
+              <span v-else>账单未出</span>
             </div>
           </li>
         </ul>
@@ -51,6 +54,8 @@
     export default {
         data () {
             return {
+                apiPrefix:this.common.config.apiReconciliation,
+                dayListObj:{},
                 year:'',
                 month:'',
                 nowLi:'',
@@ -67,11 +72,62 @@
                 this.common.searchMerchantList(keyword,this.autoComplete)
             },
             searchSubmit(){
-                let date = this.common.formatDate(this.searchForm.date, "yyyy-MM")
-            }
+                // 创建日历
+                let {merchantNo,date} = this.searchForm
+                if(!merchantNo){
+                    this.$Message.warning('请选择商户简称')
+                    return
+                }else if(!date){
+                    this.$Message.warning('请选时间')
+                    return
+                }
+                let yearDate = this.common.formatDate(date, "yyyy")
+                let merchantNoObj = merchantNo.match(/\((.+?)\)/);
+                let url = '/reconStat/month/list'
+                let params = {
+                    yearDate,
+                    merchantNo:merchantNoObj[1]
+                }
+                this.apiGet(url,params,this.apiPrefix).then(res=>{
+                    if(res.success){
+                        let dayListObj= {}
+                        res.data.forEach(ele=>{
+                            let reconDate = Number(ele.reconDate)
+                            console.log(reconDate)
+                            dayListObj[reconDate] = ele.flag
+                        })
+                        this.dayListObj = dayListObj
+                    }else{
+                        this.$Message.warning(res.message||'请求错误')
+                    }
+                })
+
+            },
+            downLoad(dayDate){
+                let url='/reconStat/day/download'
+                let {merchantNo} = this.searchForm
+                let merchantNoObj = merchantNo.match(/\((.+?)\)/);
+                let params = {
+                    dayDate,
+                    merchantNo:merchantNoObj[1]
+                }
+                this.apiGetBlob(url,params,this.apiPrefix).then(res=>{
+                    if(res){
+                        let url = window.URL.createObjectURL(res)
+                        let a = document.createElement('a')
+                        a.href = url
+                        a.download = '日对账单.cvs'
+                        document.body.appendChild(a)
+                        a.click()
+                        a.parentNode.removeChild(a);
+                    }else {
+                        this.$Message.error('报表没有记录')
+                    }
+                })
+            },
         },
         created(){
-            this.searchSubmit()
+            // this.searchSubmit()
         }
     }
 </script>
@@ -102,6 +158,9 @@
   }
   .day li:nth-child(6n){
     border-right: 1px solid #ddd
+  }
+  .day li.flag{
+    background-color: #c5c8ce;
   }
   .now{
     background: #f2f8fe;

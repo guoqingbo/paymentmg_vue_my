@@ -4,10 +4,10 @@
           :columns="columns"
           :url="url"
           :params="params"
+          :apiPrefix="apiPrefix"
           :searchItems="searchItems"
           @beforeSubmit="beforeSubmit"
-          :hannleItems="hannleItems"
-          :exportItem="exportItem"></list>
+          :hannleItems="hannleItems"></list>
     <!--    <confirm ref="confirmModel"-->
     <!--             :content="content"-->
     <!--             :sucessMsg="sucessMsg"-->
@@ -20,6 +20,7 @@
     export default {
         data() {
             return {
+                apiPrefix:this.common.config.apiReconciliation,
                 columns: [
                     {
                         title: '序号',
@@ -29,51 +30,49 @@
                     },
                     {
                         title: '商户号',
-                        key: 'orderTime',
+                        key: 'merchantNo',
 
                     },
                     {
                         title: '商户名称',
-                        key: 'orderNo',
-
+                        key: 'merchantName',
                     },
                     {
                         title: '交易类型',
-                        key: 'payNo',
-
-                    },
-                    {
-                        title: '渠道流水号',
-                        key: 'orderAmount',
-
-                        render: (h, params) => {
-                            return h('span', this.common.formatNumber(params.row.orderAmount))
+                        key: 'tradeType',
+                        render:(h,params)=>{
+                            let span = h('span',this.filter.turn('tradeType',params.row.tradeType))
+                            return span
                         }
                     },
                     {
+                        title: '渠道流水号',
+                        key: 'thirdPartyNo',
+                        // render: (h, params) => {
+                        //     return h('span', this.common.formatNumber(params.row.orderAmount))
+                        // }
+                    },
+                    {
                         title: '渠道金额',
-                        key: 'payAmount',
-
+                        key: 'thirdPartAmount',
                         render: (h, params) => {
-                            return h('span', this.common.formatNumber(params.row.payAmount))
+                            return h('span', this.common.formatNumber(params.row.thirdPartAmount))
                         }
                     },
                     {
                         title: '渠道状态',
-                        key: 'payStatus',
+                        key: 'thirdPartState',
                         render: (h, params) => {
-                            return h('span', this.common.formatNumber(params.row.payAmount))
+                            // return h('span', this.common.formatNumber(params.row.thirdPartState))
                         }
                     },
                     {
                         title: '渠道支付时间',
-                        key: 'merchantName',
-
+                        key: 'thirdSuccessTime',
                     },
                     {
                         title: '支付流水号',
-                        key: 'merchantName',
-
+                        key: 'payNo',
                     },
                     {
                         title: '订单金额',
@@ -84,36 +83,40 @@
                     },
                     {
                         title: '交易状态',
-                        key: 'channelName',
+                        key: 'status',
+                        render: (h, params) => {
+                            return h('span', this.common.formatNumber(params.row.payAmount))
+                        }
 
                     },
                     {
                         title: '支付时间',
-                        key: 'channelName',
+                        key: 'tradeSuccessTime',
 
                     },
                     {
                         title: '错误代码',
-                        key: 'channelName',
+                        key: 'errorCode',
                     },
                     {
                         title: '账不平原因',
-                        key: 'channelName',
+                        key: 'errorCodeDesc',
                         render:(h,params)=>{
                             let span = h('span',{
                                 style:{
                                     color:'#f00'
                                 }
-                            },params.row.channelName)
+                            },params.row.errorCodeDesc)
                             return span
                         }
                     }
                 ],
                 params: {
-                    sort: 'modifyTime',
-                    order: 'desc'
+                    // sort: 'modifyTime',
+                    // order: 'desc'
+                    ...this.$route.query
                 },
-                url: '/splitSubMerchant/grid',
+                url: '/reconStat/fail/detail/list',
                 searchItems: [
                     {
                         label: '商户名称',
@@ -122,7 +125,7 @@
                         value: '',
                         data: [],
                         search: (value) => {
-                            this.common.searchMerchantList(value, this.searchItems[4])
+                            this.common.searchMerchantList(value, this.searchItems[0])
                         }
                     },
                 ],
@@ -139,7 +142,9 @@
         methods: {
             // 搜索之前
             beforeSubmit(params) {
-
+                // 拆分商户号
+              this.common.splitMerchant(params)
+              delete params.merchantName
             },
         }
     }

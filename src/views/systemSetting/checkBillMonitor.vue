@@ -36,22 +36,12 @@
         name: "checkBillMonitor",
         data () {
             return {
+                apiPrefix:this.common.config.apiReconciliation,
                 columns: [
                     {
                         title: '支付渠道',
-                        key: 'name',
+                        key: 'channelCode',
                         render:(h,params)=>{
-                            return h('span',{
-                                style:{
-                                    color:'#81b4ff',
-                                    cursor: 'pointer'
-                                },
-                                on:{
-                                    click:()=>{
-                                        this.showHistory()
-                                    }
-                                }
-                            },params.row.name)
                         }
                     },
                     {
@@ -92,51 +82,17 @@
                     },
                 ],
                 todayList: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        date: '2016-10-03'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        date: '2016-10-02'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        date: '2016-10-04'
-                    }
                 ],
                 params:{
-                    limit:10,
-                    page:1
+                    limit:6,
+                    page:1,
+                    channelCode:''
                 },
                 columns1: [
                     {
                         title: '支付渠道',
-                        key: 'name',
+                        key: 'channelCode',
                         render:(h,params)=>{
-                            return h('span',{
-                                style:{
-                                    color:'#81b4ff',
-                                    cursor: 'pointer'
-                                },
-                                on:{
-                                    click:()=>{
-                                        console.log(params.row)
-                                    }
-                                }
-                            },params.row.name)
                         }
                     },
                     {
@@ -162,11 +118,11 @@
                     },
                     {
                         title: '对账完成时间',
-                        key: 'address'
+                        key: 'finishTime'
                     },
                     {
                         title: '对账结果',
-                        key: 'address',
+                        key: 'reconResult',
                         render:(h,params)=>{
                             let style = {
                                 color:'#0f0'
@@ -194,22 +150,59 @@
             }
         },
         created(){
+            // 获取支付渠道
+            this.getChannel()
             // 获取今日对账列表
             this.getTodayList()
         },
         methods:{
-            // 历史对账明细
-            getHistoryList(){
-                let url = '/splitStatistics/total'
-                this.apiGet(url,this.params).then(res=>{
-
+            // 获取支付渠道
+            getChannel(){
+                this.$store.dispatch("getChannel").then(res=>{
+                    let channelListObj = {}
+                    res.forEach(ele=>{
+                        channelListObj[ele.value] = ele.label
+                    })
+                    this.columns[0].render=(h,params)=>{
+                        let span = h('span',{
+                            style:{
+                                color:'#81b4ff',
+                                cursor: 'pointer'
+                            },
+                            on:{
+                                click:()=>{
+                                    this.showHistory(params.row.channelCode)
+                                }
+                            }
+                        },channelListObj[params.row.channelCode])
+                        return span
+                    }
+                    this.columns1[0].render=(h,params)=>{
+                        let span = h('span',channelListObj[params.row.channelCode])
+                        return span
+                    }
                 })
             },
-            // 今日对账明细
+            // 历史对账明细
+            getHistoryList(){
+                let url = '/reconStat/page'
+                this.apiGet(url,this.params,this.apiPrefix).then(res=>{
+                  if(res.success){
+                      this.res = res.data
+                  }else{
+                      this.$Message.warning(res.message||'请求错误')
+                  }
+                })
+            },
+            // 今日对账
             getTodayList(){
-                let url = '/splitStatistics/detail'
-                this.apiGet(url).then(res=>{
-
+                let url = '/reconStat/list'
+                this.apiGet(url,{},this.apiPrefix).then(res=>{
+                  if(res.success){
+                      this.todayList = res.data
+                  }else{
+                      this.$Message.warning(res.message||'请求错误')
+                  }
                 })
             },
             pageSizeShange(limit){
@@ -217,11 +210,15 @@
                 this.getHistoryList()
             },
             changepage2(num) {
-                this.$store.state.list.params.page = num
-                this.$refs.search.searchSubmit()
+                this.params.page = num
+                this.getHistoryList()
             },
-            showHistory(){
+            showHistory(channelCode){
                 this.showModal = true
+                this.params.channelCode = channelCode
+                this.params.page = 1
+                this.params.limit = 6
+                this.getHistoryList()
             }
         }
     }

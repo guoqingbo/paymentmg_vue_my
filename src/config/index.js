@@ -5,6 +5,7 @@ const config = {
     apiAdminPrefix:'/api/admin',// 支付中心接口前缀
     apiPayPrefix:'/api/pay',// 支付收银台接口前缀
     apiUser:'/api/user',// 用户管理接口前缀
+    apiReconciliation:'/api/reconciliation',// 对账接口前缀
   },
   // 预发环境
   pre:{
@@ -12,6 +13,7 @@ const config = {
     apiAdminPrefix:'/manage/api/admin',// 支付中心接口前缀
     apiPayPrefix:'/manage/api/pay',// 支付收银台接口前缀
     apiUser:'/api/user',// 用户管理接口前缀
+    apiReconciliation:'/api/reconciliation',// 对账接口前缀
   },
   // 生产环境
   production:{
@@ -19,6 +21,7 @@ const config = {
     apiAdminPrefix:'/manage/api/admin',// 支付中心接口前缀
     apiPayPrefix:'/manage/api/pay',// 支付收银台接口前缀
     apiUser:'/api/user',// 用户管理接口前缀
+    apiReconciliation:'/api/reconciliation',// 对账接口前缀
   },
   // 开发环境
   dev:{
@@ -26,6 +29,7 @@ const config = {
     apiAdminPrefix:'/api/admin',// 支付中心接口前缀
     apiPayPrefix:'/api/pay',// 支付收银台接口前缀
     apiUser:'/api/user',// 用户管理接口前缀
+    apiReconciliation:'/api/reconciliation',// 对账接口前缀
   },
 }
 let env = 'production'

@@ -34,12 +34,18 @@
         <ul class="day">
           <li v-for="(item,index) in days"
               :key=index
-              :class="{now:item.date && nowLi==item.date,nowmonth:item.date && month == item.date.split('-')[1]}">
+              :class="{
+              now:item.date && nowLi==item.date,
+              nowmonth:item.date && month == item.date.split('-')[1],
+              flag:Object.keys(dayListObj).length && item.date && !dayListObj[item.date]}">
             <p class="day-value">
               {{item.day}}
             </p>
-            <div style="padding: 0 10px" v-if="item.date && month == item.date.split('-')[1]">
-              <Icon type="md-arrow-down" />
+            <div style="padding: 0 10px" v-if="Object.keys(dayListObj).length && item.date && month == item.date.split('-')[1]">
+              <Icon type="md-arrow-down"
+                    v-if="dayListObj[item.date]"
+                    @click="downLoad(item.date)"/>
+              <span v-else>账单未出</span>
             </div>
           </li>
         </ul>
@@ -52,6 +58,7 @@
     export default {
         data () {
             return {
+                apiPrefix:this.common.config.apiReconciliation,
                 weekList:['周日','周一','周二','周三','周四','周五','周六'],
                 year:'',
                 month:'',
@@ -62,14 +69,14 @@
                     date:new Date(),
                     merchantNo:''
                 },
-                autoComplete:{data:[]}
+                autoComplete:{data:[]},
+                dayListObj:{}
             }
         },
         methods:{
             //控制当前日期显示特殊样式
             handleShowDateStyle(){
                 this.nowLi = this.common.formatDate(this.searchForm.date, "yyyy-MM-dd")
-                console.log(this.nowLi)
             },
             //得到当前年这个月分有多少天
             getDays(Y,M){
@@ -119,9 +126,6 @@
                 this.pushDays();
 
             },
-            changeDate(){
-
-            },
             handleShowNextMonth(){
                 this.days=[];
                 if(this.month<12){
@@ -155,20 +159,69 @@
                 }
 
             },
-            //
+            downLoad(dayDate){
+                let url='/reconStat/day/download'
+                let {merchantNo} = this.searchForm
+                let merchantNoObj = merchantNo.match(/\((.+?)\)/);
+                let params = {
+                    dayDate,
+                    merchantNo:merchantNoObj[1]
+                }
+                this.apiGetBlob(url,params,this.apiPrefix).then(res=>{
+                    if(res){
+                        let url = window.URL.createObjectURL(res)
+                        let a = document.createElement('a')
+                        a.href = url
+                        a.download = '日对账单.cvs'
+                        document.body.appendChild(a)
+                        a.click()
+                        a.parentNode.removeChild(a);
+                    }else {
+                        this.$Message.error('报表没有记录')
+                    }
+                })
+            },
             merchantSearch(keyword){
                 this.common.searchMerchantList(keyword,this.autoComplete)
             },
             searchSubmit(){
-
-                let date = this.common.formatDate(this.searchForm.date, "yyyy-MM-dd")
-
+                // 创建日历
                 this.getDate();
                 this.handleShowDateStyle();
+
+                let {merchantNo,date} = this.searchForm
+                if(!merchantNo){
+                    this.$Message.warning('请选择商户简称')
+                    return
+                }else if(!date){
+                    this.$Message.warning('请选时间')
+                    return
+                }
+                let monthDate = this.common.formatDate(date, "yyyy-MM")
+                let merchantNoObj = merchantNo.match(/\((.+?)\)/);
+                let url = '/reconStat/day/list'
+                let params = {
+                    monthDate,
+                    merchantNo:merchantNoObj[1]
+                }
+                this.apiGet(url,params,this.apiPrefix).then(res=>{
+                    if(res.success){
+                        let dayListObj= {}
+                        res.data.forEach(ele=>{
+                            dayListObj[ele.reconDate] = ele.flag
+                        })
+                        this.dayListObj = dayListObj
+                    }else{
+                        this.$Message.warning(res.message||'请求错误')
+                    }
+                })
+
             }
         },
         created(){
-            this.searchSubmit()
+            // 创建日历
+            this.getDate();
+            this.handleShowDateStyle();
         }
     }
 </script>
@@ -213,6 +266,9 @@
   }
   .day li.nowmonth{
     background-color: #fff;
+  }
+  .day li.flag{
+    background-color: #c5c8ce;
   }
   .day li .day-value{
     padding: 5px 10px;

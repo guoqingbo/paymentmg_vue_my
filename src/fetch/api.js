@@ -158,7 +158,9 @@ export function apiPut (url, params = {}) {
  * @param data
  * @returns {Promise}
  */
-export function apiGetBlob (url, params = {}) {
+export function apiGetBlob (url, params = {},apiPrefix) {
+  // 如果设置了前缀
+  axios.defaults.baseURL = apiPrefix || config.apiAdminPrefix;
   return new Promise((resolve, reject) => {
     axios({
       method:'get',
