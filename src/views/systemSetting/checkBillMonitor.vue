@@ -8,7 +8,7 @@
 <!--      历史记录弹框-->
       <Modal v-model="showModal">
         <h5>渠道对账监控</h5>
-        <p>对账渠道：微信支付</p>
+        <p>对账渠道：{{channelName}}</p>
         <p>执行时间：T+1日 凌晨 06：00</p>
 
         <p style="margin: 5px 0">历史对账明细</p>
@@ -37,6 +37,7 @@
         data () {
             return {
                 apiPrefix:this.common.config.apiReconciliation,
+                channelName:'',
                 columns: [
                     {
                         title: '支付渠道',
@@ -46,37 +47,37 @@
                     },
                     {
                         title: '今日是否对账',
-                        key: 'age',
+                        key: 'reconStatus',
                         render:(h,params)=>{
                             let style = {
                                 color:'#0f0'
                             }
-                            if(params.row){
+                            if(params.row.reconStatus == 0){
                                 style.color='#f00'
                             }
                             let span = h('span',{
                                 style,
-                            },params.row.name)
+                            },this.filter.turn('reconStatus',params.row.reconStatus))
                             return span
                         }
                     },
                     {
                         title: '对账完成时间',
-                        key: 'address'
+                        key: 'finishTime'
                     },
                     {
                         title: '最近对账结果',
-                        key: 'address',
+                        key: 'reconResult',
                         render:(h,params)=>{
                             let style = {
                                 color:'#0f0'
                             }
-                            if(params.row){
+                            if(params.row.reconResult == 0){
                                 style.color='#f00'
                             }
                             let span = h('span',{
                                 style,
-                            },params.row.name)
+                            },this.filter.turn('reconResult',params.row.reconResult))
                             return span
                         }
                     },
@@ -84,7 +85,7 @@
                 todayList: [
                 ],
                 params:{
-                    limit:6,
+                    limit:5,
                     page:1,
                     channelCode:''
                 },
@@ -97,22 +98,17 @@
                     },
                     {
                         title: '是否对账',
-                        key: 'age',
+                        key: 'reconStatus',
                         render:(h,params)=>{
                             let style = {
                                 color:'#0f0'
                             }
-                            if(params.row){
+                            if(params.row.reconStatus == 0){
                                 style.color='#f00'
                             }
                             let span = h('span',{
                                 style,
-                                on:{
-                                    click:()=>{
-                                        this.showHistory()
-                                    }
-                                }
-                            },params.row.name)
+                            },this.filter.turn('reconStatus',params.row.reconStatus))
                             return span
                         }
                     },
@@ -127,17 +123,12 @@
                             let style = {
                                 color:'#0f0'
                             }
-                            if(params.row){
+                            if(params.row.reconResult == 0){
                                 style.color='#f00'
                             }
                             let span = h('span',{
                                 style,
-                                on:{
-                                    click:()=>{
-                                        this.showHistory()
-                                    }
-                                }
-                            },params.row.name)
+                            },this.filter.turn('reconResult',params.row.reconResult))
                             return span
                         }
                     }
@@ -171,6 +162,7 @@
                             },
                             on:{
                                 click:()=>{
+                                    this.channelName = channelListObj[params.row.channelCode]
                                     this.showHistory(params.row.channelCode)
                                 }
                             }
@@ -217,7 +209,7 @@
                 this.showModal = true
                 this.params.channelCode = channelCode
                 this.params.page = 1
-                this.params.limit = 6
+                this.params.limit = 5
                 this.getHistoryList()
             }
         }

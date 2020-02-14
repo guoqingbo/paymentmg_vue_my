@@ -280,7 +280,15 @@
                   }
                 },params.row.channelProductName))
               if(params.row.priority){
-                array.push(h('span', {class: 'fun-name-tip'},'优先'))
+                array.push(h('span', {
+                    style: {
+                        padding:'0 8px',
+                        color: '#f00',
+                        border: '1px solid #f00',
+                        borderRadius: '20px',
+                        marginLeft: '3px',
+                        wordBreak: 'keep-all'
+                    }},'优先'))
               }
               return array
             }
@@ -410,7 +418,7 @@
             type: 'input',
             rules: [
               {required: true, message: '请输入开发管理员', trigger: 'blur'},
-              {max: 32, message: "应用名称不超过32字符", trigger: 'blur'}
+              {max: 32, message: "开发管理员不超过32字符", trigger: 'blur'}
             ],
             value: ""
           },
@@ -804,23 +812,23 @@
     .dev-config-info-group{
       padding: 10px 0;
     }
-    td.fun-name{
-      .ivu-table-cell{
+    /deep/ td.fun-name{
+       .ivu-table-cell{
         overflow:visible;
-        position: relative;
-        .fun-name-tip{
-          padding:2px 8px;
-          text-align: center;
-          color: #f00;
-          border: 1px solid #f00;
-          border-radius: 20px;
-          margin-left: 3px;
-          word-break: keep-all;
-        }
-        .fun-name-value{
-          padding-left: 20px;
-          display: block;
-        }
+        /*position: relative;*/
+        /*.fun-name-tip{*/
+        /*  padding:2px 8px;*/
+        /*  text-align: center;*/
+        /*  color: #f00;*/
+        /*  border: 1px solid #f00;*/
+        /*  border-radius: 20px;*/
+        /*  margin-left: 3px;*/
+        /*  word-break: keep-all;*/
+        /*}*/
+        /*.fun-name-value{*/
+        /*  padding-left: 20px;*/
+        /*  display: block;*/
+        /*}*/
       }
     }
   }

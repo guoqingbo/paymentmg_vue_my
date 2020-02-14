@@ -136,11 +136,24 @@ let dic = {
     {label:"退款",value:"2"},
   ],
   tradeState:[
-    {label:"智游宝",value:"100"},
-    {label:"小鲸商城",value:"101"},
-    {label:"云票务",value:"102"},
-    {label:"云餐饮",value:"103"},
-    {label:"普通商户",value:"150"},
+    {label:"支付成功",value:"10"},
+    {label:"支付中",value:"11"},
+    {label:"支付失败",value:"12"},
+    {label:"已关闭",value:"13"},
+    {label:"已撤销",value:"14"},
+    {label:"未支付",value:"15"},
+    {label:"退款成功",value:"20"},
+    {label:"退款中",value:"21"},
+    {label:"退款失败",value:"22"},
+    {label:"已关闭",value:"23"},
+  ],
+  reconStatus:[
+    {label:"未对账",value:"0"},
+    {label:"已对账",value:"1"},
+  ],
+  reconResult:[
+    {label:"不平账",value:"0"},
+    {label:"平账",value:"1"},
   ],
 }
 export default dic

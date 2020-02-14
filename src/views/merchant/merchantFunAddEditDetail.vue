@@ -85,7 +85,6 @@
     <!--配置应用-->
     <Modal v-model="funConfigModal"
            title="配置应用"
-           @on-ok="addFunConfig"
            width="750">
       <Form :model="funConfigParam"
             ref="formRef">
@@ -101,6 +100,10 @@
           <div style="color: #f00">请选择应用来源，不同的应用来源配置不同的功能</div>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button @click="funConfigModal=false">取消</Button>
+        <Button type="primary" @click="addFunConfig">确认</Button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -169,7 +172,7 @@
                     }else if(value == 2){
                       // 配置应用
                       this.funConfigModal = true
-                      this.funItem = this.funList[params.index]
+                      this.funItem = this.funList[params.row.index]
                       this.getOrderSource()
                     }
                   }
@@ -259,7 +262,8 @@
     },
     filters:{
           funListFilter(value,type){
-              return value.filter(ele=>{
+              return value.filter((ele,index)=>{
+                  ele.index = index
                   if(ele.type==type){
                       return true
                   }else{
@@ -302,7 +306,7 @@
                   on:{
                     click:()=>{
                       orderSource.splice(index,1)
-                      this.funList[params.row._index].orderSource = orderSource.join(',')
+                      this.funList[params.row.index].orderSource = orderSource.join(',')
                     }
                   }
                 })
@@ -316,24 +320,18 @@
                     marginRight:'5px',
                     whiteSpace: "nowrap"
                 }
-                  if(this.routeType=='edit'){
+                  if(this.routeType!='detail'){
                       spanIner.push(deleteBtn)
                       spanStyle.padding = '0 15px 0 10px'
                   }
                 arr.push(h('span', {
                   style: spanStyle,
-                  on: {
-                    // click: () => {
-                    //
-                    // }
-                  }
                 },spanIner))
               })
               return arr
             }
           }
         })
-
       },
       // 获取详情
       getDetail(merchantNo){
@@ -357,13 +355,21 @@
 
       // 添加应用来源
       addFunConfig(){
+          if(!this.funConfigParam.orderSource){
+              this.$Message.warning('未选择应用配置')
+              return
+          }
         let orderSource = []
         if(this.funItem.orderSource){
           orderSource =  this.funItem.orderSource.toString().split(",")
         }
         if(!orderSource.includes(this.funConfigParam.orderSource)){
          orderSource.push(this.funConfigParam.orderSource)
+        }else{
+            this.$Message.warning('已经设置了该应用配置，请勿重复设置')
+            return
         }
+        this.funConfigModal = false
         this.$set(this.funItem,'orderSource',orderSource.join(","))
       },
       // 获取应用来源
@@ -402,7 +408,7 @@
       // 获取已经选择的功能
       getFunSelected(){
         let funSelected = []
-        this.funList.forEach(ele=>{
+        this.funList.forEach((ele,index)=>{
           funSelected.push(ele.channelProductCode+"_"+ele.payProductCode)
         })
         this.funSelected = funSelected

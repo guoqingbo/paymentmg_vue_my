@@ -33,8 +33,8 @@
             type: 'input',
             value:'',
             rules: [
-              { required: true, message: '请输入场景名称', trigger: 'blur' },
-              { max: 20, message: "场景名称不超过20字符" ,trigger: 'blur'}
+              { required: true, message: '请输入渠道名称', trigger: 'blur' },
+              { max: 20, message: "渠道名称不超过20字符" ,trigger: 'blur'}
             ]
           },
           {

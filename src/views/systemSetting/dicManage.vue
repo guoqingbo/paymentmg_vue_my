@@ -157,7 +157,7 @@
             name: 'remark',
             type: 'textarea',
             rules: [
-                {required: false, max:128,message: '备注不得超过64个字符', trigger: 'blur'}
+                {required: false, max:128,message: '备注不得超过128个字符', trigger: 'blur'}
             ],
           },
         ],

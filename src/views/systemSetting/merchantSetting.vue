@@ -19,7 +19,7 @@
         <Col span="20">
           <Button style="margin-right: 20px"
                   :type="!params.type?'primary':'default'"
-                  @click="chooseFunType()">全部
+                  @click="chooseFunType()">全部{{"("+totalFunNum+")"}}
           </Button>
           <Button v-for="(item,index) in common.dic.funType"
                   :key="index"
@@ -33,7 +33,7 @@
                   @on-change="platformChange"
                   v-model="params.orderSource"
                   style="width:100px;text-align: left" placeholder="请选择平台">
-            <Option v-for="(item,index) in common.dic.platform" :value="item.value" :key="index">{{ item.label }}
+            <Option v-for="(item,index) in orderSource" :value="item.value" :key="index">{{ item.label }}
             </Option>
           </Select>
         </Col>
@@ -96,15 +96,19 @@
         <Button type="primary" @click="addFun">确定</Button>
       </div>
     </Modal>
+    <confirm ref="confirmModel"
+             :content="content"
+             :sucessMsg="sucessMsg"
+             @sucessDone="getList"
+             :mode="mode"></confirm>
   </div>
 </template>
 
 <script>
-
     import modalForm from '@/components/global/modalForm'
-
+    import confirm from '@/components/global/confirm'
     export default {
-        components: {modalForm},
+        components: {modalForm,confirm},
         data() {
             return {
                 orderSource:[],
@@ -166,24 +170,32 @@
                                     onClick: (value) => {
                                         if (value == 1) {
                                             // 删除
-                                            this.$Modal.confirm({
-                                                title: '删除',
-                                                content: '确定删除？',
-                                                onOk: () => {
-                                                    let url = '/configDefaultChannel/delete/'+params.row.id
-                                                    this.apiGet(url).then(res=>{
-                                                        if(res.success){
-                                                            this.$Message.info(res.message||'删除成功')
-                                                            this.getList()
-                                                        }else{
-                                                            this.$Message.warning(res.message)
-                                                        }
-                                                    })
-                                                },
-                                                onCancel: () => {
-
-                                                }
-                                            });
+                                            this.mode = "delete";
+                                            this.sucessMsg = "删除成功！";
+                                            this.content = "确定删除？";
+                                            this.$refs.confirmModel.confirm(
+                                                '/configDefaultChannel/delete/'+params.row.id,
+                                                {},
+                                                'get'
+                                            );
+                                            // this.$Modal.confirm({
+                                            //     title: '删除',
+                                            //     content: '确定删除？',
+                                            //     onOk: () => {
+                                            //         let url = '/configDefaultChannel/delete/'+params.row.id
+                                            //         this.apiGet(url).then(res=>{
+                                            //             if(res.success){
+                                            //                 this.$Message.info(res.message||'删除成功')
+                                            //                 this.getList()
+                                            //             }else{
+                                            //                 this.$Message.warning(res.message)
+                                            //             }
+                                            //         })
+                                            //     },
+                                            //     onCancel: () => {
+                                            //
+                                            //     }
+                                            // });
                                         }
                                     }
                                 }
@@ -192,29 +204,7 @@
                         }
                     }
                 ],
-                selectFunColumns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '服务商',
-                        key: 'channelName'
-                    },
-                    {
-                        title: '产品分类',
-                        key: 'payProductName'
-                    },
-                    {
-                        title: '功能名称',
-                        key: 'channelProductName'
-                    },
-                    {
-                        title: '功能代码',
-                        key: 'channelProductCode'
-                    },
-                ],
+                selectFunColumns: [],
                 selection: [],
                 funSelected: [],
                 addFunParams: {
@@ -224,7 +214,59 @@
                     type:'0',
                     channelCode:''
                 },
-                routeType: this.$route.query.routeType
+                routeType: this.$route.query.routeType,
+                mode: "",
+                content: "",
+                sucessMsg: "",
+            }
+        },
+        computed:{
+            totalFunNum(){
+                let totalFunNum = 0
+                Object.keys(this.res.typeMap).forEach(ele=>{
+                    totalFunNum+=this.res.typeMap[ele]
+                })
+                return totalFunNum
+            }
+        },
+        watch:{
+            'funSearchParams.type':{
+                handler(newName, oldName) {
+                    let selectFunColumns = [
+                        {
+                            type: 'selection',
+                            width: 60,
+                            align: 'center'
+                        },
+                        {
+                            title: '服务商',
+                            key: 'channelName'
+                        },
+                        {
+                            title: '产品分类',
+                            key: 'payProductName'
+                        },
+                        {
+                            title: '功能名称',
+                            key: 'channelProductName'
+                        },
+                        {
+                            title: '功能代码',
+                            key: 'channelProductCode'
+                        },
+                    ]
+                    this.selectFunColumns = selectFunColumns.filter(ele=>{
+                        if(newName != 0 && ele.key =='payProductName'){
+                            // 类型为支付时，才有支付产品列
+                            return false
+
+                        }else{
+                            return true
+                        }
+                    })
+                },
+                deep: true,
+                immediate: true
             }
         },
         // computed:{
@@ -262,8 +304,8 @@
                 this.getList()
             },
             pageSizeShange(limit) {
-                this.$store.state.list.params.limit = this.limit = limit
-                this.$refs.search.searchSubmit()
+                this.params.limit = this.limit = limit
+                this.getList()
             },
             changepage(num) {
                 this.params.page = num

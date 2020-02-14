@@ -31,7 +31,7 @@
             type: 'input',
             rules: [
               { required: true, message: '请输入渠道产品编码', trigger: 'blur' },
-              { max: 20, message: "支付产品名称不超过20字符" ,trigger: 'blur'}
+              { max: 20, message: "渠道产品编码不超过20字符" ,trigger: 'blur'}
             ]
           },
           {

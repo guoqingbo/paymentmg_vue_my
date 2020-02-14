@@ -62,8 +62,9 @@
                     {
                         title: '渠道状态',
                         key: 'thirdPartState',
-                        render: (h, params) => {
-                            // return h('span', this.common.formatNumber(params.row.thirdPartState))
+                        render:(h,params)=>{
+                            let span = h('span',this.filter.turn('tradeState',params.row.thirdPartState))
+                            return span
                         }
                     },
                     {
@@ -83,16 +84,16 @@
                     },
                     {
                         title: '交易状态',
-                        key: 'status',
+                        key: 'tradeState',
                         render: (h, params) => {
-                            return h('span', this.common.formatNumber(params.row.payAmount))
+                            let span = h('span',this.filter.turn('tradeState',params.row.tradeState))
+                            return span
                         }
 
                     },
                     {
                         title: '支付时间',
                         key: 'tradeSuccessTime',
-
                     },
                     {
                         title: '错误代码',

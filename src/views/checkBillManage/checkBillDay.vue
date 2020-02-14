@@ -26,7 +26,7 @@
       </FormItem>
     </Form>
     <div class="calender">
-      <div style="text-align: center;padding-bottom: 10px;font-size: 14px;margin-top: -10px">{{nowLi}}</div>
+<!--      <div style="text-align: center;padding-bottom: 10px;font-size: 14px;margin-top: -10px">{{nowLi}}</div>-->
       <div class="date_wrap">
         <ul class="week">
           <li v-for="(item,index) in weekList" :key="index">{{item}}</li>
@@ -172,7 +172,7 @@
                         let url = window.URL.createObjectURL(res)
                         let a = document.createElement('a')
                         a.href = url
-                        a.download = '日对账单.cvs'
+                        a.download = '对账单'+dayDate+'.cvs'
                         document.body.appendChild(a)
                         a.click()
                         a.parentNode.removeChild(a);

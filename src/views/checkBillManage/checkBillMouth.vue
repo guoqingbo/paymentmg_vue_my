@@ -56,7 +56,7 @@
             return {
                 apiPrefix:this.common.config.apiReconciliation,
                 dayListObj:{},
-                year:'',
+                // year:'',
                 month:'',
                 nowLi:'',
                 // 搜索
@@ -103,12 +103,16 @@
                 })
 
             },
-            downLoad(dayDate){
-                let url='/reconStat/day/download'
-                let {merchantNo} = this.searchForm
+            downLoad(month){
+                let url='/reconStat/month/download'
+                let {merchantNo,date} = this.searchForm
+                if(month<10){
+                    month = '0'+month
+                }
+                let monthDate = this.common.formatDate(date, "yyyy")+'-'+month
                 let merchantNoObj = merchantNo.match(/\((.+?)\)/);
                 let params = {
-                    dayDate,
+                    monthDate,
                     merchantNo:merchantNoObj[1]
                 }
                 this.apiGetBlob(url,params,this.apiPrefix).then(res=>{
@@ -116,7 +120,7 @@
                         let url = window.URL.createObjectURL(res)
                         let a = document.createElement('a')
                         a.href = url
-                        a.download = '日对账单.cvs'
+                        a.download = '对账单'+monthDate+'.cvs'
                         document.body.appendChild(a)
                         a.click()
                         a.parentNode.removeChild(a);
