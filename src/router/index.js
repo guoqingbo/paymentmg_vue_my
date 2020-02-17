@@ -2,9 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import iView,{Message} from 'iview'
 import store from '../store/index'
-import {
-  routers
-} from './router'
+import routers from './router'
 import common from '../common'
 // vue-router ≥3.0版本回调形式以及改成promise api的形式了，返回的是一个promise，如果路由地址跳转相同, 且没有捕获到错误，控制台始终会出现如图所示的警告 （注：3.0以下版本则不会出现以下警告！！！，因路由回调问题…）
 // 注：官方vue-router ≥3.0新版本路由默认回调返回的都是promise，原先就版本的路由回调将废弃！！！！

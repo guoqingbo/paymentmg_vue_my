@@ -37,12 +37,22 @@ module.exports = {
         // 用户角色接口
         '/api/user':{
           // target:'http://192.168.66.28:8080/',
-          target:'http://192.168.200.88:10910/',// 测试环境
+          // target:'http://192.168.200.88:10910/',// 测试环境
+          target:'http://testpaycenter.zhiyoubao.com/',
           changeOrigin:true,
           pathRewrite: {
             '^/api/user': '/api/user'
           }
         },
+      // 对账
+      '/api/reconciliation':{
+        // target:'http://192.168.200.88:10810/',// 测试环境
+        target:'http://testpaycenter.zhiyoubao.com/',
+        changeOrigin:true,
+        pathRewrite: {
+          '^/api/reconciliation': '/api/reconciliation'
+        }
+      },
 
     },
 
