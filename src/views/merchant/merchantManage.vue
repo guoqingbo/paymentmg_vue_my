@@ -45,17 +45,6 @@
             }
           },
           {
-            title: '企业码',
-            key: 'corpCode',
-          },
-          {
-            title: '是否开户',
-            key: 'openAccount',
-            render: (h, params) => {
-              return h('span', this.filter.turn("openAccount",params.row.openAccount)||'未开户')
-            }
-          },
-          {
             title: '创建时间',
             key: 'createTime',
             sortable: 'custom',

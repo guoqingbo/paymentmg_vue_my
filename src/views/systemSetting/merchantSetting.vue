@@ -348,6 +348,7 @@
             },
             // 选择功能分类
             chooseAddFunType(item) {
+                this.funListData = []
                 if(item){
                     this.funSearchParams.type = item.value
                 }else{
@@ -388,9 +389,6 @@
                 this.apiGet(url, this.funSearchParams).then(res => {
                     if (res.success) {
                         this.funListData = res.data.rows
-
-                        this.funListData
-
                         this.funListData.forEach(ele => {
                             // 已经选中过的不可再选
                             if (this.funSelected.includes(ele.channelProductCode + "_" + ele.payProductCode)) {

@@ -39,9 +39,7 @@
             name: 'type',
             type: 'select',
             data: this.common.dic.funType,
-            onChange:this.funTypeOnChange,
-            rules: [{ required: true,message: '请选择渠道所属类别', trigger: 'change' }],
-            value:''
+            rules: [{ required: true,message: '请选择渠道所属类别', trigger: 'change' }]
           },
           {
             title: '渠道产品名称',
@@ -52,22 +50,6 @@
               { max: 20, message: "渠道产品名称不超过20字符" ,trigger: 'blur'}
             ]
           },
-          {
-            title: '可用状态',
-            name: 'status',
-            type: 'select',
-            data: this.common.dic.status,
-            rules: [{ required:false,type: 'number'}],
-            value:1
-          },
-          {
-            title: '备注',
-            name: 'remark',
-            type: 'textarea',
-            rules: [{ max: 100, message: "备注不超过100字符" ,trigger: 'blur'}]
-          },
-        ],
-        funTypeItems:[
           {
             title: '渠道计费方式',
             name: 'feeType',
@@ -95,6 +77,20 @@
             rules: [{ required: true, message: '请选择是否退手续费', trigger: 'change' }],
             value:'T'
           },
+          {
+            title: '可用状态',
+            name: 'status',
+            type: 'select',
+            data: this.common.dic.status,
+            rules: [{ required:false,type: 'number'}],
+            value:1
+          },
+          {
+            title: '备注',
+            name: 'remark',
+            type: 'textarea',
+            rules: [{ max: 100, message: "备注不超过100字符" ,trigger: 'blur'}]
+          },
         ],
         routeType:"",
       }
@@ -106,18 +102,6 @@
       this.getDetail()
     },
     methods: {
-      funTypeOnChange(value){
-        if(value==1 || value == 4){
-          // 当前所属类别为备用金充值，分账 渠道计费方式，渠道费率，退款是否手续费隐藏
-          if(this.formList[4].name == 'feeType'){
-            this.formList.splice(4,3)
-          }
-        }else{
-          if(this.formList[4].name !== 'feeType'){
-            this.formList.splice(4,0,...this.funTypeItems)
-          }
-        }
-      },
       validateChannelRate(rule, value, callback){
         if(rule.required && value === ''){
           callback(new Error('请输入渠道费率'))
@@ -181,7 +165,6 @@
                 ele.value = res.data[ele.name]
                 if(ele.name == 'type'){
                   ele.value = ele.value+""
-                  this.funTypeOnChange(ele.value)
                 }
                 if(this.routeType == 'detail'&&ele.type!='text'){
                   // 如果是详情页

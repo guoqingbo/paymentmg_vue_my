@@ -80,7 +80,7 @@ let dic = {
     {label:"分账",value:"1"},
     {label:"保险",value:"2"},
     {label:"金融",value:"3"},
-    {label:"备用金充值",value:"4"},
+    // {label:"备用金充值",value:"4"},
   ],
   // 适用场景
   appScene: [

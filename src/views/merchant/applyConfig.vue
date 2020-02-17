@@ -206,30 +206,15 @@
             }else{
               this.getPayConfig()
             }
-            let priorityIndex = ''
-            let merchantFeeRateIndex = ''
-            this.formList.forEach((ele,index) => {
+            this.formList.forEach(ele => {
               if(typeof this.detail[ele.name]!=='undefined'){
                 ele.value = this.detail[ele.name]
-              }
-              if(ele.name =='priority'){
-                priorityIndex = index
-              }else if(ele.name =='merchantFeeRate'){
-                merchantFeeRateIndex = index
               }
               // 如果是详情页
               if(this.routeType == 'detail'){
                 ele.type += "Text"
               }
             })
-            if(!this.detail.sameFlag && this.detail.type!=1){
-              // 非分账，隐藏优先支付
-              this.formList.splice(priorityIndex, 1)
-            }
-            if(this.detail.channelProductCode == '20001'){
-              // 用金充值功能，隐藏商户费率
-              this.formList.splice(merchantFeeRateIndex, 1)
-            }
           }else{
             this.$Message.warning(res.message)
           }
