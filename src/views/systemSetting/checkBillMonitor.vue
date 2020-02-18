@@ -6,7 +6,7 @@
              :columns="columns"
              :data="todayList"></Table>
 <!--      历史记录弹框-->
-      <Modal v-model="showModal">
+      <Modal v-model="showModal" width="800">
         <h5>渠道对账监控</h5>
         <p>对账渠道：{{channelName}}</p>
         <p>执行时间：T+1日 凌晨 06：00</p>
@@ -22,6 +22,7 @@
               show-total
               show-sizer
               show-elevator
+              :page-size-opts="[5,10, 20, 30, 40]"
               :current="params.page"
               :page-size="params.limit"></Page>
         <div slot="footer">
@@ -85,7 +86,7 @@
                 todayList: [
                 ],
                 params:{
-                    limit:10,
+                    limit:5,
                     page:1,
                     channelCode:''
                 },
@@ -206,10 +207,14 @@
                 this.getHistoryList()
             },
             showHistory(channelCode){
+                this.res = {
+                    rows:[],
+                    total:0
+                }
                 this.showModal = true
                 this.params.channelCode = channelCode
                 this.params.page = 1
-                this.params.limit = 10
+                this.params.limit = 5
                 this.getHistoryList()
             }
         }
