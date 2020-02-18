@@ -3,7 +3,6 @@
     <list ref="gridTable"
           :columns="columns"
           :url="url"
-<!--          width="1300"-->
           :params="params"
           :apiPrefix="apiPrefix"
           :searchItems="searchItems"
@@ -55,16 +54,20 @@
                     },
                     {
                         title: '渠道金额',
-                        key: 'thirdPartAmount',
+                        key: 'thirdPayAmount',
                         render: (h, params) => {
-                            return h('span', this.common.formatNumber(params.row.thirdPartAmount))
+                            let amount = params.row.thirdPayAmount
+                            if(params.row.thirdTradeState == 20){
+                                amount = params.row.thirdRefundAmount
+                            }
+                            return h('span', this.common.formatNumber(amount))
                         }
                     },
                     {
                         title: '渠道状态',
-                        key: 'thirdPartState',
+                        key: 'thirdTradeState',
                         render:(h,params)=>{
-                            let span = h('span',this.filter.turn('tradeState',params.row.thirdPartState))
+                            let span = h('span',this.filter.turn('tradeState',params.row.thirdTradeState))
                             return span
                         }
                     },
@@ -80,7 +83,11 @@
                         title: '订单金额',
                         key: 'payAmount',
                         render: (h, params) => {
-                            return h('span', this.common.formatNumber(params.row.payAmount))
+                            let amount = params.row.payAmount
+                            if(params.row.tradeState == 20){
+                                amount = params.row.refundAmount
+                            }
+                            return h('span', this.common.formatNumber(amount))
                         }
                     },
                     {

@@ -91,17 +91,17 @@
           {
             label: '起始日期',
             type: 'date',
-            name: 'orderTimeStart',
+            name: 'startTime',
             format:'yyyy-MM-dd',
-            // value: new Date(new Date().setMonth(new Date().getMonth()-1)),
+            value: new Date(new Date().getTime()-24*60*60*1000),
             options:{}
           },
           {
             label: '结束日期',
             type: 'date',
-            name: 'orderTimeEnd',
+            name: 'endTime',
             format:'yyyy-MM-dd',
-            // value: new Date(),
+            value: new Date(),
             options:{}
           },
 
@@ -146,31 +146,37 @@
       },
       // 日期限制
       checkDate(){
-        // 开始时间结束时间限制
-        let startDateItem = this.searchItems[2]
-        let endDateItem = this.searchItems[3]
-        if(startDateItem && endDateItem){
-          startDateItem.onChange=(date1)=>{
-            endDateItem.options.disabledDate=date2=>{
-              let disabled = false
-              if(date2.getTime()<new Date(this.common.formateDateStr(date1)).getTime()){
-                // 结束日期不得小于开始日期
-                disabled = true
+          // 开始时间结束时间限制
+          let startDateItem = this.searchItems[1]
+          let endDateItem = this.searchItems[2]
+          if(startDateItem && endDateItem){
+              startDateItem.onChange=(date1)=>{
+                  endDateItem.options.disabledDate=date2=>{
+                      let disabled = false
+                      if(date2.getTime()<new Date(this.common.formateDateStr(date1)).getTime()){
+                          // 结束日期不得小于开始日期
+                          disabled = true
+                      }if(date2.getTime()-365*24*60*60*1000>new Date(this.common.formateDateStr(date1)).getTime()){
+                          // 结束日期不得大于一年
+                          disabled = true
+                      }
+                      return disabled
+                  }
               }
-              return disabled
-            }
-          }
-          endDateItem.onChange=(date1)=>{
-            startDateItem.options.disabledDate=date2=>{
-              let disabled = false
-              if(date2.getTime()>new Date(this.common.formateDateStr(date1)).getTime()){
-                // 开始日期不得大于结束日期
-                disabled = true
+              endDateItem.onChange=(date1)=>{
+                  startDateItem.options.disabledDate=date2=>{
+                      let disabled = false
+                      if(date2.getTime()>new Date(this.common.formateDateStr(date1)).getTime()){
+                          // 开始日期不得大于结束日期
+                          disabled = true
+                      }else if(date2.getTime()+365*24*60*60*1000<new Date(this.common.formateDateStr(date1)).getTime()){
+                          // 开始日期不得大于结束日期
+                          disabled = true
+                      }
+                      return disabled
+                  }
               }
-              return disabled
-            }
           }
-        }
       }
     }
   }

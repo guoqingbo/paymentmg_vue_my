@@ -7,6 +7,7 @@
           :searchItems="searchItems"
           :apiPrefix="apiPrefix"
           @beforeSubmit="beforeSubmit"
+          @searchSubmit="searchSubmit"
           :hannleItems="hannleItems"></list>
 <!--    <confirm ref="confirmModel"-->
 <!--             :content="content"-->
@@ -85,7 +86,7 @@
             type: 'date',
             name: 'beginDate',
             format:'yyyy-MM-dd',
-            // value: new Date(new Date().setMonth(new Date().getMonth()-1)),
+            value: new Date(new Date().getTime()-24*60*60*1000),
             options:{}
           },
           {
@@ -93,7 +94,7 @@
             type: 'date',
             name: 'endDate',
             format:'yyyy-MM-dd',
-            // value: new Date(),
+            value: new Date(),
             options:{}
           },
           {
@@ -119,11 +120,33 @@
       this.getChannel()
       // 日期限制
       this.checkDate()
+
+    },
+    mounted(){
+        // this.searchSubmit()
+        // this.$store.dispatch('getList',this.apiPrefix)
+        this.$refs.gridTable.searchSubmit()
     },
     methods: {
       // 搜索之前
       beforeSubmit(params){
 
+      },
+      searchSubmit(params){
+          if(params && !params.beginDate){
+              this.$Message.warning('请选择开始日期')
+              return
+          }else if(params && !params.endDate){
+              this.$Message.warning('请选择结束日期')
+              return;
+          }
+          this.$store.dispatch('getList',this.apiPrefix).then(res=>{
+              // if(res.success){
+              //     // this.$emit('afterSubmit',res)
+              // }else{
+              //     this.$Message.warning(res.message||'无响应')
+              // }
+          })
       },
       // 获取支付渠道
       getChannel(){
@@ -151,6 +174,9 @@
               if(date2.getTime()<new Date(this.common.formateDateStr(date1)).getTime()){
                 // 结束日期不得小于开始日期
                 disabled = true
+              }if(date2.getTime()-365*24*60*60*1000>new Date(this.common.formateDateStr(date1)).getTime()){
+                    // 结束日期不得大于一年
+                    disabled = true
               }
               return disabled
             }
@@ -161,6 +187,9 @@
               if(date2.getTime()>new Date(this.common.formateDateStr(date1)).getTime()){
                 // 开始日期不得大于结束日期
                 disabled = true
+              }else if(date2.getTime()+365*24*60*60*1000<new Date(this.common.formateDateStr(date1)).getTime()){
+                  // 开始日期不得大于结束日期
+                  disabled = true
               }
               return disabled
             }

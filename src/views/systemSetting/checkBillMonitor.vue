@@ -9,7 +9,7 @@
       <Modal v-model="showModal" width="800">
         <h5>渠道对账监控</h5>
         <p>对账渠道：{{channelName}}</p>
-        <p>执行时间：T+1日 凌晨 06：00</p>
+        <p>执行时间：{{executeTime}}</p>
 
         <p style="margin: 5px 0">历史对账明细</p>
         <Table border
@@ -135,9 +135,10 @@
                     }
                 ],
                 showModal:false,
+                executeTime:'',
                 res:{
                     rows:[],
-                    total:0
+                    total:0,
                 }
             }
         },
@@ -181,7 +182,8 @@
                 let url = '/reconStat/page'
                 this.apiGet(url,this.params,this.apiPrefix).then(res=>{
                   if(res.success){
-                      this.res = res.data
+                      this.res = res.data.dataGrid
+                      this.executeTime = res.data.executeTime
                   }else{
                       this.$Message.warning(res.message||'请求错误')
                   }

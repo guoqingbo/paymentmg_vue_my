@@ -110,7 +110,8 @@
     mounted() {
       // 是否自定义搜索
       if (this._events.searchSubmit) {
-        this.on("searchSubmit",this._events.searchSubmit)
+          this.$refs.search.$on("searchSubmit",this._events.searchSubmit[0])
+        return
       }
       this.$refs.search.searchSubmit()
     },
@@ -130,8 +131,8 @@
         }
       }
     },
-    methods: {
-      searchSubmit(params){
+    methods: {searchSubmit
+      (params){
         this.$refs.search.searchSubmit(params)
       },
       pageSizeShange(limit){
