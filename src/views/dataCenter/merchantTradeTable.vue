@@ -7,6 +7,7 @@
           :searchItems="searchItems"
           @beforeSubmit="beforeSubmit"
           :hannleItems="hannleItems"
+          :apiPrefix="apiPrefix"
           :exportItem="exportItem"></list>
     <confirm ref="confirmModel"
              :content="content"
@@ -20,6 +21,7 @@
   export default {
     data () {
       return {
+        apiPrefix:this.common.config.apiReport,
         columns: [
           {
             title: '序号',
@@ -68,7 +70,7 @@
           sort:'modifyTime',
           order:'desc'
         },
-        url: '/payorder/grid',
+        url: '/tradestatistics/grid',
         searchItems: [
           {
             label: '商户名称',
@@ -111,7 +113,7 @@
             loading: false,
             callback: () => {
               this.exportItem.loading = true
-              let url = '/payorder/export';
+              let url = '/tradestatistics/export';
               let params = this.$store.state.list.params
               this.common.exportData({
                 url,

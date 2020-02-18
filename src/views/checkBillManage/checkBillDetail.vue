@@ -3,6 +3,7 @@
     <list ref="gridTable"
           :columns="columns"
           :url="url"
+          width="1300"
           :params="params"
           :apiPrefix="apiPrefix"
           :searchItems="searchItems"

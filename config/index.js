@@ -53,7 +53,15 @@ module.exports = {
           '^/api/reconciliation': '/api/reconciliation'
         }
       },
-
+      // 商户统计报表
+      '/api/report':{
+        // target:'http://192.168.200.88:10805/',// 测试环境
+        target:'http://testpaycenter.zhiyoubao.com/',
+        changeOrigin:true,
+        pathRewrite: {
+          '^/api/report': '/api/report'
+        }
+      },
     },
 
     // Various Dev Server settings

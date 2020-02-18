@@ -85,7 +85,7 @@
                 todayList: [
                 ],
                 params:{
-                    limit:5,
+                    limit:10,
                     page:1,
                     channelCode:''
                 },
@@ -209,7 +209,7 @@
                 this.showModal = true
                 this.params.channelCode = channelCode
                 this.params.page = 1
-                this.params.limit = 5
+                this.params.limit = 10
                 this.getHistoryList()
             }
         }

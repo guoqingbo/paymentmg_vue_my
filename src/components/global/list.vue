@@ -18,9 +18,10 @@
         </Col>
       </template>
     </Row>
-    <div class="grids">
+    <div style="overflow: auto">
       <Table
         :highlight-row="highlightRow"
+        :width="width"
         style="position:static;"
         border
         stripe
@@ -69,6 +70,9 @@
       },
       apiPrefix:{
         type: String,
+      },
+      width:{
+          type: String,
       },
       url:{
         type: String,
