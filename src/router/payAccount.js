@@ -1,7 +1,7 @@
 // 收款账号
 let routers = [
   {
-    path: '/payAccount/list',
+    path: '/payAccount/payAccountList',
     name: 'payAccountList',
     meta: {
       title: '商户收款账号',
