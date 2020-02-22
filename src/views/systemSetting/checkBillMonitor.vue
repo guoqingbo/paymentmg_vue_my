@@ -47,6 +47,10 @@
                         }
                     },
                     {
+                        title: '批次号',
+                        key: 'batchNo'
+                    },
+                    {
                         title: '今日是否对账',
                         key: 'reconStatus',
                         render:(h,params)=>{
@@ -96,6 +100,10 @@
                         key: 'channelCode',
                         render:(h,params)=>{
                         }
+                    },
+                    {
+                        title: '批次号',
+                        key: 'batchNo'
                     },
                     {
                         title: '是否对账',

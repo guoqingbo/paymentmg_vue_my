@@ -87,7 +87,16 @@
             name: 'beginDate',
             format:'yyyy-MM-dd',
             value: new Date(new Date().getTime()-24*60*60*1000),
-            options:{}
+            options:{
+                disabledDate:(date)=>{
+                    let disabled = false
+                    if(date.getTime()>new Date().getTime()-24*60*60*1000){
+                        // 结束日期不得小于开始日期
+                        disabled = true
+                    }
+                    return disabled
+                }
+            }
           },
           {
             label: '结束日期',
@@ -95,7 +104,16 @@
             name: 'endDate',
             format:'yyyy-MM-dd',
             value: new Date(),
-            options:{}
+            options:{
+                disabledDate:(date)=>{
+                    let disabled = false
+                    if(date.getTime()<new Date().getTime()){
+                        // 结束日期不得小于开始日期
+                        disabled = true
+                    }
+                    return disabled
+                }
+            }
           },
           {
             label: '支付渠道',
@@ -150,12 +168,21 @@
       },
       // 获取支付渠道
       getChannel(){
-        this.$store.dispatch("getChannel").then(res=>{
-          this.searchItems[2].data = res
+          // this.$store.dispatch("getChannel")
+        let url= '/reconStat/channel/list'
+        this.apiGet(url,{},this.apiPrefix).then(res=>{
+            let channelType = []
             let channelListObj = {}
-            res.forEach(ele=>{
-                channelListObj[ele.value] = ele.label
-            })
+            if(res.status == 200){
+                res.data.forEach((ele)=>{
+                    channelType.push({
+                        value:ele.channelCode,
+                        label:ele.channelName
+                    })
+                    channelListObj[ele.channelCode] = ele.channelName
+                })
+            }
+            this.searchItems[2].data = channelType
             this.columns[1].render=(h,params)=>{
               let span = h('span',channelListObj[params.row.channelCode])
               return span

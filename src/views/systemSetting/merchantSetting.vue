@@ -61,7 +61,10 @@
            width="750">
       <div>
         <p style="margin-bottom: 10px">选择平台</p>
-        <Select clearable v-model="addFunParams.orderSource" style="width:100%" placeholder="请选择平台">
+        <Select clearable v-model="addFunParams.orderSource"
+                style="width:100%"
+                @on-change="orderSourceChange"
+                placeholder="请选择平台">
           <Option v-for="(item,index) in orderSource" :value="item.value" :key="index">{{ item.label }}
           </Option>
         </Select>
@@ -126,7 +129,7 @@
                     typeMap:{},
                 },
                 funListData:[],
-                funSelected: [],
+                // funSelected: [],
                 addFunModal: false,
                 channelList: [],
                 funListColumns: [
@@ -280,6 +283,12 @@
             this.getList()
         },
         methods: {
+            orderSourceChange(value){
+                this.funListData = []
+                if(this.funSearchParams.channelCode){
+                    this.getChannelProduct()
+                }
+            },
             // 获取应用来源
             getMerchantSource(){
                 this.$store.dispatch("getMerchantSource").then(res=>{
@@ -368,7 +377,7 @@
             getFunSelected() {
                 let funSelected = []
                 this.res.defaultDataGrid.rows.forEach(ele => {
-                    funSelected.push(ele.channelProductCode + "_" + ele.payProductCode)
+                    funSelected.push(ele.orderSource+"_"+ele.channelProductCode + "_" + ele.payProductCode)
                 })
                 this.funSelected = funSelected
                 return funSelected
@@ -391,7 +400,7 @@
                         this.funListData = res.data.rows
                         this.funListData.forEach(ele => {
                             // 已经选中过的不可再选
-                            if (this.funSelected.includes(ele.channelProductCode + "_" + ele.payProductCode)) {
+                            if (this.funSelected.includes(this.addFunParams.orderSource+"_"+ele.channelProductCode + "_" + ele.payProductCode)) {
                                 ele._checked = true
                                 ele._disabled = true
                             }
@@ -428,7 +437,7 @@
                 let ids = []
                 this.selection.forEach(ele=>{
                     // 去除已经添加的功能
-                    if(!this.funSelected.includes(ele.channelProductCode+"_"+ele.payProductCode)){
+                    if(!this.funSelected.includes(this.addFunParams.orderSource+'_'+ele.channelProductCode+"_"+ele.payProductCode)){
                         ids.push(ele.id)
                     }
                 })
