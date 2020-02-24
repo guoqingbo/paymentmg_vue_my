@@ -11,39 +11,39 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        // 默认后台
-        '/api/admin':{
-            // target:'http://192.168.200.88:10806/',
-            // target:'http://192.168.66.246:6071/',
-            // target:'http://192.168.66.230:10806/',
-            // target:'http://192.168.200.88:10804',
-            target:'http://testpaycenter.zhiyoubao.com/',
-            // target:'http://192.168.201.122:10806/',
-            changeOrigin:true,
-            pathRewrite: {
-              '^/api/admin': '/api/admin'
-            }
-          },
-        // 收银台
-        '/api/pay':{
-          // target:'http://192.168.200.88:6073/',
-          // target:'http://192.168.66.83:6073/',
-          target:'http://192.168.200.88:10804',
-          changeOrigin:true,
-          pathRewrite: {
-            '^/api/pay': '/api/pay'
-          }
-        },
-        // 用户角色接口
-        '/api/user':{
-          // target:'http://192.168.66.28:8080/',
-          // target:'http://192.168.200.88:10910/',// 测试环境
-          target:'http://testpaycenter.zhiyoubao.com/',
-          changeOrigin:true,
-          pathRewrite: {
-            '^/api/user': '/api/user'
-          }
-        },
+      // 默认后台
+      '/api/admin':{
+        // target:'http://192.168.200.88:10806/',
+        // target:'http://192.168.66.246:6071/',
+        // target:'http://192.168.66.230:10806/',
+        // target:'http://192.168.200.88:10804',
+        target:'http://testpaycenter.zhiyoubao.com/',
+        // target:'http://192.168.201.122:10806/',
+        changeOrigin:true,
+        pathRewrite: {
+          '^/api/admin': '/api/admin'
+        }
+      },
+      // 收银台
+      '/api/pay':{
+        // target:'http://192.168.200.88:6073/',
+        // target:'http://192.168.66.83:6073/',
+        target:'http://192.168.200.88:10804',
+        changeOrigin:true,
+        pathRewrite: {
+          '^/api/pay': '/api/pay'
+        }
+      },
+      // 用户角色接口
+      '/api/user':{
+        // target:'http://192.168.66.28:8080/',
+        // target:'http://192.168.200.88:10910/',// 测试环境
+        target:'http://testpaycenter.zhiyoubao.com/',
+        changeOrigin:true,
+        pathRewrite: {
+          '^/api/user': '/api/user'
+        }
+      },
       // 对账
       '/api/reconciliation':{
         // target:'http://192.168.200.88:10810/',// 测试环境
